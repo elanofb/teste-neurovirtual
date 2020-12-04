@@ -1,0 +1,21 @@
+﻿@model WEB.Areas.Planos.ViewModels.PlanoAnuncioForm
+
+@if (Model.Anuncio.id > 0)
+{
+    <div class="form-horizontal">
+        <div class="col-md-1">
+            <label>ID</label>
+            <input type="text" class="form-control input-sm" readonly="readonly" value="@Model.Anuncio.id" />
+        </div>
+        <div class="col-md-2">
+            <label>Cadastrado em:</label>
+            <input type="text" class="form-control input-sm" readonly="readonly" value="@Model.Anuncio.dtCadastro" />
+        </div>
+        <div class="col-md-2">
+            <label>Alterado em:</label>
+            <input type="text" class="form-control input-sm" readonly="readonly" value="@Model.Anuncio.dtAlteracao" />
+        </div>
+    </div>
+    
+    <div class="clearfix"></div>
+}

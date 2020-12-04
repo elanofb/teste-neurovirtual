@@ -1,0 +1,108 @@
+﻿@model FluxoCaixaMovimentacaoDiariaVM
+
+@using WEB.Areas.Financeiro.ViewModels
+
+@if (!Model.listaMovimentacaoDiaria.Any()) {
+    <div class="alert alert-info">
+        Nenhum lançamento foi encontrado para o período informado.
+    </div>
+} else {
+    <div class="text-right margin-bottom-20 margin-top-20 margin-right-25 fs-16">        
+        <strong>Saldo Inicial: </strong> <span class="@(Model.saldoInicial > 0 ? "text-green" : "text-red")">@Model.saldoInicial.ToString("C")</span> 
+    </div>
+    
+    <div class="padding-left-10 padding-right-25">
+        @boxCabecalho()
+    </div>
+    
+    <div class="padding-left-10 padding-right-25" id="tableMovimentacaoDiaria" style="max-height: 600px; overflow-y: scroll; overflow-x: hidden;">
+        @{ var count = 0; }
+        @foreach (var OLancamento in Model.listaMovimentacaoDiaria) {
+            @boxItem(OLancamento, count++)
+        }
+    </div>
+    
+}
+
+@helper boxCabecalho() {
+    
+    <div class="box-info-item-dotted padding-5 fs-12 hidden-xs">
+        
+        <div class="row">
+            
+            <div class="col-sm-2 abreviar">
+                <span class="text-bold">Data</span>
+            </div>
+            
+            <div class="col-sm-5 abreviar">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <span data-toggle="tooltip" title="" class="text-bold">Entrada</span>
+                    </div>
+                    <div class="col-sm-6">
+                        <span data-toggle="tooltip" title="" class="text-bold">Saida</span>
+                    </div>
+                </div>
+            </div>  
+            
+            <div class="col-sm-5 abreviar">
+                <div class="row">
+                    <div class="col-sm-6 text-right">
+                        <span data-toggle="tooltip" title="" class="text-bold">Saldo do Dia</span>
+                    </div>
+                    <div class="col-sm-6 text-right">
+                        <span data-toggle="tooltip" title="" class="text-bold">Saldo Acumulado</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@helper boxItem(FluxoCaixaMovimentacaoDiariaDTO OMovimentacao, int count) {
+
+    <div class="box-info-item-dotted padding-5 margin-top-5 fs-12 border-green bg-green-very-light">
+     
+        <div class="row" onclick="$('#detalhes@(count)').slideToggle('fast');">
+            <div class="col-lg-2 col-sm-2 abreviar">
+                <strong>@OMovimentacao.dtReferencia.exibirData()</strong>
+            </div>
+            
+            <div class="col-lg-5 col-sm-5 abreviar">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <span class="text-green"><i class="fa fa-caret-up"></i> @OMovimentacao.valorTotalEntrada.ToString("C")</span>
+                    </div>
+                    <div class="col-sm-6">
+                        <span class="text-red"><i class="fa fa-caret-down"></i> @OMovimentacao.valorTotalSaida.ToString("C")</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-sm-5 abreviar">
+                <div class="row">
+                    <div class="col-sm-6 text-right">
+                        @OMovimentacao.saldoDia.ToString("C")
+                    </div>
+                    <div class="col-sm-6 text-right">
+                        @OMovimentacao.saldoAcumulado.ToString("C")
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-12 detalhes-movimentacao" id="detalhes@(count)" style="display: none">
+            
+            <hr style="border-color: #ccc; margin: 10px -15px 5px -15px;"/>
+            
+            <div class="row padding-left-25">
+                @{ Html.RenderPartial("partial-pagamentos-movimentacao", OMovimentacao.listaPagamentosMovimentacao); }
+            </div>
+        </div>
+        
+        <div class="clearfix"></div>      
+        
+    </div>
+}
+
+<div class="clearfix"></div><br/>

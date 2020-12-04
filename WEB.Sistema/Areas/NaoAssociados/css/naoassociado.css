@@ -1,0 +1,148 @@
+.modal-body {
+    max-height: 768px;
+    overflow-y: hidden;
+}
+
+#userpic .btn {
+    cursor: pointer;
+    display: inline-block;
+    overflow: hidden;
+    font-family: Arial;
+    border-radius: 4px;
+    vertical-align: middle;
+}
+
+#userpic .btn-primary {
+    border: 1px solid rgba(0,0,0,.2);
+    box-shadow: 0 1px 1px rgba(255,255,255,.5);
+}
+
+.btn-success.btn-small[aria-disabled],
+.btn-primary[disabled],
+.btn-warning[disabled] {
+    opacity: .7;
+}
+
+
+.btn-txt {
+    position: relative;
+}
+
+.btn .progress {
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: .8;
+    position: absolute;
+    height: 30px;
+}
+
+.progress .bar {
+    width: 0;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    position: absolute;
+    background-color: #02c66c;
+}
+
+.userpic {
+    width: 113px;
+    height: 150px;
+    border: 1px solid rgba(0,0,0,.3);
+    display: inline-block;
+    position: relative;
+    margin: 0 auto;
+    background: url('../img/userpic.gif') no-repeat;
+    background-size: 100% 100%;
+}
+
+    .userpic .btn {
+        width: 73%;
+        position: absolute;
+        bottom: 5px;
+        left: 14%;
+        font-size: 11px;
+    }
+
+.userpic__preview {
+    position: absolute;
+}
+
+.btn input {
+    bottom: 0px;
+    right: 0px;
+    z-index: 2;
+    position: absolute;
+    cursor: pointer;
+    opacity: 0;
+    filter: alpha(opacity=0);
+    font-size: 50px;
+    cursor: pointer;
+}
+
+input[type="radio"].jcrop-keymgr {
+    display: none !important;
+}
+
+.jcrop-holder {
+    margin: 0 auto;
+}
+
+.userpic .js-fileapi-wrapper {
+    opacity: .7;
+}
+
+.userpic:hover .js-fileapi-wrapper {
+    opacity: 1;
+}
+
+.box-detalhe-associado label {
+    font-size: 8px;
+    text-transform: uppercase;
+    margin-top: 10px !important;
+}
+
+/*.nav-tabs-custom > .nav-tabs > li {
+    border-top: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    border-bottom: none;
+    background-color: #3c8dbc;
+}
+
+.nav-tabs > li > a {
+    padding: 8px;
+    color: #FFF;
+}
+
+.nav-tabs > li.active > a {
+    padding: 8px;
+    color: #111111;
+    
+}
+
+.nav-tabs-custom > .tab-content {
+    padding-top: 0 !important;
+}*/
+
+
+.select2-container--default .select2-selection--single {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 0px;
+}
+
+/*@media screen and (max-width: 1024px) {
+    .nav-tabs > li > a {
+        font-size: 10px !important; 
+    }
+}
+
+
+@media screen and (min-width: 1025px) {
+    .nav-tabs > li > a {
+        font-size: 11px !important; 
+    }
+
+}*/

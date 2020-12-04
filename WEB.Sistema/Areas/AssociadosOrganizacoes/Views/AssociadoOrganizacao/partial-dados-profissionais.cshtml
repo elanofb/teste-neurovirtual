@@ -1,0 +1,34 @@
+﻿@model DAL.Pessoas.Pessoa
+
+@if (!Model.profissao.isEmpty()) {
+
+    <div>
+        <strong><i class="fa fa-user"></i> Profissão: </strong> @Model.profissao
+    </div>
+    
+}
+
+@if (!Model.instituicaoFormacao.isEmpty()) {
+
+    <div>
+        <strong><i class="fa fa-university"></i> Instituição de Formação: </strong> @Model.instituicaoFormacao
+    </div>
+    
+}
+
+@if (!Model.nroMatriculaEstudante.isEmpty()) {
+
+    <div>
+        <strong><i class="fa fa-id-card"></i> N° Matrícula: </strong> @Model.nroMatriculaEstudante
+    </div>
+    
+}
+
+@if (!Model.anoFormacao.isEmpty()) {
+
+    <div>
+        <strong><i class="fa fa-graduation-cap"></i> Ano Formação: </strong> @Model.anoFormacao
+    </div>
+    
+}
+

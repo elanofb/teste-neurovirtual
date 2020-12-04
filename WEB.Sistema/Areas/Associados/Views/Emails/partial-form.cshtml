@@ -1,0 +1,89 @@
+﻿@using MvcFlashMessages
+@using WEB.Helpers
+@model WEB.Areas.Associados.ViewModels.ConfiguracaoEmailForm
+
+@{
+    Layout = "";
+}
+
+@Html.RenderFlash()
+
+@using (Ajax.BeginForm("salvar", "Emails", new AjaxOptions{HttpMethod = "POST", InsertionMode = InsertionMode.Replace, UpdateTargetId = "boxConfiguracaoNotificacao", OnSuccess = "FroalaCustom.listenerEditores()"}, new{id = "formConfiguracaoNotificacao", enctype = "multipart/form-data"})){
+    @Html.ValidationSummary(false)
+    
+    @Html.HiddenFor(m => m.MensagemEmailAtualizacaoCadastral.id)
+    @Html.HiddenFor(m => m.MensagemEmailAtualizacaoCadastral.codigoIdentificacao)
+    @Html.HiddenFor(m => m.MensagemEmailAtualizacaoCadastral.idReferencia)
+    
+    <div class="row">
+        
+        <div class="col-sm-6">
+            <h4 class="separator-form-icon"><i class="far fa-envelope"></i> E-mail nova inscrição</h4>
+            <div class="row">
+                <div class="col-sm-12">
+                    <label>Título</label>
+                    @Html.TextBoxFor(m => m.MensagemEmailAtualizacaoCadastral.titulo, new{@class = "form-control input-sm", maxlength = "255"})
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <label>Enviar cópia para:</label>
+                    @Html.TextBoxFor(m => m.MensagemEmailAtualizacaoCadastral.emailsCopia, new{@class = "form-control input-sm", maxlength = "255"})
+                    @Html.instrucao("Separar e-mails com ponto e vírgula")
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <label>Conteúdo do e-mail</label>
+                    @Html.TextAreaFor(m => m.MensagemEmailAtualizacaoCadastral.corpoEmail, new{@class = "form-control input-sm froala-editor", rows = "10"})
+                    @Html.instrucao("Limite de 8.000 caracteres.")<br/>
+                    <a href="javascript:void(0)" class="fs-11 for-popover" data-placement="top" data-trigger="focus" data-url="#hashtags-email-nova-inscricao" data-title="Hash Tags"><i class="fa fa-question-circle"></i> Hash tags do sistema</a>
+                    @Html.ValidationMessageFor(m => m.MensagemEmailAtualizacaoCadastral.corpoEmail)
+                </div>
+            </div>
+        </div>
+        
+        <div class="clearfix"></div>
+        
+    </div>
+    <div class="clearfix"></div>
+    
+    <div class="hide" id="hashtags-email-convite-palestrantes">
+        <div>
+            <strong class="btn btn-info">#TITULO_EVENTO# </strong> Título do evento<br/><br/>
+            <strong class="btn btn-info">#NOME_EVENTO# </strong> Nome do palestrante<br/><br/>
+            <strong class="btn btn-info">#DATAS_EVENTO#: </strong> Dastas de realização do evento<br/><br/>
+            <strong class="btn btn-info">#LINK_ACEITE#: </strong> Link para registrar o aceite do convidado/palestrante<br/><br/>
+            <strong class="btn btn-info">#IMG_ACEITE#: </strong> Imagem que acompanha o link de aceite<br/><br/>
+            <strong class="btn btn-info">#LINK_NAO_ACEITE#: </strong> Link para registrar o não aceite do convidado/palestrante<br/><br/>
+            <strong class="btn btn-info">#IMG_NAO_ACEITE#: </strong> Imagem que acompanha o link de não aceite<br/><br/>
+        </div>
+    </div>
+
+    <div class="hide" id="hashtags-email-nova-inscricao">
+        <div>
+            <strong class="btn btn-info">#NOME_INSCRITO# </strong> Nome da pessoa inscrita<br/><br/>
+            <strong class="btn btn-info">#TITULO_EVENTO# </strong> Título do evento<br/><br/>
+            <strong class="btn btn-info">#INSTRUCOES_PAGAMENTO#: </strong> Link/Instruções para pagamento da inscrição<br/><br/>
+            <strong class="btn btn-info">#LINK_INSCRICAO#: </strong> Link de acompanhamento da inscrição<br/><br/>
+        </div>
+    </div>
+    
+    <div class="hide" id="hashtags-email-liberacao-inscricao">
+        <div>
+            <strong class="btn btn-info">#NOME_INSCRITO# </strong> Nome da pessoa inscrita<br/><br/>
+            <strong class="btn btn-info">#TITULO_EVENTO# </strong> Título do evento<br/><br/>
+            <strong class="btn btn-info">#INSTRUCOES_PAGAMENTO#: </strong> Link/Instruções para pagamento da inscrição<br/><br/>
+        </div>
+    </div>
+
+    <div class="clearfix"></div>
+    <br/>
+    <div class="text-right">
+
+        <button type="button" class="btn btn-primary link-loading" onclick="$('#formConfiguracaoNotificacao').submit()">
+            <i class="fa fa-hdd"></i> Salvar Dados
+        </button>
+
+    </div>
+}

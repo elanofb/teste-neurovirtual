@@ -1,0 +1,57 @@
+﻿@model WEB.Areas.Relacionamentos.ViewModels.OcorrenciaRelacionamentoCadastroForm
+
+@{
+
+	if (IsPost) {
+		Layout = null;
+	} else{
+		Layout = "~/views/shared/associatec/masterpage-modal.cshtml";
+	}
+
+	ViewBag.modalTitle = "Cadastro de Ocorrência de Histórico";
+	ViewBag.modalId = "modalFormOcorrenciaRelacionamento"; 
+}
+
+<div id="boxFormOcorrenciaRelacionamento">
+
+	@using (Ajax.BeginForm("salvar", "OcorrenciaRelacionamentoCadastro", new AjaxOptions { HttpMethod = "POST", InsertionMode = InsertionMode.Replace, UpdateTargetId = "boxFormOcorrenciaRelacionamento", OnSuccess = "OcorrenciaRelacionamentoCadastro.onSuccessForm" }, new { id = "formOcorrenciaRelacionamento" })){
+
+		@Html.HiddenFor(m => m.OcorrenciaRelacionamento.id)
+		
+		@Html.HiddenFor(m => m.idComboSelecionar)
+		
+		@Html.HiddenFor(m => m.flagRecarregar)
+
+		@Html.ValidationSummary(false)
+
+		<div class="row">
+
+			<div class="col-sm-6">
+				@Html.labelRequired("Descrição")
+				@Html.TextBoxFor(m => m.OcorrenciaRelacionamento.descricao, new { @class = "form-control input-sm", maxlength="100" })
+				@Html.ValidationMessageFor(m => m.OcorrenciaRelacionamento.descricao)
+			</div>
+
+			<div class="col-sm-3">
+				<label>Status</label>
+				@Html.DropDownListFor(m => m.OcorrenciaRelacionamento.ativo, ComboHelper.selectListTrueFalse(Model.OcorrenciaRelacionamento.ativo), new { @class = "form-control input-sm" })
+				@Html.ValidationMessageFor(m => m.OcorrenciaRelacionamento.ativo)
+			</div>
+			<div class="clearfix"></div><br />
+
+		</div>
+	}
+	
+</div>
+
+@section modalFooter {
+	
+	<div class="text-right">
+		
+		<button class="btn btn-primary link-loading" onclick="$('#formOcorrenciaRelacionamento').submit()">
+			<i class="fa fa-hdd"></i> Salvar
+		</button>
+		
+	</div>
+	
+}

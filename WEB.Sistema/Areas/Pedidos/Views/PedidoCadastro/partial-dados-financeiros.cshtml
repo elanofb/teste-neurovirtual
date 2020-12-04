@@ -1,0 +1,80 @@
+﻿@model WEB.Areas.Pedidos.ViewModels.PedidoCadastroForm
+
+@using WEB.Areas.Financeiro.Helpers
+
+<div class="box box-primary">
+        
+    <div class="box-header with-border">
+            
+        <h3 class="box-title">
+            <i class="fa fa-usd"></i> Dados Financeiros
+        </h3>                
+
+    </div>
+        
+    <div id="boxFormFinanceiro" class="box-body collapse in">
+        
+        <div class="row">
+            
+            <div class="col-md-4">
+                <label>Vencimento</label>
+                @Html.TextBoxFor(x => x.Pedido.dtVencimento, new { @class = "form-control input-sm input-datepicker", alt = "date" })
+                @Html.ValidationMessageFor(x => x.Pedido.codigoContabil)
+            </div>
+
+            <div class="col-md-4">
+                <label>Conta Bancária</label>
+                @Html.DropDownListFor(x => x.Pedido.idContaBancaria, WEB.Areas.ContasBancarias.Helpers.ContaBancariaHelper.getInstance.selectList(Model.Pedido.idContaBancaria), "...", new {@class = "form-control input-sm"})
+                @Html.ValidationMessageFor(x => x.Pedido.idContaBancaria)
+            </div>
+            
+            <div class="col-md-4">
+                @*<label>Código Contábil</label>
+                @Html.TextBoxFor(x => x.Pedido.codigoContabil, new { @class = "form-control input-sm", maxlength = 10 })
+                @Html.ValidationMessageFor(x => x.Pedido.codigoContabil)*@
+            </div>
+            <div class="clearfix"></div>
+
+            <div class="col-md-4">
+                <label>Centro de Custo</label>
+                @Html.DropDownListFor(x => x.Pedido.idCentroCusto, CentroCustoHelper.getInstance.selectList(Model.Pedido.idCentroCusto), "", new {@class = "form-control input-sm idCentroCusto" })
+                @Html.ValidationMessageFor(x => x.Pedido.idCentroCusto)
+            </div>
+
+            <div class="col-md-4">
+                <label>Macro Conta</label>
+                @Html.DropDownListFor(x => x.Pedido.idMacroConta, MacroContaHelper.getInstance.selectList(Model.Pedido.idMacroConta), "", new {@class = "form-control input-sm idMacroConta"})
+                @Html.ValidationMessageFor(x => x.Pedido.idMacroConta)
+            </div>
+
+            <div class="col-md-4">
+                <label>Sub-Conta</label>
+                @Html.DropDownListFor(x => x.Pedido.idCategoriaTitulo, CategoriaTituloHelper.getInstance.selectList(Model.Pedido.idCategoriaTitulo, 0), "", new {@class = "form-control input-sm idSubConta" })
+                @Html.ValidationMessageFor(x => x.Pedido.idCategoriaTitulo)
+            </div>
+            <div class="clearfix"></div>
+            
+            <div class="col-md-4">
+                <label>Permitir pgto. via cartão de crédito?</label>
+                @Html.DropDownListFor(x => x.Pedido.flagCartaoCreditoPermitido, ComboHelper.selectListTrueFalse(Model.Pedido.flagCartaoCreditoPermitido), "...", new {@class = "form-control input-sm"})
+                @Html.ValidationMessageFor(x => x.Pedido.flagCartaoCreditoPermitido)
+            </div>
+
+            <div class="col-md-4">
+                <label>Permitir pgto. via boleto</label>
+                @Html.DropDownListFor(x => x.Pedido.flagBoletoBancarioPermitido, ComboHelper.selectListTrueFalse(Model.Pedido.flagBoletoBancarioPermitido), "...", new {@class = "form-control input-sm"})
+                @Html.ValidationMessageFor(x => x.Pedido.flagBoletoBancarioPermitido)
+            </div>
+
+            <div class="col-md-4">
+                <label>Permitir pgto. via depósito</label>
+                @Html.DropDownListFor(x => x.Pedido.flagDepositoPermitido, ComboHelper.selectListTrueFalse(Model.Pedido.flagDepositoPermitido), "...", new {@class = "form-control input-sm"})
+                @Html.ValidationMessageFor(x => x.Pedido.flagDepositoPermitido)
+            </div>
+            <div class="clearfix"></div>
+
+        </div>
+
+    </div>
+
+</div>

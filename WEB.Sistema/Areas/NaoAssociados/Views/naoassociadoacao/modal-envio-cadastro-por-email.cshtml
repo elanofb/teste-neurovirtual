@@ -1,0 +1,35 @@
+﻿@model WEB.Areas.NaoAssociados.ViewModels.NaoAssociadoEnvioCadastroEmailForm
+@using MvcFlashMessages
+
+@{
+    Layout = "~/views/shared/associatec/masterpage-modal.cshtml";
+
+    if (IsPost) {
+        Layout = null;
+    }
+
+    ViewBag.modalTitle = "Enviar Ficha de Cadastro por E-mail";
+}
+
+<div id="boxFormEnvioCadastro">
+
+    @using(Ajax.BeginForm("enviar-cadastro-por-email", "naoassociadoacao", new { Area = "NaoAssociados" }, new AjaxOptions { HttpMethod = "POST", InsertionMode = InsertionMode.Replace, UpdateTargetId = "boxFormEnvioCadastro", OnSuccess = "NaoAssociadoAcao.onSuccessFormEnvioFichaCadastralPoEmail" }, new { @class = "" })) {
+
+        @Html.RenderFlash()
+        @Html.HiddenFor(m => m.idAssociado)
+
+        <div class="col-md-12">
+            <label>Informe o(s) e-Mail(s) destinatário(s)</label>
+            @Html.TextAreaFor(x => x.emailsDestino, new { @class = "form-control input-sm", rows = "3" })
+            @Html.ValidationMessageFor(x => x.emailsDestino)
+            @Html.instrucao("Informe no máximo 5 emails separando-os por \"ponto e vírgula\" (;).")
+        </div>
+        <div class="clearfix"></div>
+
+        <div class="col-md-12 padtop22 text-right">
+            <button type="submit" class="btn btn-primary btn-submit link-loading"><i class="fa fa-send"></i> Enviar</button>
+        </div>
+        <div class="clearfix"></div>
+    }
+
+</div>

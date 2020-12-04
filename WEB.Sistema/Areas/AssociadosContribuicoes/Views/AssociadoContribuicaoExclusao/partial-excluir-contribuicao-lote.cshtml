@@ -1,0 +1,126 @@
+﻿@using MvcFlashMessages
+@model List<DAL.AssociadosContribuicoes.AssociadoContribuicao>
+
+@{
+    ViewBag.modalTitle = "Exclusão de ";
+    ViewBag.modalWidthClass = "lg";
+    
+    if (UtilRequest.getBool("IsPost") == true) {
+        Layout = null;
+    } else {
+        Layout = "~/views/shared/associatec/masterpage-modal.cshtml";
+    }
+    
+}
+
+<div id="boxFormExclusao">
+    
+    @Html.RenderFlash()
+
+    @using (Ajax.BeginForm("excluir-contribuicao-lote", null, new AjaxOptions {HttpMethod = "POST", UpdateTargetId = "boxFormExclusao", InsertionMode = InsertionMode.Replace, OnSuccess = "AssociadoContribuicaoExclusao.onSuccessFormExclusao"}, new {id = "formExclusao", @class = "default col-md-12"})) {
+
+        var ids = Model.Select(x => x.id)
+            .ToList();
+
+        {
+            Html.EnableClientValidation(false);
+        }
+
+        @Html.Hidden("IsPost", true)
+
+        <div class="field" style="display: none">
+            @Html.EditorFor(m => ids)
+        </div>
+
+        <div class="row">
+
+            <div class="col-sm-6">
+
+                <div class="row">
+
+                    <div class="col-md-12">
+                        @Html.labelRequired("Informe o motivo para exclusão da cobrança")
+                        @Html.TextArea("observacoes", "", new {@class = "form-control input-sm", rows = "4"})
+                        @Html.ValidationMessage("observacoes")
+                    </div>
+                    <div class="clearfix"></div>
+
+                </div>
+
+            </div>
+
+            <div class="col-sm-6">
+
+                <label>@Model.Count() cobranças selecionadas</label>
+
+                <div id="boxCobrancasSelecionadas" class="hide">
+
+                    @if (Model.Count() > 1000) {
+
+                        <div class="alert alert-info">
+
+                            Você selecionou mais de 1000 cobranças para realizar a exclusão e, por motivo de desempenho,
+                            a lista com o detalhe das cobranças não será exibida, porém todos as cobranças selecionadas
+                            serão desligadas.
+
+                        </div>
+
+                    }
+
+                    @if (Model.Count() <= 1000) {
+
+                        foreach (var OCobranca in Model) {
+
+                            <div class="box-info-item">
+
+                                <div class="row">
+
+                                    <div class="col-md-12">
+
+                                        <span class="titulo">
+                                            <i class="fa fa-user"></i> @OCobranca.Associado.Pessoa.nome
+                                        </span><br>
+
+                                    </div>
+
+                                    <div class="col-md-6">
+
+                                        <span># @(OCobranca.Associado.nroAssociado ?? OCobranca.Associado.id)</span> <em>(@OCobranca.Associado.TipoAssociado.descricao)</em>
+
+                                    </div>
+
+                                    <div class="col-md-6">
+
+                                        <strong>@OCobranca.valorAtual.ToString("C") </strong>
+
+                                        <small class="text-italic fs-10">@(OCobranca.dtVencimentoAtual.exibirData())</small>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        }
+
+                    }
+
+                </div>
+
+            </div>
+
+            <div class="clearfix"></div>
+
+        </div>
+        <div class="clearfix"></div>
+
+    }
+</div>
+<div class="clearfix"></div>
+
+@section modalFooter{
+    <div class="text-right">
+        <input type="button" value="Cancelar" class="btn btn-default" data-dismiss="modal" aria-hidden="true" />
+        <input type="button" value="Confirmar Exclusão" class="btn btn-danger link-loading" onclick="$('#formExclusao').submit();" />
+    </div>
+}

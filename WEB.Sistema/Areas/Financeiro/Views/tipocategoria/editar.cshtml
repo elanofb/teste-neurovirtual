@@ -1,0 +1,79 @@
+﻿@model WEB.Areas.Financeiro.ViewModels.TipoCategoriaTituloForm
+
+@using DAL.Permissao.Security.Extensions
+@using WEB.Areas.Associacoes.Helpers
+
+@{
+    Layout = "~/views/shared/associatec/masterpage-edit.cshtml";
+    ViewBag.titlePage = "Tipo de Categoria";
+    ViewBag.subTituloPagina = Model.TipoCategoriaTitulo.descricao;
+}
+@section scripts{
+    <script type="text/javascript" src="@UtilConfig.linkResourses()Areas/Financeiro/js/auxiliares.js"></script>
+}
+
+@section navTabs{
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#tab-1" data-toggle="tab">Principal</a></li>
+    </ul>
+}
+
+@section tabContent{
+    <div id="tab-1" class="tab-pane active">
+        
+        @Html.infoCadastro(Model.TipoCategoriaTitulo.id, Model.TipoCategoriaTitulo.dtCadastro, Model.TipoCategoriaTitulo.dtAlteracao)
+
+        @using (Html.BeginForm("editar", null, FormMethod.Post, new {role = "form", @class = "default"})) {
+            
+            @Html.HiddenFor(m => m.TipoCategoriaTitulo.id)
+
+            @Html.ValidationSummary(true, "Alguns campos não foram validados")
+
+            <h4 class="separator-form">Dados Principais do Tipo de Categoria</h4>
+
+            <div class="form-horizontal">
+
+                @if(User.idOrganizacao() == 0) {
+                    <div class="col-sm-4 col-md-3">
+                        <label>Organização</label>
+                        @Html.DropDownListFor(m => m.TipoCategoriaTitulo.idOrganizacao, AssociacaoHelper.getInstance.selectList(Model.TipoCategoriaTitulo.idOrganizacao), "Padrão", new {@class = "form-control input-sm"})
+                    </div>
+                    <div class="clearfix"></div>
+                }
+
+                <div class="col-md-2">
+                    <label>Status</label>
+                    @Html.DropDownListFor(m => m.TipoCategoriaTitulo.ativo, ComboHelper.selectListStatus(Model.TipoCategoriaTitulo.ativo), new {@class = "form-control input-sm"})
+                    @Html.ValidationMessageFor(m => m.TipoCategoriaTitulo.ativo)
+                </div>
+
+                <div class="col-md-2">
+                    @Html.labelRequired("Macro Conta")
+                    @Html.DropDownListFor(m => m.TipoCategoriaTitulo.Categoria.idMacroConta, MacroContaHelper.getInstance.selectList(Model.TipoCategoriaTitulo.Categoria.idMacroConta), "...", new {id = "idMacroConta", @class = "form-control input-sm", onchange = "Auxiliares.carregarCategorias();"})
+                    @Html.ValidationMessageFor(m => m.TipoCategoriaTitulo.Categoria.idMacroConta)
+                </div>
+
+                <div class="col-md-2">
+                    @Html.labelRequired("Categoria")
+                    @Html.DropDownListFor(m => m.TipoCategoriaTitulo.idCategoria, CategoriaTituloHelper.getInstance.selectList(Model.TipoCategoriaTitulo.Categoria.idMacroConta, Model.TipoCategoriaTitulo.idCategoria), "...", new {id = "idCategoria", @class = "form-control input-sm"})
+                    @Html.ValidationMessageFor(m => m.TipoCategoriaTitulo.idCategoria)
+                </div>
+
+                <div class="col-md-4">
+                    @Html.labelRequired("Descrição")
+                    @Html.TextBoxFor(m => m.TipoCategoriaTitulo.descricao, new {@class = "form-control input-sm", maxlength = "100"})
+                    @Html.ValidationMessageFor(m => m.TipoCategoriaTitulo.descricao)
+                </div>
+                <div class="clearfix"></div>
+
+            </div>
+            <div class="clearfix"></div><br/>
+            
+            <div class="text-right">
+                @Html.exibirBotoesFormulario(Url.Action("listar"), "N", Url.Action("editar"))
+            </div>
+        }
+        
+    </div>
+}
+

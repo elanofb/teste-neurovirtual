@@ -1,0 +1,154 @@
+﻿@using DAL.Permissao.Security.Extensions
+@using WEB.Areas.Associacoes.Helpers
+@using WEB.Areas.Localizacao.Helpers
+@model WEB.Areas.Permissao.ViewModels.UsuarioSistemaForm
+
+
+@using (Html.BeginForm("editar", null, FormMethod.Post, new { role = "form", @class = "default" })) {
+    { Html.EnableClientValidation(false );}
+
+    { Html.EnableUnobtrusiveJavaScript(false); }
+
+    @Html.HiddenFor(m => m.UsuarioSistema.id)
+
+    @Html.ValidationSummary(true, "Alguns campos não foram validados.")
+
+    <div class="row">
+        
+        <div class="col-sm-6">
+            <h4 class="separator-form">Dados Pessoais</h4>
+            <div class="col-sm-12">
+                @Html.labelRequired("Nome")
+                @Html.TextBoxFor(m => m.UsuarioSistema.Pessoa.nome, new {@class = "form-control input-sm", maxlength = "100"})
+                @Html.ValidationMessageFor(m => m.UsuarioSistema.Pessoa.nome)
+            </div>
+            <div class="col-sm-4">
+                <label>CPF</label>
+                @Html.TextBoxFor(m => m.UsuarioSistema.Pessoa.nroDocumento, new {@class = "form-control input-sm", alt = "cpf"})
+                @Html.ValidationMessageFor(m => m.UsuarioSistema.Pessoa.nroDocumento)
+            </div>
+            <div class="col-sm-4">
+                <label>RG</label>
+                @Html.TextBoxFor(m => m.UsuarioSistema.Pessoa.rg, new {@class = "form-control input-sm"})
+
+            </div>
+            <div class="col-sm-4">
+                <label>Nascto.</label>
+                @Html.TextBoxFor(m => m.UsuarioSistema.Pessoa.dtNascimento, new {@class = "form-control input-sm", alt = "date"})
+                @Html.ValidationMessageFor(m => m.UsuarioSistema.Pessoa.dtNascimento)
+            </div>
+            <div class="clearfix"></div>
+            <div class="col-sm-4">
+                <label>Tel.Principal</label>
+                @Html.TextBoxFor(m => m.UsuarioSistema.Pessoa.nroTelPrincipal, new {@class = "form-control input-sm", alt = "phone"})
+            </div>
+            <div class="col-sm-4">
+                <label>Tel.Secundário</label>
+                @Html.TextBoxFor(m => m.UsuarioSistema.Pessoa.nroTelSecundario, new {@class = "form-control input-sm", alt = "phone"})
+            </div>
+
+            <div class="col-sm-4">
+                <label>Status</label>
+                @Html.DropDownListFor(m => m.UsuarioSistema.ativo, ComboHelper.selectListStatus(Model.UsuarioSistema.ativo), "...", new {@class = "form-control input-sm"})
+                @Html.ValidationMessageFor(m => m.UsuarioSistema.ativo)
+            </div>
+        </div>
+
+        <div class="col-sm-6">
+            <h4 class="separator-form">Dados de Acesso</h4>
+            <div class="col-sm-12">
+                @Html.labelRequired("E-mail")
+                @Html.TextBoxFor(m => m.UsuarioSistema.Pessoa.emailPrincipal, new {type = "email", @class = "form-control input-sm", maxlength = "100"})
+                @Html.ValidationMessageFor(m => m.UsuarioSistema.Pessoa.emailPrincipal)
+            </div>
+
+            <div class="col-sm-6">
+                @Html.labelRequired("Login")
+                @Html.TextBoxFor(m => m.UsuarioSistema.login, new {@class = "form-control input-sm", maxlength = "100"})
+                @Html.ValidationMessageFor(m => m.UsuarioSistema.login)
+                @Html.instrucao("Dica: utilize o CPF ou um e-mail do usuário.")
+            </div>
+
+            <div class="col-sm-6">
+                @Html.labelRequired("Perfil de Acesso")
+                @Html.DropDownListFor(m => m.UsuarioSistema.idPerfilAcesso, WEB.Areas.Permissao.Helpers.PerfilAcessoHelper.getInstance.selectList(User.idOrganizacao(), Model.UsuarioSistema.idPerfilAcesso), "...", new {@class = "form-control input-sm"})
+                @Html.ValidationMessageFor(m => m.UsuarioSistema.idPerfilAcesso)
+            </div>
+
+            <div class="col-sm-6">
+                @Html.labelRequired("Organização")
+                @Html.DropDownListFor(m => m.UsuarioSistema.idOrganizacao, AssociacaoHelper.getInstance.selectList(Model.UsuarioSistema.idOrganizacao, false), new {@class = "form-control input-sm"})
+                @Html.ValidationMessageFor(m => m.UsuarioSistema.idOrganizacao)
+            </div>
+
+            <div class="col-sm-6">
+                <label>Período de Acesso</label>
+                <div class="input-group">
+                    @Html.TextBoxFor(m => m.UsuarioSistema.dtInicioDegustacao, new {@class = "form-control input-sm input-datepicker", alt = "date"})
+                    <span class="input-group-addon"></span>
+                    @Html.TextBoxFor(m => m.UsuarioSistema.dtFimDegustacao, new {@class = "form-control input-sm input-datepicker", alt = "date"})
+                </div>
+                @Html.ValidationMessageFor(m => m.UsuarioSistema.dtInicioDegustacao)
+                @Html.ValidationMessageFor(m => m.UsuarioSistema.dtFimDegustacao)
+                @Html.instrucao("Informe somente se esse usuário possuir acesso temporário.")
+            </div>
+            <div class="clearfix"></div>
+
+        </div>
+        <div class="clearfix"></div>
+
+        <div class="col-sm-6">
+
+            <h4 class="separator-form">Dados de Endereço</h4>
+
+            <div class="col-sm-4 col-lg-3">
+                <label>CEP</label>
+                @Html.TextBoxFor(m => m.UsuarioSistema.Pessoa.listaEnderecos[0].cep, new { @class = "form-control input-sm", alt = "cep", onkeyup= "Localizacao.carregarEndereco('Endereco');", rel = "cepEndereco" })
+            </div>
+            <div class="clearfix"></div>
+
+            <div class="col-sm-9 col-lg-9">
+                <label>Logradouro</label>
+                @Html.TextBoxFor(m => m.UsuarioSistema.Pessoa.listaEnderecos[0].logradouro, new { @class = "form-control input-sm", rel = "logradouroEndereco", maxlength = "100" })
+            </div>
+
+            <div class="col-sm-3">
+                <label>Número</label>
+                @Html.TextBoxFor(m => m.UsuarioSistema.Pessoa.listaEnderecos[0].numero, new { @class = "form-control input-sm", maxlength = "20" })
+            </div>
+            <div class="clearfix"></div>
+
+            <div class="col-sm-9 col-lg-9">
+                <label>Bairro</label>
+                @Html.TextBoxFor(m => m.UsuarioSistema.Pessoa.listaEnderecos[0].bairro, new { @class = "form-control input-sm", rel = "bairroEndereco", maxlength = "80" })
+            </div>
+
+            <div class="col-sm-3">
+                <label>Complemento</label>
+                @Html.TextBoxFor(m => m.UsuarioSistema.Pessoa.listaEnderecos[0].complemento, new { @class = "form-control input-sm", maxlength = "50" })
+            </div>
+            <div class="clearfix"></div>
+
+            <div class="col-sm-3 col-lg-3">
+	            <label>UF</label>
+                @Html.DropDownListFor(m => m.UsuarioSistema.Pessoa.listaEnderecos[0].idEstado, EstadoHelper.selectList(Model.UsuarioSistema.Pessoa.listaEnderecos[0].idEstado), "...", new { @class = "form-control input-sm", onchange = "Localizacao.carregarCidades('Endereco', '');", rel = "idEstadoEndereco" })
+            </div>
+            <div class="col-sm-6 col-lg-6">
+	            <label>Cidade</label>
+                @Html.DropDownListFor(m => m.UsuarioSistema.Pessoa.listaEnderecos[0].idCidade, CidadeHelper.selectList(Model.UsuarioSistema.Pessoa.listaEnderecos[0].idEstado, Model.UsuarioSistema.Pessoa.listaEnderecos[0].idCidade), "Selecione...", new { @class = "form-control input-sm select2", rel = "idCidadeEndereco" })
+            </div>
+
+        </div>
+        <div class="clearfix"></div>
+
+    </div>
+    <div class="clearfix"></div><br/>
+
+    <div class="col-sm-12">
+        <p class="text-right">
+            @Html.exibirBotoesFormulario(Url.Action("listar"), Model.UsuarioSistema.flagSistema, Url.Action("editar", new {id = 0}))
+        </p>
+    </div>
+    <div class="clearfix"></div>
+
+}

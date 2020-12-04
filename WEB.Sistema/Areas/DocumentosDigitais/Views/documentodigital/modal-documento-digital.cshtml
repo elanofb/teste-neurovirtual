@@ -1,0 +1,21 @@
+﻿@model WEB.Areas.DocumentosDigitais.ViewModels.DocumentoDigitalForm
+
+@{
+    Layout = "~/views/shared/associatec/masterpage-modal.cshtml";
+    ViewBag.modalTitle = Model.DocumentoDigital.titulo;
+}
+
+<div class="col-xs-12">
+    @Html.Raw(Model.DocumentoDigital.htmlCorpo)
+</div>
+<div class="clearfix"></div>
+
+@section modalFooter {
+
+    <div class="text-right">
+        <button type="button" class="btn btn-primary" data-dismiss="modal" aria-hidden="true">
+            <i class="fa fa-times-circle"></i> Fechar
+        </button>
+    </div>
+
+}

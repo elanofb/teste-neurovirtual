@@ -1,0 +1,28 @@
+﻿@using DAL.Permissao.Security.Extensions
+@using WEB.Areas.Associacoes.Helpers
+@model WEB.Areas.Configuracao.ViewModels.ConfiguracaoComissaoForm
+
+@if (User.idOrganizacao() == 0){
+    <h4 class="separator-form">Configurações Comissões</h4>
+    <div class="col-md-3 col-sm-6">
+        <label>Associação</label>
+        @Html.DropDownListFor(m => m.ConfiguracaoComissao.idOrganizacao, AssociacaoHelper.getInstance.selectList(Model.ConfiguracaoComissao.idOrganizacao), "Padrão  Sistema", new { @class = "form-control input-sm", type = "number" })
+    </div>
+}
+<div class="clearfix"></div>
+
+<div class="col-md-4">
+	<label>Habilitar?</label>
+	@Html.DropDownListFor(m => m.ConfiguracaoComissao.flagHabilitar, ComboHelper.selectListTrueFalse(Model.ConfiguracaoComissao.flagHabilitar), "...", new { @class="form-control input-sm" })
+</div>
+<div class="clearfix"></div><br/>
+
+@if (Model.ConfiguracaoComissao.flagHabilitar == true) {
+    <h4 class="separator-form">Grupos de acesso comissionáveis</h4>
+    <div class="carregando content-load" id="boxPerfilComissavel" data-url="@Url.Action("partial-form-vincular-perfil-comissionavel", "ConfiguracaoComissao", new { Model.ConfiguracaoComissao.id})"></div>
+}
+
+<div class="clearfix"></div><br />
+
+
+

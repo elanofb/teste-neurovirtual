@@ -1,0 +1,61 @@
+﻿@model WEB.Areas.MateriaisApoio.ViewModels.TipoMaterialApoioForm
+@using DAL.Permissao.Security.Extensions
+@using WEB.Areas.Associacoes.Helpers
+@{
+	Layout = "~/views/shared/associatec/masterpage-edit.cshtml";
+	ViewBag.titlePage = "Tipo de Material de Apoio";
+}
+
+@section navTabs{
+	<ul class="nav nav-tabs">
+		<li class="active"><a href="#tab-1" data-toggle="tab">Principal</a></li>
+	</ul>
+}
+
+@section tabContent{
+	<div id="tab-1" class="tab-pane active">
+		@{Html.RenderPartial("partial-info-cadastro");}
+
+		@using (Html.BeginForm("editar", null, FormMethod.Post, new { role = "form", @class = "default" })) {
+			@Html.legendaRequired()<br />
+			@Html.HiddenFor(m => m.TipoMaterialApoio.id)
+			@Html.ValidationSummary(true, "Confira os erros do formulário.")
+
+			<div class="form-horizontal">
+
+                @if (User.idOrganizacao() == 0) {
+
+                    <div class="col-sm-4 col-md-4">
+                        <label>Organização</label>
+                        @Html.DropDownListFor(m => m.TipoMaterialApoio.idOrganizacao, AssociacaoHelper.getInstance.selectList(Model.TipoMaterialApoio.idOrganizacao), "Padrão", new { @class = "form-control input-sm" })
+                    </div>
+                    <div class="clearfix"></div>
+                }
+
+				<div class="col-md-4">
+					@Html.labelRequired("Descrição")
+					@Html.TextBoxFor(m => m.TipoMaterialApoio.descricao, new { @class = "form-control input-sm", maxlength = "100" })
+					@Html.ValidationMessageFor(m => m.TipoMaterialApoio.descricao)
+				</div>
+
+				<div class="col-md-2">
+					<label>Status</label>
+					@Html.DropDownListFor(m => m.TipoMaterialApoio.ativo, ComboHelper.selectListStatus(Model.TipoMaterialApoio.ativo), new { @class = "form-control input-sm" })
+					@Html.ValidationMessageFor(m => m.TipoMaterialApoio.ativo)
+				</div>
+				<div class="clearfix"></div>
+
+			</div>
+			<div class="clearfix"></div>
+			<br /><br />
+
+			<div class="col-md-6">
+				<div class="text-right">
+					@Html.exibirBotoesFormulario(Url.Action("listar"), "N")
+				</div>
+			</div>
+
+		}
+	</div><div class="clearfix"></div>
+}
+

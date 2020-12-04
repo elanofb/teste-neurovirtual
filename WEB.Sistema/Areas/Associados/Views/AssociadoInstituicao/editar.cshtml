@@ -1,0 +1,34 @@
+﻿@model  WEB.Areas.Associados.ViewModels.AssociadoInstituicaoForm
+@using BLL.ConfiguracoesTextos.Extensions
+@using DAL.Permissao.Security.Extensions
+@using MvcFlashMessages
+@using WEB.Areas.Instituicoes.Helpers
+
+<script type="text/javascript" src="@UtilConfig.linkResourses()Areas/Associados/js/associado-instituicoes.js?v=1.0"></script>
+
+<div id="boxFormInstituicao" >
+	@Html.RenderFlash()
+
+        @using (Ajax.BeginForm("editar", "associadoinstituicao", new { area = "associados" }, new AjaxOptions { HttpMethod = "POST", InsertionMode = InsertionMode.Replace, UpdateTargetId = "boxFormInstituicao", OnSuccess = "AssociadoInstituicao.onSuccessForm" }, new { @class = "" })) {
+            { Html.EnableClientValidation(false); }
+            @Html.AntiForgeryToken()
+            @Html.legendaRequired()<br />
+            @Html.HiddenFor(m => m.AssociadoInstituicao.id)
+            @Html.HiddenFor(m => m.AssociadoInstituicao.idAssociado, new { @class = "nao-limpar" })
+            <div class="row">
+                @Html.ValidationSummary(true, "Algumas informações precisam ser corrigidas abaixo.")
+            </div>
+
+            <div class="row">
+                <div class="col-md-4">
+                    @Html.labelTexto(User.idOrganizacao(), "lblinstituicao", "Instituição")
+                    @Html.DropDownListFor(m => m.AssociadoInstituicao.idInstituicao, InstituicaoHelper.selectList(Model.AssociadoInstituicao.idInstituicao), "...", new { @class = "form-control input-sm" })
+                    @Html.ValidationMessageFor(m => m.AssociadoInstituicao.idInstituicao)
+                </div>
+                <div class="col-md-2 padding-top-20">
+                    <input type="submit" name="salvar" value="Salvar" class="btn btn-primary link-loading" />
+                </div>
+            </div>
+        }
+</div>
+<div class="clearfix"></div>

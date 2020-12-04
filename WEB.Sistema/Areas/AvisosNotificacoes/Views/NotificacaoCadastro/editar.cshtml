@@ -1,0 +1,226 @@
+﻿@model WEB.Areas.AvisosNotificacoes.ViewModels.AvisoNotificacaoForm
+
+@using DAL.Notificacoes
+@using MvcFlashMessages
+@using DAL.Permissao.Security.Extensions;
+@using WEB.Areas.Associacoes.Helpers;
+
+@{
+    Layout = "~/views/shared/associatec/masterpage-edit.cshtml";
+    ViewBag.titlePage = "Avisos e Notificações";
+}
+
+@section scripts{
+    @Html.includeDatePicker()
+    @Html.includeDateTimePicker()
+    
+    @Html.includeFroalaEditorJS()
+    <script src="@UtilConfig.linkResourses("Areas/AvisosNotificacoes/js/aviso-notificacao.js?v=3")"></script>
+    <script src="@UtilConfig.linkResourses("Areas/AvisosNotificacoes/js/aviso-notificacao-associado.js")"></script>
+    <script src="@UtilConfig.linkResourses("Areas/AvisosNotificacoes/js/aviso-notificacao-perfil.js")"></script>
+    <script src="@UtilConfig.linkResourses("Areas/AvisosNotificacoes/js/aviso-notificacao-usuario.js")"></script>
+}
+
+@section styles {
+    @Html.includeFroalaEditorCSS()
+
+    <link href="@UtilConfig.linkResourses("css/associatec/list-custom.css")" rel="stylesheet" />
+}
+
+@section breadcrump {
+    <ol class="breadcrumb">
+        <li><a class="active fs-14" href="@Url.Action("listar", "NotificacaoConsulta")"><i class="fa fa-arrow-left"></i> Voltar</a></li>
+    </ol>
+}
+
+@section navTabs{
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#tab-1" data-toggle="tab">Principal</a></li>
+
+        @if(Model.ONotificacaoSistema.id > 0) {
+
+            if (Model.ONotificacaoSistema.flagNotificacaoAssociado()) {
+                <li class="tabAssociadoNotificado"><a href="#tab-2" data-toggle="tab">Associados Notificados</a></li>   
+            }
+
+            if (Model.ONotificacaoSistema.flagNotificacaoUsuario()) { 
+                <li class="tabUsuarioNotificado"><a href="#tab-3" data-toggle="tab">Usuários Notificados</a></li>
+            }
+        }
+
+    </ul>
+}
+
+@section tabContent{
+
+    <div id="tab-1" class="tab-pane active">
+
+        @Html.RenderFlash()
+
+        @Html.infoCadastro(Model.ONotificacaoSistema.id, Model.ONotificacaoSistema.dtCadastro, Model.ONotificacaoSistema.dtAlteracao)
+
+        @using (Html.BeginForm("editar", null, FormMethod.Post, new { role = "form", @class = "default", id = "formNotificacao" })) {
+            
+            { Html.EnableClientValidation(false); }
+            
+            @Html.HiddenFor(m => m.ONotificacaoSistema.id)
+            
+            <div class="col-md-8">
+
+                <h4 class="separator-form-icon"><i class='far fa-edit'></i> Dados Principais</h4>
+
+                <div class="row">
+
+                    @if (User.idOrganizacao() == 0) {
+
+                        <div class="col-sm-4 col-md-3">
+                            <label>Organização</label>
+                            @Html.DropDownListFor(m => m.ONotificacaoSistema.idOrganizacao, AssociacaoHelper.getInstance.selectList(Model.ONotificacaoSistema.idOrganizacao), "Padrão", new { @class = "form-control input-sm" })
+                        </div>
+                        <div class="clearfix"></div>
+
+                    }
+
+                    <div class="col-md-12">
+                        @Html.labelRequired("Título")
+                        @Html.TextBoxFor(x => x.ONotificacaoSistema.titulo, new {@class = "form-control input-sm", maxlength = "255"})
+                        @Html.ValidationMessageFor(x => x.ONotificacaoSistema.titulo)
+                    </div>
+                    <div class="clearfix"></div>
+
+                    @*
+                    @if (Model.flagTemTemplates) {
+                        <div class="col-md-6">
+                            @Html.labelRequired("Template")
+                            <div class="input-group">
+                                @Html.DropDownListFor(x => x.ONotificacaoSistema.idTemplate, TemplateMensagemHelper.getInstance.selectList(Model.ONotificacaoSistema.idTemplate), "...", new {@class = "form-control input-sm", onchange = "AvisoNotificacao.onChangeTemplate(this)"})
+                                <span class="input-group-btn">
+                                    <a data-toggle="tooltip" title="Pré-visualizar Template" href="javascript:;" onclick="AvisoNotificacao.preVisualizarTemplate('@Url.Action("modal-pre-visualizar", "TemplateMensagemConsulta", new { Area = "Notificacoes" })')" class="btn btn-primary btn-sm">
+                                        <i class="far fa-browser"></i>
+                                    </a>
+                                </span>
+                            </div>
+                            @Html.ValidationMessageFor(x => x.ONotificacaoSistema.idTemplate)
+                        </div>
+                        <div class="clearfix"></div>
+                    }
+                    *@
+
+                    <div id="boxMensagemNotificacao" class="col-md-12 @(Model.ONotificacaoSistema.idTemplate > 0 ? "hide" : "")">
+                        @Html.labelRequired("Mensagem")
+                        @Html.TextAreaFor(x => x.ONotificacaoSistema.notificacao, new {id = "editor", @class = "form-control input-sm", rows = "5", maxlength = 1000})
+                        @Html.ValidationMessageFor(x => x.ONotificacaoSistema.notificacao)
+                    </div>
+                    <div class="clearfix"></div><br />
+
+                </div>
+                
+                @if (Model.flagPermiteEnvioMobile) {
+                    
+                    <div>
+        
+                        <h4 class="separator-form-icon"><i class='far fa-edit'></i> Configurações de Aplicativo</h4>
+                
+                        <div class="row">
+                            
+                            @if (Model.flagPermiteEnvioMobile) {
+
+                                <div class="col-xs-12">
+                                    <label>Envio APP</label>
+                                    @Html.DropDownListFor(x => x.ONotificacaoSistema.flagMobile, ComboHelper.selectListTrueFalse(Model.ONotificacaoSistema.flagMobile), "...", new {@class = "form-control input-sm", onchange = "AvisoNotificacao.onChangeFlagMobile(this)"})
+                                    @Html.ValidationMessageFor(x => x.ONotificacaoSistema.flagMobile)
+                                </div>
+                                <div class="clearfix"></div>
+
+                            }
+
+                            <div id="boxNotificacaoMobile" class="@(Model.ONotificacaoSistema.flagMobile != true ? "hide" : "")">
+
+                                <div class="col-xs-12">
+                                    @Html.labelRequired("Título Push")
+                                    @Html.TextBoxFor(x => x.ONotificacaoSistema.tituloPush, new {@class = "form-control input-sm", maxlength = "100"})
+                                    @Html.ValidationMessageFor(x => x.ONotificacaoSistema.tituloPush)
+                                </div>
+                                <div class="clearfix"></div>
+
+                                <div class="col-xs-12">
+                                    @Html.labelRequired("Mensagem Push")
+                                    @Html.TextAreaFor(x => x.ONotificacaoSistema.notificacaoPush, new {@class = "form-control input-sm", maxlength = "500", rows = 6})
+                                    @Html.ValidationMessageFor(x => x.ONotificacaoSistema.notificacaoPush)
+                                </div>
+                                <div class="clearfix"></div>
+
+                            </div>
+
+                        </div>
+                        
+                    </div>
+                    
+                }
+
+            </div>
+
+            <div class="col-md-4">
+
+                @if (Model.ONotificacaoSistema.id == 0) {
+                    
+                    { Html.RenderPartial("partial-definicao-associados", Model); }
+                    
+                }
+                
+                @if (Model.ONotificacaoSistema.id > 0) {
+
+                    if (Model.ONotificacaoSistema.flagNotificacaoAssociado()) {
+                        { Html.RenderPartial("partial-definicao-associados", Model); }    
+                    }
+                    
+                    if (Model.ONotificacaoSistema.flagNotificacaoUsuario()) {
+                        { Html.RenderPartial("partial-definicao-usuarios", Model); }    
+                    }
+
+                }
+                
+                @{ Html.RenderPartial("partial-configuracoes", Model); }
+
+            </div>
+            <div class="clearfix"></div>
+
+        }
+
+        @if (Model.ONotificacaoSistema.id == 0) {
+            <div class="col-md-12">
+                <div id="boxAssociadoEspecifico" class="content-load-associados carregando" data-url="@Url.Action("partialAssociadosEspecificos", "avisonotificacaoassociado")"></div>
+            </div>
+        }
+        <div class="clearfix"></div><br />
+
+        <div class="text-right">
+                
+            <a href="@Url.Action("listar", "NotificacaoConsulta")" class="btn btn-default">Voltar</a>&nbsp;
+
+            @if (Model.ONotificacaoSistema.id == 0) {
+                <input type="button" name="enviar" value="Salvar" class="btn btn-primary link-loading" onclick="$('#formNotificacao').submit()"/>
+            }
+
+        </div>
+        <div class="clearfix"></div><br />
+
+        </div>
+
+    @if (Model.ONotificacaoSistema.id > 0) {
+        
+        if (Model.ONotificacaoSistema.flagNotificacaoAssociado()) {
+            <div id="tab-2" class="tab-pane">
+                <div id="boxAssociadosEnvio" class="content-load carregando" data-url="@Url.Action("partialAssociadosNotificacao", "NotificacaoCadastro", new {idNotificacao = Model.ONotificacaoSistema.id})"></div>
+            </div>
+        }
+        
+        if (Model.ONotificacaoSistema.flagNotificacaoUsuario()) {
+            <div id="tab-3" class="tab-pane">
+                <div id="boxUsuariosEnvio" class="content-load carregando" data-url="@Url.Action("partialUsuariosNotificacao", "NotificacaoCadastro", new {idNotificacao = Model.ONotificacaoSistema.id})"></div>
+            </div>
+        }
+        
+    }
+
+}

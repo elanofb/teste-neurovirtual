@@ -1,0 +1,36 @@
+﻿@model WEB.Areas.ConfiguracoesAssociados.ViewModels.AssociadoCampoOpcaoForm
+@using MvcFlashMessages
+@{
+    Layout = null;
+
+    string idBox = IsPost ? "" : "boxOpcaoCampo";
+}
+
+<div id="@idBox">
+    <div class="row">
+        @Html.RenderFlash()
+
+        @using (Ajax.BeginForm("salvar-form-opcao", null, new AjaxOptions { HttpMethod = "POST", InsertionMode = InsertionMode.Replace, UpdateTargetId = idBox, OnSuccess = "AssociadoCampoOpcao.onSucessFormOpcao"}, new { })) {
+            
+            @Html.HiddenFor(x => x.AssociadoCampoOpcao.id)
+
+            @Html.HiddenFor(x => x.AssociadoCampoOpcao.idConfiguracaoAssociadoCampo)
+
+            @Html.ValidationSummary(false)
+
+            <div class="col-sm-4">
+                @Html.labelRequired("Value")
+                @Html.TextBoxFor(x => x.AssociadoCampoOpcao.value, new { @class = "form-control input-sm", maxlength="100" })
+            </div>
+
+            <div class="col-sm-6">
+                @Html.labelRequired("Texto")
+                @Html.TextBoxFor(x => x.AssociadoCampoOpcao.texto, new { @class = "form-control input-sm", maxlength = "100" })
+            </div>
+
+            <div class="col-sm-2 padding-top-20">
+                <button type="submit" name="enviar" class="btn btn-sm btn-primary link-loading">OK</button>
+            </div>
+        }
+    </div>
+</div>

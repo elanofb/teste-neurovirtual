@@ -1,0 +1,131 @@
+[
+  {
+    "outputFileName": "js/base.js",
+    "inputFiles": [
+      "js/associatec/plugins/pace/pace.js",
+      "js/associatec/plugins/jQuery/jquery-2.2.3.js",
+      "css/associatec/bootstrap/js/bootstrap.js",
+      "js/associatec/plugins/globalize/globalize.js",
+      "js/associatec/plugins/alert/bootbox.js",
+      "js/associatec/plugins/sweetalert/sweetalert2.js",
+      "js/associatec/plugins/sweetalert/core.js",
+      "js/associatec/plugins/globalize/cultures/globalize.culture.pt-BR.js",
+      "js/associatec/plugins/mask/meio.mask.js",
+      "js/associatec/plugins/alert/alert.js",
+      "js/associatec/plugins/jquery/jquery.validate.js",
+      "js/associatec/plugins/jquery/jquery.validate.globalize.js",
+      "js/associatec/plugins/jquery/jquery.validate.unobtrusive.js",
+      "js/associatec/plugins/jquery/jquery.unobtrusive-ajax.js",
+      "js/associatec/plugins/slimScroll/jquery.slimscroll.js",
+      "js/associatec/plugins/fastclick/fastclick.js",
+      "js/associatec/plugins/jquery.loading/jquery.loading.js"
+    ]
+  },
+  {
+    "outputFileName": "js/tela-login.js",
+    "inputFiles": [
+      "js/associatec/plugins/jQuery/jquery-2.2.3.js",
+      "css/associatec/bootstrap/js/bootstrap.js",
+      "js/associatec/plugins/globalize/globalize.js",
+      "js/associatec/plugins/globalize/cultures/globalize.culture.pt-BR.js",
+      "js/associatec/plugins/jquery/jquery.validate.js",
+      "js/associatec/plugins/jquery/jquery.validate.globalize.js",
+      "js/associatec/plugins/jquery/jquery.validate.unobtrusive.js",
+      "js/associatec/plugins/jquery/jquery.unobtrusive-ajax.js"
+    ]
+  },
+  {
+    "outputFileName": "js/modulos.js",
+    "inputFiles": [
+      "css/associatec/dist/js/app.js",
+      "js/associatec/vocabulary.pt-br.js",
+      "js/associatec/ajax_default.js",
+      "js/associatec/default_actions.js",
+      "js/associatec/default_sistema.js",
+      "js/associatec/combo_select.js",
+      "Areas/Permissao/js/carregador-permissao.js",
+      "js/associatec/nav.js",
+      "Areas/Notificacoes/js/notificacao.js",
+      "Areas/Associados/js/pesquisa-rapida.js"
+    ]
+  },
+  {
+    "outputFileName": "css/base.css",
+    "inputFiles": [
+      "js/associatec/plugins/pace/pace.css",
+      "css/associatec/bootstrap/css/bootstrap.css",
+      "js/associatec/plugins/sweetalert/sweetalert2.css",
+      "css/associatec/dist/css/AdminLTE.css",
+      "css/associatec/flash-messages.css",
+      "css/associatec/modulos/custom.css",
+      "css/associatec/modulos/responsive.css",
+      "js/associatec/plugins/jquery.loading/jquery.loading.css",
+      "Areas/associados/css/pesquisa-rapida.css"
+    ]
+  },
+  {
+    "outputFileName": "css/base-area-associado.css",
+    "inputFiles": [
+      "Areas/AreaAssociados/css/plugins/bootstrap/css/bootstrap.css",
+      "Areas/AreaAssociados/css/flash-messages.css",
+      "Areas/AreaAssociados/css/project-custom.css",
+      "Areas/AreaAssociados/css/default.css",
+      "Areas/AreaAssociados/css/default-form.css",
+      "Areas/AreaAssociados/css/custom.css",
+      "Areas/AreaAssociados/css/mobile.css",
+      "Areas/AreaAssociados/css/colors-custom.css",
+      "Areas/AreaAssociados/js/plugins/sweetalert/sweetalert2.css"
+    ]
+  },
+  {
+    "outputFileName": "js/base-area-associado.js",
+    "inputFiles": [
+      "Areas/AreaAssociados/js/plugins/jquery/jquery-2.1.1.js",
+      "Areas/AreaAssociados/js/plugins/jquery/jquery.validate.js",
+      "Areas/AreaAssociados/js/plugins/jquery/jquery.validate.unobtrusive.js",
+      "Areas/AreaAssociados/js/plugins/jquery/jquery.unobtrusive-ajax.js",
+      "Areas/AreaAssociados/css/plugins/bootstrap/js/bootstrap.js",
+      "Areas/AreaAssociados/js/plugins/bootstrap/bootbox.js",
+      "Areas/AreaAssociados/js/plugins/sweetalert/sweetalert2.js",
+      "Areas/AreaAssociados/js/plugins/sweetalert/core.js",
+      "Areas/AreaAssociados/js/plugins/alert/alert.js",
+      "Areas/AreaAssociados/js/plugins/mask/meio.mask.js"
+    ]
+  },
+  {
+    "outputFileName": "js/modulos-area-associado.js",
+    "inputFiles": [
+      "js/associatec/vocabulary.pt-br.js",
+      "js/associatec/ajax_default.js",
+      "Areas/AreaAssociados/js/default-actions.js",
+      "Areas/AreaAssociados/js/default-area-associado.js",
+      "Areas/AreaAssociados/js/default.js",
+      "Areas/AreaAssociados/Home/js/header.js",
+      "Areas/AreaAssociados/Home/js/footer.js",
+      "Areas/AreaAssociados/js/integracao.js"
+    ]
+  },
+  {
+    "outputFileName": "css/base-area-checkout.css",
+    "inputFiles": [
+      "js/area-checkout/plugins/bootstrap-3.3.6-dist/css/bootstrap.css",
+      "css/area-checkout/flash-messages.css"
+    ]
+  },
+  {
+    "outputFileName": "js/base-area-checkout.js",
+    "inputFiles": [
+      "js/area-checkout/plugins/jquery/jquery-2.1.0.js",
+      "js/area-checkout/plugins/bootstrap-3.3.6-dist/js/bootstrap.js",
+      "js/area-checkout/plugins/mask/meio.mask.js"
+    ]
+  },
+  {
+    "outputFileName": "js/modulos-area-checkout.js",
+    "inputFiles": [
+      "js/area-checkout/default.js",
+      "js/area-checkout/vocabulary.pt-br.js",
+      "js/area-checkout/ajax_default.js"
+    ]
+  }
+]

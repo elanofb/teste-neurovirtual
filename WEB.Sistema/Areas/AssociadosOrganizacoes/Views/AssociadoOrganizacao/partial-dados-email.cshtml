@@ -1,0 +1,19 @@
+﻿@model List<DAL.Pessoas.PessoaEmail>
+
+@if (!Model.Any()) {
+    <div class="alert alert-info">
+        Nenhum e-mail cadastrado
+    </div>
+}
+
+@foreach (var OEmail in Model) {
+
+    if (OEmail.email.isEmpty()) {
+        continue;
+    }
+
+    <div>
+        <i class="far fa-envelope"></i> @OEmail.email
+    </div>
+
+}

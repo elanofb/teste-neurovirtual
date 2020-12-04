@@ -1,0 +1,21 @@
+﻿@using MvcFlashMessages
+@{
+    ViewBag.Title = "Ops, ocorreu um problema.";
+
+    if (Request.IsAjaxRequest()) {
+
+        Layout = "~/views/shared/associatec/masterpage-modal.cshtml";
+
+    }
+
+}
+
+<div class="box" id="list">
+    
+    @Html.RenderFlash()
+
+    <div class="alert">
+        <h4>Erro 403</h4>
+        Você está acessando um endereço que não existe ou para o qual você não tem permissão.
+    </div>
+</div>

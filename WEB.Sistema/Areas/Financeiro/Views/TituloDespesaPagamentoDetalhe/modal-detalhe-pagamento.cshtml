@@ -1,0 +1,306 @@
+﻿@model WEB.Areas.Financeiro.ViewModels.PagamentoDespesaDetalheVM
+@using System.Web.Script.Serialization
+@using BLL.FinanceiroLancamentos
+@using DAL.Financeiro
+@using DAL.Pessoas
+@using WEB.Areas.ContasBancarias.Helpers
+@using WEB.Areas.DadosBancarios.Helpers
+@using WEB.Helpers
+
+@{
+    ViewBag.modalTitle = "Detalhes do Pagamento - " + Model.OPagamentoDespesa.descParcela;
+    ViewBag.modalWidthClass = "lg";
+
+    if (IsPost) {
+        Layout = null;
+    } else {
+        Layout = "~/views/shared/associatec/masterpage-modal.cshtml";
+    }
+
+    Model.OPagamentoDespesa.TituloDespesa.Pessoa = Model.OPagamentoDespesa.TituloDespesa.Pessoa ?? new Pessoa();
+    var urlEdicaoPagamento = Url.Action("alterar-dados", "TituloDespesaPagamentoEdicao", new { area = "Financeiro" });
+    var urlEdicaoTitulo = Url.Action("alterar-dados", "DespesaDetalheOperacao", new { area = "Financeiro" });
+    var listaMacroConta = new JavaScriptSerializer().Serialize(MacroContaHelper.getInstance.selectList(null).Select(y => new { value = y.Value, text = y.Text }).ToList());
+    var listaCategoria = new JavaScriptSerializer().Serialize(CategoriaTituloHelper.getInstance.selectList(null,0).Select(y => new { value = y.Value, text = y.Text }).ToList());
+    var listaCentroCusto = new JavaScriptSerializer().Serialize(CentroCustoHelper.getInstance.selectList(null).Select(y => new { value = y.Value, text = y.Text }).ToList());
+    var listaModoPagamento = new JavaScriptSerializer().Serialize(ModoPagamentoDespesaHelper.getInstance.selectList(null).Select(y => new { value = y.Value, text = y.Text }).ToList());
+    var listaContaBancaria = new JavaScriptSerializer().Serialize(ContaBancariaHelper.getInstance.selectList(null).Select(y => new { value = y.Value, text = y.Text }).ToList());
+    var listaContaBancariaFavorecida = new JavaScriptSerializer().Serialize(DadoBancarioHelper.getInstance.selectList(null, Model.OPagamentoDespesa.TituloDespesa.idPessoa).Select(y => new { value = y.Value, text = y.Text }).ToList());
+}
+
+<div id="boxDetalhePagamento">
+
+    <div class="row padding-bottom-10">
+        
+        <div class="col-md-6 bordered-gray-right-1 fs-12">
+        
+            <div class="btn btn-block btn-primary abreviar" data-toggle="tooltip" title="Dados do Pagamento"><i class="fa fa-dollar-sign"></i> Dados do Pagamento</div>
+            
+            <div class="row">
+                <div class="col-sm-6 abreviar">
+                    <p class="campo-info margin-left-10">
+                        <label><i class="fa fa-chevron-right"></i> Nota Fiscal:</label> 
+                        @if (Model.flagEdicao) {
+                            @Html.linkEditable(Model.OPagamentoDespesa.id, "nroNotaFiscal", Model.OPagamentoDespesa.nroNotaFiscal, "Nota Fiscal", urlEdicaoPagamento)
+                        }
+                        else {
+                            @Model.OPagamentoDespesa.nroNotaFiscal
+                        }
+                    </p>
+                    <p class="campo-info margin-left-10">
+                        <label><i class="fa fa-chevron-right"></i> Nº Contrato:</label>
+                        @if (Model.flagEdicao) {
+                            @Html.linkEditable(Model.OPagamentoDespesa.id, "nroContrato", Model.OPagamentoDespesa.nroContrato, "Nº Contrato", urlEdicaoPagamento)
+                        }
+                        else {
+                            @Model.OPagamentoDespesa.nroContrato
+                        }
+                    </p>
+                    <p class="campo-info margin-left-10">
+                        <label><i class="fa fa-chevron-right"></i> Código Boleto/Fatura:</label> 
+                        @if (Model.flagEdicao) {
+                            @Html.linkEditable(Model.OPagamentoDespesa.id, "nroDocumento", Model.OPagamentoDespesa.nroDocumento, "Código Boleto/Fatura", urlEdicaoPagamento)
+                        }
+                        else {
+                            @Model.OPagamentoDespesa.nroDocumento
+                        }
+                    </p>
+                    <p class="campo-info margin-left-10">
+                        <label><i class="fa fa-chevron-right"></i> Modo Pagamento:</label> 
+                        @if (Model.flagEdicao) {
+                            @Html.linkEditable(Model.OPagamentoDespesa.id, "idModoPagamento", Model.OPagamentoDespesa.idModoPagamento, "Modo Pagamento", urlEdicaoPagamento, "select", listaModoPagamento, Model.OPagamentoDespesa.ModoPagamento.descricao)
+                        }
+                        else {
+                            @Model.OPagamentoDespesa.ModoPagamento.descricao
+                        }
+                    </p>
+                </div>
+                <div class="col-sm-6 abreviar">
+                    <p class="campo-info margin-left-10 margin-top-10">
+                        <label><i class="fa fa-calendar"></i> Vencimento:</label>
+                        @if (Model.flagEdicao) {
+                            @Html.linkEditable(Model.OPagamentoDespesa.id, "dtVencimento", Model.OPagamentoDespesa.dtVencimento.exibirData(), "Vencimento", urlEdicaoPagamento, "text", "", Model.OPagamentoDespesa.dtVencimento.exibirData(), 0, 0, "text-black bold", "date")
+                        }
+                        else {
+                            @Model.OPagamentoDespesa.dtVencimento.exibirData()
+                        }
+                    </p>
+                    <p class="campo-info margin-left-10">
+                        <label><i class="fa fa-calendar"></i> Previsão de Pagamento:</label> 
+                        @if (Model.flagEdicao) {
+                            @Html.linkEditable(Model.OPagamentoDespesa.id, "dtPrevisaoPagamento", Model.OPagamentoDespesa.dtPrevisaoPagamento.exibirData(), "Previsão de Pagamento", urlEdicaoPagamento, "text", "", Model.OPagamentoDespesa.dtPrevisaoPagamento.exibirData(), 0, 0, "text-black bold", "date")
+                        }
+                        else {
+                            @Model.OPagamentoDespesa.dtPrevisaoPagamento.exibirData()
+                        }
+                    </p>
+                    <p class="campo-info margin-left-10">
+                        <label><i class="fa fa-calendar"></i> Baixa:</label> 
+                        @if (Model.flagEdicao) {
+                            @Html.linkEditable(Model.OPagamentoDespesa.id, "dtBaixa", Model.OPagamentoDespesa.dtBaixa.exibirData(), "Baixa", urlEdicaoPagamento, "text", "", Model.OPagamentoDespesa.dtBaixa.exibirData(), 0, 0, "text-black bold", "date")
+                        }
+                        else {
+                            @Model.OPagamentoDespesa.dtBaixa.exibirData()
+                        }
+                    </p>
+                    <p class="campo-info margin-left-10">
+                        <label><i class="fa fa-calendar"></i> Débito:</label>
+                        @if (Model.flagEdicao) {
+                            @Html.linkEditable(Model.OPagamentoDespesa.id, "dtDebito", Model.OPagamentoDespesa.dtDebito.exibirData(), "Débito", urlEdicaoPagamento, "text", "", Model.OPagamentoDespesa.dtDebito.exibirData(), 0, 0, "text-black bold", "date")
+                        }
+                        else {
+                            @Model.OPagamentoDespesa.dtDebito.exibirData()
+                        }
+                    </p>
+                    <p class="campo-info margin-left-10">
+                        <label><i class="fa fa-calendar"></i> Competência:</label>
+                        @if (Model.flagEdicao) {
+                            @Html.linkEditable(Model.OPagamentoDespesa.id, "dtCompetencia", Model.OPagamentoDespesa.dtCompetencia.exibirData(), "Competência", urlEdicaoPagamento, "text", "", Model.OPagamentoDespesa.dtCompetencia.exibirData(), 0, 0, "text-black bold", "date")
+                        }
+                        else {
+                            @Model.OPagamentoDespesa.dtCompetencia.exibirData()
+                        }
+                    </p>
+                </div>
+            </div>
+        
+            @if (Model.OPagamentoDespesa.dtExclusao.HasValue) {
+                <div class="row text-red margin-top-10">
+                    <div class="col-sm-12 abreviar">
+                        <span class="margin-left-10">
+                            <strong><i class="fa fa-comment"></i> Motivo Exclusão: </strong>@(Model.OPagamentoDespesa.motivoExclusao)
+                        </span>
+                    </div>
+                </div>
+            }
+        </div>
+        
+        <div class="col-sm-6">
+            
+            <div class="btn btn-block btn-primary abreviar" data-toggle="tooltip" title="Dados do Favorecido"><i class="fa fa-user"></i> Dados do Favorecido</div>
+            
+            <div class="row">
+                <div class="col-sm-12">
+                    
+                    <p class="campo-info margin-left-10 margin-top-10">
+                        <label><strong><i class="fa fa-user"></i> Nome:</strong></label> 
+                        @if (Model.flagEdicao) {
+                            @Html.linkEditable(Model.OPagamentoDespesa.idTituloDespesa, "nomePessoaCredor", Model.OPagamentoDespesa.TituloDespesa.nomePessoaCredor, "Nome", urlEdicaoTitulo)
+                        }
+                        else {
+                            @(Model.OPagamentoDespesa.TituloDespesa.nomePessoaCredor ?? "Não informado")
+                        }
+                    </p>
+                    
+                    <p class="campo-info margin-left-10">
+                        <label><strong><i class="fa fa-id-card"></i> Documento:</strong></label> 
+                        @if (Model.flagEdicao) {
+                            @Html.linkEditable(Model.OPagamentoDespesa.idTituloDespesa, "documentoPessoaCredor", Model.OPagamentoDespesa.TituloDespesa.documentoPessoaCredor, "Documento", urlEdicaoTitulo, "text", "", UtilString.formatCPFCNPJ(Model.OPagamentoDespesa.TituloDespesa.documentoPessoaCredor))
+                        }
+                        else {
+                            @UtilString.formatCPFCNPJ(Model.OPagamentoDespesa.TituloDespesa.documentoPessoaCredor)
+                        }
+                    </p>
+                    
+                    <p class="campo-info margin-left-10">
+                        <label><strong><i class="fa fa-phone"></i> Telefone:</strong></label> 
+                        @if (Model.flagEdicao) {
+                            @Html.linkEditable(Model.OPagamentoDespesa.idTituloDespesa, "nroTelPrincipalCredor", Model.OPagamentoDespesa.TituloDespesa.nroTelPrincipalCredor, "Telefone", urlEdicaoTitulo)
+                        }
+                        else {
+                            @Model.OPagamentoDespesa.TituloDespesa.nroTelPrincipalCredor
+                        }
+                    </p>
+                    
+                    <p class="campo-info margin-left-10">
+                        <label><strong><i class="fa fa-university"></i> Conta Bancária:</strong></label> 
+                        @if (Model.flagEdicao) {
+                            @Html.linkEditable(Model.OPagamentoDespesa.idTituloDespesa, "idContaBancariaFavorecida", Model.OPagamentoDespesa.idContaBancariaFavorecida, "Conta Bancária", urlEdicaoPagamento, "select", listaContaBancariaFavorecida, $"{Model.OPagamentoDespesa.ContaBancariaFavorecida.Banco.descricao} - {Model.OPagamentoDespesa.ContaBancariaFavorecida.nroConta}")
+                        }
+                        else {
+                            @($"{Model.OPagamentoDespesa.ContaBancariaFavorecida.Banco.descricao} - {Model.OPagamentoDespesa.ContaBancariaFavorecida.nroConta}")
+                        }
+                    </p>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+        
+    <div class="row padding-bottom-10">
+    
+        <div class="col-sm-6 fs-12 bordered-gray-right-1">
+    
+            <div class="btn btn-block btn-primary abreviar" data-toggle="tooltip" title="Classificação Bancária"><i class="fa fa-university"></i> Classificação de Contas</div>
+    
+            <div class="row">
+                <div class="col-sm-12">
+                    <p class="campo-info margin-left-10 margin-top-10">
+                        <label><strong><i class="fa fa-chevron-right"></i> Conta Bancária:</strong></label> 
+                        @if (Model.flagEdicao) {
+                            @Html.linkEditable(Model.OPagamentoDespesa.id, "idContaBancaria", Model.OPagamentoDespesa.idContaBancaria, "Conta Bancária", urlEdicaoPagamento, "select", listaContaBancaria, Model.OPagamentoDespesa.ContaBancaria?.descricao)
+                        }
+                        else {
+                            @(Model.OPagamentoDespesa.ContaBancaria?.descricao ?? "Não informado")
+                        }
+                    </p>
+                    <p class="campo-info margin-left-10">
+                        <label><strong><i class="fa fa-chevron-right"></i> Centro de Custo:</strong></label> 
+                        @if (Model.flagEdicao) {
+                            @Html.linkEditable(Model.OPagamentoDespesa.id, "idCentroCusto", Model.OPagamentoDespesa.idCentroCusto, "Centro de Custo", urlEdicaoPagamento, "select", listaCentroCusto, Model.OPagamentoDespesa.CentroCusto?.descricaoCentroCusto())
+                        }
+                        else {
+                            @(Model.OPagamentoDespesa.CentroCusto?.descricaoCentroCusto() ?? "Não informado")
+                        }
+                    </p>
+                    <p class="campo-info margin-left-10">
+                        <label><strong><i class="fa fa-chevron-right"></i> Macro Conta:</strong></label> 
+                        @if (Model.flagEdicao) {
+                            @Html.linkEditable(Model.OPagamentoDespesa.id, "idMacroConta", Model.OPagamentoDespesa.idMacroConta, "Macro Conta", urlEdicaoPagamento, "select", listaMacroConta, Model.OPagamentoDespesa.MacroConta?.descricaoMacroConta())
+                        }
+                        else {
+                            @(Model.OPagamentoDespesa.MacroConta?.descricaoMacroConta() ?? "Não informado")
+                        }
+                    </p>
+                    <p class="campo-info margin-left-10">
+                        <label><strong><i class="fa fa-chevron-right"></i> Sub-conta:</strong></label> 
+                        @if (Model.flagEdicao) {
+                            @Html.linkEditable(Model.OPagamentoDespesa.id, "idCategoria", Model.OPagamentoDespesa.idCategoria, "Sub-conta", urlEdicaoPagamento, "select", listaCategoria, Model.OPagamentoDespesa.Categoria?.descricaoSubConta())
+                        }
+                        else {
+                            @(Model.OPagamentoDespesa.Categoria?.descricaoSubConta() ?? "Não informado")
+                        }
+                    </p>
+                </div>
+            </div>
+        </div>
+    
+        <div class="col-sm-6 fs-12">
+            @if (Model.OPagamentoDespesa.dtPagamento.HasValue) {
+                <div class="btn btn-block bg-green"><i class="fa fa-check"></i> Pago em @Model.OPagamentoDespesa.dtPagamento.exibirData()</div>
+            }
+            else {
+                <div class="btn btn-block bg-yellow"><i class="fa fa-exclamation-triangle"></i> Pagamento Pendente</div>
+            }
+    
+            <div class="row">
+    
+                <div class="col-sm-7">
+                    <p class="campo-info margin-left-10 margin-top-10">
+                        <label><i class="fa fa-dollar-sign"></i> Valor Total:</label>
+                    </p>
+                    <p class="campo-info margin-left-10">
+                        <label><i class="fa fa-dollar-sign"></i> Total Juros:</label>
+                    </p>
+                    <p class="campo-info margin-left-10">
+                        <label><i class="fa fa-dollar-sign"></i> Total Multa:</label>
+                    </p>
+                    <p class="campo-info margin-left-10">
+                        <label><i class="fa fa-dollar-sign"></i> Total Descontos:</label>
+                    </p>
+                    <p class="campo-info margin-left-10">
+                        <label><i class="fa fa-dollar-sign"></i> Total Pago:</label>
+                    </p>
+                    <p class="campo-info margin-left-10">
+                        <label><i class="fa fa-dollar-sign"></i> Saldo Total:</label>
+                    </p>
+                </div>
+    
+                <div class="col-sm-5 text-right">
+    
+                    <p class="campo-info margin-right-10 margin-top-10 text-red">@(Model.OPagamentoDespesa.valorOriginal.ToString("C"))</p>
+    
+                    <p class="campo-info margin-right-10 text-red">@Model.OPagamentoDespesa.valorJuros.toDecimal().ToString("C")</p>
+                    <p class="campo-info margin-right-10 text-red">@Model.OPagamentoDespesa.valorMulta.toDecimal().ToString("C")</p>
+                    <p class="campo-info margin-right-10 text-green">@Model.OPagamentoDespesa.valorDesconto.toDecimal().ToString("C")</p>
+                    <p class="campo-info margin-right-10 text-green">@Model.OPagamentoDespesa.valorPago.toDecimal().ToString("C")</p>
+                    <p class="campo-info margin-right-10">@Model.OPagamentoDespesa.saldo().toDecimal().ToString("C")</p>
+                </div>
+    
+                <div class="clearfix"></div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        
+    </div>
+
+</div>
+
+@section modalFooter{
+    
+    <div class="row">
+        <div class="col-sm-6 abreviar">
+            @if (Model.OPagamentoDespesa.dtExclusao.HasValue) {
+                <span data-toggle="tooltip" title="Dados de cadastro" class="text-italic text-red pull-left">
+                    Excluído em @Model.OPagamentoDespesa.dtExclusao.exibirData() por @(Model.OPagamentoDespesa.UsuarioExclusao?.nome)
+                </span>
+            }
+        </div>
+        <div class="col-sm-6 abreviar">
+            <span data-toggle="tooltip" title="Dados de cadastro" class="text-italic">
+                Cadastrado em @Model.OPagamentoDespesa.dtCadastro.exibirData() por @(Model.OPagamentoDespesa.UsuarioCadastro?.nome)
+            </span>
+        </div>
+    </div>
+    
+}

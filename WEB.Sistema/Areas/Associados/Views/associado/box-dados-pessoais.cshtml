@@ -1,0 +1,58 @@
+﻿@using WEB.Areas.RamosAtividade.Helpers
+@model WEB.Areas.Associados.ViewModels.AssociadoForm
+
+
+@exibirCampoTipo()
+
+
+<div class="col-md-6">
+    @Html.labelRequired("Nome", "info-pf")
+    @Html.labelRequired("Nome Fantasia", "info-pj")
+    @Html.TextBoxFor(m => m.Associado.Pessoa.nome, new { @class = "form-control input-sm", maxlength = "100" })
+    @Html.ValidationMessageFor(m => m.Associado.Pessoa.nome)
+</div>
+<div class="col-md-5 info-pj">
+    <label>Razão Social</label>
+    @Html.TextBoxFor(m => m.Associado.Pessoa.razaoSocial, new { @class = "form-control input-sm", maxlength = "100" })
+    @Html.ValidationMessageFor(m => m.Associado.Pessoa.razaoSocial)
+</div>
+<div class="col-sm-2 col-md-2 col-lg-2 info-pf">
+    <label>Sexo</label>
+    @Html.DropDownListFor(m => m.Associado.Pessoa.flagSexo, ComboHelper.selectListSexo(Model.Associado.Pessoa.flagSexo), "...", new { @class = "form-control input-sm" })
+    @Html.ValidationMessageFor(m => m.Associado.Pessoa.flagSexo)
+</div>
+<div class="col-sm-2 col-md-2 col-lg-2">
+    <label class="info-pf">Data de Nascto.</label>
+    <label class="info-pj">Data Fundação</label>
+    @Html.TextBoxFor(m => m.Associado.Pessoa.dtNascimento, new {@class = "form-control input-sm", alt = "date"})
+    @Html.ValidationMessageFor(m => m.Associado.Pessoa.dtNascimento)
+</div>
+<div class="col-sm-2 col-md-3 col-lg-3 info-pj">
+    <label>Ramo/Setor de Atuação</label>
+    @Html.DropDownListFor(m => m.Associado.Pessoa.idSetorAtuacao, SetorAtuacaoHelper.getInstance.selectList(0, Model.Associado.Pessoa.idSetorAtuacao), "...", new { @class = "form-control input-sm" })
+    @Html.ValidationMessageFor(m => m.Associado.Pessoa.idSetorAtuacao)
+</div>
+<div class="clearfix"></div>
+
+@* -Exibir os campos de tipo pessoa e tipo de associado, caso seja um novo cadastro
+   -Exibir somente o hidden do tipo de pessoa caso for edição/visualização de dados.*@
+@helper exibirCampoTipo() {
+
+    if (Model.Associado.id > 0) {
+         @Html.HiddenFor(m => m.Associado.Pessoa.flagTipoPessoa, new { @class = "tipoPessoa" })
+        @Html.HiddenFor(m => m.Associado.idTipoAssociado, new {  })
+        return;
+    }
+
+    <div class="col-md-2 col-lg-2">
+        <label>Tipo Pessoa</label>
+        @Html.DropDownListFor(m => m.Associado.Pessoa.flagTipoPessoa, ComboHelper.tipoPessoa(Model.Associado.Pessoa.flagTipoPessoa), "...", new { @class = "form-control input-sm tipoPessoa" })
+        @Html.ValidationMessageFor(m => m.Associado.Pessoa.flagTipoPessoa)
+    </div>
+    <div class="col-md-3 col-lg-2">
+        <label>Tipo de Associado</label>
+        @Html.DropDownListFor(m => m.Associado.idTipoAssociado, TipoAssociadoHelper.getInstance.selectList(Model.Associado.idTipoAssociado, "", false, true), "...", new { @class = "form-control input-sm" })
+        @Html.ValidationMessageFor(m => m.Associado.idTipoAssociado)
+    </div>
+    <div class="clearfix"></div>
+}

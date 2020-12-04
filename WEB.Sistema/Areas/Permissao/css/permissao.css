@@ -1,0 +1,44 @@
+.box-shadow{
+    background-color: #fff;
+    float: left;
+    border: 1px solid #eff0f2;
+    border-radius: 10px;
+    text-align: center;
+    padding-top:10px;
+    font-size: 14px;
+    font-weight: bold;
+    -webkit-box-shadow: 0 0 5px rgba(50,50,50,.11);
+    -moz-box-shadow: 0 0 5px rgba(50,50,50,.11);
+    box-shadow: 0 0 5px rgba(50,50,50,.11);
+    box-sizing: initial;
+    -moz-box-sizing: initial;
+    -webkit-box-sizing: initial;
+    width:100%;
+    margin:0 !important;
+}
+
+div.boxSubMenus {
+    margin:0 !important;
+    width:100%;
+}
+
+p.submenu{
+    width:100%;
+    margin-top:5px;
+}
+
+.subItens {
+    border:1px #cccccc solid;
+    border-radius:10px;
+    margin-top:6px;
+    min-height:120px;
+    overflow: hidden;
+}
+
+.jstree-themeicon {
+    background-image:url(../img/icons/bs/ic_right.png) !important;
+    width:0px !important;
+    margin:0px !important;
+    padding:0px !important;
+    background-position:center center !important;
+}

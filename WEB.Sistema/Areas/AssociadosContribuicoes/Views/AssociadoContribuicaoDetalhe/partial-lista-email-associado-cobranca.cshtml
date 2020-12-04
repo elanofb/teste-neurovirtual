@@ -1,0 +1,67 @@
+﻿@using WEB.Areas.AvisosNotificacoes.Extensions
+@model List<DAL.Notificacoes.NotificacaoSistemaEnvio>
+@{
+    Layout = null;
+}
+
+<div class="text-right">
+
+    <button type="button" class="btn btn-sm bg-blue">
+        <i class="fa fa-send"></i> Total enviados: @Model.Count(x => x.dtEnvioEmail.HasValue)
+    </button>
+
+    <button type="button" class="btn btn-sm bg-red">
+        <i class="fa fa-exclamation-circle"></i> Total com problema: @Model.Count(x => x.flagExcluido == true)
+    </button>
+
+    <button type="button" class="btn btn-sm bg-black">
+        <i class="fa fa-spinner"></i> Total na fila: @Model.Count(x => !x.dtEnvioEmail.HasValue && x.flagExcluido == false)
+    </button>
+
+</div>
+<div class="clearfix"></div><br />
+
+@if (!Model.Any()) {
+    <div class="alert alert-info">
+        Nenhum registro foi encontrado.
+    </div>
+}
+
+@foreach(var OItem in Model) {
+
+    <div class="col-sm-12">
+        
+        <div class="col-sm-12 box-info-item bordered-destaque @OItem.cssBorderNotificacaoEnvio()">
+
+            <div class="row fs-11 text-black">
+                
+                <div class="col-sm-1">
+                    <span><i class="fa fa-hashtag"></i>@OItem.id</span> <br />
+                </div>
+
+                <div class="col-sm-6 abreviar">
+                    <span data-toggle="tooltip" title="E-mail principal: @OItem.email">
+                        <i class="fa fa-envelope"></i> @OItem.email)
+                    </span><br />
+                </div>
+
+                <div class="col-sm-2 no-padding">
+                    <span data-toggle="tooltip" title="Data de envio"><i class="fa fa-send"></i> @OItem.dtEnvioEmail.exibirData()</span> <br />
+                </div>
+
+                <div class="col-sm-3 text-right box-acoes abreviar">
+                    @if(OItem.flagExcluido == true) {
+                        <div class="text-left">
+                            <strong>Erro:</strong> <em>@OItem.motivoExclusao</em>
+                        </div>
+                    }
+                </div>
+                <div class="clearfix"></div>
+
+            </div>
+
+        </div>
+
+    </div>
+    <div class="clearfix"></div>
+}

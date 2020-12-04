@@ -1,0 +1,24 @@
+﻿@model WEB.Areas.OrgaosClasses.ViewModels.OrgaoClasseForm
+
+@{
+    Layout = "~/views/shared/associatec/masterpage-edit.cshtml";
+    ViewBag.titlePage = "Órgão de Classe";
+    ViewBag.subTituloPagina = Model.OrgaoClasse.descricao;
+}
+
+@section navTabs{
+	<ul class="nav nav-tabs">
+		<li class="active"><a href="#tab-1" data-toggle="tab">Principal</a></li>
+	</ul>
+}
+
+@section tabContent{
+	<div id="tab-1" class="tab-pane active">
+
+        @Html.infoCadastro(Model.OrgaoClasse.id, Model.OrgaoClasse.dtCadastro, Model.OrgaoClasse.dtAlteracao)
+
+	    @{Html.RenderPartial("partial-dados-principais");}
+
+	</div>
+}
+

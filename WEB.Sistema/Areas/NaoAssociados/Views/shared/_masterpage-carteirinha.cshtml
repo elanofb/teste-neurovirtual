@@ -1,0 +1,14 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>@ViewBag.Title  @Html.sistema().tituloSistema</title>
+	@*<meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>*@
+    <link href="@UtilConfig.linkResourses()Areas/Associados/css/impressao-carteirinha.css" rel="stylesheet" />
+</head>
+<body class="print">
+	<div class="container">
+        @RenderBody()
+	</div>
+</body>
+</html>

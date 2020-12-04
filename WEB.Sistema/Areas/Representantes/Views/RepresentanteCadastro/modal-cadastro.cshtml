@@ -1,0 +1,119 @@
+﻿@model WEB.Areas.Representantes.ViewModels.RepresentanteForm
+@using WEB.Areas.Pessoas.Helpers
+
+@{
+
+    if (IsPost) {
+        Layout = null;
+    } else {
+        Layout = "~/views/shared/associatec/masterpage-modal.cshtml";
+    }
+
+    ViewBag.modalTitle = "Cadastro de Representante";
+    
+    ViewBag.modalWidthClass = "md";
+    
+    ViewBag.modalId = "modalCadastroRepresentante";
+}
+
+
+<div id="boxFormRepresentante">
+
+    @using (Html.BeginForm("salvar", null, FormMethod.Post, new { id = "formRepresentante" })) {
+    
+        @Html.HiddenFor(m => m.Representante.id)
+        @Html.HiddenFor(m => m.Representante.idPessoa)
+        
+            
+        <div class="row">
+            @Html.ValidationSummary(false)
+            
+            <div class="col-lg-12">
+                
+                <h4 class="separator-form-icon"><i class="far fa-edit"></i> Dados da Representante</h4>
+                
+                <div class="row">
+                    
+                    <div class="col-md-6">
+                        @Html.labelRequired("Tipo Pessoa")
+                        @Html.DropDownListFor(m => m.Representante.Pessoa.flagTipoPessoa, TipoPessoaHelper.selectList(Model.Representante.Pessoa.flagTipoPessoa), new{@class = "form-control input-sm", id = "flagTipoPessoa", onchange = "Representante.onChangeTipoPessoa()"})
+                        @Html.ValidationMessageFor(m => m.Representante.Pessoa.flagTipoPessoa)
+                    </div>
+                    
+                    <div class="col-md-6">
+                        @Html.labelRequired("CNPJ", "info-documento")
+                        @Html.TextBoxFor(x => x.Representante.Pessoa.nroDocumento, new {@class = "form-control input-sm", maxlength = "18", alt = "cnpj"})
+                        @Html.ValidationMessageFor(x => x.Representante.Pessoa.nroDocumento)
+                    </div>
+                    
+                </div>
+                
+                <div class="row">
+                    
+                    <div class="col-md-12">
+                        @Html.labelRequired("Nome")
+                        @Html.TextBoxFor(m => m.Representante.Pessoa.nome, new {@class = "form-control input-sm", maxlength = "100"})
+                        @Html.ValidationMessageFor(m => m.Representante.Pessoa.nome)
+                    </div>
+
+                    <div class="col-md-12 box-pj @(Model.Representante.Pessoa.flagTipoPessoa == "J" ? "hide" : "")">
+                        <label>Razão Social</label>
+                        @Html.TextBoxFor(m => m.Representante.Pessoa.razaoSocial, new {@class = "form-control input-sm", maxlength = "100"})
+                        @Html.ValidationMessageFor(m => m.Representante.Pessoa.razaoSocial)
+                    </div>
+
+                </div>
+                
+                <div class="row">
+                    
+                    <div class="col-md-6">
+                        <label>Telefone Principal</label>
+                        @Html.TextBoxFor(m => m.Representante.Pessoa.nroTelPrincipal, new {@class = "form-control input-sm", alt = "phone"})
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <label>Telefone Secundário</label>
+                        @Html.TextBoxFor(m => m.Representante.Pessoa.nroTelSecundario, new {@class = "form-control input-sm", alt = "phone"})
+                    </div>
+                    
+                </div>
+                
+                <div class="row margin-bottom-15">
+                    
+                    <div class="col-md-6">
+                        <label>E-mail</label>
+                        @Html.TextBoxFor(m => m.Representante.Pessoa.emailPrincipal, new {@class = "form-control input-sm"})
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <label>Status</label>
+                        @Html.DropDownListFor(m => m.Representante.ativo, ComboHelper.selectListStatus(Model.Representante.ativo), new {@class = "form-control input-sm"})
+                    </div>
+                    
+                </div>
+                
+            </div>
+            
+            <div class="clearfix"></div>
+                
+        </div>
+        
+    }
+    
+</div>
+
+@section modalFooter {
+    
+    <div class="text-right">
+
+        <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">
+            <i class="fa fa-times-circle"></i> Fechar
+        </button>
+        
+        <button type="button" class="btn btn-success link-loading" onclick="Representante.enviarForm()">
+            <i class="fa fa-hdd"></i> Salvar
+        </button>
+        
+    </div>
+    
+}

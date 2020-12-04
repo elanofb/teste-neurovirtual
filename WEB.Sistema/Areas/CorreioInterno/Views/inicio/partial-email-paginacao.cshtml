@@ -1,0 +1,20 @@
+﻿@model PagedList.IPagedList<LogEmail>
+@using PagedList.Mvc
+@using DAL.Entities
+@{
+	var Paginacao = Html.paginarRegistrosSemPaginas<LogEmail>(
+					Model, 
+					Html.PagedListPager(
+						Model, 
+						nroPagina => Url.Action(ViewBag.actionPaginacao, new { nroPagina }), 
+						PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(
+								PagedListRenderOptions.OnlyShowFivePagesAtATime, 
+								new AjaxOptions(){
+									HttpMethod = "GET", OnBegin = "$('#boxCaixaEmails').loadingOverlay();", OnSuccess = "CorreioInterno.onSuccessPaginacao", UpdateTargetId = "boxCaixaEmails"
+								}
+						)
+					)
+				);
+}
+
+@Paginacao

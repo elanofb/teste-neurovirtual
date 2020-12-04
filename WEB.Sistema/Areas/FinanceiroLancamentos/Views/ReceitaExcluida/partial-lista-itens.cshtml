@@ -1,0 +1,144 @@
+﻿@model LancamentoRecebimentoVM
+@using DAL.Financeiro
+@using PagedList.Mvc
+@using WEB.Helpers
+@using WEB.Areas.LancamentoRecebimentos.ViewModels
+
+@{
+    Layout = "";
+}
+
+<div class="box box-primary">
+
+    <div class="box-header with-border">
+        <div class="box-title">
+            <i class="far fa-chart-bar"></i> Resultados <em class="fs-12">@Model.listaTituloReceitaPagamento.TotalItemCount registro(s) encontrado(s)</em>
+        </div>
+        <div class="box-tools pull-right">
+            @*<div class="btn-group">
+                <button type="button" class="btn btn-box-tool dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+                    Ações <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                </ul>
+            </div>*@
+
+            @*<a href="@Url.Action("index", "DespesaCadastro", new { urlRetorno = Request.Url.AbsoluteUri })" class="btn btn-box-tool"><i class="far fa-plus-circle"></i> Nova Despesa</a>*@
+        </div>
+    </div>
+
+    <div class="box-body">
+
+        @if (!Model.listaTituloReceitaPagamento.Any()) {
+            <div class="col-sm-12">
+                <div class="alert alert-info">
+                    Nenhuma receita foi encontrada.
+                </div>
+            </div>
+        }
+
+        @foreach (var OItem in Model.listaTituloReceitaPagamento) {
+
+            <div class="box-info-item @OItem.exibirBordaStatus()">
+
+                <div class="row">
+
+                    <div class="col-sm-12">
+                        <div class="row">
+                            <div class="col-sm-12 margin-bottom-10 no-padding">
+                                <div class="col-lg-6 col-sm-5 col-xs-5">
+                                    <span data-toggle='tooltip' title='Descrição'><i class="fa fa-align-justify"></i> @OItem.descricao</span>
+                                </div>
+
+                                <div class="col-lg-2 col-sm-2 col-xs-2">
+                                    <span class="@OItem.exibirClasseStatus()"><i class="fa @OItem.exibirIconeStatus()"></i> @(OItem.dtPagamento == null && OItem.dtVencimentoRecebimento < DateTime.Today ? "EM ATRASO" : (OItem.idStatusPagamento > 0 ? OItem.descricaoStatusPagamento : "EM ABERTO"))</span>
+                                </div>
+
+                                <div class="col-lg-2 col-sm-2 col-xs-2">
+                                    <span data-toggle='tooltip' title='Data de Exclusão'><i class="fa fa-calendar-times-o"></i> @OItem.dtExclusao.exibirData()</span>
+                                </div>
+
+                                <div class="col-lg-1 col-sm-2 col-xs-2">
+                                    <div class="dropdown pull-right">
+                                        <a href="javascript:;" class="dropdown-toggle" type="button" data-toggle="dropdown">
+                                            Ações
+                                            <span class="caret"></span>
+                                        </a>
+                                        <ul class="dropdown-menu dropdown-menu-right">
+                                            <li>@acoes(OItem)</li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-1 col-sm-1 col-xs-1 text-right">
+                                    <input type="checkbox" name="checkRegistro[]" value="@OItem.idTituloPagamento" />
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+
+                            <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
+
+                                <span data-toggle='tooltip' title='Nº'><i class="fa fa-hashtag"></i> @OItem.idTituloPagamento</span><br />
+
+                                <span data-toggle='tooltip' title='Centro de Custo'><i class="far fa-chart-bar"></i> @(OItem.descricaoCentroCusto)<br /></span>
+
+                            </div>
+
+                            <div class="col-md-3 col-sm-3 col-xs-6">
+
+                                <span data-toggle='tooltip' title='Recebido de'><i class="fa fa-user"></i> @(OItem.nomePessoa)</span><br />
+
+                                <span data-toggle='tooltip' title='Data de Vencimento'><i class="fa fa-calendar"></i> @OItem.dtVencimentoRecebimento.exibirData()</span>
+                            </div>
+
+                            <div class="clearfix visible-xs"></div>
+
+                            <div class="col-md-1 col-sm-1 col-xs-6 no-padding">
+
+                                <span data-toggle='tooltip' title='Data de Pagamento'><i class="fa fa-calendar"></i> @OItem.dtPagamento.exibirData()</span><br />
+
+                                <span data-toggle='tooltip' title='Data de Crédito'><i class="fa fa-calendar"></i> @OItem.dtCredito.exibirData()</span>
+
+                            </div>
+
+                            <div class="col-md-2 col-sm-2 col-xs-6">
+
+                                <span data-toggle='tooltip' title='Valor Recebido'><i class="fa fa-usd"></i> @(OItem.valorRecebido.exibirValor())</span><br />
+
+                                <span data-toggle='tooltip' title='Valor Original'><i class="fa fa-usd"></i> @(OItem.valorOriginal?.ToString("C"))</span>
+
+                            </div>
+
+                            <div class="col-md-4 col-sm-4 col-xs-6">
+
+                                <span data-toggle='tooltip' title='Motivo Exclusão'><i class="fa fa-trash"></i> @OItem.motivoExclusao</span><br />
+
+                                <span data-toggle='tooltip' title='Usuário Exclusão'><i class="fa fa-user-times"></i> @OItem.nomeUsuarioExclusao</span>
+
+                            </div>
+
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        <div class="clearfix"></div>
+        @(Html.paginarRegistros(Model.listaTituloReceitaPagamento, Html.PagedListPager(Model.listaTituloReceitaPagamento, nroPagina => UtilRequest.linkPaginacao(nroPagina, "listar"), PagedListRenderOptions.OnlyShowFivePagesAtATime)))
+        <div class="clearfix"></div>
+        <br />
+        <br />
+    </div>
+</div>
+
+
+@helper acoes(TituloReceitaPagamentoResumoVW Item) {
+
+    @Html.linkEditar(Item.idTituloReceita.toInt(), Url.Action("editar", "ReceitaDetalhe", new { area = "Financeiro", id = Item.idTituloReceita, urlRetorno = Request.Url.AbsoluteUri }), "box-acoes", "Editar Registro")
+}
+
+
+

@@ -1,0 +1,35 @@
+﻿@model  List<DAL.Arquivos.ArquivoUpload>
+@using DAL.Arquivos.Extensions
+@using WEB.Areas.Arquivos.Extensions
+
+<table border="0" cellpadding="0" cellspacing="0" class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th class="width-125 text-center">Arquivo</th>
+            <th class="text-center">Descrição</th>
+            <th class="text-center">Data</th>
+        </tr>
+    </thead>
+    <tbody class="lista-sortable">
+        @if(Model.Any()) {
+            foreach(var Item in Model) {
+                <tr>
+                    <td class="text-center">
+                        @if(UTIL.Upload.UploadConfig.isImageExtension(Item.extensao)) {
+                            <a href="@Item.linkImagem()" class="ampliacao">
+                                <img src="@Item.linkImagem("sistema")" title="Clique para Ampliar" data-toggle="tooltip" height="50" />
+                            </a>
+                        } else {
+                            <a href="@Url.Action("exibir-arquivo", "exibicao", new {area = "arquivos", idArquivo = Item.id})" target="_blank">
+                                @Url.exibirIcone(Item.extensao)
+                            </a>
+                        }
+                    </td>
+                    <td class="text-center">@Item.legenda</td>
+                    <td class="text-center">@Item.dtCadastro.ToShortDateString() @Item.dtCadastro.ToShortTimeString()</td>
+                </tr>
+            }
+
+        }
+    </tbody>
+</table>

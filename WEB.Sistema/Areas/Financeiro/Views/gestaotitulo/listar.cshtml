@@ -1,0 +1,28 @@
+﻿@model WEB.Areas.Financeiro.ViewModels.GestaoTituloVM
+
+@{
+    ViewBag.titlePage = "Títulos a Pagar e a Receber";
+}
+
+@section styles{
+    <link href="@UtilConfig.linkResourses()Areas/Arquivos/js/plugins/jqueryFancybox/jquery.fancybox.css" rel="stylesheet"/>
+    <link href="@UtilConfig.linkResourses()Areas/Financeiro/css/financeiro.css" rel="stylesheet"/>
+}
+
+@section scripts{
+    @Html.includeDatePicker()
+    <script type="text/javascript" src="@UtilConfig.linkResourses()Areas/Arquivos/js/plugins/jqueryFancybox/jquery.fancybox.js"></script>
+}
+
+<div class="col-xs-12 box box-solid internal-default">
+
+    <div class="col-md-12 col-lg-12 margin-top-10 pull-right no-padding">
+        @{Html.RenderPartial("partial-filtro-pesquisa");}
+    </div>
+
+    <div class="clearfix"></div><br />
+
+    <div class="col-md-12 col-lg-12 no-padding">
+        @{Html.RenderPartial("partial-extrato");}
+    </div>
+</div>

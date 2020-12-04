@@ -1,0 +1,63 @@
+﻿@model WEB.Areas.Atendimentos.ViewModels.AtendimentoTipoForm
+
+@{
+    Layout = "~/views/shared/associatec/masterpage-edit.cshtml";
+    ViewBag.titlePage = "Tipo de Atendimento";
+    ViewBag.subTituloPagina = Model.AtendimentoTipo.descricao;
+}
+
+@section navTabs{
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#tab-1" data-toggle="tab">Principal</a></li>
+    </ul>
+}
+
+@section tabContent{
+    
+    <div id="tab-1" class="tab-pane active">
+        
+        @Html.infoCadastro(Model.AtendimentoTipo.id, Model.AtendimentoTipo.dtCadastro, Model.AtendimentoTipo.dtAlteracao)
+
+        @using (Html.BeginForm("editar", null, FormMethod.Post, new { role = "form", @class = "default" })) {
+
+            @Html.HiddenFor(m => m.AtendimentoTipo.id)
+
+            @Html.ValidationSummary(true, "Alguns campos não foram validados")
+
+            <div class="form-horizontal">
+                
+                <h4 class="separator-form">Tipo de Atendimento</h4>
+
+                <div class="row">
+                    
+                    <div class="col-md-4">
+                        @Html.labelRequired("Descrição")
+                        @Html.TextBoxFor(m => m.AtendimentoTipo.descricao, new {@class = "form-control input-sm", maxlength = "100"})
+                        @Html.ValidationMessageFor(m => m.AtendimentoTipo.descricao)
+                    </div>
+                    
+                    <div class="col-md-2">
+                        <label>Online?</label>
+                        @Html.DropDownListFor(m => m.AtendimentoTipo.flagOnline, ComboHelper.selectListTrueFalse(Model.AtendimentoTipo.flagOnline), "...", new {@class = "form-control input-sm"})
+                        @Html.ValidationMessageFor(m => m.AtendimentoTipo.flagOnline)
+                    </div>
+
+                    <div class="col-md-2">
+                        <label>Status</label>
+                        @Html.DropDownListFor(m => m.AtendimentoTipo.ativo, ComboHelper.selectListStatus(Model.AtendimentoTipo.ativo), new {@class = "form-control input-sm"})
+                        @Html.ValidationMessageFor(m => m.AtendimentoTipo.ativo)
+                    </div>
+                    <div class="clearfix"></div><br />
+
+                </div>
+
+            </div>
+
+            <div class="col-md-12 text-right">
+                @Html.exibirBotoesFormulario(Url.Action("listar"), "N", Url.Action("editar"))
+            </div>
+            <div class="clearfix"></div><br />
+        }
+    
+    </div>
+}

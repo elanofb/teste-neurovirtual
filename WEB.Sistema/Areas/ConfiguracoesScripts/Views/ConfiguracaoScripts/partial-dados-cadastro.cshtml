@@ -1,0 +1,15 @@
+﻿@model WEB.Areas.ConfiguracoesScripts.ViewModels.ConfiguracaoScriptsForm
+
+@if(Model.ConfiguracaoScripts.id > 0) {
+    
+    <div class="col-sm-4 col-md-2">
+        <label>Cadastro</label>
+        @Html.boxInfo(Model.ConfiguracaoScripts.dtCadastro.exibirData(true), "text-center")
+    </div>
+    <div class="col-sm-6 col-md-4">
+        <label>Usuário</label>
+        @Html.boxInfo(Model.ConfiguracaoScripts.UsuarioCadastro?.nome, "text-left")
+    </div>
+    <div class="clearfix"></div><br/>
+
+}

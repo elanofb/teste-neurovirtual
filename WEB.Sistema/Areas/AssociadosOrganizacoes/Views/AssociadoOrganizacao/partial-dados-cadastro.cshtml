@@ -1,0 +1,52 @@
+﻿@using WEB.Areas.Associados.Extensions
+@model DAL.Associados.Associado
+
+<div>
+    <span>
+        <i class="fa fa-hashtag"></i> @(Model.nroAssociado ?? Model.id)
+    </span> <em>(@(Model.TipoAssociado.descricao))</em>
+</div>
+
+<div>
+    <span data-toggle="tooltip" title="Data de Cadastro">
+        <i class="fa fa-calendar"></i> @Model.dtCadastro.exibirData(true)
+    </span>
+</div>
+
+<div>
+    <span class="@Model.exibirClasseTextoStatus()">
+        <i class="fa @Model.exibirIconeStatus()"></i> @Model.exibirStatus()
+    </span>
+</div>
+
+@if (Model.Pessoa.flagTipoPessoa == "F") {
+    
+    <div class="margin-top-10">
+        
+        <div>
+            <i class="far fa-id-card"></i> @UtilString.formatCPFCNPJ(Model.Pessoa.nroDocumento)
+        </div>
+        
+        @if (!Model.Pessoa.rg.isEmpty()) {
+            <div>
+                <i class="fa fa-id-card"></i> @Model.Pessoa.rg
+            </div>
+        }
+        
+        @if (Model.Pessoa.dtNascimento.HasValue) {
+            <div>
+                <span data-toggle="tooltip" title="Data de Nascimento">
+                    <i class="far fa-calendar"></i> @Model.Pessoa.dtNascimento.exibirData()
+                </span>
+            </div>
+        }
+        
+        @if (!Model.Pessoa.flagSexo.isEmpty()) {
+            <div>
+                <i class="fa fa-genderless"></i> @(Model.Pessoa.flagSexo == "M" ? "Masculino" : "Feminino")
+            </div>
+        }
+        
+    </div>
+    
+}

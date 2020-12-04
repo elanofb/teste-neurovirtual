@@ -1,0 +1,138 @@
+﻿@using WEB.Areas.AreaAssociados.AssociadoAtendimentos.Helpers
+@using WEB.Areas.Arquivos.Helpers
+@using WEB.Areas.Associados.Helpers
+@using WEB.Areas.Pessoas.Helpers
+@model WEB.Areas.Atendimentos.ViewModels.AtendimentoForm
+
+@{
+    ViewBag.titlePage = "Novo Atendimento";
+}
+
+@section scripts {
+    @Html.includeJSModuloArquivos()
+    @Html.includeToastJS()
+    <script src="@UtilConfig.linkResourses("Areas/Atendimentos/js/atendimento-cadastro.js")"></script>
+}
+
+@section styles {
+    @Html.includeCSSModuloArquivos()
+    @Html.includeToastCSS()
+    @*    <link href="@UtilConfig.linkResourses("Areas/Atendimentos/css/atendimento.css")" rel="stylesheet" />*@
+}
+
+<div class="box box-primary">
+
+    @Html.headerBox("Dados Atendimento", "fa fa-headphones")
+
+    <div class="box-body">
+
+        @using (Html.BeginForm("salvar", null, FormMethod.Post, new {@class = "filtros", enctype = "multipart/form-data"})) {
+    
+            <div class="col-sm-12">
+                @Html.Label("Título")
+                @Html.TextBoxFor(m => m.Atendimento.titulo, new { @class = "form-control input-sm" })
+            </div>
+            
+            <div class="col-md-6">
+    
+                <div class="row">
+                    
+                    @Html.HiddenFor(m => m.Atendimento.idAssociado, new { id = "idAssociado" })
+                    @Html.HiddenFor(m => m.Atendimento.idNaoAssociado, new { id = "idNaoAssociado" })
+
+                    <div class="col-md-11">
+                        @Html.Label("Associado/Não Associado")
+                        @Html.DropDownList("idPessoa", AssociadoHelper.selectList(Model.Atendimento.idAssociado), "Digite o nome...", new {@class = "form-control input-sm", id = "idPessoaAtendimento"})
+@*                        @Html.instrucao("Informe o associado/não associado que está vinculado à esse atendimento.")*@
+                    </div>
+    
+                    <div class="col-sm-1 padtop22">
+    
+                        <button type="button" class="btn btn-primary btn-sm link-loading-min hidden-xs pull-right"
+                                data-toggle="tooltip" title="Carregar dados do associado" onclick="AtendimentoCadastro.carregarDadosAssociado()">
+    
+                            <i class="fa fa-magic"></i>
+                        </button>
+    
+                        <button type="button" class="btn btn-primary btn-sm btn-block link-loading visible-xs" onclick="AtendimentoCadastro.carregarDadosAssociado()">
+                            <i class="fa fa-magic"></i> Carregar dados do associado
+                        </button>
+    
+                    </div>
+                    
+                    <div class="clearfix"></div>
+                    
+                    <div class="col-sm-4">
+                        @Html.Label("Tipo Pessoa")
+                        @Html.DropDownList("flagTipoPessoa", TipoPessoaHelper.selectList("F"), new {@class = "form-control input-sm", id = "flagTipoPessoa"})
+                    </div>
+                    
+                    <div class="clearfix"></div>
+                    
+                    <div class="col-sm-8">
+                        @Html.Label("Nome")
+                        @Html.TextBoxFor(m => m.Atendimento.nome, new {@class = "form-control input-sm", id = "nome"})
+                    </div>
+
+                    <div id="boxDocumentoPF" class="col-sm-4">
+                        @Html.Label("CPF")
+                        @Html.TextBox("cpf", "", new {@class = "form-control input-sm", alt = "cpf", id = "documentoPF"})
+                    </div>
+
+                    <div id="boxDocumentoPJ" class="col-sm-4 hide">
+                        @Html.Label("CNPJ")
+                        @Html.TextBox("cnpj", "", new {@class = "form-control input-sm", alt = "cnpj", id = "documentoPJ"})
+                    </div>
+
+                    <div class="col-sm-8">
+                        @Html.Label("E-mail")
+                        @Html.TextBoxFor(m => m.Atendimento.email, new {@class = "form-control input-sm", id = "emailPrincipal"})
+                    </div>
+
+                    <div class="col-sm-4">
+                        @Html.Label("Telefone")
+                        @Html.TextBoxFor(m => m.Atendimento.nroTelefone, new {@class = "form-control input-sm", alt = "phone", id = "telPrincipal"})
+                    </div>
+
+                </div>
+    
+            </div>
+    
+            <div class="col-sm-6">
+    
+                <div class="row">
+    
+                    <div class="col-sm-6">
+                        @Html.Label("Tipo de Atendimento")
+                        @Html.DropDownListFor(m => m.Atendimento.idTipoAtendimento, AtendimentoTipoHelper.getInstance.selectList(Model.Atendimento.idTipoAtendimento), "...", new { @class = "form-control input-sm" })
+                    </div>
+    
+                    <div class="col-sm-6">
+                        @Html.Label("Área de Atendimento")
+                        @Html.DropDownListFor(m => m.Atendimento.idAreaAtendimento, AtendimentoAreaHelper.getInstance.selectList(Model.Atendimento.idAreaAtendimento), "...", new { @class = "form-control input-sm" })
+                    </div>
+    
+                    <div class="col-sm-12">
+                        @Html.Label("Descrição do Atendimento")
+                        @Html.TextAreaFor(m => m.Atendimento.mensagem, new { @class = "form-control input-sm", rows = "4" })
+                    </div>
+                    
+                    <div class="col-md-12">
+                        @Html.Label("Arquivos")
+                        @Html.inputFileSimples("listaArquivo")
+                        @Html.ValidationMessageFor(m => m.listaArquivo)
+                    </div>
+                </div>
+    
+            </div>
+            
+            <div class="clearfix"></div><br/>
+                                 
+            <div class="col-sm-12 text-right">
+                <input type="submit" value="Salvar" class="btn btn-primary"/>
+            </div>
+            
+        }
+        
+    </div>
+</div>

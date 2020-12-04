@@ -1,0 +1,185 @@
+﻿@model AssociadoDocumentoVM
+@using PagedList.Mvc
+@using WEB.Areas.AssociadosConsultas.ViewModels
+@using WEB.Areas.Associados.Helpers
+@using WEB.Areas.Arquivos.Helpers
+@using WEB.Areas.AssociadosConsultas.Helpers
+
+@{
+    ViewBag.titlePage = "Associados";
+
+    ViewBag.subTitlePage = "Veja abaixo a lista de documentos dos membros cadastrados atualmente.";
+}
+
+@section styles {
+    <link href="@UtilConfig.linkResourses()css/associatec/list-custom.css" rel="stylesheet" />
+}
+
+@section scripts {
+    @Html.includeBootstrapMultiselect()
+    @Html.includeDatePicker()
+    <script type="text/javascript" src="@UtilConfig.linkResourses()Areas/AssociadosConsultas/js/associado-consulta.js"></script>
+}
+
+<div class="box box-primary">
+
+    @Html.headerBox("Filtros de Busca", "fa fa-filter")
+
+    <div class="box-body">
+
+        @using (Html.BeginForm(null, null, FormMethod.Get, new {id = "fmFiltro"})) {
+            
+            @Html.Hidden("nroPagina", "", new { id = "nroPagina" })
+
+            <div class="form-group col-md-3 col-sm-6 col-xs-12">
+                <label>Tipo de Associado</label>
+                @Html.ListBox("idsTipoAssociado", TipoAssociadoHelper.getInstance.multiSelectList(UtilRequest.getListInt("idsTipoAssociado")), new { @class = "form-control input-sm input-multiselect", multiple = "multiple" })
+            </div>
+
+            <div class="form-group col-md-3 col-sm-6 col-xs-12">
+                <label>Situação Financeira</label>
+                @Html.DropDownList("flagSituacaoContribuicao", SituacaoContribuicaoHelper.getSituacao(UtilRequest.getString("flagSituacaoContribuicao")), "Todas", new { @class = "form-control input-sm" })
+            </div>            
+
+            <div class="form-group col-md-2 col-sm-6">
+                <label>Status</label>
+                @Html.DropDownList("ativo", AssociadoHelper.selectListAtivo(UtilRequest.getString("ativo")), "Todos", new { @class = "form-control input-sm" })
+            </div>
+
+            <div class="clearfix hidden-xs"></div>
+
+            <div class="form-group col-md-3 col-sm-6">
+                <label>Tipo de Arquivo Associado</label>
+                @Html.DropDownList("idEntidadeArquivo", AssociadoArquivoHelper.selectList(UtilRequest.getInt32("idEntidadeArquivo")), "Todos", new { @class = "form-control input-sm" })
+            </div>
+
+            <div class="form-group col-md-3 col-sm-6">
+                <label>Formato do Arquivo</label>
+                @Html.DropDownList("formatoArquivo", ArquivoHelper.selectListTipoArquivo(UtilRequest.getString("formatoArquivo")), "Todos", new { @class = "form-control input-sm" })
+            </div>
+
+            <div class="form-group col-md-3 col-sm-6">
+                <label>Buscar pelo Associado</label>
+                @Html.TextBox("valorBuscaAssociado", UtilRequest.getString("valorBuscaAssociado"), new {@class="form-control input-sm"})
+            </div>
+
+            <div class="form-group col-md-3 col-sm-6">
+                <label>Buscar pela descrição</label>
+                @Html.buttonSearch(UtilRequest.getString("valorBusca"))
+            </div>
+            <div class="clearfix"></div>
+        }
+
+    </div>
+</div>
+
+<div class="box box-primary">
+
+    <div class="box-header with-border">
+        <div class="box-title">
+            <i class="far fa-chart-bar"></i> Resultados
+        </div>
+		<div class="box-tools pull-right">
+            <div class="btn-group">
+                <button type="button" class="btn btn-box-tool dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+                    Ações <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                    <li>
+                        <a href="javascript:;" onclick="AssociadoConsulta.gerarZip()">
+                            <i class="fa fa-download"></i> Baixar Documentos Selecionados
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+			<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="far fa-minus"></i></button>
+		</div>
+	</div>
+    
+    <div class="box-body">
+
+        <div class="btn-group pull-right">
+
+            <label class="btn btn-default" data-toggle="tooltip" title="Selecionar Todos">
+                <input type="checkbox" name="marcarTodos" data-childs="checkRegistro[]" id="checkMarcarTodos"/>
+            </label>
+
+        </div>
+
+        <div class="clearfix"></div>
+        @if(!Model.listaArquivoAssociado.Any()) {
+            <div class="col-sm-12">
+                <div class="alert alert-info">
+                    Nenhum documento foi encontrado.
+                </div>
+            </div>
+        }
+
+        @foreach(var OArquivoAssociado in Model.listaArquivoAssociado) {
+
+            <div class="box-info-item">
+
+                <div class="row">
+
+                    <div class="col-sm-12 col-xs-12 no-padding">
+                        <div class="col-md-4 col-sm-4 col-xs-12">
+                            <a href="@Url.Action("editar", "AssociadoCadastro", new { id = OArquivoAssociado.idAssociado, area = "Associados"})" class="text-black" target="_blank">
+                                <i class="fa fa-user"></i> <span data-toggle="tooltip" title="Número do Associado"># (@(OArquivoAssociado.nroAssociado ?? OArquivoAssociado.idAssociado))</span> <span data-toggle="tooltip" title="Nome do Associado" style="font-weight: bold;">@OArquivoAssociado.nome.abreviar(30, "").ToUpper()</span>
+                            </a><br />
+                        </div>
+
+                        <div class="col-md-4 col-sm-2 col-xs-12">
+                            <span data-toggle="tooltip" title="Tipo de Documento"><i class="fa fa-comment"></i> @AssociadoArquivoHelper.getLabelTipoArquivo(@OArquivoAssociado.idEntidadeArquivo)</span><br />
+                        </div>
+
+                        <div class="col-md-2 col-sm-2 col-xs-12">
+                            <span data-toggle="tooltip" title="Data de Cadastro"><i class="fa fa-calendar"></i> @OArquivoAssociado.dtCadastro.exibirData()</span>
+                        </div>
+
+                        <div class="col-md-2 col-sm-2 col-xs-12 text-center">
+                            <div class="pull-left">
+                                <a href="@Url.Action("exibir-arquivo-crypt", "exibicao", new {area = "Arquivos", id = UtilCrypt.toBase64Encode(OArquivoAssociado.idArquivoUpload)})" target="_blank"><i class="fa fa-download"></i> Baixar</a>
+                            </div>
+                            <div class="pull-right">
+                                <input type="checkbox" name="checkRegistro[]" value="@OArquivoAssociado.idArquivoUpload"/>
+                            </div>
+                        </div>                        
+                    </div>
+                    
+                    <div class="col-sm-12 col-xs-12 no-padding">
+                        <div class="col-md-4 col-sm-4 col-xs-12">
+                            <span data-toggle="tooltip" title="Número do Documento">
+                                <i class="fa fa-id-card"></i> @UtilString.formatCPFCNPJ(OArquivoAssociado.nroDocumento)
+                            </span><br />
+                        </div>
+                        
+                        <div class="col-md-4 col-sm-4 col-xs-12">
+                            <span data-toggle="tooltip" title="Usuário do Cadastro"><i class="fa fa-user"></i>  @OArquivoAssociado.nomeUsuarioCadastro </span><br />
+                        </div>
+                        
+                        <div class="col-md-4 col-sm-4 col-xs-12">
+                            <span data-toggle="tooltip" title="Ocorrência"><i class="fa fa-tag"></i>  @OArquivoAssociado.descOcorrencia </span><br />
+                        </div>                        
+                    </div>                           
+                    
+                    <div class="col-sm-12 col-xs-12 no-padding">
+                        <div class="col-xs-12">
+                            <span data-toggle="tooltip" title="Legenda do Arquivo"><i class="far fa-file"></i>  @OArquivoAssociado.legenda </span><br />
+                        </div>                           
+                    </div>                           
+                                       
+
+                    <div class="clearfix"></div>
+
+
+                </div>
+
+            </div>
+
+        }
+
+        @(Html.paginarRegistros(Model.listaArquivoAssociado, Html.PagedListPager(Model.listaArquivoAssociado, nroPagina => UtilRequest.linkPaginacao(nroPagina, "index"), PagedListRenderOptions.OnlyShowFivePagesAtATime)))
+
+    </div>
+</div>

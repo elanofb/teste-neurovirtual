@@ -1,0 +1,113 @@
+﻿@using MvcFlashMessages
+@using WEB.Areas.Associados.Helpers;
+@using WEB.Areas.Cargos.Helpers;
+@using DAL.Entities
+@using WEB.Helpers;
+@model WEB.Areas.Diretorias.ViewModels.DiretoriaMembroForm
+
+@{
+    if(IsPost) {
+        Layout = null;
+		
+    } else { 
+        Layout = "~/views/shared/associatec/masterpage-modal.cshtml";
+    }
+    
+    ViewBag.modalTitle = "Cadastrar Membros da Diretoria";
+    ViewBag.modalWidthClass = "lg";
+}
+
+<div id="@(IsPost ? "" : "boxFormDiretoriaMembro")">
+
+	@Html.RenderFlash()
+
+	<div class="col-md-12">
+        
+		@using (Html.BeginForm("salvar-modal-editar", null, FormMethod.Post, new {role = "form", @class = "default", enctype = "multipart/form-data", id = "formDiretoriaMembro" })) {
+			@Html.legendaRequired()
+			@Html.HiddenFor(m => m.DiretoriaMembro.id)
+            @Html.HiddenFor(m => m.DiretoriaMembro.idDiretoria)
+			@Html.ValidationSummary(false)
+            
+            <div class="col-md-4">
+                <label>Nome</label><br />
+                @Html.TextBoxFor(x => x.DiretoriaMembro.nomeMembro, new { @class = "form-control input-sm", maxlength = "100" })
+                @Html.ValidationMessageFor(x => x.DiretoriaMembro.nomeMembro)
+            </div>
+
+            <div class="col-md-3">
+                <label>Número do Documento</label><br />
+                @Html.TextBoxFor(x => x.DiretoriaMembro.nroDocumentoMembro, new { @class = "form-control input-sm", maxlength = "30" })
+                @Html.ValidationMessageFor(x => x.DiretoriaMembro.nroDocumentoMembro)
+            </div>
+
+            <div class="col-md-3">
+                <label>Telefone Principal</label><br />
+                @Html.TextBoxFor(x => x.DiretoriaMembro.telPrincipal, new { @class = "form-control input-sm", maxlength = "20" })
+                @Html.ValidationMessageFor(x => x.DiretoriaMembro.telPrincipal)
+            </div>
+
+            <div class="col-md-2">
+                <label>Status</label>
+                @Html.DropDownListFor(m => m.DiretoriaMembro.ativo, ComboHelper.selectListStatus(Model.DiretoriaMembro.ativo), "...", new { @class = "form-control input-sm" })
+                @Html.ValidationMessageFor(m => m.DiretoriaMembro.ativo)
+            </div>
+
+            <div class="clearfix"></div>
+
+            <div class="col-md-4">
+                @Html.labelRequired("Associado")
+                @Html.DropDownListFor(x => x.DiretoriaMembro.idAssociado, AssociadoHelper.selectList(Model.DiretoriaMembro.idAssociado), "...", new { @class = "form-control input-sm select2" })
+            </div>
+
+            <div class="col-md-3">
+                <label>Email Principal</label><br />
+                @Html.TextBoxFor(x => x.DiretoriaMembro.email, new { @class = "form-control input-sm", maxlength = "150" })
+                @Html.ValidationMessageFor(x => x.DiretoriaMembro.email)
+            </div>
+            
+            <div class="col-md-3">
+                @Html.labelRequired("Cargo")
+                @Html.DropDownListFor(x => x.DiretoriaMembro.idCargo, CargoHelper.getInstance.selectList(Model.DiretoriaMembro.idCargo, null), "...", new { @class = "form-control input-sm" })
+            </div>
+
+            <div class="col-md-2">
+                <label>É Presidente?</label>
+                @Html.DropDownListFor(x => x.DiretoriaMembro.flagPresidente, ComboHelper.selectListTrueFalse(Model.DiretoriaMembro.flagPresidente), "...", new { @class = "form-control input-sm" })
+            </div>
+
+            <div class="clearfix"></div>
+
+            <div class="col-md-6 no-padding">
+                <h4 class="separator-form">Biografia</h4>
+                <div class=''>
+                    <div class='box-body pad'>
+                        @Html.TextAreaFor(x => x.DiretoriaMembro.biografia, new { @id = "editor", @class = "form-control input-sm", rows = "4" })
+                        @Html.ValidationMessageFor(x => x.DiretoriaMembro.biografia)
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <h4 class="separator-form">Imagem</h4>
+
+                @Html.inputFileSimples("OImagem")
+                @Html.ValidationMessageFor(m => m.OImagem)
+                <div class="clearfix"></div>
+
+                @if (Model.DiretoriaMembro.id > 0) {
+                    <h4 class="separator-form">Imagens cadastradas</h4>
+                    <div class="content-load carregando" id="boxArquivosListar" data-target="boxArquivosListar" data-url="@Url.Action("partial-lista-fotos", "ArquivoFoto", new { area = "Arquivos", entidade = EntityTypes.DIRETORIA_MEMBRO, idReferencia = Model.DiretoriaMembro.id })"></div>
+                }
+            </div>
+			<div class="clearfix"></div><br/>
+
+			<div class="text-right">
+				<input type="button" class="btn btn-primary link-loading" value="Salvar" onclick="DiretoriaMembro.enviarFormDiretoriaMembro()"/>
+			</div>
+		}
+	</div>
+
+</div>
+<div class="clearfix"></div><br />
+

@@ -1,0 +1,151 @@
+﻿@model WEB.Areas.ConfiguracoesRedesSociais.ViewModels.ConfiguracaoRedesSociaisForm
+
+@using DAL.Permissao.Security.Extensions
+@using WEB.Areas.Associacoes.Helpers
+@using MvcFlashMessages
+
+@{
+    ViewBag.titlePage = "Configurações de Redes Sociais";
+}
+
+@section scripts {
+    <script src="@UtilConfig.linkResourses()Areas/ConfiguracoesRedesSociais/js/configuracao-redes-sociais.js"></script>
+}
+
+@section breadcrump{
+    <ol class="breadcrumb">
+        <li><a href="@Url.Action("listar")" class="active fs-14"><i class="fa fa-arrow-left"></i> Voltar</a></li>
+    </ol>
+}
+
+<div class="row">
+    
+    <div class="col-sm-12 box-primary">
+        <div class="nav-tabs-custom">
+
+            <ul class="nav nav-tabs" role="tablist">
+                <li class="active"><a href="#tab-associado-pf" data-toggle="tab">Principal</a></li>
+            </ul>
+            @using (Html.BeginForm("editar", null, FormMethod.Post, new {role = "form", @class = "tab-content", enctype = "multipart/form-data"})) {
+
+                @Html.RenderFlash()
+                @Html.ValidationSummary(false)
+
+                <div id="tab-associado-pf" role="tabpanel" class="tab-pane active">
+
+                    <div class="col-sm-12">
+
+                        <div class="row">
+                            
+                            @Html.infoCadastro(Model.ConfiguracaoRedesSociais.id, Model.ConfiguracaoRedesSociais.dtCadastro, null)
+
+                            
+                            @if (User.idOrganizacao() == 0) {
+
+                                <div class="col-sm-4 col-md-3">
+                                    <label>Organização</label>
+                                    @Html.DropDownListFor(m => m.ConfiguracaoRedesSociais.idOrganizacao, AssociacaoHelper.getInstance.selectList(Model.ConfiguracaoRedesSociais.idOrganizacao), "Padrão", new { @class = "form-control input-sm", type = "number" })
+                                </div>
+                                <div class="clearfix"></div>
+
+                            }
+
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+
+                    <div class="col-sm-12">
+
+                        <h4 class="separator-form">Configurações de Redes Sociais</h4>
+
+                        <div class="row">
+
+                            <div class="col-md-4">
+	                            <label>Twitter</label>
+	                            @Html.TextBoxFor(m => m.ConfiguracaoRedesSociais.linkTwitter, new { @class="form-control input-sm" })
+                            </div>
+                            <div class="col-md-4">
+                                <label>Facebook</label>
+                                @Html.TextBoxFor(m => m.ConfiguracaoRedesSociais.linkFacebook, new { @class = "form-control input-sm" })
+                            </div>
+                            <div class="col-md-4">
+	                            <label>Instagram</label>
+	                            @Html.TextBoxFor(m => m.ConfiguracaoRedesSociais.linkInstagram, new { @class = "form-control input-sm" })
+                            </div>
+                            <div class="clearfix"></div><br />
+
+                            <div class="col-md-4">
+	                            <label>Youtube</label>
+	                            @Html.TextBoxFor(m => m.ConfiguracaoRedesSociais.linkYouTube, new { @class="form-control input-sm" })
+                            </div>
+                            <div class="col-md-4">
+                                <label>Google Plus</label>
+                                @Html.TextBoxFor(m => m.ConfiguracaoRedesSociais.linkGooglePlus, new { @class = "form-control input-sm" })
+                            </div>
+                            <div class="col-md-4">
+	                            <label>Flickr</label>
+	                            @Html.TextBoxFor(m => m.ConfiguracaoRedesSociais.linkFlickr, new { @class = "form-control input-sm" })
+                            </div>
+                            <div class="clearfix"></div><br />
+
+                            <h4 class="separator-form">Configurações de Compartilhamentos:</h4>
+                            <div class="col-md-4">
+	                            <label>Compartilhar conteúdos no facebook?</label>
+	                            @Html.DropDownListFor(m => m.ConfiguracaoRedesSociais.flagCompartilharFB, ComboHelper.selectListTrueFalse(Model.ConfiguracaoRedesSociais.flagCompartilharFB), "...", new { id = "flagCompartilharFacebook", @class = "form-control input-sm", onchage = "Configuracoes.onChangeCompartilharFacebook();" })
+                            </div>
+                            <div class="clearfix"></div><br />
+
+                            <div id="compartilhar-facebook">
+                                
+                                <div class="col-md-5">
+                                    <label>Client ID Facebook</label>
+                                    @Html.TextBoxFor(m => m.ConfiguracaoRedesSociais.clientIdFB, new {@class = "form-control input-sm", maxlength = "100"})
+                                </div>
+                                <div class="col-md-5">
+                                    <label>Client Secret Facebook</label>
+                                    @Html.TextBoxFor(m => m.ConfiguracaoRedesSociais.clientSecretFB, new {@class = "form-control input-sm", maxlength = "100"})
+                                </div>
+                                <div class="clearfix"></div><br/>
+
+                                <div class="col-md-5">
+                                    <label>Access Token Usuário Facebook</label>
+                                    @Html.TextBoxFor(m => m.ConfiguracaoRedesSociais.accessTokenUserFB, new {@class = "form-control input-sm", maxlength = "500"})
+                                </div>
+                                <div class="col-md-5">
+                                    <label>Access Token Fanpage Facebook</label>
+                                    @Html.TextBoxFor(m => m.ConfiguracaoRedesSociais.accessTokenFanPageFB, new {@class = "form-control input-sm", maxlength = "500"})
+                                </div>
+                                <div class="clearfix"></div><br/>
+
+                                <div class="col-md-5">
+                                    <label>ID Fanpage Facebook</label>
+                                    @Html.TextBoxFor(m => m.ConfiguracaoRedesSociais.idFanPageFB, new {@class = "form-control input-sm", maxlength = "100"})
+                                </div>
+                                <div class="col-md-5">
+                                    <label>Nome Fanpage Facebook</label>
+                                    @Html.TextBoxFor(m => m.ConfiguracaoRedesSociais.nomeFanPageFB, new {@class = "form-control input-sm", maxlength = "300"})
+                                </div>
+                                <div class="clearfix"></div><br/>
+
+                                <div class="col-md-5">
+                                    <label>URL Retorno Facebook</label>
+                                    @Html.TextBoxFor(m => m.ConfiguracaoRedesSociais.urlRetornoFB, new {@class = "form-control input-sm", maxlength = "200"})
+                                </div>
+                            </div>
+                            <div class="clearfix"></div><br />
+
+                        </div>
+                    </div>
+                    <div class="clearfix"></div><br />
+
+                </div>
+
+                <div class="col-sm-12 text-right">
+                    @Html.botaoSalvar()
+                </div>
+                <div class="clearfix"></div><br/>
+
+            }
+        </div>
+    </div>
+</div>

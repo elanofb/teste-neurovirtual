@@ -1,0 +1,75 @@
+﻿@using DAL.ConfiguracoesAssociados
+@using DAL.Permissao.Security.Extensions
+@using WEB.Areas.Associados.Helpers
+@using WEB.Areas.ConfiguracoesAssociados.Helpers
+@model short
+@{
+    var idOrganizacao = User.idOrganizacao() == 0 ? UtilRequest.getInt32("idOrganizacao") : User.idOrganizacao();
+
+    var flagNaoAssociado = Model == TipoCampoCadastroConst.NA_PJ || Model == TipoCampoCadastroConst.NA_PF;
+    var tipoPessoa = Model == TipoCampoCadastroConst.PJ || Model == TipoCampoCadastroConst.NA_PJ ? "J" : "F";
+}
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="panel panel-default">
+            <div class="panel-heading bg-white">
+                <span><i class="far fa-object-group"></i> Grupos de Campos</span>
+            </div>
+            <div class="panel-body">
+                <div id="partialFormGrupo-@Model" class="partial-form-grupos content-load-campos carregando" data-url="@Url.Action("partial-form-grupo", "ConfiguracaoAssociadoCampoGrupo", new {idTipoCampoCadastro = Model, idOrganizacao})"></div>
+
+                <div id="partialListaGrupo-@Model" class="partial-lista-grupos content-load-campos carregando" data-fncallback="AssociadoCampoGrupo.alterarOrdem(@Model)" data-url="@Url.Action("partial-lista-grupo", "ConfiguracaoAssociadoCampoGrupo", new {idTipoCampoCadastro = Model, idOrganizacao})"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-12">
+        <div class="panel panel-default">
+            <div class="panel-heading bg-white">
+                <span><i class="far fa-edit"></i> Campos do Cadastro</span>
+                <div class="dropdown col-xs-1 pull-right text-right">
+                    <a href="javascript:;" class="dropdown-toggle text-black" type="button" data-toggle="dropdown">
+                        <i class="fa fa-cog"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-right">
+                        <li>
+                            <a href="javascript:;" class="" onclick="DefaultSistema.showModal('@Url.Action("modal-clonar-campos", "ConfiguracaoAssociadoCamposClonagem", new { tipoCadastro = Model })', ClonarConfiguracao.initMultiSelectTipoAssociadoDestino)">
+                                <i class="fa fa-clone"></i> Clonar Configuração
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-xs-12">
+
+                        <button class="btn btn-default btn-sm col-xs-1 pull-right" data-toggle="tooltip" title="Adicionar novo campo" onclick="DefaultSistema.showModal('@Url.Action("modal-form-campo", new {idTipoCampoCadastro = Model, idOrganizacao})', AssociadoCampo.initModal)"><i class="far fa-plus-circle"></i></button>
+
+                        <button class="btn btn-default btn-sm col-xs-1 pull-right" data-toggle="tooltip" title="Visualizar campos disponíveis" onclick="DefaultSistema.showModal('@Url.Action("modal-opcoes-campos-pf")')"><i class="fa fa-search"></i></button>
+
+                        <div class="btn-group col-xs-5 col-md-4 col-lg-3 pull-right">
+                            <button class="btn btn-sm btn-primary" style="width: 20%;"><i class="fa fa-eye"></i></button>
+                            @Html.ListBox("listaViewCampos-" + Model, ExibicaoFiltroHelper.selectList(new[] {"add", "adm"}), new {@class = "multiSelectViewCampos", data_id_tipo_campo_cadastro = Model})
+                        </div>
+
+                        <div class="btn-group col-xs-5 col-md-4 col-lg-3 pull-right">
+                            <button class="btn btn-sm btn-primary" style="width: 20%;"><i class="fa fa-users"></i></button>
+
+                            @if (Model == TipoCampoCadastroConst.DP) {
+                                @Html.ListBox("listaViewCamposTipoAssociado-" + Model, TipoAssociadoHelper.getInstance.multiSelectListDependente(null, idOrganizacao), new {@class = "multiSelectViewCamposTipoAssociado", data_id_tipo_campo_cadastro = Model, data_id = idOrganizacao})
+                            }
+                            else {
+                                @Html.ListBox("listaViewCamposTipoAssociado-" + Model, TipoAssociadoHelper.getInstance.multiSelectList(null, tipoPessoa, flagNaoAssociado, true, null, idOrganizacao), new {@class = "multiSelectViewCamposTipoAssociado", data_id_tipo_campo_cadastro = Model, data_id = idOrganizacao})
+                            }
+
+                        </div>
+                    </div>
+                </div>
+
+                <div id="partialListaCampos-@Model" class="partial-lista-campos content-load-campos carregando" data-fncallback="AssociadoCampo.changeViewCampos(@Model)" data-url="@Url.Action("partial-lista-campos", "ConfiguracaoAssociadoCampos", new {idTipoCampoCadastro = Model, idOrganizacao})"></div>
+            </div>
+        </div>
+    </div>
+</div>

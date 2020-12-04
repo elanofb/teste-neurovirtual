@@ -1,0 +1,18 @@
+﻿<ul class="nav nav-pills nav-stacked" id="listaTotaisEmails" data-url="@Url.Action("carregar-totais", "Inicio")">
+	<li class="@( ((string)ViewBag.nomeCaixa).Equals("Caixa de Entrada")? "active": "")">
+		<a href="@Url.Action("index", "Inicio")"><i class="fa fa-inbox"></i> Caixa de Entrada <span class="label label-primary pull-right" id="lblCaixaEntrada">0</span></a>
+	</li>
+	<li class="@( ((string)ViewBag.nomeCaixa).Equals("Itens Enviados") ? "active" : "")">
+		<a href="@Url.Action("enviados", "Inicio")"><i class="fa fa-envelope"></i>Itens Enviados</a>
+	</li>
+	<li class="@( ((string)ViewBag.nomeCaixa).Equals("Lixeira") ? "active" : "")">
+		<a href="@Url.Action("lixeira", "Inicio")"><i class="fa fa-trash"></i> Lixeira <span class="label label-danger pull-right" id="lblLixeira">0</span></a>
+	</li>
+	<li class="@( ((string)ViewBag.nomeCaixa).Equals("Conta de E-mail") ? "active open" : "")">
+		<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="javascript:;" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-cog"></i> Configurações <i class="fa fa-angle-left pull-right"></i></a>
+		<div class="dropdown-menu submenu-correio">
+			<a class="link-black" href="@Url.Action("index", "ConfiguracaoConta")">Conta de E-mail</a>
+		</div>
+	</li>
+	
+</ul>

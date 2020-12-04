@@ -1,0 +1,9 @@
+﻿@*@model WEB.ViewModels.LogotipoVM
+
+@{
+    Layout = null;
+}
+
+<a class="@(Model.flagLogin == false ? "logo logo-topo" : "" )" href="@Model.url">
+    <img src="@Url.Action("exibir-imagem", "imagem", new { pathImagem = Model.pathImagem, largura = Model.largura, altura = Model.altura, pathAlternativa = UtilConfig.pathRelativeLogo })">
+</a>*@

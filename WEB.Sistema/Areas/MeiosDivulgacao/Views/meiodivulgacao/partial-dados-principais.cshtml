@@ -1,0 +1,46 @@
+﻿@model WEB.Areas.MeiosDivulgacao.ViewModels.MeioDivulgacaoForm
+
+@using DAL.Permissao.Security.Extensions
+@using WEB.Areas.Associacoes.Helpers
+
+@using (Html.BeginForm("editar", null, FormMethod.Post, new { role = "form", @class = "default" })){
+	
+	@Html.HiddenFor(m => m.MeioDivulgacao.id)
+
+	@Html.ValidationSummary(false)
+
+    <h4 class="separator-form">Dados Principais do Meio de Divulgação</h4>
+
+	<div class="form-horizontal">
+
+        @if(User.idOrganizacao() == 0) {
+
+            <div class="col-sm-4 col-md-3">
+                <label>Organização</label>
+                @Html.DropDownListFor(m => m.MeioDivulgacao.idOrganizacao, AssociacaoHelper.getInstance.selectList(Model.MeioDivulgacao.idOrganizacao), "Padrão", new {@class = "form-control input-sm"})
+            </div>
+            <div class="clearfix"></div>
+
+        }
+
+	    <div class="col-sm-6">
+			@Html.labelRequired("Descrição")
+			@Html.TextBoxFor(m => m.MeioDivulgacao.descricao, new { @class = "form-control input-sm", maxlength="100" })
+			@Html.ValidationMessageFor(m => m.MeioDivulgacao.descricao)
+		</div>
+
+		<div class="col-sm-2">
+			<label>Status</label>
+			@Html.DropDownListFor(m => m.MeioDivulgacao.ativo, ComboHelper.selectListStatus(Model.MeioDivulgacao.ativo), "...", new { @class = "form-control input-sm" })
+			@Html.ValidationMessageFor(m => m.MeioDivulgacao.ativo)
+		</div>
+		<div class="clearfix"></div>
+
+	</div>
+	<div class="clearfix"></div>
+	<br />
+	<div class="text-right">
+		@Html.exibirBotoesFormulario(Url.Action("listar"), Model.MeioDivulgacao.flagSistema ? "S" : "N")
+	</div>
+
+}

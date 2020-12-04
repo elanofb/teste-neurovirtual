@@ -1,0 +1,45 @@
+﻿@model IList<TituloReceitaPagamento>
+@using DAL.Financeiro
+
+<br/>
+<table class="table table-bordered table-striped">
+	<thead>
+		<tr role="row">
+			<th>ID</th>
+			<th>Forma de Pagamento</th>
+			<th>Status</th>
+			<th>Valor Original</th>
+			<th>Vencimento</th>
+			<th>ID transação</th>
+			<th>Tarifas</th>
+			<th>Pagamento</th>
+			<th>Baixa</th>
+			<th>Valor Líquido</th>
+			<th>Data Crédito</th>
+		</tr>
+	</thead>
+	<tbody>
+	@if (Model.Count > 0) {
+		foreach (var Item in Model) {
+			<tr>
+				<td class="text-center">@Item.id</td>
+				<td>@Item.descricaoFormaPagamento()</td>
+				<td>@(Item.idStatusPagamento > 0? Item.StatusPagamento.descricao: "EM ABERTO")</td>
+				<td class="text-right">@Item.valorOriginal.ToString("C")</td>
+				<td class="text-center">@Item.dtVencimento.exibirData()</td>
+				<td class="text-center">@Item.tokenTransacao</td>
+				<td class="text-right">@Item.valorTotalTarifas().ToString("C")</td>
+				<td class="text-center">@Item.dtPagamento.exibirData()</td>
+				<td class="text-center">@Item.dtBaixa.exibirData()</td>
+				<td class="text-right">@Item.valorLiquido().ToString("C")</td>
+				<td class="text-center">@Item.dtCredito.exibirData()</td>
+			</tr>
+		}
+	} else {
+		<tr>
+			<td class="text-center" colspan="11">Ainda não existem tentativas de pagamento</td>
+		</tr>
+	}
+	</tbody>
+</table>
+<div class="clearfix"></div><br/>

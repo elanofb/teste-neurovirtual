@@ -1,0 +1,44 @@
+﻿<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+	<i class="fa fa-envelope"></i>
+	<span class="label label-success">0</span>
+</a>
+
+
+<ul class="dropdown-menu">
+
+	@if (0 > 0) {
+		<li>
+			Existem 0 mensagens para você.
+			<ul class="menu">
+				@*@foreach (var Item in listaMensagens) {
+					<li class="item-notificacao-mensagem">
+						<a href="#" class="col-md-10 pull-left">
+							@if (!String.IsNullOrEmpty(Item.titulo)) {
+								<strong> @Item.titulo : </strong><br />
+							}
+							@Item.notificacao
+						</a>
+						<a href="#" class="col-md-2" onclick="Notificacao.readMensagemAviso(@Item.id);">
+							<i class="glyphicon glyphicon-ok"></i>
+						</a>
+						<div class="clearfix"></div>
+					</li>
+				}*@
+
+			</ul>
+		</li>
+	} else {
+		<li class="header">Você não tem mensagens no momento.</li>
+	}
+
+	<li class="footer">
+		@*<a href="#">Ver Todos</a>*@
+		@*@Html.ActionLink("Ver todos","partialAvisos","notificacao",new{ verTodos = true },null)*@
+	</li>
+</ul>
+
+
+
+
+
+

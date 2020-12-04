@@ -1,0 +1,15 @@
+﻿@using MvcFlashMessages
+@{
+    ViewBag.Title = "Ops, ocorreu um problema.";
+
+    Layout = null;
+
+}
+
+<div class="box" id="list">
+    @Html.RenderFlash()
+    <div class="alert alert-warning">
+        <h4>Acesso Negado</h4>
+        Você está acessando uma área ou registro para o qual não possui permissão.
+    </div>
+</div>

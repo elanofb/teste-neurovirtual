@@ -1,0 +1,24 @@
+﻿@model DAL.Financeiro.TituloReceita
+
+@{
+    Layout = null;
+}
+
+<div class="container">
+    <div class="col-sm-12">
+        @if (Model.listaDescontosAntecipacao.Count > 0) {
+            <div class="row">
+                @foreach (var Desconto in Model.listaDescontosAntecipacao) {
+
+                    <div class="col-xs-12 text-right">
+                        <strong>Desconto de @Desconto.valor.ToString("C")</strong> até o dia <strong>@Desconto.dtLimiteDesconto.exibirData()</strong> 
+                    </div>
+
+                }
+            </div>
+
+        } else {
+            <div class="alert alert-warning">Não existem descontos registrados para essa cobrança</div>
+        }
+    </div>
+</div>

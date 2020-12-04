@@ -1,0 +1,28 @@
+#idBuscarDocumentoTitular {
+    margin-top: 22px;
+}
+
+.load-conteudo {
+    background-image: url("../img/ajax-loader.gif");
+    background-repeat: no-repeat;
+    background-position:top center;
+    background-size: 40px;
+    padding: 30px 10px 0px 60px;
+    height: 90px;
+    font-size: 14px;
+    text-align: center;
+    color: #555;
+    font-weight: bold;
+}
+
+.padtop24 {
+    padding-top: 24px;
+}
+
+#boxCartaoCredito.inativo {
+    display: none;
+}
+
+#boxCartaoCredito.ativo{
+    display: block;
+}

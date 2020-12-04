@@ -1,0 +1,127 @@
+﻿@model PendenciaCadastralConsulta
+@using PagedList.Mvc
+@using WEB.Areas.AssociadosConsultas.Extensions
+@using WEB.Areas.AssociadosConsultas.ViewModels
+
+@{
+    ViewBag.titlePage = "Associados";
+
+    ViewBag.subTitlePage = "Veja abaixo a lista de pendências cadastrais dos membros atualmente.";
+}
+
+@section scripts {
+    @Html.includeBootstrapMultiselect()
+    @Html.includeDatePicker()
+    <script type="text/javascript" src="@UtilConfig.linkResourses()Areas/AssociadosConsultas/js/associado-consulta.js"></script>
+}
+
+@section styles {
+    <link href="@UtilConfig.linkResourses()css/associatec/list-custom.css" rel="stylesheet" />
+}
+
+<div class="box box-primary">
+
+    @Html.headerBox("Filtros de Busca", "fa fa-filter")
+
+    <div class="box-body">
+
+        @{ Html.RenderPartial("partial-filtros"); }
+
+    </div>
+
+</div>
+
+
+<div class="box box-primary">
+
+    <div class="box-header with-border">
+        <div class="box-title">
+            <i class="far fa-chart-bar"></i> Resultados <em class="fs-10">@Model.listaPendenciaCadastral.TotalItemCount</em>
+        </div>
+        <div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="far fa-minus"></i></button>
+        </div>
+    </div>
+
+    <div class="box-body">
+
+        @if(!Model.listaPendenciaCadastral.Any()) {
+            <div class="col-sm-12">
+                <div class="alert alert-info">
+                    Nenhum associado foi encontrado.
+                </div>
+            </div>
+        }
+
+        @foreach(var OAssociado in Model.listaPendenciaCadastral) {
+                <div class="box-info-item">
+                    
+                    <div class="row">
+
+                        <div class="col-md-3 col-sm-4 col-xs-4">
+
+                            <span><i class="fa fa-user"></i> @OAssociado.nome</span><br />
+
+                            <span>#@OAssociado.nroAssociado <em>(@OAssociado.descricaoTipoAssociado)</em></span><br />
+
+                        </div>
+
+                        <div class="col-md-6 col-sm-8 col-xs-8">
+                            <div class="col-md-4 col-sm-4 col-xs-12 margin-top-10">
+                                <span><i class="fa fa-phone"></i> <span title="Quantidade de Telefones" class="badge @(OAssociado.qtdTelefones > 0 ? "bg-green" : "bg-red")">@OAssociado.qtdTelefones Telefone(s)</span></span>
+                            </div>
+
+                            <div class="col-md-4 col-sm-4 col-xs-12 margin-top-10">
+                                <span><i class="fa fa-envelope"></i> <span title="Quantidade de E-mails" class="badge @(OAssociado.qtdEmails > 0 ? "bg-green" : "bg-red")">@OAssociado.qtdEmails E-mail(s)</span></span><br />
+                            </div>
+
+                            <div class="col-md-4 col-sm-4 col-xs-12 margin-top-10">
+                                <span><i class="fa fa-map-marker" style="padding: 0 3px;"></i> <span title="Quantidade de Endereços" class="badge @(OAssociado.qtdEnderecos > 0 ? "bg-green" : "bg-red")">@OAssociado.qtdEnderecos Endereço(s)</span> </span><br />
+                            </div>
+                        </div>
+
+                        <div class="clearfix hidden-md hidden-lg"></div>
+
+                        <div class="col-md-2 col-sm-6 col-xs-6">
+                            <div class="row">
+
+                                <div class="col-md-12 margin-bottom-5">
+                                    <span class="@OAssociado.exibirClasseStatus()"><i class="fa @OAssociado.exibirIconeStatus()"></i> @OAssociado.exibirStatus()</span>
+                                </div>
+                                <div class="clearfix"></div>
+
+                                <div class="col-md-12">
+                                    <span class="@OAssociado.exibirClasseSituacaoFinanceira()"><i class="fa @OAssociado.exibirIconeSituacaoFinanceira()"></i> @OAssociado.exibirSituacao()</span>
+                                </div>
+                                <div class="clearfix"></div>
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-1 col-sm-6 col-xs-6 text-right">
+
+                            <div class="dropdown">
+                                <a href="javascript:;" class="dropdown-toggle" type="button" data-toggle="dropdown">
+                                    Ações
+                                    <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-right">
+                                    <li>
+                                        <a href="@Url.Action("editar", "AssociadoCadastro", new {area = "Associados", id = OAssociado.id})" class="text-black"><i class="fa fa-edit"></i> Editar Cadastro</a>
+                                    </li>
+                                </ul>
+                            </div>
+
+                        </div>
+
+                        <div class="clearfix"></div>
+
+
+                    </div>
+
+                </div>
+        }
+
+        @(Html.paginarRegistros(Model.listaPendenciaCadastral, Html.PagedListPager(Model.listaPendenciaCadastral, nroPagina => UtilRequest.linkPaginacao(nroPagina, "consultar"), PagedListRenderOptions.OnlyShowFivePagesAtATime)))
+    </div>
+</div>

@@ -1,0 +1,91 @@
+﻿@using MvcFlashMessages
+@model WEB.Areas.Financeiro.ViewModels.TituloDespesaPagamentoClonarForm
+
+@{
+    Layout = IsPost ? null : "~/views/shared/associatec/masterpage-modal.cshtml";
+
+    ViewBag.modalTitle =  "Adicionar Despesa Pagamento";
+    ViewBag.modalWidthClass = "md";
+}
+
+<div id="@(IsPost ? "" : "boxClonarPagamentoDespesaForm")">
+
+    @Html.RenderFlash()
+
+    <div class="col-xs-12">
+        <div class="row">
+            @using (Ajax.BeginForm("salvar-titulo-despesa-pagamento", null, new AjaxOptions { UpdateTargetId = "boxClonarPagamentoDespesaForm", HttpMethod = "POST", OnSuccess = "DespesaPagamentoClone.onSuccessSalvarClone" }, new { role = "form", @class = "default" })) {
+                
+                @Html.legendaRequired()
+
+                @Html.ValidationSummary(false)
+
+                @Html.HiddenFor(x=>x.TituloDespesaPagamento.idTituloDespesa)
+
+                <h4 class="separator-form">Dados do Pagamento</h4>
+
+                <div class="form-horizontal">
+                    <div class="col-sm-4">
+                        <label>Descrição</label>
+                        @Html.TextBoxFor(x => x.TituloDespesaPagamento.descParcela, new {@class = "form-control input-sm"})
+                        @Html.ValidationMessageFor(x => x.TituloDespesaPagamento.descParcela)
+                    </div>
+
+                    <div class="col-sm-4">
+                        @Html.labelRequired("Valor")
+                        @Html.TextBoxFor(x => x.TituloDespesaPagamento.valorOriginal, new { @class = "form-control input-sm", alt = "decimal" })
+                        @Html.ValidationMessageFor(x => x.TituloDespesaPagamento.valorOriginal)
+                    </div>
+
+                    <div class="col-sm-4">
+                        @Html.labelRequired("Vencimento")
+                        @Html.TextBoxFor(x => x.TituloDespesaPagamento.dtVencimento, new { @class = "form-control input-sm input-datepicker", alt = "date" })
+                        @Html.ValidationMessageFor(x => x.TituloDespesaPagamento.dtVencimento)
+                    </div>
+
+                    <div class="col-sm-4">
+                        <label>Competência</label>
+                        @Html.TextBoxFor(x => x.TituloDespesaPagamento.dtCompetencia, new {@class = "form-control input-sm input-datepicker", alt = "date"})
+                        @Html.ValidationMessageFor(x => x.TituloDespesaPagamento.dtCompetencia)
+                    </div>
+
+                    <div class="col-sm-4">
+                        <label>N° Nota Fiscal</label>
+                        @Html.TextBoxFor(x => x.TituloDespesaPagamento.nroNotaFiscal, new { @class = "form-control input-sm" })
+                        @Html.ValidationMessageFor(x => x.TituloDespesaPagamento.nroNotaFiscal)
+                    </div>
+
+                    <div class="clearfix"></div>
+
+                    <h4 class="separator-form">Classificação de Contas</h4>
+
+                    <div class="col-sm-6">
+                        <label>Centro de Custo</label>
+                        @Html.DropDownListFor(x => x.TituloDespesaPagamento.idCentroCusto, CentroCustoHelper.getInstance.selectList(Model.TituloDespesaPagamento.idCentroCusto), "", new { @class = "form-control input-sm idCentroCusto", data_group = "modalCloneDespesaPagamento" })
+                        @Html.ValidationMessageFor(x => x.TituloDespesaPagamento.idCentroCusto)
+                    </div>
+
+                    <div class="col-sm-6">
+                        <label>Macro Conta</label>
+                        @Html.DropDownListFor(x => x.TituloDespesaPagamento.idMacroConta, MacroContaHelper.getInstance.selectList(Model.TituloDespesaPagamento.idMacroConta), "", new { @class = "form-control input-sm idMacroConta", data_group = "modalCloneDespesaPagamento" })
+                        @Html.ValidationMessageFor(x => x.TituloDespesaPagamento.idMacroConta)
+                    </div>
+
+                    <div class="col-sm-6">
+                        <label>Sub-Conta</label>
+                        @Html.DropDownListFor(x => x.TituloDespesaPagamento.idCategoria, CategoriaTituloHelper.getInstance.selectList(Model.TituloDespesaPagamento.idCategoria, 0), "", new { @class = "form-control input-sm idSubConta", data_group = "modalCloneDespesaPagamento" })
+                        @Html.ValidationMessageFor(x => x.TituloDespesaPagamento.idCategoria)
+                    </div>
+
+                </div>
+                <div class="clearfix"></div><br/>
+
+                <div class="text-right">
+                    <input type="submit" class="btn btn-primary link-loading" value="Salvar" />
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<div class="clearfix"></div><br />
+

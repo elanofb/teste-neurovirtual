@@ -1,0 +1,115 @@
+﻿@using DAL.Entities
+@using WEB.Extensions
+@using WEB.Helpers
+@model WEB.Areas.ContasBancarias.ViewModels.ContaMovimentacaoForm
+
+@{
+    Layout = "~/views/shared/associatec/masterpage-edit.cshtml";
+    ViewBag.titlePage = "Conta - " + Model.descricaoConta;
+    ViewBag.subTitlePage = "";
+}
+
+@section styles{
+    <link href="@UtilConfig.linkResourses()areas/financeiro/js/plugins/bootstrap-editable/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet" />
+    <link href="@UtilConfig.linkResourses()areas/financeiro/css/financeiro.css" rel="stylesheet" />
+
+    @*  Utilizado na aba de documentos e arquivos  *@
+    <link href="@UtilConfig.linkResourses()Areas/Arquivos/js/plugins/bootstrap-editable/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet" />
+    <link href="@UtilConfig.linkResourses()Areas/Arquivos/js/plugins/bootstrap-fileinput/css/fileinput.min.css" rel="stylesheet" />
+    <link href="@UtilConfig.linkResourses()Areas/Arquivos/js/plugins/jqueryFancybox/jquery.fancybox.css" rel="stylesheet" />
+}
+
+@section scripts {
+    @*  Utilizado na aba de documentos e arquivos *@
+    <script type="text/javascript" src="@UtilConfig.linkResourses()Areas/Arquivos/js/plugins/bootstrap-fileinput/js/fileinput.min.js"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses()Areas/Arquivos/js/plugins/jqueryFancybox/jquery.fancybox.js"></script>
+
+    <script type="text/javascript" src="@UtilConfig.linkResourses()Areas/financeiro/js/plugins/bootstrap-editable/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses()Areas/Arquivos/js/arquivo-documento.js?v=1"></script>
+
+    @Html.includeDatePicker()
+
+}
+
+@section navTabs{
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#tab-principal" data-toggle="tab">Principal</a></li>
+        <li><a href="#tab-arquivos" data-toggle="tab">Documentos</a></li>
+    </ul>
+}
+
+@section tabContent{
+    <div id="tab-principal" class="tab-pane active">
+        @using (Html.BeginForm("editar", null, FormMethod.Post, new {role = "form", @class = "default"})) {
+            @Html.legendaRequired()<br/>
+            @Html.HiddenFor(m => m.ContaMovimentacao.id)
+            @Html.HiddenFor(m => m.ContaMovimentacao.idContaBancariaOrigem)
+            @Html.HiddenFor(m => m.ContaMovimentacao.idTipoOperacao)
+            @Html.HiddenFor(m => m.ContaMovimentacao.ativo)
+            @Html.HiddenFor(m => m.urlRetorno)
+            
+            @Html.ValidationSummary(true,"Confira os erros do formulário.")
+            { Html.RenderPartial("partial-info-cadastro"); }
+
+            <div class="form-horizontal">
+
+                <div class="col-md-2">
+                    <label>Conta Principal</label>
+                    @Html.TextBoxFor(m => m.descricaoConta, new {@class = "form-control input-sm"}.isReadOnly(true))
+                </div>
+
+                <div class="col-md-2">
+                    @Html.Label("Conta de Destino")
+                    @Html.DropDownListFor(m => m.ContaMovimentacao.idContaBancariaDestino, WEB.Areas.ContasBancarias.Helpers.ContaBancariaHelper.getInstance.selectTransferencia(Model.ContaMovimentacao.idContaBancariaDestino, Model.ContaMovimentacao.idContaBancariaOrigem), "...", new {@class = "form-control input-sm"})
+                </div>
+
+                <div class="clearfix"></div><br/>
+
+                <div class="col-md-2">
+                    @Html.Label("Data da Operação")
+                    @Html.TextBoxFor(m => m.ContaMovimentacao.dtOperacao, new {id = "dtOperacao", alt = "date", @class = "input-datepicker form-control input-sm"})
+                    @Html.ValidationMessageFor(m => m.ContaMovimentacao.dtOperacao)
+                </div>
+
+                <div class="col-md-2">
+                    @Html.labelRequired("Valor")
+                    @Html.TextBoxFor(m => m.ContaMovimentacao.valor, new {@class = " form-control input-sm", alt = "decimal"})
+                    @Html.ValidationMessageFor(m => m.ContaMovimentacao.valor)
+                </div>
+
+                <div class="col-md-2">
+                    @Html.Label("Conciliado?")
+                    @Html.DropDownListFor(m => m.ContaMovimentacao.flagConciliado, ComboHelper.selectListTrueFalse(Model.ContaMovimentacao.flagConciliado), "...", new {@class = "form-control input-sm"})
+                </div>
+
+                <div class="col-md-3">
+                    <label>Descrição:</label>
+                    @Html.TextBoxFor(m => m.ContaMovimentacao.descricao, new {@class = "form-control input-sm", maxlength = "100"})
+                    @Html.ValidationMessageFor(m => m.ContaMovimentacao.descricao)
+                </div>
+            </div>
+
+            <div class="clearfix"></div>
+            <br/><br/>
+
+            <div class="col-md-7">
+                <div class="text-right">
+                    @Html.exibirBotoesFormulario(Model.urlRetorno, "N", Url.Action("editar", new {id = 0, Model.ContaMovimentacao.idContaBancariaOrigem, Model.ContaMovimentacao.idTipoOperacao, Model.urlRetorno}))
+                </div>
+            </div>
+        }
+    </div>
+    <div id="tab-arquivos" class="tab-pane">
+        <div class="col-md-5">
+            <h4 class="separator-form">Cadastrar Documentos/Arquivos</h4>
+            <div id="boxLoadFormDocumentos" class="" data-url="@Url.Action("editar-documento", "arquivo", new { area = "arquivos", idReferencia = Model.ContaMovimentacao.id, entidade = EntityTypes.TRANSFERENCIABANCARIA  })"></div>
+        </div>
+        <div class="col-md-offset-1 col-md-6">
+            <h4 class="separator-form">Documentos e Arquivos</h4>
+            <div id="boxLoadListaDocumentos" class="" data-url="@Url.Action("listar-galeria-documentos", "arquivo", new { area = "arquivos", idReferencia = Model.ContaMovimentacao.id, entidade = EntityTypes.TRANSFERENCIABANCARIA })"></div>
+        </div>
+        <div class="clearfix"></div><br />
+    </div>
+    <div class="clearfix"></div>
+}
+

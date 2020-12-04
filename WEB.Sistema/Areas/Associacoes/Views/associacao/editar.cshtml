@@ -1,0 +1,88 @@
+﻿@model WEB.Areas.Associacoes.ViewModels.AssociacaoForm
+@using WEB.Areas.Arquivos.Helpers
+@using WEB.Helpers
+
+@{
+    ViewBag.titlePage = "Associação";
+    ViewBag.subTituloPagina = Model.Associacao.Pessoa.nome;
+    ViewBag.flagButtonNewItem = false;
+}
+
+@section styles{
+    @Html.includeCSSModuloArquivos()
+    
+    <link href="@UtilConfig.linkResourses()Areas/Associacoes/js/plugins/bootstrap-toggle/css/bootstrap-toggle.css" rel="stylesheet" />
+}
+
+@section scripts{
+    @Html.includeJSModuloArquivosFotos()
+    @Html.includeLocalizacaoJS()
+    
+    @Html.includeDatePicker()
+    @Html.includeJqueryLoading()
+
+    <script src="@UtilConfig.linkResourses()Areas/Associacoes/js/plugins/bootstrap-toggle/js/bootstrap-toggle.js"></script>
+    <script src="@UtilConfig.linkResourses()Areas/Associacoes/js/associacao-modulos-contratados.js"></script>
+}
+
+@section breadcrump{
+    <ol class="breadcrumb">
+        <li><a href="@Url.Action("listar")" class="active fs-14"><i class="fa fa-arrow-left"></i> Voltar</a></li>
+    </ol>    
+}
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="nav-tabs-custom">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#tab-1" data-toggle="tab">Principal</a></li>
+
+                @if (Model.Associacao.idOrganizacaoGestora == null && Model.Associacao.id > 0) {
+
+                    <li><a href="#tab-2" data-toggle="tab">Associações Vinculadas</a></li>
+
+                    <li><a href="#tab-3" data-toggle="tab">Plano de Contratação</a></li>
+
+                    <li><a href="#tab-4" data-toggle="tab">Módulos Contratados</a></li>
+
+                }
+                
+            </ul>
+
+            <div class="tab-content">
+                <div id="tab-1" class="tab-pane active">
+
+                    @Html.infoCadastro(Model.Associacao.id, Model.Associacao.dtCadastro, Model.Associacao.dtAlteracao)
+
+                    <div class="row">
+                        @{Html.RenderPartial("partial-dados-principais", Model);}
+                    </div>
+                </div>
+
+                @if (Model.Associacao.idOrganizacaoGestora == null && Model.Associacao.id > 0) {
+
+                    <div id="tab-2" class="tab-pane">
+                        <div class="carregando content-load" data-url="@Url.Action("partial-lista-associacoes-vinculadas", "Associacao", new {idOrganizacaoGestora = Model.Associacao.id})"></div>
+                    </div>
+
+                    @*<div id="tab-3" class="tab-pane">
+                        <h4 class="separator-form">Configuração do Plano de Cobrança</h4>
+                        <div class="carregando content-load" data-url="@Url.Action("partial-form-associacao-cobranca", "AssociacaoCobranca", new {area = "AssociacoesCobranca", idOrganizacao = Model.Associacao.id})"></div>
+
+                        <div class="clearfix"></div>
+
+                        <h4 class="separator-form" style="opacity: 0.7;">Histórico de alterações do Plano de Cobrança</h4>
+                        <div class="carregando content-load" style="opacity: 0.7;" id="boxLoadListaHistoricoPlanoCobranca" data-url="@Url.Action("partial-lista-historico-associacao-cobranca", "AssociacaoCobranca", new {area = "AssociacoesCobranca", idOrganizacao = Model.Associacao.id})"></div>
+                    </div>*@
+
+                    <div id="tab-4" class="tab-pane">
+                        
+                        <div id="boxModulosContratados" class="carregando" data-url="@Url.Action("partial-lista-modulos", "AssociacaoModulosContratados", new { idOrganizacao = Model.Associacao.id})"></div>
+
+                    </div>
+                }
+                
+            </div>
+        </div>
+    </div>
+</div>

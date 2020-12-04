@@ -1,0 +1,152 @@
+﻿@model WEB.Areas.MateriaisApoio.ViewModels.MaterialApoioForm
+@using WEB.Areas.Arquivos.Helpers
+@using WEB.Areas.MateriaisApoio.Helpers
+@using DAL.Entities
+@using DAL.Permissao.Security.Extensions
+@using WEB.Areas.Associacoes.Helpers
+
+@{
+    ViewBag.titlePage = "Material de Apoio";
+    Layout = "~/views/shared/associatec/masterpage-edit.cshtml";
+}
+
+@section styles{
+    @Html.includeCSSModuloArquivos()
+    @Html.includeToastCSS()
+}
+
+@section scripts{
+    @Html.includeDatePicker()
+    @Html.includeBootstrapEditable()
+    @Html.includeToastJS()
+    @Html.includeJSModuloArquivos()
+    
+    <script type="text/javascript" src="@UtilConfig.linkResourses()Areas/MateriaisApoio/js/materialapoio.js"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses()Areas/MateriaisApoio/js/tipo-material-apoio.js"></script>
+    <script src="@UtilConfig.linkResourses()Areas/MateriaisApoio/js/material-apoio-associado.js?v=2.1"></script>
+}
+
+@section navTabs{
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#tab-1" data-toggle="tab">Principal</a></li>
+        <li id="abaAssociadosEspecificos">
+            <a href="#tab-2" data-toggle="tab">Associados Específicos</a>
+        </li>
+    </ul>
+}
+
+@section tabContent{
+
+    <div id="tab-1" class="tab-pane active">
+
+        @Html.infoCadastro(Model.MaterialApoio.id, Model.MaterialApoio.dtCadastro, Model.MaterialApoio.dtAlteracao)
+
+        @using (Html.BeginForm("editar", null, FormMethod.Post, new {enctype = "multipart/form-data"}))
+        {
+            @Html.HiddenFor(m => m.MaterialApoio.id)
+            @Html.ValidationSummary(false)
+
+            <div class="col-sm-8">
+                <h4 class="separator-form">Material de apoio</h4>
+
+                @if (User.idOrganizacao() == 0)
+                {
+
+                    <div class="col-sm-4 col-md-4">
+                        <label>Organização</label>
+                        @Html.DropDownListFor(m => m.MaterialApoio.idOrganizacao, AssociacaoHelper.getInstance.selectList(Model.MaterialApoio.idOrganizacao), "Padrão", new {@class = "form-control input-sm"})
+                    </div>
+                    <div class="clearfix"></div>
+                }
+                <div class="col-sm-4">
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label>Categoria</label>
+                            @Html.DropDownListFor(x => x.MaterialApoio.idTipoMaterialApoio, TipoMaterialApoioHelper.selectList(Model.MaterialApoio.idTipoMaterialApoio), "...", new {id = "idCategoria", @class = "form-control input-sm"})
+                        </div>
+
+                        <div class="col-md-12">
+                            @Html.Label("Material disponível para")
+                            @Html.DropDownListFor(x => x.MaterialApoio.flagDisponibilidadeAssociado, DisponibilidadeMaterialApoioHelper.selectList(Model.MaterialApoio.flagDisponibilidadeAssociado), new {id = "flagDisponibilidadeAssociado", @class = "form-control input-sm", onchange = "MaterialApoioAssociado.verificarAbaAssociadosEspecificos(this)"})
+                        </div>
+
+                        <div class="col-md-12">
+                            @Html.Label("Status")
+                            @Html.DropDownListFor(x => x.MaterialApoio.ativo, ComboHelper.selectListStatus(Model.MaterialApoio.ativo), new {@class = "form-control input-sm"})
+                            @Html.instrucao("Itens desativados não aparecem para os associado")
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-md-8">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            @Html.labelRequired("Título do Material")
+                            @Html.TextBoxFor(x => x.MaterialApoio.titulo, new {@class = "form-control input-sm", maxlength = "100"})
+                            @Html.ValidationMessageFor(x => x.MaterialApoio.titulo)
+                        </div>
+                        <div class="col-sm-12">
+                            @Html.Label("Descrição")
+                            @Html.TextAreaFor(x => x.MaterialApoio.descricao, new {@class = "form-control input-sm", maxlength = "255", rows = 4})
+                            @Html.instrucao("Faça uma curta sinopse sobre o material.")<div class="clearfix"></div>
+                            @Html.ValidationMessageFor(m => m.MaterialApoio.descricao)
+                        </div>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+
+                <div class="form-group col-sm-4 col-sm-offset-4">
+                    <label>Disponível De</label>
+                    <div class="input-group">
+                        <div class="input-group-addon"><i class="fa fa-calendar"></i>
+                        </div>
+                        @Html.TextBoxFor(x => x.MaterialApoio.dtInicioDisponivel, new {@class = "form-control input-sm input-datepicker", alt = "date"})
+                        <div class="clearfix"></div>
+                        @Html.ValidationMessageFor(m => m.MaterialApoio.dtInicioDisponivel)
+                    </div>
+                </div>
+                <div class="form-group col-sm-4">
+                    <label>Até</label>
+                    <div class="input-group">
+                        <div class="input-group-addon"><i class="fa fa-calendar"></i>
+                        </div>
+                        @Html.TextBoxFor(x => x.MaterialApoio.dtFinalDisponivel, new {@class = "form-control input-sm input-datepicker", alt = "date"})
+                        <div class="clearfix"></div>
+                        @Html.ValidationMessageFor(m => m.MaterialApoio.dtFinalDisponivel)
+                    </div>
+                </div>
+
+                <div class="clearfix"></div>
+            </div>
+            <div class="col-sm-4">
+                <h4 class="separator-form">Arquivos que compõem o material</h4>
+
+                <div class="col-md-12">
+                    <label>Arquivo(s)</label>
+                    @Html.inputFileSimples("OArquivo")
+                    @Html.ValidationMessageFor(x => x.OArquivo)
+                </div>
+                <div class="clearfix"></div><br/>
+
+                @if (Model.MaterialApoio.id > 0){
+                    <div class="col-md-12">
+                        <div class="carregando" id="boxArquivosListar" data-target="boxArquivosListar" data-url="@Url.Action("listar-galeria-documentos", "arquivo", new {area = "arquivos", entidade = EntityTypes.MATERIAL_APOIO, idReferencia = Model.MaterialApoio.id})"></div>
+                    </div>
+                }
+            </div>
+            <div class="clearfix"></div><br/>
+
+            <div class="text-right">
+                @Html.exibirBotoesFormulario(Url.Action("listar"), "N", Url.Action("editar", new {id = 0}))
+            </div>
+        }
+    </div>
+
+    <div id="tab-2" class="tab-pane">
+
+        <div id="boxAssociadoEspecifico" class="content-load-associados carregando" data-url="@Url.Action("partial-associados-especificos", "materialapoioassociado", new { idMaterialApoio = Model.MaterialApoio.id })"></div>
+
+    </div>
+
+}

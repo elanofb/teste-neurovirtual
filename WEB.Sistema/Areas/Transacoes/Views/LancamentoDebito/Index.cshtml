@@ -1,0 +1,43 @@
+﻿@using MvcFlashMessages
+@model WEB.Areas.Transacoes.ViewModels.DebitoVM
+
+@{
+    Layout = "~/views/shared/associatec/masterpage.cshtml";
+    ViewBag.titlePage = "Lançamento de Débito";
+}
+
+@section styles {
+    <link href="@UtilConfig.linkResourses("Areas/css/list-custom.css")" rel="stylesheet"/>
+}
+
+@section scripts{
+}
+
+<div class="box box-primary">
+    
+    @Html.headerBox("Efetuar Lançamento de Débito", "")
+    
+    <div class="box-body">
+        
+        <div class="row">
+
+            <div id="boxTransferenciaCadastro">
+
+                <div class="col-md-12">
+                    @Html.RenderFlash()
+                </div>
+
+                @{
+                    Html.RenderPartial("~/Areas/Transacoes/Views/LancamentoDebito/partial-form-validacao.cshtml", Model);
+
+                    Html.RenderPartial("~/Areas/Transacoes/Views/LancamentoDebito/partial-form-efetivacao.cshtml", Model);
+                }
+            </div>
+                
+            <div class="clearfix"></div>
+
+        </div>
+        
+    </div>
+    
+</div>

@@ -1,0 +1,98 @@
+﻿@model WEB.Areas.Financeiro.ViewModels.CategoriaTituloForm
+@using DAL.Permissao.Security.Extensions
+@using WEB.Areas.Associacoes.Helpers
+
+@{
+	Layout = "~/views/shared/associatec/masterpage-edit.cshtml";
+	ViewBag.titlePage = "Sub-Contas";
+	ViewBag.subTituloPagina = Model.CategoriaTitulo.descricao;
+}
+
+@section styles{
+    <link href="@UtilConfig.linkResourses("Areas/Relatorios/js/plugins/autocomplete/select2/css/select2.css")" rel="stylesheet" />
+    <link href="@UtilConfig.linkResourses("js/associatec/plugins/bootstrap-multiselect/bootstrap-multiselect.css")" rel="stylesheet" />
+}
+
+@section scripts{
+    @Html.includeSelect2()
+    @Html.includeDatePicker()
+}
+
+
+@section navTabs{
+	<ul class="nav nav-tabs">
+		<li class="active"><a href="#tab-1" data-toggle="tab">Principal</a></li>
+	</ul>
+}
+
+@section tabContent{
+	<div id="tab-1" class="tab-pane active">
+	    
+        @Html.infoCadastro(Model.CategoriaTitulo.id, Model.CategoriaTitulo.dtCadastro, Model.CategoriaTitulo.dtAlteracao)
+
+         @using(Html.BeginForm("editar",null,FormMethod.Post,new { role = "form",@class = "default" })) {
+            
+            @Html.HiddenFor(m => m.CategoriaTitulo.id)
+
+            @Html.ValidationSummary(true, "Alguns campos não foram validados.")
+
+            <h4 class="separator-form">Dados Principais da sub-conta</h4>
+
+            <div class="form-horizontal">
+
+                @if (User.idOrganizacao() == 0) {
+                    <div class="col-sm-4 col-md-3">
+                        <label>Organização</label>
+                        @Html.DropDownListFor(m => m.CategoriaTitulo.idOrganizacao, AssociacaoHelper.getInstance.selectList(Model.CategoriaTitulo.idOrganizacao), "Padrão", new {@class = "form-control input-sm"})
+                    </div>
+                    <div class="clearfix"></div>
+                }
+
+                <div class="col-lg-3 col-sm-6">
+                    @Html.labelRequired("Macro Conta")
+                    @Html.DropDownListFor(m => m.CategoriaTitulo.idMacroConta, MacroContaHelper.getInstance.selectList(Model.CategoriaTitulo.idMacroConta), new { id = "idMacroConta", @class = "form-control input-sm select2" })
+                    @Html.ValidationMessageFor(m => m.CategoriaTitulo.idMacroConta)
+                </div>
+
+                <div class="col-lg-3 col-sm-6">
+                    @Html.Label("Sub Conta Pai")
+                    @Html.DropDownListFor(m => m.CategoriaTitulo.idCategoriaPai, CategoriaPaiHelper.getInstance.selectList(Model.CategoriaTitulo.idCategoriaPai, true,new List<int> {Model.CategoriaTitulo.id}), "...", new { id = "idCategoriaPai", @class = "form-control input-sm" } )
+                    @Html.ValidationMessageFor(m => m.CategoriaTitulo.idCategoriaPai)
+                </div>
+
+                <div class="col-lg-4 col-sm-6">
+                    @Html.labelRequired("Descrição da sub-conta")
+                    @Html.TextBoxFor(m => m.CategoriaTitulo.descricao, new { @class = "form-control input-sm", maxlength = "100" })
+                    @Html.ValidationMessageFor(m => m.CategoriaTitulo.descricao)
+                </div>
+                <div class="clearfix visible-sm"></div>
+
+                <div class="col-lg-3 col-sm-6">
+                    <label>Código Fiscal</label>
+                    @Html.TextBoxFor(m => m.CategoriaTitulo.codigoFiscal, new { @class = "form-control input-sm", maxlength = "10" })
+                </div>
+
+                <div class="col-lg-2 col-sm-6">
+                    <label>Exibir DRE?</label>
+                    @Html.DropDownListFor(m => m.CategoriaTitulo.flagExibirDRE, ComboHelper.selectListTrueFalse(Model.CategoriaTitulo.flagExibirDRE), "...", new { @class = "form-control input-sm" })
+                    @Html.ValidationMessageFor(m => m.CategoriaTitulo.flagExibirDRE)
+                </div>
+
+                <div class="col-lg-2 col-sm-6">
+                    <label>Status</label>
+                    @Html.DropDownListFor(m => m.CategoriaTitulo.ativo, ComboHelper.selectListStatus(Model.CategoriaTitulo.ativo), new { @class = "form-control input-sm" })
+                    @Html.ValidationMessageFor(m => m.CategoriaTitulo.ativo)
+                </div>
+                <div class="clearfix"></div>
+
+            </div>
+            <div class="clearfix"></div><br />
+             
+            <div class="text-right">
+                @Html.exibirBotoesFormulario(Url.Action("listar", "SubContaConsulta"), "N", Url.Action("editar"))
+            </div>
+
+         }
+
+	</div>
+}

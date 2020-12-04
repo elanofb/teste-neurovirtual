@@ -1,0 +1,9 @@
+﻿@model DAL.Associados.Associado
+
+<div class="tab-pane" id="tab-pontuacao">
+    
+    <div id="boxLoadPontuacao" class="carregando content-load" data-url="@Url.Action("partial-pontuacao-membro", "PontuacaoMembro", new {area = "RedeAfiliados", idMembro = Model.id})"></div>
+    
+    <div class="clearfix"></div><br/>
+    
+</div>

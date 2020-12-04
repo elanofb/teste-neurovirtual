@@ -1,0 +1,87 @@
+﻿@model  WEB.Areas.AssociadosContribuicoes.ViewModels.AssociadoContribuicaoPartialForm
+@using MvcFlashMessages
+@using WEB.Areas.Contribuicoes.Helpers
+
+@{
+    string idBox = "boxFormAssociadoAnuidade";
+    Layout = null;
+    Model.AssociadoContribuicao.flagIsento = false;
+}
+
+<div id="@idBox">
+    <script type="text/javascript" src="@UtilConfig.linkResourses()Areas/AssociadosContribuicoes/js/associado-contribuicao.js?v=1.4"></script>
+
+    @Html.RenderFlash()
+
+    @using (Ajax.BeginForm("salvar", "associadocontribuicao", new { area = "associadoscontribuicoes" }, new AjaxOptions { HttpMethod = "POST", InsertionMode = InsertionMode.Replace, UpdateTargetId = idBox, OnSuccess = "AssociadoContribuicao.onSuccessForm" }, new { @class = "" })) {
+        { Html.EnableClientValidation(false); }
+        @Html.legendaRequired()<br />
+
+        @Html.HiddenFor(m => m.AssociadoContribuicao.id)
+
+        @Html.HiddenFor(m => m.AssociadoContribuicao.flagIsento)
+
+        @Html.HiddenFor(m => m.AssociadoContribuicao.idAssociado, new { @class = "nao-limpar" })
+
+        @Html.ValidationSummary(false, "Algumas informações precisam ser corrigidas abaixo.")
+
+        <div class="row">
+            <div class="col-sm-8 col-lg-6">
+                <div class="row">
+                    <div class="col-sm-12 nao-exibir margin-bottom-10" id="boxAssociadoIsento">
+                        <button class="btn btn-warning"><i class="fa fa-exclamation"></i> Associado Isento para essa cobrança</button>
+                    </div>
+
+                    <div class="col-sm-9 col-lg-9">
+                        @Html.labelRequired("Contribuição / Plano")
+                        @Html.DropDownListFor(m => m.AssociadoContribuicao.idContribuicao, ContribuicaoHelper.getInstance.selectList(Model.AssociadoContribuicao.idContribuicao), "...", new {@class = "form-control input-sm", onchange = "AssociadoContribuicao.carregarPreco(this.value, '" + Model.AssociadoContribuicao.idAssociado + "')"})
+                        @Html.ValidationMessageFor(m => m.AssociadoContribuicao.idContribuicao)
+                    </div>
+                    <div class="col-sm-3 col-lg-3">
+                        @Html.labelRequired("Valor")
+                        @Html.TextBoxFor(m => m.AssociadoContribuicao.valorAtual, new {@class = "form-control input-sm", alt = "decimal", id = "valorContribuicao"})
+                        @Html.ValidationMessageFor(m => m.AssociadoContribuicao.valorAtual)
+                    </div>
+
+                    <div class="clearfix"></div>
+                    <div class="col-sm-3 col-lg-3" id="boxVencimentoOriginal">
+                        @Html.labelRequired("Data Vencimento")
+                        <div id="boxVencimentoOriginal">
+                            @Html.TextBoxFor(m => m.AssociadoContribuicao.dtVencimentoOriginal, new { @class = "form-control input-sm", alt = "date", id = "dtVencimentoOriginal" })
+                        </div>
+                        @Html.ValidationMessageFor(m => m.AssociadoContribuicao.dtVencimentoOriginal)
+                    </div>
+                    <div class="col-sm-3 col-lg-3">
+                        @Html.Label("Novo Vencimento")
+                        @Html.TextBox("dtVencimentoAtual", UtilRequest.getString("dtVencimentoAtual"), new { @class = "form-control input-sm", alt = "date", id = "dtVencimentoAtual", data_toggle="tooltip", title= "Esse campo permite alterar a data de vencimento padrão para o associado. Deixe em branco para manter o vencimento padrão." })
+                    </div>
+
+                    <div class="col-sm-6 col-lg-6" id="boxPeriodoVigencia">
+                        @Html.labelRequired("Período de Vigência")
+                        <div class="input-group">
+                            @Html.TextBoxFor(m => m.AssociadoContribuicao.dtInicioVigencia, new {@class = "form-control input-sm", alt = "date", id = "dtInicioVigencia"}.isReadOnly(true))
+                            <span class="input-group-addon">-</span>
+                            @Html.TextBoxFor(m => m.AssociadoContribuicao.dtFimVigencia, new {@class = "form-control input-sm", alt = "date", id = "dtFimVigencia"}.isReadOnly(true))
+                        </div>
+                        @Html.ValidationMessageFor(m => m.AssociadoContribuicao.dtInicioVigencia)
+                        @Html.ValidationMessageFor(m => m.AssociadoContribuicao.dtFimVigencia)
+                    </div>
+
+                    <div class="clearfix"></div><br />
+
+                    <div class="col-sm-12 col-lg-12 text-right">
+                        <input type="submit" name="salvar" value="Salvar Cobrança" class="btn btn-primary link-loading" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4 col-lg-3 col-lg-offset-1 nao-exibir" id="boxOpcoesVencimento">
+                <div class="row">
+                    <div class="alert alert-info">Veja as datas de vencimento válidas</div>
+                </div>
+                <ul class="list-group"></ul>
+            </div>
+        </div>
+        <div class="clearfix"></div><br />
+    }
+</div>
+<div class="clearfix"></div>

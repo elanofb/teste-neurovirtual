@@ -1,0 +1,46 @@
+﻿@using MvcFlashMessages
+@model WEB.Areas.AssociadosOperacoes.ViewModels.AssociadoSituacaoContribuicaoForm
+
+@{
+    ViewBag.modalTitle = "Alterar situação do associado.";
+    ViewBag.modalWidthClass = "md";
+
+    Layout = "~/views/shared/associatec/masterpage-modal.cshtml";
+
+    if (IsPost) {
+        Layout = null;
+    } else {
+        Layout = "~/views/shared/associatec/masterpage-modal.cshtml";
+    }
+}
+
+<div id="boxFormSituacaoContribuicao">
+
+    @Html.RenderFlash()
+
+    @using (Ajax.BeginForm("salvar-alteracao", null, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "boxFormSituacaoContribuicao", InsertionMode = InsertionMode.Replace, OnSuccess = "AssociadoSituacaoContribuicao.onSuccessForm" }, new { id = "formSituacaoContribuicao" })) {
+
+        @Html.legendaRequired()<br />
+
+        { Html.EnableClientValidation(false); }
+
+        @Html.ValidationSummary(true, "Alguns campos não foram validados")
+
+        @Html.HiddenFor(m => m.id)
+
+        <div class="col-md-12 no-padding-top">
+            @Html.TextAreaFor(m => m.motivoAlteracao, new { @class = "form-control input-sm", rows = "5" })
+            @Html.ValidationMessageFor(m => m.motivoAlteracao)
+        </div>
+        <div class="clearfix"></div><br />
+
+    }
+
+</div>
+
+@section modalFooter{
+    <div class="text-right">
+        <input type="button" value="Cancelar" class="btn btn-default" data-dismiss="modal" aria-hidden="true" />
+        <input type="button" value="Confirmar Alteração" class="btn btn-success link-loading" onclick="$('#formSituacaoContribuicao').submit();" />
+    </div>
+}

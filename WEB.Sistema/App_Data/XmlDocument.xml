@@ -1,0 +1,1580 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>WEB</name>
+    </assembly>
+    <members>
+        <member name="T:WEB.App_GlobalResources.Messages">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:WEB.App_GlobalResources.Messages.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:WEB.App_GlobalResources.Messages.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="M:WEB.Helpers.FormHelperCustom.botaoSalvar(System.Web.Mvc.HtmlHelper)">
+            <summary>
+            Helper para gerar HTML de botão padrao de submit dos formulários
+            </summary>
+        </member>
+        <member name="M:WEB.Helpers.FormHelperCustom.labelRequired(System.Web.Mvc.HtmlHelper,System.String,System.String,System.Boolean)">
+            
+        </member>
+        <member name="M:WEB.Helpers.JSHelper.includeFroalaEditorCSS(System.Web.Mvc.HtmlHelper)">
+            <summary>
+            Inclusao de arquivos CSS necessarios para utilizacao da editor FROALA
+            </summary>
+            <param name="helper">HTML Helper</param>
+            <returns>String com tag link de inclusao dos scripts css do plugin</returns>		
+        </member>
+        <member name="M:WEB.Helpers.JSHelper.includeFroalaEditorJS(System.Web.Mvc.HtmlHelper)">
+            <summary>
+            Inclusao de arquivos JS necessarios para utilizacao da editor FROALA
+            </summary>
+            <param name="helper">HTML Helper</param>
+            <returns>String com tag de inclusao dos scripts js do plugin</returns>
+        </member>
+        <member name="M:WEB.Helpers.SelectListHelper.parametrosMetodo(System.Reflection.MethodInfo,System.String,System.Object,System.Collections.Specialized.NameValueCollection)">
+            <summary>
+            Capturar a lista de parametros de um método
+            </summary>
+        </member>
+        <member name="M:WEB.Helpers.TipoContribuicaoHelper.selectList(System.Nullable{System.Int32})">
+            
+        </member>
+        <member name="M:WEB.Helpers.HtmlHelperCustom.buttonSearch(System.Web.Mvc.HtmlHelper,System.String,System.String,System.String)">
+            
+        </member>
+        <member name="M:WEB.Helpers.HtmlHelperCustom.badgeStatus(System.Web.Mvc.HtmlHelper,System.String)">
+            <summary>
+            Exibir a descrição de status de um registro de forma visual: verde para ativos e vermelho para inativos
+            </summary>
+        </member>
+        <member name="M:WEB.Helpers.HtmlHelperCustom.badgeStatus(System.Web.Mvc.HtmlHelper,System.Nullable{System.Boolean})">
+            <summary>
+            Exibir a descrição de status de um registro de forma visual: verde para ativos e vermelho para inativos
+            </summary>
+        </member>
+        <member name="M:WEB.Helpers.StatusPedidoHelper.getComboWorkFlow(System.Int32)">
+            
+        </member>
+        <member name="M:WEB.App_Infrastructure.SecurityConfig.verificarAutorizacao(System.Int32,System.String,System.String,System.String,System.Collections.Generic.List{DAL.Permissao.RecursoSistemaVW},System.Collections.Generic.List{DAL.Permissao.RecursoPermissaoVW})">
+            <summary>
+            Verificar a permissao de acordo com o local que está sendo acesso e as permissoes concedidas para o perfil
+            </summary>
+        </member>
+        <member name="M:WEB.OrganizacaoFilter.OnAuthorization(System.Web.Mvc.AuthorizationContext)">
+            <summary>
+            Verificar se o usuario logado tem uma organizacao vinculada
+            </summary>
+            <param name="filterContext"></param>
+        </member>
+        <member name="T:WEB.Areas.Api.Eventos.Controllers.EventoAgendaController">
+            <summary>
+                Serviço responsável por disponibilizar a agenda do evento atual
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.Api.Eventos.Controllers.EventoAgendaController.Get">
+            <summary>
+                Carregamento da agenda de Eventos
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:WEB.Areas.AreaAssociados.CacheService.prefixoKey(System.Int32)">
+            <summary>
+            Definir prefixo das chaves a partir do id da organizacao
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.AreaAssociados.CacheService.keyCache(System.Int32,System.String)">
+            <summary>
+            Montagem para uma chave de chave
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.AreaAssociados.CacheService.carregar(System.String)">
+            <summary>
+            Carregar um item salvo no cache
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.AreaAssociados.CacheService.carregar``1(System.String)">
+            <summary>
+            Carregar um registro a partir do cache
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.AreaAssociados.CacheService.adicionar(System.String,System.Object)">
+            <summary>
+            Adicionar itens em cache
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.AreaAssociados.CacheService.limparCacheOrganizacao(System.Int32)">
+            <summary>
+            Limpar todas as chaves
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.AreaAssociados.CacheService.limparConfiguracoes">
+            <summary>
+            Limpar todas as chaves
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.AreaAssociados.CacheService.remover(System.String)">
+            <summary>
+            Limpar uma chave de cache 
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.AreaAssociados.OrganizacaoFilter.OnAuthorization(System.Web.Mvc.AuthorizationContext)">
+            <summary>
+            Verificar se o associado logado tem uma organizacao vinculada
+            </summary>
+            <param name="filterContext"></param>
+        </member>
+        <member name="M:WEB.Areas.AreaAssociados.ApiConex.get(System.String,System.String)">
+            <summary>
+            Sending GET request.
+            </summary>
+            <param name="urlGet">Request Url.</param>
+            <param name="dados">Data for request.</param>
+            <returns>Response body.</returns>
+        </member>
+        <member name="M:WEB.Areas.AreaCheckout.CheckoutFinalizacao.Models.Validators.FinalizacaoCheckoutValidator.validar(WEBCheckout.Areas.AreaCheckout.Checkout.ViewModels.CheckoutForm)">
+            <summary>
+            Validar os dados para finalizacao do checkout
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.AreaCheckout.CheckoutFinalizacao.Models.Validators.FinalizacaoCheckoutValidator.validarEntrega(WEBCheckout.Areas.AreaCheckout.Checkout.ViewModels.CheckoutForm)">
+            <summary>
+            Validar Dados de entrega (se houver)
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.AreaCheckout.CheckoutFinalizacao.Models.Validators.FinalizacaoCheckoutValidator.validarRecibo(WEBCheckout.Areas.AreaCheckout.Checkout.ViewModels.CheckoutForm)">
+            <summary>
+            Validar informações de recibos (se houver)
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.AreaCheckout.CheckoutFinalizacao.Models.Validators.FinalizacaoCheckoutValidator.validarPagamento(WEBCheckout.Areas.AreaCheckout.Checkout.ViewModels.CheckoutForm)">
+            <summary>
+            Validar os dados de pagamento
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.Arquivos.Controllers.ExibicaoController.exibirArquivo(System.Int32)">
+            
+        </member>
+        <member name="M:WEB.Areas.Arquivos.Helpers.ImagemHelper.redimensionar(System.Drawing.Bitmap,System.Int32,System.Int32)">
+            Método para redimensionamento de imagens em tempo de execução.
+        </member>
+        <member name="M:WEB.Areas.Arquivos.Helpers.ImagemHelper.exibirImagem(System.String,System.Int32,System.Int32)">
+            Retornar uma imagem 
+        </member>
+        <member name="M:WEB.Areas.Associacoes.Helpers.AssociacaoHelper.selectList(System.Nullable{System.Int32},System.Boolean,System.Boolean)">
+            <summary>
+            Dropdown com opcao de unidades cadastradas no sistema
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.Associacoes.Helpers.AssociacaoHelper.selectListOrganizacaoGestora(System.Nullable{System.Int32},System.Nullable{System.Boolean},System.Int32)">
+            <summary>
+            Dropdown com opção de organizações gestoras
+            </summary>
+        </member>
+        <member name="T:WEB.Areas.AssociadosCarteirinha.Helpers.AssociadoCarteirinhaHelper">
+            
+        </member>
+        <member name="M:WEB.Areas.AssociadosConsultas.Controllers.AssociadoDocumentoController.exportar">
+            <summary>
+            Exportar Zip
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.AssociadosContribuicoes.Helpers.AssociadoContribuicaoHelper.linkBoleto(System.Web.Mvc.HtmlHelper,System.String,System.String,System.String)">
+            <summary>
+            Link para um boleto bancario
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.AssociadosContribuicoes.Helpers.AssociadoContribuicaoHelper.menuAcoes(System.Web.Mvc.HtmlHelper,WEB.Areas.AssociadosContribuicoes.ViewModels.AssociadoContribuicaoItemLista)">
+            <summary>
+            Gerar o menu de acoes para uma contribuica
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.AssociadosContribuicoes.ViewModels.AssociadoContribuicaoItemLista.#ctor">
+            <summary>
+            Construtor
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.AssociadosContribuicoes.ViewModels.AssociadoContribuicaoItemLista.carregarDados(DAL.AssociadosContribuicoes.AssociadoContribuicaoResumoVW,System.Collections.Generic.List{DAL.AssociadosContribuicoes.AssociadoContribuicaoResumoVW})">
+            <summary>
+            Montar dados do objeto
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.AssociadosContribuicoes.ViewModels.AssociadoContribuicaoPartialLista.carregarContribuicoes(DAL.Associados.Associado)">
+            <summary>
+            Carregamento de itens de contribuicoes para exibicao
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.AssociadosContribuicoes.ViewModels.AssociadoContribuicaoPartialLista.carregarInscricoes(DAL.Associados.Associado)">
+            <summary>
+            Carregar dados da taxa de inscricao (se houver)
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.AssociadosDependentes.Controllers.AssociadoDependenteCadastroController.editar(System.Nullable{System.Int32})">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.AssociadosDependentes.Controllers.AssociadoDependenteCadastroController.salvarCadastroDependente(WEB.Areas.AssociadosDependentes.ViewModels.AssociadoDependenteCadastroForm)">
+            <summary>
+            Processar e salvar os dados enviados pelo formulário
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.AssociadosDependentes.ViewModels.AssociadoDependenteCadastroForm.carregaDados">
+            <summary>
+            Carregar os dados
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.AssociadosDependentes.ViewModels.AssociadoDependenteCadastroForm.carregarGrupos">
+            <summary>
+            Montar query e carregar lista dos grupos
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.AssociadosDependentes.ViewModels.AssociadoDependenteCadastroForm.carregarCampos">
+            <summary>
+            Montar query e carregar lista de campos
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.AssociadosDependentes.ViewModels.AssociadoDependenteCadastroForm.atribuirValoresFixos(WEB.Areas.AssociadosDependentes.ViewModels.AssociadoDependenteCadastroForm)">
+            <summary>
+            Atribuir os valores fixos 
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.AssociadosDependentes.ViewModels.AssociadoDependenteCadastroForm.carregarValorCampos(WEB.Areas.AssociadosDependentes.ViewModels.AssociadoDependenteCadastroForm)">
+            <summary>
+            Atribuir os valores fixos 
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.Associados.Controllers.AssociadoCadastroPJController.editar(System.Nullable{System.Int32})">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.Associados.Controllers.AssociadoCadastroPJController.salvarCadastro(WEB.Areas.Associados.ViewModels.AssociadoCadastroPJForm)">
+            <summary>
+            Processar e salvar os dados enviados pelo formulário
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.Associados.Controllers.AssociadoCadastroController.editar(System.Nullable{System.Int32})">
+            <summary>
+            Hub para direcionar o usuário para a tela de edição correta
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.Associados.Controllers.AssociadoCadastroController.criarArquivoPadrao">
+            <summary>
+            Criar um arquivo padrao
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:WEB.Areas.Associados.Controllers.AssociadoCadastroPFController.editar(System.Nullable{System.Int32})">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.Associados.Controllers.AssociadoCadastroPFController.salvarCadastro(WEB.Areas.Associados.ViewModels.AssociadoCadastroPFForm)">
+            <summary>
+            Processar e salvar os dados enviados pelo formulário
+            </summary>
+        </member>
+        <member name="T:WEB.Areas.Associados.Helpers.TitulacaoHelper">
+            
+        </member>
+        <member name="M:WEB.Areas.Associados.Helpers.TipoAssociadoHelper.selectListPF(System.Int32,System.Boolean)">
+            <summary>
+            Carregar combo com tipos de associados físicos
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.Associados.Helpers.TipoAssociadoHelper.selectListDependente(System.Nullable{System.Int32})">
+            <summary>
+            Carregar combo com tipos de associados físicos
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.Associados.Helpers.TipoAssociadoHelper.selectListEstudante(System.Nullable{System.Int32})">
+            <summary>
+            Carregar combo com tipos de associados físicos
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.Associados.Helpers.TipoAssociadoHelper.selectListPJ(System.Int32,System.Boolean)">
+            <summary>
+            Carregar combo com tipos de associados jurídicos
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.Associados.ViewModels.AssociadoImpressaoPF.carregarCampos">
+            <summary>
+            Montar query e carregar lista de campos
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.Associados.ViewModels.AssociadoImpressaoPJ.carregarCampos">
+            <summary>
+            Montar query e carregar lista de campos
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.Associados.ViewModels.AssociadoCadastroPJForm.carregaDados">
+            <summary>
+            Carregar os dados
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.Associados.ViewModels.AssociadoCadastroPJForm.carregarGrupos">
+            <summary>
+            Montar query e carregar lista dos grupos
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.Associados.ViewModels.AssociadoCadastroPJForm.carregarCampos">
+            <summary>
+            Montar query e carregar lista de campos
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.Associados.ViewModels.AssociadoCadastroPJForm.atribuirValoresFixos(WEB.Areas.Associados.ViewModels.AssociadoCadastroPJForm)">
+            <summary>
+            Atribuir os valores fixos 
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.Associados.ViewModels.AssociadoCadastroPJForm.carregarValorCampos(WEB.Areas.Associados.ViewModels.AssociadoCadastroPJForm)">
+            <summary>
+            Atribuir os valores fixos 
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.Associados.ViewModels.AssociadoCadastroPFForm.carregaDados">
+            <summary>
+            Carregar os dados
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.Associados.ViewModels.AssociadoCadastroPFForm.carregarGrupos">
+            <summary>
+            Montar query e carregar lista dos grupos
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.Associados.ViewModels.AssociadoCadastroPFForm.carregarCampos">
+            <summary>
+            Montar query e carregar lista de campos
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.Associados.ViewModels.AssociadoCadastroPFForm.atribuirValoresFixos(WEB.Areas.Associados.ViewModels.AssociadoCadastroPFForm)">
+            <summary>
+            Atribuir os valores fixos 
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.Associados.ViewModels.AssociadoCadastroPFForm.carregarValorCampos(WEB.Areas.Associados.ViewModels.AssociadoCadastroPFForm)">
+            <summary>
+            Atribuir os valores fixos 
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.Associados.ViewModels.AssociadoCadastroPFForm.criarArquivoPadrao(System.Int32)">
+            <summary>
+            Criar um arquivo json que servirá de padrao para quando não houver novas configuracoes
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.Beneficiarios.Controllers.BeneficiarioController.listar">
+            
+        </member>
+        <member name="M:WEB.Areas.Beneficiarios.Controllers.BeneficiarioController.editar(System.Nullable{System.Int32})">
+            
+        </member>
+        <member name="M:WEB.Areas.Beneficiarios.Controllers.BeneficiarioController.editar(WEB.Areas.Beneficiarios.ViewModels.BeneficiarioVM)">
+            
+        </member>
+        <member name="M:WEB.Areas.Beneficiarios.Controllers.BeneficiarioController.partialPlanos(System.Nullable{System.Int32})">
+            
+        </member>
+        <member name="M:WEB.Areas.Beneficiarios.Controllers.BeneficiarioController.partialDependentes(System.Nullable{System.Int32})">
+            
+        </member>
+        <member name="M:WEB.Areas.Beneficiarios.Controllers.BeneficiarioController.partialLoginAcesso(System.Nullable{System.Int32})">
+            
+        </member>
+        <member name="M:WEB.Areas.Beneficiarios.Controllers.BeneficiarioController.partialListaDependentes(System.Nullable{System.Int32})">
+            
+        </member>
+        <member name="M:WEB.Areas.Beneficiarios.Controllers.BeneficiarioController.getBeneficiarios(System.String,System.Nullable{System.Int32})">
+            
+        </member>
+        <member name="M:WEB.Areas.Beneficiarios.Controllers.BeneficiarioController.reenviarSenha">
+            
+        </member>
+        <member name="M:WEB.Areas.Beneficiarios.Controllers.BeneficiarioController.excluir(System.Int32[])">
+            
+        </member>
+        <member name="T:WEB.Areas.Beneficiarios.ViewModels.EnderecoValidator">
+            Validação da entidade Pessoa Endereço
+        </member>
+        <member name="M:WEB.Areas.BoletosRemessa.Controllers.ArquivoRemessaGeracaoController.gerarArquivo">
+            <summary>
+            Rotina que busca geracao dos boletos para o arquivo remessa
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:WEB.Areas.BoletosRemessa.ViewModels.ArquivoRemessaDetalheVM.carregarDados(System.Int32)">
+            <summary>
+            Carregar lista com os detalhes das cobranças do arquivo de remessa.
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.Cargos.Helpers.CargoHelper.selectList(System.Nullable{System.Int32},System.Int32[])">
+            
+        </member>
+        <member name="M:WEB.Areas.ConfiguracoesAssociados.Controllers.ConfiguracaoAssociadoCampoGrupoController.alterarOrdem(System.Int32,System.Byte,System.Int32)">
+            <summary>
+            Alterar a ordem de exibição dos grupos
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.ConfiguracoesAssociados.Controllers.ConfiguracaoAssociadoCamposController.partialListaCampos(System.Int32)">
+            <summary>
+            Listagem de campos e grupo já configurados
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.ConfiguracoesAssociados.Controllers.ConfiguracaoAssociadoCamposController.modalOpcoesCampoPF">
+            <summary>
+            Lista com as opções de campos disponíveis para incluir no cadastro do associado
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.ConfiguracoesAssociados.Controllers.ConfiguracaoAssociadoCamposController.modalOpcoesCampoPJ">
+            <summary>
+            Lista com as opções de campos disponíveis para incluir no cadastro do associado
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.ConfiguracoesAssociados.Controllers.ConfiguracaoAssociadoCamposController.modalFormCampo(System.Nullable{System.Int32},System.Int32)">
+            <summary>
+            Listagem de campos e grupo já configurados
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.ConfiguracoesAssociados.Controllers.ConfiguracaoAssociadoCamposController.salvarFormCampo(WEB.Areas.ConfiguracoesAssociados.ViewModels.AssociadoCampoForm)">
+            <summary>
+            Salvar os dados
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.ConfiguracoesAssociados.Controllers.ConfiguracaoAssociadoCamposController.clonarPadraoSistema">
+            
+        </member>
+        <member name="M:WEB.Areas.ConfiguracoesAssociados.Controllers.ConfiguracaoAssociadoCamposController.excluir(System.Nullable{System.Int32})">
+            
+        </member>
+        <member name="M:WEB.Areas.ConfiguracoesAssociados.ViewModels.ConfiguracaoCadastroVM.carregarDados(System.Int32)">
+            <summary>
+            Carregar os dados de configuracao
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.ConfiguracoesAssociados.Models.ViewModels.ConfiguracaoCamposVM.carregarDados">
+            <summary>
+            Carregar dados da viewmodel
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.ConfiguracoesAssociados.Models.ViewModels.ConfiguracaoCamposVM.carregarGrupos">
+            <summary>
+            Montar query e carregar lista dos grupos
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.ConfiguracoesAssociados.Models.ViewModels.ConfiguracaoCamposVM.carregarCampos">
+            <summary>
+            Montar query e carregar lista de campos
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.ContribuicoesImportacoes.ViewModels.ImportacaoContribuicaoCSVValidator.validarArquivo(System.Web.HttpPostedFileBase)">
+            <summary>
+            Validar arquivo de importacao com relacao de pesos
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.ContribuicoesImportacoes.ViewModels.ImportacaoContribuicaoCSVValidator.validarArquivoFisico(System.Web.HttpPostedFileBase)">
+            <summary>
+            Validacoes de existencia do arquivo, extensao, etc
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.ContribuicoesImportacoes.ViewModels.ImportacaoContribuicaoCSVValidator.validarCabecalho(System.String[])">
+            <summary>
+            Validar a estrutura de cabeçalho do arquivo
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.ContribuicoesImportacoes.ViewModels.ImportacaoContribuicaoCSVValidator.validarColunas(System.Collections.Generic.List{System.String[]},System.String[])">
+            <summary>
+            Validar a quantidade de colunas. Todas as linhas devem ter a mesma quatnidade
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.ContribuicoesPainel.Controllers.ListaBoletosController.listar">
+            <summary>
+            Gerar as cobranças
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.ContribuicoesPainel.Controllers.ListaBoletosController.exportar">
+            <summary>
+            Exportar Zip
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.ContribuicoesPainel.Controllers.CobrancaBoletoController.gerarBoletos">
+            <summary>
+            Gerar as cobranças
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.ContribuicoesPainel.Controllers.CobrancaController.gerarCobrancas">
+            <summary>
+            Gerar as cobranças
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.ContribuicoesPainel.Controllers.CobrancaController.modalEnviarCobrancas">
+            <summary>
+            Gerar as cobranças
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.ContribuicoesPainel.ViewModels.PainelCobrancaVM.carregarContribuicao(System.Int32)">
+            <summary>
+            Carregar a contribuicao pelo ID
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.ContribuicoesPainel.ViewModels.PainelCobrancaVM.carregarDadosContribuicao(System.Int32,System.Int32[])">
+            <summary>
+            Carregar as informacoes necessarias para dinamizar o painel
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.ContribuicoesPainel.ViewModels.PainelCobrancaVM.carregarAssociados(System.Int32[])">
+            <summary>
+            Carregar os associados que devem/deveriam estar vinculados à contribuicao
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.ContribuicoesPainel.ViewModels.PainelCobrancaVM.carregarBoletos">
+            <summary>
+            Carregar boletos
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.ContribuicoesPainel.ViewModels.PainelCobrancaVM.carregarBoletosExportacao(System.Int32,System.Collections.Generic.List{System.Int32})">
+            <summary>
+            Carregar os boletos para exportacao
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.ContribuicoesPainel.ViewModels.PainelContribuicaoPadraoVM.carregarDadosContribuicao">
+            <summary>
+            Carregar as informacoes necessarias para dinamizar o painel
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.ContribuicoesPainel.ViewModels.PainelContribuicaoPadraoVM.filtrarContribuicoes">
+            <summary>
+            Tratamento de informacoes para filtros
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.ContribuicoesPainel.ViewModels.PainelContribuicaoPadraoVM.carregarFiltros">
+            <summary>
+            Tratamento de informacoes para filtros
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.ContribuicoesPainel.ViewModels.PainelContribuicaoPadraoVM.carregarVencimentos">
+            <summary>
+            Montar a lista de vencimentos disponíveis pra consulta por parte do usuário
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.ContribuicoesPainel.ViewModels.PainelContribuicaoPadraoVM.carregarAssociados">
+            <summary>
+            Montar a lista de associados que serao visualizados na tela
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.ContribuicoesPainel.ViewModels.PainelContribuicaoPadraoVM.filtrarAssociados">
+            <summary>
+            Filtrar os associados de acordo com o preenchimento dos campos
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.ContribuicoesPainel.ViewModels.PainelContribuicaoPadraoVM.multiSelectListVencimentos">
+            <summary>
+            Montar o combo com as opcoes de vencimentos para filtro
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:WEB.Areas.Emails.Helpers.TipoEmailHelper.selectList(System.Nullable{System.Int32},System.Boolean)">
+            <summary>
+            Dropdown com opcao de unidades cadastradas no sistema
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.Empresas.Controllers.EmpresaPorteController.editar(System.Nullable{System.Int32})">
+            
+        </member>
+        <member name="M:WEB.Areas.Empresas.Controllers.EmpresaPorteController.editar(WEB.Areas.Empresas.ViewModels.EmpresaPorteForm)">
+            
+        </member>
+        <member name="M:WEB.Areas.Empresas.Controllers.DefaultController.editar(System.Nullable{System.Int32})">
+            
+        </member>
+        <member name="M:WEB.Areas.Empresas.Controllers.DefaultController.editar(WEB.Areas.Empresas.ViewModels.EmpresaForm)">
+            
+        </member>
+        <member name="M:WEB.Areas.Empresas.Helpers.EmpresaPorteHelper.selectList(System.Nullable{System.Int32},System.Boolean)">
+            <summary>
+            Dropdown com opcao de unidades cadastradas no sistema
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.FinanceiroLancamentos.Controllers.DevedorController.autocompleteInformacoesDevedor(System.String)">
+            <summary>
+            Retorna as informações do credor, quando selecionado em um combo
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.FinanceiroLancamentos.Controllers.CredorController.autocompleteInformacoesCredor(System.String)">
+            <summary>
+            Retorna as informações do credor, quando selecionado em um combo
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.FinanceiroLancamentos.ViewModels.ReceitaCadastroFormValidator.verificarDevedor(System.String)">
+            <summary>
+            Verifica se o credor informado existe de acordo com sua categoria
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.FinanceiroLancamentos.ViewModels.DespesaCadastroFormValidator.verificarCredor(System.String)">
+            <summary>
+            Verifica se o credor informado existe de acordo com sua categoria
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.FinanceiroLancamentos.ViewModels.ReceitaCadastroForm.gerarPagamento">
+            <summary>
+            Gera o Titulo despesa pagamentos para despesas de parcela única
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.FinanceiroLancamentos.ViewModels.ReceitaCadastroForm.tratarPagamentos">
+            <summary>
+            Coloca os valores padrões de cada parcela
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.FinanceiroLancamentos.ViewModels.ReceitaCadastroForm.carregarIdPessoa">
+            <summary>
+            Carrega o id da pessoa de acordo com o hash informado 
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.FinanceiroLancamentos.ViewModels.DespesaCadastroForm.gerarPagamento">
+            <summary>
+            Gera o Titulo despesa pagamentos para despesas de parcela única
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.FinanceiroLancamentos.ViewModels.DespesaCadastroForm.tratarPagamentos">
+            <summary>
+            Gera o Titulo despesa pagamentos para despesas de parcela única
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.FinanceiroLancamentos.ViewModels.DespesaCadastroForm.carregarIdPessoa">
+            <summary>
+            Carrega o id da pessoa de acordo com o hash informado 
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.Financeiro.Controllers.DespesaDetalhePagamentosOperacaoController.alterarDadosPagamentos">
+            <summary>
+            Altera os campos dos pagamentos individualmente, gravando o log do mesmo
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.Financeiro.Controllers.DespesaDetalhePagamentosOperacaoController.alterarDadosOutrosPagamentos">
+            <summary>
+            Altera os campos dos pagamentos em lote de acordo com a opção selecionada
+            Quando é realizado a alteração de um pagamento é questionado se deve alterar todos
+                somente aquele ou aquele e os posteriores a ele 
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.Financeiro.Controllers.DespesaDetalhePagamentosOperacaoController.modelRegistrarPagamento(System.Int32)">
+            <summary>
+            Abre a modal pra registrar o pagamento da parcela
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.Financeiro.Controllers.DespesaDetalhePagamentosOperacaoController.registrarPagamento(WEB.Areas.Financeiro.ViewModels.BaixaTituloDespesaPagamentoForm)">
+            <summary>
+            Registra o pagamento da parcela
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.Financeiro.Controllers.DespesaDetalhePagamentosOperacaoController.cancelarPagamento">
+            <summary>
+            Cancela o pagamento da parcela
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.Financeiro.Controllers.DespesaDetalhePagamentosOperacaoController.conciliarPagamento(System.Int32,System.Boolean)">
+            <summary>
+            Faz a conciliação do pagamento da parcela
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.Financeiro.Controllers.TituloReceitaPagamentoExclusaoController.modalExcluirPagamento(System.Int32)">
+            <summary>
+            Abrir o modal com formulario para registro da data de pagamento
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.Financeiro.Controllers.TituloReceitaPagamentoExclusaoController.salvarExclusaoPagamento(WEB.Areas.Financeiro.ViewModels.TituloReceitaExclusaoPagamentoForm)">
+            <summary>
+            Salvar o pagamento de uma parcela com baixa manual
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.Financeiro.Controllers.DespesaDetalheController.partialInfoTitulo(System.Nullable{System.Int32})">
+            Carrega as informações do titulo por AJAX
+        </member>
+        <member name="M:WEB.Areas.Financeiro.Controllers.TituloReceitaPagamentoController.modalRegistrarPagamento(System.Int32)">
+            <summary>
+            Abrir o modal com formulario para registro da data de pagamento
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.Financeiro.Controllers.TituloReceitaPagamentoController.salvarPagamento(WEB.Areas.Financeiro.ViewModels.TituloReceitaPagamentoForm)">
+            <summary>
+            salvar o pagamento de uma parcela com baixa manual
+            </summary>
+        </member>
+        <member name="P:WEB.Areas.Financeiro.ViewModels.CategoriaTituloForm.group">
+            Propriedade para auxiliar os modais de cadastro
+        </member>
+        <member name="P:WEB.Areas.Financeiro.ViewModels.MacroContaForm.group">
+            Propriedade Auxiliar modal
+        </member>
+        <member name="P:WEB.Areas.Financeiro.ViewModels.CentroCustoForm.group">
+            Propriedade Auxiliar modal
+        </member>
+        <member name="M:WEB.Areas.Financeiro.ViewModels.CentroCustoForm.#ctor">
+            
+        </member>
+        <member name="M:WEB.Areas.Financeiro.ViewModels.CentroCustoForm.carregarCheckboxes">
+            
+        </member>
+        <member name="M:WEB.Areas.Financeiro.Helpers.TituloReceitaPagamentoExtensions.linkRecibo(System.Web.Mvc.HtmlHelper,System.Int32,System.String,System.String)">
+            <summary>
+            Link do recibo de pagamento
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.Financeiro.Helpers.TituloReceitaPagamentoExtensions.linkDetalhes(System.Web.Mvc.HtmlHelper,System.Int32,System.String,System.String)">
+            <summary>
+            Link do recibo de pagamento
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.Financeiro.Helpers.TituloReceitaPagamentoExtensions.linkExcluirRegistro(System.Web.Mvc.HtmlHelper,System.Int32,System.String,System.String)">
+            <summary>
+            Montagem do link para exclusao do registro
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.Financeiro.Helpers.TituloReceitaPagamentoExtensions.menuAcoes(System.Web.Mvc.HtmlHelper,DAL.Financeiro.TituloReceitaVW,System.Boolean)">
+            <summary>
+            Gerar o menu de acoes para uma contribuica
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.Importacoes.ViewModels.ImportacaoAssociadoContatoCSVValidator.validarArquivo(System.Web.HttpPostedFileBase)">
+            <summary>
+            Validar arquivo de importacao com relacao de pesos
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.Importacoes.ViewModels.ImportacaoAssociadoContatoCSVValidator.validarArquivoFisico(System.Web.HttpPostedFileBase)">
+            <summary>
+            Validacoes de existencia do arquivo, extensao, etc
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.Importacoes.ViewModels.ImportacaoAssociadoContatoCSVValidator.validarCabecalho(System.String[])">
+            <summary>
+            Validar a estrutura de cabeçalho do arquivo
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.Importacoes.ViewModels.ImportacaoAssociadoContatoCSVValidator.validarColunas(System.Collections.Generic.List{System.String[]},System.String[])">
+            <summary>
+            Validar a quantidade de colunas. Todas as linhas devem ter a mesma quatnidade
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.Importacoes.ViewModels.ImportacaoAssociadoDependenteCSVValidator.validarArquivo(System.Web.HttpPostedFileBase)">
+            <summary>
+            Validar arquivo de importacao com relacao de pesos
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.Importacoes.ViewModels.ImportacaoAssociadoDependenteCSVValidator.validarArquivoFisico(System.Web.HttpPostedFileBase)">
+            <summary>
+            Validacoes de existencia do arquivo, extensao, etc
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.Importacoes.ViewModels.ImportacaoAssociadoDependenteCSVValidator.validarCabecalho(System.String[])">
+            <summary>
+            Validar a estrutura de cabeçalho do arquivo
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.Importacoes.ViewModels.ImportacaoAssociadoDependenteCSVValidator.validarColunas(System.Collections.Generic.List{System.String[]},System.String[])">
+            <summary>
+            Validar a quantidade de colunas. Todas as linhas devem ter a mesma quatnidade
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.Importacoes.ViewModels.ImportacaoAssociadoCSVValidator.validarArquivo(System.Web.HttpPostedFileBase)">
+            <summary>
+            Validar arquivo de importacao com relacao de pesos
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.Importacoes.ViewModels.ImportacaoAssociadoCSVValidator.validarArquivoFisico(System.Web.HttpPostedFileBase)">
+            <summary>
+            Validacoes de existencia do arquivo, extensao, etc
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.Importacoes.ViewModels.ImportacaoAssociadoCSVValidator.validarCabecalho(System.String[])">
+            <summary>
+            Validar a estrutura de cabeçalho do arquivo
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.Importacoes.ViewModels.ImportacaoAssociadoCSVValidator.validarColunas(System.Collections.Generic.List{System.String[]},System.String[])">
+            <summary>
+            Validar a quantidade de colunas. Todas as linhas devem ter a mesma quatnidade
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.ApiHelp.ApiDescriptionExtensions.GetFriendlyId(System.Web.Http.Description.ApiDescription)">
+            <summary>
+            Generates an URI-friendly ID for the <see cref="T:System.Web.Http.Description.ApiDescription"/>. E.g. "Get-Values-id_name" instead of "GetValues/{id}?name={name}"
+            </summary>
+            <param name="description">The <see cref="T:System.Web.Http.Description.ApiDescription"/>.</param>
+            <returns>The ID as a string.</returns>
+        </member>
+        <member name="T:WEB.Areas.ApiHelp.HelpPageConfig">
+            <summary>
+            Use this class to customize the Help Page.
+            For example you can set a custom <see cref="T:System.Web.Http.Description.IDocumentationProvider"/> to supply the documentation
+            or you can provide the samples for the requests/responses.
+            </summary>
+        </member>
+        <member name="T:WEB.Areas.ApiHelp.Controllers.HelpController">
+            <summary>
+            The controller that will handle requests for the help page.
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.ApiHelp.Controllers.HelpController.#ctor">
+            <summary>
+            Construtor
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.ApiHelp.Controllers.HelpController.#ctor(System.Web.Http.HttpConfiguration)">
+            <summary>
+            Construtor
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.ApiHelp.HelpPageConfigurationExtensions.SetDocumentationProvider(System.Web.Http.HttpConfiguration,System.Web.Http.Description.IDocumentationProvider)">
+            <summary>
+            Sets the documentation provider for help page.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="documentationProvider">The documentation provider.</param>
+        </member>
+        <member name="M:WEB.Areas.ApiHelp.HelpPageConfigurationExtensions.SetSampleObjects(System.Web.Http.HttpConfiguration,System.Collections.Generic.IDictionary{System.Type,System.Object})">
+            <summary>
+            Sets the objects that will be used by the formatters to produce sample requests/responses.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="sampleObjects">The sample objects.</param>
+        </member>
+        <member name="M:WEB.Areas.ApiHelp.HelpPageConfigurationExtensions.SetSampleRequest(System.Web.Http.HttpConfiguration,System.Object,System.Net.Http.Headers.MediaTypeHeaderValue,System.String,System.String)">
+            <summary>
+            Sets the sample request directly for the specified media type and action.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="sample">The sample request.</param>
+            <param name="mediaType">The media type.</param>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+        </member>
+        <member name="M:WEB.Areas.ApiHelp.HelpPageConfigurationExtensions.SetSampleRequest(System.Web.Http.HttpConfiguration,System.Object,System.Net.Http.Headers.MediaTypeHeaderValue,System.String,System.String,System.String[])">
+            <summary>
+            Sets the sample request directly for the specified media type and action with parameters.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="sample">The sample request.</param>
+            <param name="mediaType">The media type.</param>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+            <param name="parameterNames">The parameter names.</param>
+        </member>
+        <member name="M:WEB.Areas.ApiHelp.HelpPageConfigurationExtensions.SetSampleResponse(System.Web.Http.HttpConfiguration,System.Object,System.Net.Http.Headers.MediaTypeHeaderValue,System.String,System.String)">
+            <summary>
+            Sets the sample request directly for the specified media type of the action.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="sample">The sample response.</param>
+            <param name="mediaType">The media type.</param>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+        </member>
+        <member name="M:WEB.Areas.ApiHelp.HelpPageConfigurationExtensions.SetSampleResponse(System.Web.Http.HttpConfiguration,System.Object,System.Net.Http.Headers.MediaTypeHeaderValue,System.String,System.String,System.String[])">
+            <summary>
+            Sets the sample response directly for the specified media type of the action with specific parameters.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="sample">The sample response.</param>
+            <param name="mediaType">The media type.</param>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+            <param name="parameterNames">The parameter names.</param>
+        </member>
+        <member name="M:WEB.Areas.ApiHelp.HelpPageConfigurationExtensions.SetSampleForMediaType(System.Web.Http.HttpConfiguration,System.Object,System.Net.Http.Headers.MediaTypeHeaderValue)">
+            <summary>
+            Sets the sample directly for all actions with the specified media type.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="sample">The sample.</param>
+            <param name="mediaType">The media type.</param>
+        </member>
+        <member name="M:WEB.Areas.ApiHelp.HelpPageConfigurationExtensions.SetSampleForType(System.Web.Http.HttpConfiguration,System.Object,System.Net.Http.Headers.MediaTypeHeaderValue,System.Type)">
+            <summary>
+            Sets the sample directly for all actions with the specified type and media type.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="sample">The sample.</param>
+            <param name="mediaType">The media type.</param>
+            <param name="type">The parameter type or return type of an action.</param>
+        </member>
+        <member name="M:WEB.Areas.ApiHelp.HelpPageConfigurationExtensions.SetActualRequestType(System.Web.Http.HttpConfiguration,System.Type,System.String,System.String)">
+            <summary>
+            Specifies the actual type of <see cref="T:System.Net.Http.ObjectContent`1"/> passed to the <see cref="T:System.Net.Http.HttpRequestMessage"/> in an action.
+            The help page will use this information to produce more accurate request samples.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="type">The type.</param>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+        </member>
+        <member name="M:WEB.Areas.ApiHelp.HelpPageConfigurationExtensions.SetActualRequestType(System.Web.Http.HttpConfiguration,System.Type,System.String,System.String,System.String[])">
+            <summary>
+            Specifies the actual type of <see cref="T:System.Net.Http.ObjectContent`1"/> passed to the <see cref="T:System.Net.Http.HttpRequestMessage"/> in an action.
+            The help page will use this information to produce more accurate request samples.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="type">The type.</param>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+            <param name="parameterNames">The parameter names.</param>
+        </member>
+        <member name="M:WEB.Areas.ApiHelp.HelpPageConfigurationExtensions.SetActualResponseType(System.Web.Http.HttpConfiguration,System.Type,System.String,System.String)">
+            <summary>
+            Specifies the actual type of <see cref="T:System.Net.Http.ObjectContent`1"/> returned as part of the <see cref="T:System.Net.Http.HttpRequestMessage"/> in an action.
+            The help page will use this information to produce more accurate response samples.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="type">The type.</param>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+        </member>
+        <member name="M:WEB.Areas.ApiHelp.HelpPageConfigurationExtensions.SetActualResponseType(System.Web.Http.HttpConfiguration,System.Type,System.String,System.String,System.String[])">
+            <summary>
+            Specifies the actual type of <see cref="T:System.Net.Http.ObjectContent`1"/> returned as part of the <see cref="T:System.Net.Http.HttpRequestMessage"/> in an action.
+            The help page will use this information to produce more accurate response samples.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="type">The type.</param>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+            <param name="parameterNames">The parameter names.</param>
+        </member>
+        <member name="M:WEB.Areas.ApiHelp.HelpPageConfigurationExtensions.GetHelpPageSampleGenerator(System.Web.Http.HttpConfiguration)">
+            <summary>
+            Gets the help page sample generator.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <returns>The help page sample generator.</returns>
+        </member>
+        <member name="M:WEB.Areas.ApiHelp.HelpPageConfigurationExtensions.SetHelpPageSampleGenerator(System.Web.Http.HttpConfiguration,WEB.Areas.ApiHelp.HelpPageSampleGenerator)">
+            <summary>
+            Sets the help page sample generator.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="sampleGenerator">The help page sample generator.</param>
+        </member>
+        <member name="M:WEB.Areas.ApiHelp.HelpPageConfigurationExtensions.GetModelDescriptionGenerator(System.Web.Http.HttpConfiguration)">
+            <summary>
+            Gets the model description generator.
+            </summary>
+            <param name="config">The configuration.</param>
+            <returns>The <see cref="T:WEB.Areas.ApiHelp.ModelDescriptions.ModelDescriptionGenerator"/></returns>
+        </member>
+        <member name="M:WEB.Areas.ApiHelp.HelpPageConfigurationExtensions.GetHelpPageApiModel(System.Web.Http.HttpConfiguration,System.String)">
+            <summary>
+            Gets the model that represents an API displayed on the help page. The model is initialized on the first call and cached for subsequent calls.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="apiDescriptionId">The <see cref="T:System.Web.Http.Description.ApiDescription"/> ID.</param>
+            <returns>
+            An <see cref="T:WEB.Areas.ApiHelp.Models.HelpPageApiModel"/>
+            </returns>
+        </member>
+        <member name="T:WEB.Areas.ApiHelp.ModelDescriptions.ModelDescription">
+            <summary>
+            Describes a type model.
+            </summary>
+        </member>
+        <member name="T:WEB.Areas.ApiHelp.ModelDescriptions.ModelDescriptionGenerator">
+            <summary>
+            Generates model descriptions for given types.
+            </summary>
+        </member>
+        <member name="T:WEB.Areas.ApiHelp.ModelDescriptions.ModelNameAttribute">
+            <summary>
+            Use this attribute to change the name of the <see cref="T:WEB.Areas.ApiHelp.ModelDescriptions.ModelDescription"/> generated for a type.
+            </summary>
+        </member>
+        <member name="T:WEB.Areas.ApiHelp.Models.HelpPageApiModel">
+            <summary>
+            The model that represents an API displayed on the help page.
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.ApiHelp.Models.HelpPageApiModel.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:WEB.Areas.ApiHelp.Models.HelpPageApiModel"/> class.
+            </summary>
+        </member>
+        <member name="P:WEB.Areas.ApiHelp.Models.HelpPageApiModel.ApiDescription">
+            <summary>
+            Gets or sets the <see cref="P:WEB.Areas.ApiHelp.Models.HelpPageApiModel.ApiDescription"/> that describes the API.
+            </summary>
+        </member>
+        <member name="P:WEB.Areas.ApiHelp.Models.HelpPageApiModel.UriParameters">
+            <summary>
+            Gets or sets the <see cref="T:WEB.Areas.ApiHelp.ModelDescriptions.ParameterDescription"/> collection that describes the URI parameters for the API.
+            </summary>
+        </member>
+        <member name="P:WEB.Areas.ApiHelp.Models.HelpPageApiModel.RequestDocumentation">
+            <summary>
+            Gets or sets the documentation for the request.
+            </summary>
+        </member>
+        <member name="P:WEB.Areas.ApiHelp.Models.HelpPageApiModel.RequestModelDescription">
+            <summary>
+            Gets or sets the <see cref="T:WEB.Areas.ApiHelp.ModelDescriptions.ModelDescription"/> that describes the request body.
+            </summary>
+        </member>
+        <member name="P:WEB.Areas.ApiHelp.Models.HelpPageApiModel.RequestBodyParameters">
+            <summary>
+            Gets the request body parameter descriptions.
+            </summary>
+        </member>
+        <member name="P:WEB.Areas.ApiHelp.Models.HelpPageApiModel.ResourceDescription">
+            <summary>
+            Gets or sets the <see cref="T:WEB.Areas.ApiHelp.ModelDescriptions.ModelDescription"/> that describes the resource.
+            </summary>
+        </member>
+        <member name="P:WEB.Areas.ApiHelp.Models.HelpPageApiModel.ResourceProperties">
+            <summary>
+            Gets the resource property descriptions.
+            </summary>
+        </member>
+        <member name="P:WEB.Areas.ApiHelp.Models.HelpPageApiModel.SampleRequests">
+            <summary>
+            Gets the sample requests associated with the API.
+            </summary>
+        </member>
+        <member name="P:WEB.Areas.ApiHelp.Models.HelpPageApiModel.SampleResponses">
+            <summary>
+            Gets the sample responses associated with the API.
+            </summary>
+        </member>
+        <member name="P:WEB.Areas.ApiHelp.Models.HelpPageApiModel.ErrorMessages">
+            <summary>
+            Gets the error messages associated with this model.
+            </summary>
+        </member>
+        <member name="T:WEB.Areas.ApiHelp.HelpPageSampleGenerator">
+            <summary>
+            This class will generate the samples for the help page.
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.ApiHelp.HelpPageSampleGenerator.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:WEB.Areas.ApiHelp.HelpPageSampleGenerator"/> class.
+            </summary>
+        </member>
+        <member name="P:WEB.Areas.ApiHelp.HelpPageSampleGenerator.ActualHttpMessageTypes">
+            <summary>
+            Gets CLR types that are used as the content of <see cref="T:System.Net.Http.HttpRequestMessage"/> or <see cref="T:System.Net.Http.HttpResponseMessage"/>.
+            </summary>
+        </member>
+        <member name="P:WEB.Areas.ApiHelp.HelpPageSampleGenerator.ActionSamples">
+            <summary>
+            Gets the objects that are used directly as samples for certain actions.
+            </summary>
+        </member>
+        <member name="P:WEB.Areas.ApiHelp.HelpPageSampleGenerator.SampleObjects">
+            <summary>
+            Gets the objects that are serialized as samples by the supported formatters.
+            </summary>
+        </member>
+        <member name="P:WEB.Areas.ApiHelp.HelpPageSampleGenerator.SampleObjectFactories">
+            <summary>
+            Gets factories for the objects that the supported formatters will serialize as samples. Processed in order,
+            stopping when the factory successfully returns a non-<see langref="null"/> object.
+            </summary>
+            <remarks>
+            Collection includes just <see cref="M:WEB.Areas.ApiHelp.ObjectGenerator.GenerateObject(System.Type)"/> initially. Use
+            <code>SampleObjectFactories.Insert(0, func)</code> to provide an override and
+            <code>SampleObjectFactories.Add(func)</code> to provide a fallback.</remarks>
+        </member>
+        <member name="M:WEB.Areas.ApiHelp.HelpPageSampleGenerator.GetSampleRequests(System.Web.Http.Description.ApiDescription)">
+            <summary>
+            Gets the request body samples for a given <see cref="T:System.Web.Http.Description.ApiDescription"/>.
+            </summary>
+            <param name="api">The <see cref="T:System.Web.Http.Description.ApiDescription"/>.</param>
+            <returns>The samples keyed by media type.</returns>
+        </member>
+        <member name="M:WEB.Areas.ApiHelp.HelpPageSampleGenerator.GetSampleResponses(System.Web.Http.Description.ApiDescription)">
+            <summary>
+            Gets the response body samples for a given <see cref="T:System.Web.Http.Description.ApiDescription"/>.
+            </summary>
+            <param name="api">The <see cref="T:System.Web.Http.Description.ApiDescription"/>.</param>
+            <returns>The samples keyed by media type.</returns>
+        </member>
+        <member name="M:WEB.Areas.ApiHelp.HelpPageSampleGenerator.GetSample(System.Web.Http.Description.ApiDescription,WEB.Areas.ApiHelp.SampleDirection)">
+            <summary>
+            Gets the request or response body samples.
+            </summary>
+            <param name="api">The <see cref="T:System.Web.Http.Description.ApiDescription"/>.</param>
+            <param name="sampleDirection">The value indicating whether the sample is for a request or for a response.</param>
+            <returns>The samples keyed by media type.</returns>
+        </member>
+        <member name="M:WEB.Areas.ApiHelp.HelpPageSampleGenerator.GetActionSample(System.String,System.String,System.Collections.Generic.IEnumerable{System.String},System.Type,System.Net.Http.Formatting.MediaTypeFormatter,System.Net.Http.Headers.MediaTypeHeaderValue,WEB.Areas.ApiHelp.SampleDirection)">
+            <summary>
+            Search for samples that are provided directly through <see cref="P:WEB.Areas.ApiHelp.HelpPageSampleGenerator.ActionSamples"/>.
+            </summary>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+            <param name="parameterNames">The parameter names.</param>
+            <param name="type">The CLR type.</param>
+            <param name="formatter">The formatter.</param>
+            <param name="mediaType">The media type.</param>
+            <param name="sampleDirection">The value indicating whether the sample is for a request or for a response.</param>
+            <returns>The sample that matches the parameters.</returns>
+        </member>
+        <member name="M:WEB.Areas.ApiHelp.HelpPageSampleGenerator.GetSampleObject(System.Type)">
+            <summary>
+            Gets the sample object that will be serialized by the formatters. 
+            First, it will look at the <see cref="P:WEB.Areas.ApiHelp.HelpPageSampleGenerator.SampleObjects"/>. If no sample object is found, it will try to create
+            one using <see cref="M:WEB.Areas.ApiHelp.HelpPageSampleGenerator.DefaultSampleObjectFactory(WEB.Areas.ApiHelp.HelpPageSampleGenerator,System.Type)"/> (which wraps an <see cref="T:WEB.Areas.ApiHelp.ObjectGenerator"/>) and other
+            factories in <see cref="P:WEB.Areas.ApiHelp.HelpPageSampleGenerator.SampleObjectFactories"/>.
+            </summary>
+            <param name="type">The type.</param>
+            <returns>The sample object.</returns>
+        </member>
+        <member name="M:WEB.Areas.ApiHelp.HelpPageSampleGenerator.ResolveHttpRequestMessageType(System.Web.Http.Description.ApiDescription)">
+            <summary>
+            Resolves the actual type of <see cref="T:System.Net.Http.ObjectContent`1"/> passed to the <see cref="T:System.Net.Http.HttpRequestMessage"/> in an action.
+            </summary>
+            <param name="api">The <see cref="T:System.Web.Http.Description.ApiDescription"/>.</param>
+            <returns>The type.</returns>
+        </member>
+        <member name="M:WEB.Areas.ApiHelp.HelpPageSampleGenerator.ResolveType(System.Web.Http.Description.ApiDescription,System.String,System.String,System.Collections.Generic.IEnumerable{System.String},WEB.Areas.ApiHelp.SampleDirection,System.Collections.ObjectModel.Collection{System.Net.Http.Formatting.MediaTypeFormatter}@)">
+            <summary>
+            Resolves the type of the action parameter or return value when <see cref="T:System.Net.Http.HttpRequestMessage"/> or <see cref="T:System.Net.Http.HttpResponseMessage"/> is used.
+            </summary>
+            <param name="api">The <see cref="T:System.Web.Http.Description.ApiDescription"/>.</param>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+            <param name="parameterNames">The parameter names.</param>
+            <param name="sampleDirection">The value indicating whether the sample is for a request or a response.</param>
+            <param name="formatters">The formatters.</param>
+        </member>
+        <member name="M:WEB.Areas.ApiHelp.HelpPageSampleGenerator.WriteSampleObjectUsingFormatter(System.Net.Http.Formatting.MediaTypeFormatter,System.Object,System.Type,System.Net.Http.Headers.MediaTypeHeaderValue)">
+            <summary>
+            Writes the sample object using formatter.
+            </summary>
+            <param name="formatter">The formatter.</param>
+            <param name="value">The value.</param>
+            <param name="type">The type.</param>
+            <param name="mediaType">Type of the media.</param>
+            <returns></returns>
+        </member>
+        <member name="T:WEB.Areas.ApiHelp.HelpPageSampleKey">
+            <summary>
+            This is used to identify the place where the sample should be applied.
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.ApiHelp.HelpPageSampleKey.#ctor(System.Net.Http.Headers.MediaTypeHeaderValue)">
+            <summary>
+            Creates a new <see cref="T:WEB.Areas.ApiHelp.HelpPageSampleKey"/> based on media type.
+            </summary>
+            <param name="mediaType">The media type.</param>
+        </member>
+        <member name="M:WEB.Areas.ApiHelp.HelpPageSampleKey.#ctor(System.Net.Http.Headers.MediaTypeHeaderValue,System.Type)">
+            <summary>
+            Creates a new <see cref="T:WEB.Areas.ApiHelp.HelpPageSampleKey"/> based on media type and CLR type.
+            </summary>
+            <param name="mediaType">The media type.</param>
+            <param name="type">The CLR type.</param>
+        </member>
+        <member name="M:WEB.Areas.ApiHelp.HelpPageSampleKey.#ctor(WEB.Areas.ApiHelp.SampleDirection,System.String,System.String,System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Creates a new <see cref="T:WEB.Areas.ApiHelp.HelpPageSampleKey"/> based on <see cref="P:WEB.Areas.ApiHelp.HelpPageSampleKey.SampleDirection"/>, controller name, action name and parameter names.
+            </summary>
+            <param name="sampleDirection">The <see cref="P:WEB.Areas.ApiHelp.HelpPageSampleKey.SampleDirection"/>.</param>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+            <param name="parameterNames">The parameter names.</param>
+        </member>
+        <member name="M:WEB.Areas.ApiHelp.HelpPageSampleKey.#ctor(System.Net.Http.Headers.MediaTypeHeaderValue,WEB.Areas.ApiHelp.SampleDirection,System.String,System.String,System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Creates a new <see cref="T:WEB.Areas.ApiHelp.HelpPageSampleKey"/> based on media type, <see cref="P:WEB.Areas.ApiHelp.HelpPageSampleKey.SampleDirection"/>, controller name, action name and parameter names.
+            </summary>
+            <param name="mediaType">The media type.</param>
+            <param name="sampleDirection">The <see cref="P:WEB.Areas.ApiHelp.HelpPageSampleKey.SampleDirection"/>.</param>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+            <param name="parameterNames">The parameter names.</param>
+        </member>
+        <member name="P:WEB.Areas.ApiHelp.HelpPageSampleKey.ControllerName">
+            <summary>
+            Gets the name of the controller.
+            </summary>
+            <value>
+            The name of the controller.
+            </value>
+        </member>
+        <member name="P:WEB.Areas.ApiHelp.HelpPageSampleKey.ActionName">
+            <summary>
+            Gets the name of the action.
+            </summary>
+            <value>
+            The name of the action.
+            </value>
+        </member>
+        <member name="P:WEB.Areas.ApiHelp.HelpPageSampleKey.MediaType">
+            <summary>
+            Gets the media type.
+            </summary>
+            <value>
+            The media type.
+            </value>
+        </member>
+        <member name="P:WEB.Areas.ApiHelp.HelpPageSampleKey.ParameterNames">
+            <summary>
+            Gets the parameter names.
+            </summary>
+        </member>
+        <member name="P:WEB.Areas.ApiHelp.HelpPageSampleKey.SampleDirection">
+            <summary>
+            Gets the <see cref="P:WEB.Areas.ApiHelp.HelpPageSampleKey.SampleDirection"/>.
+            </summary>
+        </member>
+        <member name="T:WEB.Areas.ApiHelp.ImageSample">
+            <summary>
+            This represents an image sample on the help page. There's a display template named ImageSample associated with this class.
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.ApiHelp.ImageSample.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WEB.Areas.ApiHelp.ImageSample"/> class.
+            </summary>
+            <param name="src">The URL of an image.</param>
+        </member>
+        <member name="T:WEB.Areas.ApiHelp.InvalidSample">
+            <summary>
+            This represents an invalid sample on the help page. There's a display template named InvalidSample associated with this class.
+            </summary>
+        </member>
+        <member name="T:WEB.Areas.ApiHelp.ObjectGenerator">
+            <summary>
+            This class will create an object of a given type and populate it with sample data.
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.ApiHelp.ObjectGenerator.GenerateObject(System.Type)">
+            <summary>
+            Generates an object for a given type. The type needs to be public, have a public default constructor and settable public properties/fields. Currently it supports the following types:
+            Simple types: <see cref="T:System.Int32"/>, <see cref="T:System.String"/>, <see cref="T:System.Enum"/>, <see cref="T:System.DateTime"/>, <see cref="T:System.Uri"/>, etc.
+            Complex types: POCO types.
+            Nullables: <see cref="T:System.Nullable`1"/>.
+            Arrays: arrays of simple types or complex types.
+            Key value pairs: <see cref="T:System.Collections.Generic.KeyValuePair`2"/>
+            Tuples: <see cref="T:System.Tuple`1"/>, <see cref="T:System.Tuple`2"/>, etc
+            Dictionaries: <see cref="T:System.Collections.Generic.IDictionary`2"/> or anything deriving from <see cref="T:System.Collections.Generic.IDictionary`2"/>.
+            Collections: <see cref="T:System.Collections.Generic.IList`1"/>, <see cref="T:System.Collections.Generic.IEnumerable`1"/>, <see cref="T:System.Collections.Generic.ICollection`1"/>, <see cref="T:System.Collections.IList"/>, <see cref="T:System.Collections.IEnumerable"/>, <see cref="T:System.Collections.ICollection"/> or anything deriving from <see cref="T:System.Collections.Generic.ICollection`1"/> or <see cref="T:System.Collections.IList"/>.
+            Queryables: <see cref="T:System.Linq.IQueryable"/>, <see cref="T:System.Linq.IQueryable`1"/>.
+            </summary>
+            <param name="type">The type.</param>
+            <returns>An object of the given type.</returns>
+        </member>
+        <member name="T:WEB.Areas.ApiHelp.SampleDirection">
+            <summary>
+            Indicates whether the sample is used for request or response
+            </summary>
+        </member>
+        <member name="T:WEB.Areas.ApiHelp.TextSample">
+            <summary>
+            This represents a preformatted text sample on the help page. There's a display template named TextSample associated with this class.
+            </summary>
+        </member>
+        <member name="T:WEB.Areas.ApiHelp.XmlDocumentationProvider">
+            <summary>
+            A custom <see cref="T:System.Web.Http.Description.IDocumentationProvider"/> that reads the API documentation from an XML documentation file.
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.ApiHelp.XmlDocumentationProvider.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WEB.Areas.ApiHelp.XmlDocumentationProvider"/> class.
+            </summary>
+            <param name="documentPath">The physical path to XML document.</param>
+        </member>
+        <member name="M:WEB.Areas.Localizacao.Controllers.DefaultController.carregarCidades">
+            
+        </member>
+        <member name="M:WEB.Areas.Localizacao.Controllers.DefaultController.buscarEndereco(System.String)">
+            
+        </member>
+        <member name="M:WEB.Areas.Localizacao.Controllers.DefaultController.buscarAutocomplete(System.String,System.Nullable{System.Int32})">
+            
+        </member>
+        <member name="M:WEB.Areas.Localizacao.Helpers.CidadeHelper.selectListCidade(System.Nullable{System.Int32})">
+            <summary>
+            Select list com busca a partir do ID de uma cidade (Ira buscar todas as cidades que estão dentro do mesmo estado da cidade informada)
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.MateriaisApoio.Controllers.TipoMaterialApoioController.#ctor">
+            
+        </member>
+        <member name="M:WEB.Areas.MateriaisApoio.Controllers.TipoMaterialApoioController.listar">
+            
+        </member>
+        <member name="M:WEB.Areas.NaoAssociados.Controllers.NaoAssociadoCadastroPFController.editar(System.Nullable{System.Int32})">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.NaoAssociados.Controllers.NaoAssociadoCadastroPFController.salvarCadastro(WEB.Areas.NaoAssociados.ViewModels.NaoAssociadoCadastroPFForm)">
+            <summary>
+            Processar e salvar os dados enviados pelo formulário
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.NaoAssociados.Controllers.NaoAssociadoCadastroPJController.editar(System.Nullable{System.Int32})">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.NaoAssociados.Controllers.NaoAssociadoCadastroPJController.salvarCadastro(WEB.Areas.NaoAssociados.ViewModels.NaoAssociadoCadastroPJForm)">
+            <summary>
+            Processar e salvar os dados enviados pelo formulário
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.NaoAssociados.Controllers.NaoAssociadoCadastroController.editar(System.Nullable{System.Int32})">
+            <summary>
+            Hub para direcionar o usuário para a tela de edição correta
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.NaoAssociados.ViewModels.NaoAssociadoImpressaoPF.carregarCampos">
+            <summary>
+            Montar query e carregar lista de campos
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.NaoAssociados.ViewModels.NaoAssociadoImpressaoPJ.carregarCampos">
+            <summary>
+            Montar query e carregar lista de campos
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.NaoAssociados.ViewModels.NaoAssociadoCadastroPFForm.carregaDados">
+            <summary>
+            Carregar os dados
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.NaoAssociados.ViewModels.NaoAssociadoCadastroPFForm.carregarGrupos">
+            <summary>
+            Montar query e carregar lista dos grupos
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.NaoAssociados.ViewModels.NaoAssociadoCadastroPFForm.carregarCampos">
+            <summary>
+            Montar query e carregar lista de campos
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.NaoAssociados.ViewModels.NaoAssociadoCadastroPFForm.atribuirValoresFixos(WEB.Areas.NaoAssociados.ViewModels.NaoAssociadoCadastroPFForm)">
+            <summary>
+            Atribuir os valores fixos 
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.NaoAssociados.ViewModels.NaoAssociadoCadastroPFForm.carregarValorCampos(WEB.Areas.NaoAssociados.ViewModels.NaoAssociadoCadastroPFForm)">
+            <summary>
+            Atribuir os valores fixos 
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.NaoAssociados.ViewModels.NaoAssociadoCadastroPJForm.carregaDados">
+            <summary>
+            Carregar os dados
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.NaoAssociados.ViewModels.NaoAssociadoCadastroPJForm.carregarGrupos">
+            <summary>
+            Montar query e carregar lista dos grupos
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.NaoAssociados.ViewModels.NaoAssociadoCadastroPJForm.carregarCampos">
+            <summary>
+            Montar query e carregar lista de campos
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.NaoAssociados.ViewModels.NaoAssociadoCadastroPJForm.atribuirValoresFixos(WEB.Areas.NaoAssociados.ViewModels.NaoAssociadoCadastroPJForm)">
+            <summary>
+            Atribuir os valores fixos 
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.NaoAssociados.ViewModels.NaoAssociadoCadastroPJForm.carregarValorCampos(WEB.Areas.NaoAssociados.ViewModels.NaoAssociadoCadastroPJForm)">
+            <summary>
+            Atribuir os valores fixos 
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.Planos.Helpers.PlanoHelper.getComboYesNo(System.String)">
+            
+        </member>
+        <member name="T:WEB.Areas.Enderecos.ViewModels.EnderecoValidator">
+            Validação da entidade Pessoa Endereço
+        </member>
+        <member name="M:WEB.Areas.Pedidos.Controllers.PedidosCanceladosController.listar">
+            Listagem de pedidos cancelados
+        </member>
+        <member name="M:WEB.Areas.Pedidos.Controllers.PedidosFinalizadosController.listar">
+            Listagem de pedidos finalizados
+        </member>
+        <member name="M:WEB.Areas.Produtos.Controllers.ProdutoController.editar(WEB.Areas.Produtos.ViewModels.ProdutoForm)">
+            
+        </member>
+        <member name="M:WEB.Areas.Produtos.Controllers.ProdutoController.excluir(System.Int32[])">
+            Exclusao de Produtos
+        </member>
+        <member name="M:WEB.Areas.CorreioInterno.Controllers.InicioController.lixeira">
+            
+        </member>
+        <member name="M:WEB.Areas.CorreioInterno.Controllers.InicioController.caixaEmailsLixeira(System.String)">
+            
+        </member>
+        <member name="M:WEB.Areas.CorreioInterno.Controllers.InicioController.enviados">
+            
+        </member>
+        <member name="M:WEB.Areas.CorreioInterno.ViewModels.EmailNovoVM.listarSelecionados(System.Collections.Generic.List{System.String})">
+            Carrega os e-mails que ja foram incluídos para pre carregar o formulario
+            Isso evita que o usuário tenha que digitar os e-mails novamente caso a ViewModel nao seja validada
+        </member>
+        <member name="M:WEB.Areas.CorreioInterno.ViewModels.EmailNovoVM.incluirNovosEnderecos(System.Collections.Generic.List{System.Web.Mvc.SelectListItem}@,System.Collections.Generic.List{System.String})">
+            Caso haja algum e-mail informado que ainda nao exista na base de dados, incluímos novamente na lista
+        </member>
+        <member name="T:WEB.Areas.CorreioInterno.ViewModels.EmailNovoValidator">
+            
+        </member>
+        <member name="M:WEB.Areas.Imagem.Controllers.DefaultController.exibirImagem(System.String,System.Int32,System.Int32)">
+            Exibição de imagens em tempo de execucao
+            PathImagem: Caminho do arquivo a partir do diretório raíz de imagens
+            largura: Tamanho que deve ser exibido em tempo de execução (se nao informar, usará a proporção)
+            altura: Altura que deve ser exibida em tempo de execução (se nao informar, usará a proporção)
+            pathAlternativa: caso as pasta de imagens seja de um caminho diferente do padrão
+        </member>
+        <member name="M:WEB.Areas.Imagem.Helpers.ImagemHelper.redimensionar(System.Drawing.Bitmap,System.Int32,System.Int32)">
+            Método para redimensionamento de imagens em tempo de execução.
+        </member>
+        <member name="M:WEB.Areas.Imagem.Helpers.ImagemHelper.exibirImagem(System.String,System.Int32,System.Int32)">
+            Retornar uma imagem 
+        </member>
+        <member name="M:WEB.Areas.Relacionamentos.Controllers.RelacionamentoController.editar(System.Nullable{System.Int32})">
+            
+        </member>
+        <member name="M:WEB.Areas.Relacionamentos.Controllers.RelacionamentoController.editar(WEB.Areas.Relacionamentos.ViewModels.OcorrenciaRelacionamentoForm)">
+            
+        </member>
+        <member name="M:WEB.Areas.Tarefas.Controllers.TarefaDiariaController.rotinaInadimplencia">
+            <summary>
+            Rotina para atualizar situacao financeira dos associados
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.Tarefas.Controllers.TarefaDiariaController.rotinaGerarFilaContricao">
+            <summary>
+            Rotina para verificar os associados que precisam ser cobrados e colocar na fila para geracao
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.Tarefas.Controllers.TarefaRecorrenteController.executarTarefasEmAndamento">
+            <summary>
+            Rodar todas as tarefas que foram abertas e ainda estão pendentes.
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.Telefones.Helpers.OperadoraTelefoniaHelper.selectList(System.Nullable{System.Int32},System.Boolean)">
+            <summary>
+            Dropdown com opcao de unidades cadastradas no sistema
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.Telefones.Helpers.TipoTelefoneHelper.selectList(System.Nullable{System.Int32},System.Boolean)">
+            <summary>
+            Dropdown com opcao de unidades cadastradas no sistema
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.Unidades.Controllers.UnidadeContaBancariaController.partialListaContasUnidade(System.Int32)">
+            
+        </member>
+        <member name="M:WEB.Areas.Unidades.Controllers.UnidadeContaBancariaController.partialEditarContaUnidade(System.Nullable{System.Int32},System.Int32)">
+            
+        </member>
+        <member name="M:WEB.Areas.Unidades.Controllers.UnidadeContaBancariaController.salvar(WEB.Areas.Unidades.ViewModels.UnidadeContaBancariaForm)">
+            
+        </member>
+        <member name="M:WEB.Areas.Unidades.Controllers.UnidadeContaBancariaController.excluir(System.Int32[])">
+            
+        </member>
+        <member name="M:WEB.Areas.Unidades.Controllers.UnidadeContaBancariaController.autocompletar(System.String)">
+            
+        </member>
+        <member name="M:WEB.Areas.Unidades.Helpers.UnidadeHelper.selectList(System.Nullable{System.Int32},System.Boolean,System.Int32[])">
+            <summary>
+            Dropdown com opcao de unidades cadastradas no sistema
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.Unidades.Helpers.UnidadeHelper.seleListMulti(System.Collections.Generic.List{System.Int32},System.Boolean,System.Int32[])">
+            <summary>
+            Dropdown com opcao de unidades cadastradas no sistema
+            </summary>
+        </member>
+        <member name="M:WEB.Areas.Unidades.Helpers.UnidadeHelper.selectListUnidadeMatriz(System.Nullable{System.Int32},System.Int32,System.Boolean)">
+            <summary>
+            Dropdown com opcao de unidades matriz cadastradas no sistema
+            </summary>
+        </member>
+        <member name="M:WEB.MvcApplication.initModules">
+            Iniciar metodos de configurações dos módulos
+        </member>
+        <member name="M:System.PedidoExtensions.getValorTotal(System.Collections.Generic.List{DAL.Pedidos.PedidoProduto})">
+            Extension method para capturar valor total dos items de uma lista
+        </member>
+        <member name="M:System.PedidoExtensions.getPesoTotal(System.Collections.Generic.List{DAL.Pedidos.PedidoProduto})">
+            Extension method para capturar valor total dos items de uma lista
+        </member>
+        <member name="M:System.PedidoExtensions.getQtdeItens(System.Collections.Generic.List{DAL.Pedidos.PedidoProduto})">
+            Extension method para capturar valor total dos items de uma lista
+        </member>
+        <member name="M:System.PedidoExtensions.getValorOriginalTotal(System.Collections.Generic.List{DAL.Financeiro.TituloReceitaPagamento})">
+            Extension method para capturar valor total das condições de pagamento
+        </member>
+        <member name="M:System.EmailExtensions.exibirRemetente(DAL.Entities.LogEmail)">
+            
+        </member>
+        <member name="M:System.EmailExtensions.exibirDestinos(DAL.Entities.LogEmail)">
+            
+        </member>
+        <member name="M:System.EmailExtensions.exibirCopias(DAL.Entities.LogEmail)">
+            
+        </member>
+        <member name="M:System.EmailExtensions.exibirCopiasOcultas(DAL.Entities.LogEmail)">
+            
+        </member>
+        <member name="M:System.EmailExtensions.htmlContato(System.Collections.Generic.List{DAL.Entities.LogEmailDestino})">
+            
+        </member>
+        <member name="M:System.EmailExtensions.exibirDestinosEnviados(DAL.Entities.LogEmail)">
+            
+        </member>
+        <member name="M:System.EmailExtensions.exibirMensagem(DAL.Entities.LogEmail,System.Boolean)">
+            
+        </member>
+        <member name="M:System.EmailExtensions.cssClasseLeitura(DAL.Entities.LogEmail)">
+            
+        </member>
+        <member name="M:WEBCheckout.Areas.AreaCheckout.Checkout.Controllers.InicioPagamentoController.prepararParcela(System.Int32)">
+            <summary>
+            Se o parametro informado for o id de uma parcela, realiza as validacoes e tratamentos
+            </summary>
+        </member>
+        <member name="M:WEBCheckout.Areas.AreaCheckout.Checkout.Controllers.InicioPagamentoController.prepararTitulo(System.Int32)">
+            <summary>
+            Se o parametro informado for o id de um titulo de receita, realiza as validacoes e tratamentos
+            </summary>
+        </member>
+        <member name="T:BLL.ActionResults.ExcelResult">
+            <summary>
+            Custom ActionResult for saving excel files
+            </summary>
+        </member>
+        <member name="M:BLL.ActionResults.ExcelResult.#ctor(System.Byte[],System.String)">
+            <summary>
+            Creates a new ActionResult for saving excel files
+            </summary>
+            <param name="excel">byte array from excel workbook</param>
+            <param name="fileName">string defining file name</param>
+        </member>
+        <member name="M:BLL.ActionResults.ExcelResult.#ctor(System.Byte[],System.String,System.Boolean)">
+            <summary>
+            Creates a new ActionResult for saving excel files
+            </summary>
+            <param name="excel">byte array from excel workbook</param>
+            <param name="fileName">string defining file name</param>
+            <param name="saveAsXML">defines the content type as XML</param>
+        </member>
+    </members>
+</doc>

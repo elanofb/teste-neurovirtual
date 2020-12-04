@@ -1,0 +1,74 @@
+﻿@model WEB.Areas.AvisosNotificacoes.ViewModels.AvisoNotificacaoForm
+
+@using DAL.Associados
+@using WEB.Areas.Associados.Helpers
+
+<div class="row">
+
+    <div class="col-md-12">
+        
+        <h4 class="separator-form-icon"><i class='far fa-edit'></i> Definição de Associados</h4>
+
+        @Html.labelRequired("Envio para todos os associados?")
+        @Html.DropDownListFor(x => x.ONotificacaoSistema.flagTodosAssociados, ComboHelper.selectListTrueFalse(Model.ONotificacaoSistema.flagTodosAssociados), "...", new {id = "flagTodosAssociados", @class = "form-control input-sm", @onChange = "AvisoNotificacao.onChangeFlagAssociados()" })
+        @Html.ValidationMessageFor(x => x.ONotificacaoSistema.flagTodosAssociados)
+    </div>
+    <div class="clearfix"></div>
+
+    <div class="col-md-12 hidden boxFlagsAssociados padding-bottom-10">
+
+        <div class="radio">
+
+            <label class="radio-label">
+                @if (Model.ONotificacaoSistema.flagAssociadosAdimplentes ?? false) {
+                    @Html.RadioButtonFor(x => x.flagAssociados, SituacaoContribuicaoConst.ADIMPLENTE, new {@checked = Model.ONotificacaoSistema.flagAssociadosAdimplentes})
+                } else {
+                    @Html.RadioButtonFor(x => x.flagAssociados, SituacaoContribuicaoConst.ADIMPLENTE)
+                }
+
+                Somente Adimplentes
+            </label>
+
+        </div>
+
+        <div class="radio">
+
+            <label class="radio-label">
+
+                @if (Model.ONotificacaoSistema.flagAssociadosInadimplentes ?? false) {
+                    @Html.RadioButtonFor(x => x.flagAssociados, SituacaoContribuicaoConst.INADIMPLENTE, new {@checked = Model.ONotificacaoSistema.flagAssociadosInadimplentes})
+                } else {
+                    @Html.RadioButtonFor(x => x.flagAssociados, SituacaoContribuicaoConst.INADIMPLENTE)
+                }
+
+                Somente Inadimplentes
+            </label>
+
+        </div>
+
+        <div class="radio">
+
+            <label class="radio-label">
+
+                @if (Model.ONotificacaoSistema.flagAssociadosEspecificos ?? false) {
+                    @Html.RadioButtonFor(x => x.flagAssociados, "espec", new {@checked = Model.ONotificacaoSistema.flagAssociadosEspecificos})
+                } else {
+                    @Html.RadioButtonFor(x => x.flagAssociados, "espec")
+                }
+
+                Associados Específicos
+            </label>
+
+        </div>
+
+    </div>
+    <div class="clearfix"></div>
+
+    <div class="col-md-12 boxStatusAssociados">
+        @Html.labelRequired("Com qual status?")
+        @Html.DropDownListFor(x => x.ONotificacaoSistema.flagStatusAssociados, AssociadoHelper.selectListAtivo(Model.ONotificacaoSistema.flagStatusAssociados, true), "Todos", new { id = "flagStatusAssociados", @class = "form-control input-sm" })
+        @Html.ValidationMessageFor(x => x.ONotificacaoSistema.flagStatusAssociados)
+    </div>
+    <div class="clearfix"></div>
+
+</div>

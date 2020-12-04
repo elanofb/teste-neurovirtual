@@ -1,0 +1,48 @@
+﻿@using WEB.Areas.Financeiro.Helpers
+@model WEB.Areas.Contribuicoes.ViewModels.ContribuicaoPadraoForm
+
+<div class="panel panel-info">
+    <div class="panel-heading">
+        <h3 class="panel-title fs-14">Configurações Financeiras</h3>
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-sm-6">
+                <label>Centro de Custo</label>
+                @Html.DropDownListFor(x => x.Contribuicao.idCentroCusto, CentroCustoHelper.getInstance.selectList(Model.Contribuicao.idCentroCusto), "", new {@class = "form-control input-sm idCentroCusto" })
+                @*@Html.instrucao("Os rececimentos dessa contribuição serão vinculados a esse centro de custo.")*@
+                @Html.ValidationMessageFor(x => x.Contribuicao.idCentroCusto)
+            </div>
+            <div class="col-sm-6">
+                <label>Macro Conta</label>
+                @Html.DropDownListFor(x => x.Contribuicao.idMacroConta, MacroContaHelper.getInstance.selectList(Model.Contribuicao.idMacroConta), "", new {@class = "form-control input-sm idMacroConta"})
+                @*@Html.instrucao("Os rececimentos dessa contribuição serão vinculados a essa macro conta.")*@
+                @Html.ValidationMessageFor(x => x.Contribuicao.idMacroConta)
+            </div>
+
+            <div class="clearfix"></div>
+
+            <div class="col-sm-6">
+                <label>Sub-Conta</label>
+                @Html.DropDownListFor(x => x.Contribuicao.idCategoriaTitulo, CategoriaTituloHelper.getInstance.selectList(Model.Contribuicao.idCategoriaTitulo, 0), "", new {@class = "form-control input-sm idSubConta" })
+                @*@Html.instrucao("Os rececimentos dessa contribuição serão vinculados a essa categoria.")*@
+                @Html.ValidationMessageFor(x => x.Contribuicao.idCategoriaTitulo)
+            </div>
+            <div class="col-sm-6">
+                <label>Conta Bancária</label>
+                @Html.DropDownListFor(x => x.Contribuicao.idContaBancaria, WEB.Areas.ContasBancarias.Helpers.ContaBancariaHelper.getInstance.selectList(Model.Contribuicao.idContaBancaria), "", new {@class = "form-control input-sm"})
+                @*@Html.instrucao("Os rececimentos dessa contribuição serão vinculados a essa conta bancária.")*@
+                @Html.ValidationMessageFor(x => x.Contribuicao.idContaBancaria)
+            </div>
+
+            <div class="clearfix"></div>
+
+            <div class="col-sm-6">
+                <label>Código Contábil</label>
+                @Html.TextBoxFor(x => x.Contribuicao.codigoContabil, new { @class = "form-control input-sm", maxlength = 10 })
+                @Html.ValidationMessageFor(x => x.Contribuicao.codigoContabil)
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+</div>

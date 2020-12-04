@@ -1,0 +1,41 @@
+﻿@model WEB.Areas.Planos.ViewModels.PlanoCarreiraAlteracaoDadosListaVM
+
+@{
+    Layout = "~/views/shared/associatec/masterpage-modal.cshtml";
+
+    ViewBag.modalTitle = "Logs de Alterações";
+    ViewBag.modalWidthClass = "lg";
+}
+
+@using (Ajax.BeginForm("buscar-logs", "PlanoCarreiraAlteracaoDadosLista", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "boxListaLogsPlanoCarreira", InsertionMode = InsertionMode.Replace, OnSuccess = "PlanoCarreiraLogAlteracoes.iniciarPluginsModal" }, new {  })) {
+    
+    { Html.EnableClientValidation(false); }
+    
+    @Html.ValidationSummary(false)
+    
+    @Html.HiddenFor(m => m.idPlanoCarreira)
+    
+    <div class="col-md-4">
+        
+        <label>Busca:</label>
+        
+        <div class="input-group">
+            
+            @Html.TextBoxFor(m => m.valorBusca, new {@class = "form-control input-sm"})
+            
+            <div class="input-group-btn">
+                <button class="btn btn-primary btn-sm link-loading-min">
+                    <i class="fa fa-search"></i>
+                </button>
+            </div>
+
+        </div>
+
+    </div>
+    <div class="clearfix"></div><br />
+
+}
+
+<div id="boxListaLogsPlanoCarreira">
+    @{ Html.RenderPartial("partial-lista-logs", Model.listaLogs); }
+</div>

@@ -1,0 +1,129 @@
+﻿@model WEB.Areas.Publicacoes.ViewModels.IniciacaoCientificaForm
+
+@using DAL.Permissao.Security.Extensions
+@using WEB.Areas.Associacoes.Helpers
+
+@{
+    Layout = "~/views/shared/associatec/masterpage-edit.cshtml";
+
+    ViewBag.titlePage = "Iniciação Científica";
+    ViewBag.subTituloPagina = Model.ONoticia.titulo;
+}
+
+@section scripts{
+    @Html.includeDatePicker()
+    @Html.includeFroalaEditorJS()
+    <script src="@UtilConfig.linkResourses()Areas/Publicacoes/js/noticia.js"></script>
+}
+
+@section styles {
+    @Html.includeFroalaEditorCSS()
+}
+
+@section navTabs{
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#tab-1" data-toggle="tab">Principal</a></li>
+    </ul>
+}
+
+@section tabContent{
+    <div id="tab-1" class="tab-pane active">
+
+        @Html.infoCadastro(Model.ONoticia.id, Model.ONoticia.dtCadastro, Model.ONoticia.dtAlteracao)
+
+        @using(Html.BeginForm("editar", "iniciacaocientifica", FormMethod.Post)) {
+
+            { Html.EnableClientValidation(false); }
+
+            @Html.ValidationSummary(true, "Alguns campos não foram validados.")
+            
+            @Html.HiddenFor(m => m.ONoticia.id)
+            
+            <h4 class="separator-form">Dados Principais da Iniciação Científica</h4>
+
+            <div class="col-md-6">
+
+                <div class="row">
+
+                    @if (User.idOrganizacao() == 0) {
+	                    <div class="col-sm-5 col-md-5">
+		                    <label>Organização</label>
+		                    @Html.DropDownListFor(m => m.ONoticia.idOrganizacao, AssociacaoHelper.getInstance.selectList(Model.ONoticia.idOrganizacao), "Padrão", new {@class = "form-control input-sm"})
+	                    </div>
+                    }
+
+                    <div class="col-md-4">
+                        <label>Portal</label>
+                        @Html.DropDownListFor(m => m.ONoticia.idPortal, WEB.Areas.Portais.Helpers.PortalHelper.getInstance.selectList(Model.ONoticia.idPortal), "...", new { @class = "form-control input-sm" })
+                        @Html.ValidationMessageFor(m => m.ONoticia.idPortal)
+                    </div>
+
+                    <div class="col-md-3">
+                        <label>Status</label>
+                        @Html.DropDownListFor(m => m.ONoticia.ativo, ComboHelper.selectListStatus(Model.ONoticia.ativo), "...", new { @class = "form-control input-sm" })
+                        @Html.ValidationMessageFor(m => m.ONoticia.ativo)
+                    </div>
+
+                    <div class="clearfix"></div>
+
+                    <div class="col-md-9">
+                        <label>Autor</label><br />
+                        @Html.TextBoxFor(x => x.ONoticia.autor, new { @class = "form-control input-sm" })
+                        @Html.ValidationMessageFor(x => x.ONoticia.autor)
+                    </div>
+                    <div class="col-md-3">
+                        <label>Data da Postagem</label><br />
+                        @Html.TextBoxFor(x => x.ONoticia.dtNoticia, new { @class = "form-control input-sm input-datepicker", @alt = "date" })
+                        @Html.ValidationMessageFor(x => x.ONoticia.dtNoticia)
+                    </div>
+                    <div class="clearfix"></div>
+
+                    <div class="col-md-12">
+                        <label>Título</label><br />
+                        @Html.TextBoxFor(x => x.ONoticia.titulo, new { @class = "form-control input-sm" })
+                        @Html.ValidationMessageFor(x => x.ONoticia.titulo)
+                    </div>
+                    <div class="clearfix"></div>
+
+                    <div class="col-md-12">
+                        <label>Chamada</label><br />
+                        @Html.TextAreaFor(x => x.ONoticia.chamada, new { @class = "form-control input-sm", rows = 4, maxlength = 400 })
+                        @Html.ValidationMessageFor(x => x.ONoticia.chamada)
+                    </div>
+                    <div class="clearfix"></div>
+
+                    @if (ViewBag.flagCompartilharFBConfig == "S") {
+                        <div class="col-md-4">
+                            <label>Compartilhar no Facebook</label>
+
+                            @if (Model.ONoticia.id > 0) {
+                                @Html.DropDownListFor(m => m.ONoticia.flagCompartilharFB, WEB.Helpers.ComboHelper.selectListYesNo(Model.ONoticia.flagCompartilharFB), "...", new { @class = "form-control input-sm", disabled = "disabled" })
+                            } else {
+                                @Html.DropDownListFor(m => m.ONoticia.flagCompartilharFB, WEB.Helpers.ComboHelper.selectListYesNo(Model.ONoticia.flagCompartilharFB), "...", new { @class = "form-control input-sm" })
+                            }
+                        </div>
+                    }
+                    <div class="clearfix"></div>
+
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <h4 class="separator-form">Detalhes</h4>
+                <div class=''>
+                    <div class='box-body pad'>
+                        @Html.TextAreaFor(x => x.ONoticia.descricao, new { id = "editor", @class = "form-control input-sm", rows = "10" })
+                        @Html.ValidationMessageFor(x => x.ONoticia.descricao)
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix"></div><br />
+
+            <div class="text-right">
+                @Html.exibirBotoesFormulario(Url.Action("listar"), "N")
+            </div>
+        }
+
+    </div>
+    <div class="clearfix"></div>
+}

@@ -1,0 +1,100 @@
+﻿@model WEB.Areas.Pedidos.ViewModels.PedidoPagamentoVM
+@using System.Web.Mvc.Html
+@using DAL.Financeiro
+
+@{
+    var idBox = "box-dados-pagamento";
+}
+
+<div id="@(IsPost? "": idBox)">
+    <h4 class="separator-form">Valores do Pedido</h4>
+    <div class="col-xs-12">
+        <table class="table table-bordered table-default">
+            <thead>
+                <tr>
+                    <th>Valor Produtos</th>
+                    <td class="text-right">@Model.Pedido.valorProdutos.ToString("C")</td>
+                    <th>Valor Frete</th>
+                    <td class="text-right">@UtilNumber.toDecimal(Model.Pedido.valorFrete).ToString("C")</td>
+                    <th>Valor Desconto</th>
+                    <td class="text-right">@UtilNumber.toDecimal(Model.Pedido.valorDesconto).ToString("C")</td>
+                    <th class="bg-green">Valor Total</th>
+                    <td class="text-right">@Model.Pedido.getValorTotal().ToString("C")</td>
+                </tr>
+            </thead>
+        </table>
+
+    </div>
+    <div class="clearfix"></div>
+    <br />
+
+    <h4 class="separator-form">Forma de Pagamento</h4>
+    <div class="col-xs-12">
+        @if (!Model.flagTemPagamento) {
+            <div class="row">
+                @{ Html.RenderPartial("partial-box-parcelamento", Model);}
+                
+            </div><br />
+        }
+
+        <table class="table table-bordered table-default">
+            <thead>
+                <tr>
+                    <th width="50">ID</th>
+                    <th>Forma Pagamento</th>
+                    <th>Valor</th>
+                    <th>Tarifas</th>
+                    <th width="120">Data Vencimento</th>
+                    <th width="120">Data Pgto</th>
+                    <th width="120">Data Baixa</th>
+                    <th width="140">&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{ int cont = 0;}
+                @if (Model.listaPagamentos.Any(x => x.id > 0)) {
+                    foreach (var OPagamento in Model.listaPagamentos) {
+                        <tr>
+                            <td class="text-center">@(OPagamento.id > 0 ? OPagamento.id.ToString() : "-")</td>
+                            <td>@(OPagamento.FormaPagamento == null? "-": OPagamento.FormaPagamento.descricao)</td>
+                            <td class="text-right">@OPagamento.valorOriginal.ToString("C")</td>
+                            <td class="text-right">@OPagamento.valorTotalTarifas().ToString("C")</td>
+                            <td class="text-center">@OPagamento.dtVencimento.exibirData()</td>
+                            <td class="text-center">@OPagamento.dtPagamento.exibirData()</td>
+                            <td class="text-center">@OPagamento.dtBaixa.exibirData(true)</td>
+                            <td class="text-left box-acoes">
+                                @exibirAcoes(OPagamento)
+
+                            </td>
+                        </tr>
+                        cont++;
+                    }
+                } else {
+                    <tr>
+                        <td class="text-center" colspan="8">Nenhuma parcela registrada para esse pedido.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    </div>
+</div>
+<div class="clearfix"></div>
+<br />
+@helper exibirAcoes(TituloReceitaPagamento OPagamento) {
+
+    if (!OPagamento.dtPagamento.HasValue) {
+
+            @*<a href="javascript:;" data-toggle="tooltip" title="Registrar pagamento do pedido" onclick="TituloReceitaPagamento.modalRegistrarPagamento(this);" data-url="@Url.Action("modal-registrar-pagamento", "TituloReceitaPagamento", new { area = "Financeiro", OPagamento.id })"><i class="fa fa-check-circle-o"></i></a>*@
+
+            <a href="@String.Format(UtilConfig.linkPgto, UtilCrypt.toBase64Encode(OPagamento.id))" data-toggle="tooltip" title="Ir para tela de pagamento" target="_blank"><i class="fa fa-credit-card "></i> </a>
+
+            @*<a href="javascript:void(0);" onclick="TituloReceitaPagamento.enviarEmailCobranca('@OPagamento.id')" data-toggle="tooltip" title="Enviar por e-mail" target="_blank"> <i class="fa fa-envelope"></i> </a>*@
+
+            <a href="javascript:void(0);" onclick="DefaultSistema.showModal('@Url.Action("modal-excluir-receita-pagamento", "ReceitaDetalhePagamentosOperacao", new { area = "Financeiro", OPagamento.id })')" data-toggle="tooltip" title="Remover parcela de pagamento." target="_blank"> <i class="fa fa-trash"></i> </a>
+
+        return;
+    }
+
+    <a href="@Url.Action("exibir-recibo", "Recibo", new {area = "Recibos", r = UtilCrypt.toBase64Encode(OPagamento.id)})" data-toggle="tooltip" title="Visualizar recibo de pagamento" target="_blank"> <i class="far fa-file"></i> </a>
+}

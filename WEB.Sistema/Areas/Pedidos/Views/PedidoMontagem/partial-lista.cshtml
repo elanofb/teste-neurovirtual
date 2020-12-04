@@ -1,0 +1,123 @@
+﻿@model WEB.Areas.Pedidos.ViewModels.PedidoMontagemVM
+
+@using DAL.Pedidos.Extensions
+@using PagedList.Mvc
+@using WEB.Areas.Pedidos.Extensions
+
+<div class="col-md-12">
+
+   
+
+    @if (!Model.listaPedidos.Any()) { 
+        <div class="alert alert-info margin-top-10">
+            Nenhum pedido foi encontrado.
+        </div>
+    }
+    
+    @foreach (var OPedido in Model.listaPedidos) {
+
+        <div class="box-info-item bordered-destaque @OPedido.classeBordaPedido()">
+            
+            <div class="row fs-11">
+                <div class="col-md-4 col-sm-6 col-xs-12">
+                    <div class="row">
+
+                        <div class="col-md-12">
+                            <a href="@Url.Action("index", "PedidoDetalhes", new {OPedido.id})" class="text-black">
+                                <strong><i class="fa fa-user"></i> (<span>@OPedido.id</span>) - @OPedido.nomePessoa.abreviar(30, "...").ToUpper()</strong>
+                            </a>
+                        </div>
+
+                        <div class="clearfix"></div>
+
+                        <div class="col-md-12">
+                            <i class="fa fa-id-card"></i> @UtilString.formatCPFCNPJ(OPedido.cpf)
+                        </div>
+                        <div class="clearfix"></div>
+
+                    </div>
+                </div>
+                
+                <div class="col-md-2 col-sm-5 hidden-sm hidden-xs">
+                    
+                    <div class="row">
+                        
+                        <div class="col-md-12">
+                            <span data-toggle="tooltip" title="Iniciado em @OPedido.dtCadastro.exibirData(true)">
+                                <i class="far fa-calendar-alt"></i> @OPedido.dtCadastro.exibirData(true)
+                            </span>
+                        </div>
+                        <div class="clearfix"></div>
+                        
+                        @if (OPedido.dtFinalizado.HasValue) {
+                            <div class="col-md-12">
+                                <span data-toggle="tooltip" title="Finalizado em @OPedido.dtFinalizado.exibirData(true)">
+                                    <i class="fa fa-calendar-check"></i> @OPedido.dtFinalizado.exibirData(true)
+                                </span>
+                            </div>
+                            <div class="clearfix"></div>
+                        }
+                    </div>
+                </div>
+
+                <div class="col-md-3 col-sm-4 hidden-xs">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <span>
+                                <strong><i class="fa fa-usd"></i>Total: </strong> @OPedido.getValorTotal().ToString("C")
+                            </span>
+                        </div>
+                        <div class="clearfix"></div>
+
+                        <div class="col-md-12">
+                            <strong class="@OPedido.exibirCorTextoStatus()">@(OPedido.StatusPedido.descricao)</strong>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+                
+                <div class="col-md-2 col-sm-2 hidden-sm hidden-xs">
+                    <div class="row">
+                        @if (OPedido.listaPedidoEntrega.Any()) {
+
+                            <div class="col-md-12">
+                                <span class="@(OPedido.listaPedidoEntrega.FirstOrDefault().dtAgendamentoEntrega < DateTime.Now.Date ? "text-red" : "")" data-toggle="tooltip" title="Data Limite de Entrega">
+                                    <i class="fa fa-truck"></i> @OPedido.listaPedidoEntrega.FirstOrDefault().dtAgendamentoEntrega.exibirData() @(Html.Raw(OPedido.listaPedidoEntrega.FirstOrDefault().dtAgendamentoEntrega < DateTime.Now.Date ? "<label class='badge bg-red'>ATRASADO</label>" : ""))
+                                </span>
+                            </div>
+                            <div class="clearfix"></div>
+
+                            <div class="col-md-12">
+                                <span data-toggle="tooltip" title="Período da Entrega">
+                                    <i class="far fa-clock"></i> @OPedido.listaPedidoEntrega.FirstOrDefault().exibirPeriodoEntrega()
+                                </span>
+                            </div>
+                            <div class="clearfix"></div>
+
+                            <div class="col-md-12">
+                                
+                                <span class="text-green no-pointer">
+                                    <i class="far fa-money-bill"></i> @(OPedido.flagPagamentoNaEntrega == true ? "Pagamento na entrega" : "Pagamento prévio")
+                                </span>
+
+                            </div>
+                            <div class="clearfix"></div>
+                        }
+                    </div>
+                </div>                
+                
+                <div class="col-sm-1 col-xs-12 text-right box-acoes">
+                    <a href="@Url.Action("index", "PedidoDetalhes", new {OPedido.id})" title="Visualizar Registro" data-toggle="tooltip">
+                        <i class="fa fa-search"></i>
+                    </a>
+                    <input type="hidden" value="@OPedido.id" class="hide idPedido" />      
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    }
+    
+    @(Html.paginarRegistros(Model.listaPedidos, Html.PagedListPager(Model.listaPedidos, nroPagina => UtilRequest.linkPaginacao(nroPagina, ViewContext.RouteData.Values["action"].ToString()))))
+
+</div>
+<div class="clearfix"></div>

@@ -1,0 +1,44 @@
+﻿@model WEB.Areas.Pedidos.ViewModels.PedidoMontagemVM
+
+<div class="col-lg-offset-2 col-lg-2 col-xs-6 text-center borderred-silver-right borderred-silver-left margin-bottom-20">
+    <input type="hidden" id="totalPedidosValue" value="@Model.totalPedidos">
+    <input type="text" data-max="@Model.totalPedidos" id="totalPedidos" class="dial" data-fgColor="#f39c12">
+    <div class="knob-label">
+        <a href="javascript:;" target="_blank" style="color: #f39c12; font-weight: bold;">
+            Total de Pedidos 
+        </a>
+    </div>
+</div>
+
+<div class="col-lg-2 col-xs-6 text-center borderred-silver-right margin-bottom-20">
+    <input type="hidden" id="totalPedidosAtrasadosValue" value="@Model.totalPedidosAtrasados">
+    <input type="text" data-max="@Model.totalPedidos" id="totalPedidosAtrasados" class="dial" data-fgColor="#f56954">
+    <div class="knob-label">
+        <a href="javascript:;" target="_blank" style="color: #f56954; font-weight: bold;">
+            Total de Pedidos Atrasados 
+        </a>
+    </div>
+</div>
+
+<div class="col-lg-2 col-xs-6 text-center borderred-silver-right borderred-silver-left margin-bottom-20">
+    <input type="hidden" id="totalPedidosHojeValue" value="@Model.totalPedidosHoje">
+    <input type="text" data-max="@Model.totalPedidos" id="totalPedidosHoje" class="dial" data-fgColor="#f39c12">
+    <div class="knob-label">
+        <a href="javascript:;" target="_blank" style="color: #f39c12; font-weight: bold;">
+            Total de Pedidos para hoje 
+        </a>
+    </div>
+</div>
+
+<div class="col-lg-2 col-xs-6 text-center borderred-silver-right margin-bottom-20">
+    <input type="hidden" id="totalPedidosAmanhaValue" value="@Model.totalPedidosProximos">
+    <input type="text" data-max="@Model.totalPedidos" id="totalPedidosAmanha" class="dial" data-fgColor="#00a65a">
+    <div class="knob-label">
+        <a href="javascript:;" target="_blank" style="color: #00a65a; font-weight: bold;">
+            Total de Pedidos para os próximos 5 dias 
+        </a>
+    </div>
+</div>
+
+
+<div class="clearfix"></div>

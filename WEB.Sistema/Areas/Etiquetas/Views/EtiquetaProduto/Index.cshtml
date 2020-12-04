@@ -1,0 +1,89 @@
+﻿@using MvcFlashMessages
+@using WEB.Areas.ConfiguracoesEtiquetas.Helpers
+@model WEB.Areas.Etiquetas.ViewModels.EtiquetaProdutoVM
+
+@{
+    Layout = "~/Areas/Etiquetas/Views/Shared/masterpage-print.cshtml";
+    
+    ViewBag.titlePage = "Impressão de Etiquetas";
+}
+
+@section styles {
+    
+    <style>
+        .marginFolha {
+            padding-top: @(Model.OConfiguracaoEtiqueta.margPagTop?.ToString().Replace(",", "."))mm;
+            padding-left: @(Model.OConfiguracaoEtiqueta.margPagLef?.ToString().Replace(",", "."))mm;
+        }
+
+        .medidasEtiqueta {
+            width: @(Model.OConfiguracaoEtiqueta.width?.ToString().Replace(",", "."))mm;
+            height: @(Model.OConfiguracaoEtiqueta.height?.ToString().Replace(",", "."))mm;
+        }
+
+        @Model.OConfiguracaoEtiqueta.cssCustomizado
+    </style>    
+    
+}
+
+@Html.RenderFlash()
+
+@if (Model.OConfiguracaoEtiqueta == null || Model.listaEtiquetas?.Any() != true) {
+    return;
+}
+
+<div class="header">
+    
+    @Html.Hidden("pagina", "etiqueta-produto")
+
+    <div class="selectConfiguracoesEtiqueta">
+        <label>Configurações de etiquetas</label><br/>
+        @Html.DropDownList("idConfiguracaoEtiqueta", ConfiguracaoEtiquetaHelper.getInstance.selectList(Model.OConfiguracaoEtiqueta.id), "...", new { @class = "", onchange = "Etiqueta.alterarModeloEtiqueta(this)" })
+    </div>
+
+    <div class="print-all"><a href="javascript:void(0);" class="btn btn-default" onclick="window.print()">Imprimir</a></div>
+    
+</div>
+
+@if (Model.listaEtiquetas?.Any() == true){
+    var countEtiquetas = 1;
+    var countLinhas = 1;
+
+    @Html.Raw($"<div class=\"marginFolha\">")
+
+    foreach (var corpoEtiqueta in Model.listaEtiquetas) {
+
+        if (countEtiquetas > Model.OConfiguracaoEtiqueta.qtdeEtiquetasLinha) {
+            <div style=" clear: both;"></div>
+            countEtiquetas = 1;
+            countLinhas++;
+        }
+
+        if (countLinhas > Model.OConfiguracaoEtiqueta.qtdeLinhasPagina) {
+            @Html.Raw("</div>")
+            <div style="page-break-before: always;"></div>
+            @Html.Raw($"<div class=\"marginFolha\">")
+            countLinhas = 1;
+        }
+
+        <div class="box-etiqueta medidasEtiqueta" style="@getDimensao(countEtiquetas, countLinhas)">
+            
+            @Html.Raw(corpoEtiqueta)
+        </div>
+        countEtiquetas++;
+    }
+}
+
+@helper getDimensao(int countEtiquetas, int countLinhas) {
+
+    string style = "";
+
+    style +=
+        "margin:"
+        + $"{(countLinhas > 1 ? Model.OConfiguracaoEtiqueta.margEtiquetaTop?.ToString().Replace(",", ".") : "0")}mm "
+        + $"{Model.OConfiguracaoEtiqueta.margEtiquetaRig?.ToString().Replace(",", ".")}mm "
+        + $"{(countEtiquetas < Model.OConfiguracaoEtiqueta.qtdeEtiquetasLinha ? Model.OConfiguracaoEtiqueta.margEtiquetaBot?.ToString().Replace(",", ".") : "0")}mm "
+        + $"{(countEtiquetas > 1 ? Model.OConfiguracaoEtiqueta.margEtiquetaLef?.ToString().Replace(",", ".") : "0")}mm;";
+
+    @Html.Raw(style);
+}

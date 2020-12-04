@@ -1,0 +1,88 @@
+﻿@model List<DAL.Historicos.HistoricoAtualizacao>
+
+
+@using DAL.Historicos
+
+@{
+    Layout = "";
+
+    int qtdeAprovados = Model.Count(x => x.flagAprovado == true);
+    int qtdeReprovados = Model.Count(x => x.flagAprovado == false);
+}
+
+<div class="bordered-gray-bottom-1 white margin-bottom-20 margin-top-20">
+    
+    <div class="row">
+        
+        <div class="col-sm-2 margin-bottom-10">            
+            <span class="badge bg-green">Qtde de Aprovados: @qtdeAprovados</span>            
+        </div>
+        
+        <div class="col-sm-2 margin-bottom-10">                        
+            <span class="badge bg-red">Qtde Descartados: @qtdeReprovados</span>
+        </div>
+        
+    </div>
+    
+    <div class="row">
+        
+        <div class="col-sm-12">
+            <strong><i class="fa fa-users"></i> @Model.Count associado(s) com dados atualizados avaliados</strong>
+        </div>
+        
+    </div>
+    
+</div>
+
+@if (!Model.Any()){
+    <div class="col-md-12 alert alert-info">
+        <p>Nenhuma atualização foi avaliada!</p>
+    </div>
+    <div class="clearfix"></div>
+}
+
+@foreach (HistoricoAtualizacao OItem in Model){
+    
+    <div class="box-info-item-dotted @(OItem.flagAprovado == true ? "border-green" : "border-red")">
+        <div class="row">
+            
+            <div class="col-lg-4 col-md-4 col-sm-12">
+                <i class="glyphicons glyphicons-user"></i> # <span>@OItem.id</span> - @(OItem.Pessoa?.nome)
+            </div>
+            
+            <div class="col-lg-2 col-md-2 col-sm-12">
+                <span data-toggle="tooltip" title="Data da Analise">
+                    <i class="fa fa-calendar-alt"></i> @(OItem.dtAnalise.exibirData())
+                </span>
+            </div>
+            
+            <div class="col-lg-3 col-md-3 col-sm-12">
+                <span data-toggle="tooltip" title="Usuário da Análise">
+                    <i class="fas fa-user-circle"></i> @(OItem.UsuarioAnalise?.nome)    
+                </span>                
+            </div>
+            
+            <div class="col-sm-3 text-right">
+                                                
+                <div class="dropdown">
+                    <a href="javascript:;" class="dropdown-toggle text-black" type="button" data-toggle="dropdown">
+                        <i class="fa fa-cog"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-right">
+
+                        <li>
+                            <a href="@Url.Action("index", "PreAtualizacaoDetalhe", new{Area = "Associados", OItem.id})">
+                                <i class="fa fa-search"></i> Detalhes
+                            </a>
+                        </li>
+
+                    </ul>
+                </div>
+
+            </div>
+
+        </div>                 
+
+    </div>
+}
+

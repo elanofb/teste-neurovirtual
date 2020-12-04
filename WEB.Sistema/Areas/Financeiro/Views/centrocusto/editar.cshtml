@@ -1,0 +1,87 @@
+﻿@model WEB.Areas.Financeiro.ViewModels.CentroCustoForm
+
+@{
+    Layout = "~/views/shared/associatec/masterpage-edit.cshtml";
+    ViewBag.titlePage = "Centro de Custo";
+    ViewBag.subTituloPagina = Model.CentroCusto.descricao;
+}
+
+@section scripts{
+    <script type="text/javascript" src="@UtilConfig.linkResourses()areas/financeiro/js/macrocontacentrocusto.js"></script>
+}
+
+@section breadcrump{
+    <ol class="breadcrumb">
+        <li><a class="active fs-14" href="@Url.Action("listar")"><i class="fa fa-arrow-left"></i> Voltar</a></li>
+    </ol>
+}
+
+
+@section navTabs{
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#tab-1" data-toggle="tab">Principal</a></li>
+    </ul>
+}
+
+@section tabContent{
+    <div id="tab-1" class="tab-pane active">
+
+        @Html.infoCadastro(Model.CentroCusto.id, Model.CentroCusto.dtCadastro, Model.CentroCusto.dtAlteracao)
+
+        @using (Html.BeginForm("editar", null, FormMethod.Post, new { role = "form", @class = "default" })) {
+
+            @Html.HiddenFor(m => m.CentroCusto.id)
+
+            @Html.ValidationSummary(true, "Alguns campos não foram validados.")
+
+            <h4 class="separator-form-icon"><i class="far fa-edit"></i> Dados Principais do Centro de Custo</h4>
+
+            <div class="row margin-bottom-20">
+                
+                <div class="col-md-6">
+                    @Html.labelRequired("Descrição")
+                    @Html.TextBoxFor(m => m.CentroCusto.descricao, new { @class = "form-control input-sm", maxlength = "100" })
+                    @Html.ValidationMessageFor(m => m.CentroCusto.descricao)
+                </div>
+                
+                <div class="col-sm-2">
+                    <label>Código Fiscal</label>
+                    @Html.TextBoxFor(m => m.CentroCusto.codigoFiscal, new { @class = "form-control input-sm", maxlength = "10" })
+                </div>
+
+                <div class="col-sm-2">
+                    <label>Status</label>
+                    @Html.DropDownListFor(m => m.CentroCusto.ativo, ComboHelper.selectListStatus(Model.CentroCusto.ativo), new { @class = "form-control input-sm" })
+                    @Html.ValidationMessageFor(m => m.CentroCusto.ativo)
+                </div>
+            </div>
+
+            if (Model.CentroCusto.id > 0) {
+                <h4 class="separator-form-icon"><i class="far fa-edit"></i>  Macro Contas</h4>
+
+                <div class="row">
+                    @if (Model.listaMacroConta.Any()) {
+                        int cont = 0;
+
+                        for (int index = 0; index < Model.listaSelecionados.Count; index++) {
+                            var Item = Model.listaSelecionados[index];
+                            @Html.HiddenFor(x => x.listaSelecionados[index].id)
+                            
+                            <div class="col-xs-4">
+                                <label class="btn btn-default btn-flat btn-block fs-12 text-left">
+                                    @Html.CheckBoxFor(x => x.listaSelecionados[index].isChecked, new { @class = "item-check no-icheck" }) &nbsp;&nbsp;@Item.descricao
+                                </label>                                
+                            </div>
+                        }
+                    }
+                </div>
+            }
+
+            <div class="text-right margin-top-20">
+                @Html.exibirBotoesFormulario(Url.Action("listar"), "N", Url.Action("editar", new { id = 0}))
+            </div>
+
+        }
+    </div>
+}
+

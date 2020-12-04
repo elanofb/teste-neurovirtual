@@ -1,0 +1,71 @@
+﻿@using MvcFlashMessages
+@model List<DAL.AssociadosContribuicoes.AssociadoContribuicaoBoleto>
+
+@{
+    ViewBag.modalTitle = string.Format("Exclusão de boleto(s)");
+    ViewBag.modalWidthClass = "md";
+    Layout = IsPost ? null : "~/views/shared/associatec/masterpage-modal.cshtml";
+}
+
+<div id="boxFormExclusao">
+    @Html.RenderFlash()
+    @using (Ajax.BeginForm("excluir-boleto", null, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "boxFormExclusao", InsertionMode = InsertionMode.Replace, OnSuccess = "ListaBoletos.onSuccessFormExclusao" }, new { id = "formExclusao", @class = "default col-md-12" })) {
+
+        { Html.EnableClientValidation(false); }
+        @Html.ValidationSummary(false)
+
+        <div class="col-md-8">
+            @Html.labelRequired("Informe o motivo para exclusão da cobrança")
+        </div>
+        <div class="clearfix"></div>
+        <div class="col-md-12">
+            @Html.TextArea("observacoes", "", new { @class = "form-control input-sm", rows = "4" })
+            @Html.ValidationMessage("observacoes")
+        </div>
+        <div class="clearfix"></div><br/>
+
+        <table class="table table-responsive table-bordered table-striped info-table">
+            <thead>
+                <tr>
+                    <th width="50">#</th>
+                    <th>Descrição</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Count > 0) {
+                    int cont = 0;
+                    foreach (var Item in Model) {
+                        <tr>
+                            <td class="text-center">
+                                @Html.HiddenFor(x => x[cont].id)
+                                @Html.HiddenFor(x => x[cont].idTituloReceitaPagamento)
+                                @Item.id
+                            </td>
+                            <td class="text-left">
+                                @Html.HiddenFor(x => x[cont].descricaoTituloReceita)
+                                @Item.descricaoTituloReceita
+                            </td>
+                        </tr>
+                        cont++;
+                    }
+                    <tr>
+                        <td colspan="6" class="text-center">@Model.Count boletos selecionadas.</td>
+                    </tr>
+                } else {
+                    <tr>
+                        <td colspan="6" class="text-center">Nenhuma boleto foi selecionada.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+    <div class="clearfix"></div>
+</div>
+
+@section modalFooter{
+    <div class="text-right">
+        <input type="button" value="Cancelar" class="btn btn-default" data-dismiss="modal" aria-hidden="true" />
+        <input type="button" value="Confirmar Exclusão" class="btn btn-danger link-loading" onclick="$('#formExclusao').submit();" />
+    </div>
+}

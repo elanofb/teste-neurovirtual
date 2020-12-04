@@ -1,0 +1,104 @@
+﻿@model PagedList.IPagedList<DAL.Produtos.EstoqueSaida>
+@using PagedList.Mvc
+@using DAL.Produtos
+@using WEB.Areas.Produtos.Helpers
+@{
+    ViewBag.tituloPagina = "Saídas de Estoque Cadastradas";
+}
+
+<script src="@UtilConfig.linkResourses()Areas/Produtos/js/estoquesaida.js" type="text/javascript"></script>
+
+<div class="col-xs-12 box box-solid internal-default">
+    <div>
+        @using (Html.BeginForm(null, null, FormMethod.Get, new { @class = "filtros" })) {
+            <div class="form-group col-xs-3">
+            </div>
+			<div class="form-group col-xs-2">
+				<label>Tipo de Saída</label>
+				@Html.DropDownList("idTipoReferencia", TipoReferenciaSaidaHelper.selectList(UtilRequest.getInt32("idTipoReferencia")), "Todos", new { @class = "form-control input-sm", id = "EstoqueSaida_idTipoReferenciaSaida", onchange = "EstoqueSaida.carregarReferencias();" })
+			</div>
+			<div class="form-group col-xs-2">
+				<label>Saída Para</label>
+				@Html.DropDownList("idReferencia", TipoReferenciaSaidaHelper.selectListReferencias(UtilRequest.getInt32("idReferencia"), UtilRequest.getInt32("idTipoReferencia")), "Todos", new { @class = "form-control input-sm", id = "EstoqueSaida_idReferencia" })
+			</div>
+			<div class="form-group col-xs-2">
+				<label>Produto</label>
+				@Html.DropDownList("idProduto", ProdutoHelper.getInstance.selectList(0, UtilRequest.getInt32("idProduto")), "Todos", new { @class = "form-control input-sm" })
+			</div>
+            <div class="form-group col-xs-3">
+                <label>Buscar</label>
+                @Html.buttonSearch(UtilRequest.getString("valorBusca"))
+            </div>
+        }
+        <div class="clearfix"></div>
+    </div>
+
+    <div class="table-responsive">
+        <div class="dataTables_wrapper form-inline" role="grid">
+
+            <div class="links-table">
+                <div class="btn-group">
+                    <a href="javascript:void(0);" data-url="@Url.Action("excluir")" class="btn btn-default btn-flat" title="Remover itens selecionados" data-toggle="tooltip" onclick="return DefaultAction.removeAll(this);">
+                        <i class="fa fa-trash"></i>
+                    </a>
+                    <a href="@Url.Action("editar")" class="btn btn-default btn-flat" title="Adicionar novo registro" data-toggle="tooltip">
+                        <i class="far fa-plus-circle"></i>
+                    </a>
+                    <a href="javascript:void(0);" onclick="return DefaultAction.gerarExcel();" class="btn btn-default btn-flat" title="Gerar Excel">
+                        <i class="far fa-file-excel"></i>
+                    </a>
+                    @using(Html.BeginForm("gerar-excel",null,FormMethod.Post,new { id = "formExcel",role = "form",@class = "default",target = "_blank" })) {
+                        @Html.Hidden("ids",0,new { id = "idsExcel" });
+                    }
+                </div>
+            </div>
+
+            <table class="table table-bordered table-striped dataTable">
+                <thead>
+                    <tr role="row">
+                        <th class="width-50 text-center"><input type="checkbox" name="marcarTodos" data-childs="checkRegistro[]" id="checkMarcarTodos" /></th>
+                        <th class="width-100 text-center">Data de Saída</th>                        
+                        <th class="width-100">Quantidade</th>
+                        <th class="width-200">Tipo de Saída</th>
+                        <th class="width-200">Saiu Para</th>
+                        <th>Produto</th>
+                        <th class="width-75">Cadastro</th>
+                        <th class="width-50">&nbsp;</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Count > 0) {
+                        foreach (EstoqueSaida Item in Model) {
+
+                            string dtMovimentacao = (Item.ProdutoEstoque.dtMovimentacao == null) ? "" : @UtilDate.toDisplay(Item.ProdutoEstoque.dtMovimentacao.ToString());
+                            
+                            <tr>
+                                <td class="text-center"><input type="checkbox" name="checkRegistro[]" value="@Item.id" /></td>
+                                <td class="text-center">@dtMovimentacao</td>
+                                <td class="text-right">@Item.ProdutoEstoque.qtdMovimentada</td>
+                                <td>@Item.TipoReferenciaSaida.descricao</td>
+                                <td>@WEB.Areas.Produtos.Helpers.TipoReferenciaSaidaHelper.getReferencia(Item.idReferencia, Item.idTipoReferenciaSaida)</td>
+                                <td>@Item.ProdutoEstoque.Produto.nome</td>
+                                <td class="text-center">@Item.dtCadastro.exibirData(true)</td>
+                                <td class="text-center">
+									@Html.linkEditar(Item.id)
+                                    @Html.linkAjaxExcluir(Item.id)
+                                </td>
+                            </tr>
+                        }
+                    } else {
+                        <tr>
+                            <td class="text-center" colspan="10">Nenhum registro cadastrado</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            @(Html.paginarRegistros<EstoqueSaida>(Model, Html.PagedListPager(Model, nroPagina => Url.Action("listar", new { nroPagina }))))
+
+        </div>
+    </div>
+
+
+
+</div>

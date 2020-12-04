@@ -1,0 +1,146 @@
+﻿@model WEB.Areas.ContribuicoesPainel.ViewModels.PainelContribuicaoPadraoVM
+@using DAL.AssociadosContribuicoes
+@using WEB.Areas.AssociadosContribuicoes.Extensions
+@using WEB.Areas.AssociadosContribuicoes.Helpers
+@using WEB.Areas.Financeiro.Helpers
+@using WEB.Helpers
+
+<h4 class="separator-form">Relação de Associados</h4>
+
+<div class="col-sm-12">
+    <div class="row">
+        <div class="col-sm-2">Associado</div>
+        <div class="col-sm-10">
+            <div class="row">
+                @foreach (var dtVencimento in Model.listaDatasSelecionadas) {
+                    <div class="col-sm-1 fs-11">
+                        <div class="row">
+                            <p class="text-center no-margin">
+                                <strong>@dtVencimento.ToString("MM/yyyy")</strong>
+                            </p>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    @foreach (var OAssociado in Model.listaAssociados) {
+        <div class="row bordered-1-black-top">
+            <div class="col-sm-2 fs-11">
+                <div class="row padding-5">
+                    <a href="@Url.Action("editar", "AssociadoCadastro", new {area = "Associados", OAssociado.id})" target="_blank">
+                        <span class="visible-lg">@OAssociado.nome.abreviar(22, "").ToUpper()</span>
+                        <span class="hidden-lg">@OAssociado.nome.abreviar(18, "").ToUpper()</span>
+                    </a>
+                </div>
+            </div>
+            <div class="col-sm-10 fs-11">
+                @foreach (var dtVencimento in Model.listaDatasSelecionadas) {
+
+                    var OContribuicaoAssociado = Model.listaContribuicoes.FirstOrDefault(x => x.dtVencimentoOriginal == dtVencimento && x.idAssociado == OAssociado.id);
+
+                    <div class="col-sm-1 @OContribuicaoAssociado.cssBgSituacao()">
+
+                        <div class="row padding-5 text-right bordered-white-right">
+                            <div class="dropdown-custom">
+                                <a href="javascript:void(0);" onclick="ContribuicaoPainel.toogleMenuAcoes(this)" class="dropbtn text-black" data-toggle="tooltip" data-placement="left" data-html="true" title="">
+                                    @(OContribuicaoAssociado == null ? "-" : OContribuicaoAssociado.valorAtual.ToString("C"))
+                                </a>
+                                @exibirBoxAcoes(OContribuicaoAssociado)
+                            </div>
+                        </div>
+
+                    </div>
+                }
+
+            </div>
+        </div>
+    }
+
+    @if (!Model.listaAssociados.Any()) {
+        <div class="row bordered-1-black-top">
+            <div class="col-sm-12">
+                <div class="alert alert-info">Nenhum registro foi localizado com os dados informados.</div>
+            </div>
+        </div>
+    }
+</div>
+<div class="clearfix"></div>
+
+
+@helper exibirBoxAcoes(AssociadoContribuicao OItem) {
+
+if (OItem == null) {
+    return;
+}
+
+    <div class="dropdown-content">
+
+        @linksPagamentoRealizado(OItem)
+
+        @linksNaoParcelado(OItem)
+
+        @linkIsencao(OItem)
+
+        <a href="@Url.Action("index", "AssociadoContribuicaoDetalhe", new { area = "AssociadosContribuicoes", id = OItem.id})">Detalhes</a>
+
+        <hr class="no-margin" />
+
+        @Html.linkExcluirContribuicao(OItem.id, "Excluir Cobrança")
+
+    </div>
+}
+
+
+@helper linksNaoParcelado(AssociadoContribuicao OItem) {
+
+if (OItem.flagParcelamento() || OItem.dtPagamento.HasValue || OItem.flagIsento == true) {
+    return;
+}
+
+    @Html.linkEnviarEmailCobranca(OItem, "Enviar e-mail de cobrança")
+
+    @Html.linkRegistrarPagamento(OItem.id, "Registrar pagamento")
+
+    @*@Html.linkPagamentoContribuicao(OItem.id, "Ir para tela de cobrança")*@
+
+}
+
+@helper linksPagamentoRealizado(AssociadoContribuicao OItem) {
+
+if (!OItem.dtPagamento.HasValue) {
+    return;
+}
+
+    @Html.linkRecibo(OItem.id, "Recibo")
+}
+
+@helper linkIsencao(AssociadoContribuicao OItem) {
+if (OItem.dtPagamento.HasValue || OItem.flagIsento == true) {
+    return;
+}
+    @Html.linkConcederIsencao(OItem.id, "Conceder Isenção")
+}
+
+
+
+@functions{
+
+    /// <summary>
+    /// Montar uma string com descricao do tipo de associado e vencimento atual da cobrança
+    /// </summary>
+    private string descricaoTooltip(AssociadoContribuicao OContribuicaoAssociado) {
+
+        if (OContribuicaoAssociado == null) {
+            return "";
+        }
+
+        string descricaoTipoAssociado = OContribuicaoAssociado.TipoAssociado == null ? "-" : OContribuicaoAssociado.TipoAssociado.descricao;
+
+        string dtVencimentoAtual = OContribuicaoAssociado.dtVencimentoAtual.exibirData().ToString();
+
+        return string.Concat("Tipo de Associado: ", descricaoTipoAssociado, "<br />", "Vencimento atual: ", dtVencimentoAtual);
+
+    }
+
+}

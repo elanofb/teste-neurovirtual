@@ -1,0 +1,53 @@
+﻿@model WEB.Areas.Pedidos.ViewModels.PedidoPagamentoVM
+@using System.Web.Mvc.Html
+@using WEB.Areas.Pedidos.Helpers
+
+@{
+    var idBox = "box-dados-pagamento";
+}
+
+@using (Ajax.BeginForm("salvar-parcelas", "pedidopagamento", new AjaxOptions {HttpMethod = "POST", InsertionMode = InsertionMode.Replace, UpdateTargetId = idBox, OnSuccess = "PedidoPagamento.onSuccessParcelamento" }, new {})) {
+    @Html.HiddenFor(m => m.Pedido.id)
+
+    <div class="col-xs-4">
+        <div class="input-group">
+            @Html.DropDownListFor(m => m.qtdeParcelas, PedidoHelper.getInstance.selectListParcelamento(Model.listaPagamentos.Count), "Quantidade de parcelas...", new {@class = "form-control input-sm", id = "qtdeParcelas"})
+            <span class="input-group-addon primary"><a href="javascript:void(0)" onclick="PedidoPagamento.carregarParcelas('@Model.Pedido.id');" class="text-white">Parcelar</a></span>
+        </div>
+        <div class="clearfix"></div><br/>
+
+        <table class="table table-bordered table-default">
+            <thead>
+            <tr>
+                <th>Valor</th>
+                <th width="120">Data Vencimento</th>
+            </tr>
+            </thead>
+            <tbody>
+            @if (Model.listaPagamentos.Count > 0) {
+                int cont = 0;
+                foreach (var OPagamento in Model.listaPagamentos) {
+                    <tr>
+                        <td class="text-right">@OPagamento.valorOriginal.ToString("C")</td>
+                        <td class="text-center">
+                            @Html.HiddenFor(m => m.listaPagamentos[cont].valorOriginal)
+                            @Html.TextBoxFor(m => m.listaPagamentos[cont].dtVencimento, new {@class = "form-control input-sm text-center input-datepicker", alt = "date"})
+                            @Html.ValidationMessageFor(m => m.listaPagamentos[cont].dtVencimento)
+                        </td>
+                    </tr>
+                    cont++;
+                }
+            } else {
+                <tr>
+                    <td colspan="2" class="text-center">Nenhuma parcela de pagamento configurada</td>
+                </tr>
+            }
+            </tbody>
+        </table><br/>
+        <p class="text-right">
+            <input type="submit" name="salvar" value="Salvar" class="btn btn-primary link-loading" />
+        </p>
+    </div>
+}
+<div class="clearfix"></div>
+

@@ -1,0 +1,30 @@
+﻿@using WEB.Areas.Permissao.Helpers
+@model List<DAL.Configuracoes.ConfiguracaoPerfilComissionavel>
+@{
+    Layout = null;
+}
+
+<div class="form-horizontal">
+    <div class="col-sm-6">
+        <div class="box box-default">
+            <div class="box-header with-border">
+                <h3 class="box-title">Vínculos de grupos comissionáveis</h3>
+            </div>
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-sm-8">
+                        <label>Grupo de Usuários</label>
+                        @Html.DropDownList("idPerfilAcesso", PerfilAcessoHelper.getInstance.selectList(null, null, Model.Select(x => x.idPerfilAcesso).ToList()), "...", new Dictionary<string, object> { { "class", "form-control input-sm no-padding" }, { "style", "width:100%" } })
+                    </div>
+                    <div class="col-sm-4">
+                        <label>&nbsp;</label>
+                        <button type="button" name="enviar" class="btn btn-sm btn-primary margin-top-20 link-loading" data-idconfiguracaocomissao="@((int?)ViewBag.id)" data-url="@Url.Action("vincular-perfil-comissionavel", "ConfiguracaoComissao")" onclick="ConfiguracaoComissao.vincularPerfilComissionavel(this);"><i class="fa fa-plus"></i> Vincular </button>
+                    </div>
+                    <div class="clearfix"></div><br />
+
+                    @{ Html.RenderPartial("partial-lista-perfis-comissionavel", Model); }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

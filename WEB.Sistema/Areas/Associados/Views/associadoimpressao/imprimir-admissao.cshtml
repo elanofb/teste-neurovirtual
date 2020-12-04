@@ -1,0 +1,10 @@
+﻿@model AssociadoImpressao
+
+@using WEB.Areas.Associados.ViewModels
+
+@{
+    Layout = "~/Areas/Associados/Views/shared/_masterpage-print.cshtml";
+    ViewBag.Title = "Ficha Cadastral";
+}
+
+@Html.Raw(Model.htmlFicha)

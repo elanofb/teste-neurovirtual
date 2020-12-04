@@ -1,0 +1,69 @@
+﻿@model WEB.Areas.Associados.ViewModels.AssociadoForm
+
+<li class="active"><a href="#tab-dados-cadastrais" data-toggle="tab">Dados Cadastrais</a></li>
+
+@if (Model.Associado.id > 0) {
+
+    @*if (Model.ConfiguracaoGeral.flagAbaContatos == true) {
+        <li><a href="#tab-contatos" data-toggle="tab">Contatos</a></li>
+    }
+
+    <li><a href="#tab-documentos" data-toggle="tab">Documentos</a></li>
+
+    <li><a href="#tab-historico" data-toggle="tab">Histórico</a></li>
+
+    if (Model.Associado.Pessoa.flagTipoPessoa == "J") {
+        if (Model.ConfiguracaoGeral.flagAbaRepresentantes == true) {
+            <li><a href="#tab-representantes" data-toggle="tab">Representantes</a></li>
+        }
+
+        if (Model.ConfiguracaoGeral.flagAbaAbrangencias == true && (Model.Associado.idTipoAssociado == TipoAssociadoConst.PROVEDOR || Model.Associado.idTipoAssociado == TipoAssociadoConst.PROVEDOR_FORNECEDOR)) {
+            <li><a href="#tab-abrangencia" data-toggle="tab">Cidades de Atuação</a></li>
+        }
+
+        if (Model.ConfiguracaoGeral.flagAbaListaEmail == true) {
+            <li><a href="#tab-listaemail" data-toggle="tab">Lista de E-mail</a></li>
+        }
+    }
+
+    if (Model.ConfiguracaoGeral.flagAbaAreaAtuacoes == true) {
+        <li><a href="#tab-area-atuacao" data-toggle="tab">@Html.labelTexto("areaAtuacaoPlural")</a></li>
+    }
+
+    if (Model.ConfiguracaoGeral.flagAbaTitulo == true) {
+        <li><a href="#tab-titulos" data-toggle="tab">Títulos</a></li>
+    }
+
+    if (Model.ConfiguracaoGeral.flagAbaCargos == true && Model.Associado.Pessoa.flagTipoPessoa == "F") {
+        <li><a href="#tab-cargos" data-toggle="tab">Cargos</a></li>
+    }
+
+    if (Model.ConfiguracaoGeral.flagAbaCobrancas == true) {
+        <li><a href="#tab-cobrancas" data-toggle="tab">Cobranças</a></li>
+    }
+
+    if (Model.ConfiguracaoGeral.flagAbaAnuidades == true) {
+        <li><a href="#tab-anuidades" data-toggle="tab">Anuidades</a></li>
+    }
+
+    if (Model.ConfiguracaoGeral.flagAbaMensalidades == true) {
+        <li><a href="#tab-mensalidades" data-toggle="tab">Mensalidades</a></li>
+    }
+
+    if (Model.ConfiguracaoGeral.flagAbaPedidos == true) {
+        <li><a href="#tab-pedidos" data-toggle="tab">Pedidos</a></li>
+    }
+
+    if (Model.ConfiguracaoGeral.flagAbaEventos == true) {
+        <li><a href="#tab-eventos" data-toggle="tab">Eventos</a></li>
+    }
+
+    if (Model.ConfiguracaoGeral.flagAbaAnuncios == true) {
+        <li><a href="#tab-anuncios" data-toggle="tab">Anúncios</a></li>
+    }
+
+    if (Model.ConfiguracaoGeral.flagAbaCarteirinha == true) {
+        <li><a href="#tab-carteirinha" data-toggle="tab">Carteirinha</a></li>
+    }*@
+
+}

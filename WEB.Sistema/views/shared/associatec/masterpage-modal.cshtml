@@ -1,0 +1,26 @@
+﻿@using MvcFlashMessages
+
+<div class="modal fade" id="@(ViewBag.modalId ?? "myModal")" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-@(ViewBag.modalWidthClass ?? "md")">
+		<div class="modal-content" id="@ViewBag.idModalContent">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			    <h4 class="modal-title fs-16"><i class="fa fa-edit"></i> @ViewBag.modalTitle</h4>
+			</div>
+			<div class="modal-body no-padding-bottom" style="max-height: 500px; overflow-y: auto">
+				<div class="row">
+					<div class="col-sm-12">
+						@Html.RenderFlash()
+
+						@RenderBody()
+					</div>
+				</div>
+			</div>
+			@if (IsSectionDefined("modalFooter")) {
+				<div class="modal-footer bg-gray">
+					@RenderSection("modalFooter", false)
+				</div>
+			}
+		</div>
+	</div>
+</div>

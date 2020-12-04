@@ -1,0 +1,187 @@
+﻿@model LancamentoRecebimentoVM
+@using DAL.Financeiro
+@using PagedList.Mvc
+@using WEB.Helpers
+@using WEB.Areas.LancamentoRecebimentos.ViewModels
+
+@{
+    Layout = "";
+}
+
+<div class="box box-primary">
+    <div class="box-header with-border">
+        <div class="box-title">
+            <i class="far fa-chart-bar"></i> Resultados <em class="fs-12">@Model.listaTituloReceitaPagamento.TotalItemCount registro(s) encontrado(s)</em>
+        </div>
+        <div class="box-tools pull-right">
+            <div class="btn-group margin-right-10">
+                <a href="javascript:;" class="text-black fs-16" data-toggle="dropdown" aria-expanded="true">
+                    <i class="fa fa-cog"></i>
+                </a>
+                <ul class="dropdown-menu" role="menu">
+                    <li>
+                        <a href="@Url.Action("index", "ReceitaCadastro", new {urlRetorno = Request.Url.AbsoluteUri})">
+                            <i class="far fa-plus"></i> Nova Receita
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:;" data-url="@Url.Action("modal-registrar-pagamento", "ReceitaDetalhePagamentosOperacao", new {area = "Financeiro"})" onclick="ReceitaRegistrarPagamento.modalRegistrarPagamento(this, 'lancamentos');">
+                            <i class="far fa-check"></i> Registrar Pagamentos
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:;" data-url="@Url.Action("modal-arquivo-remessa", "CadastroRemessaCAR", new { area = "ArquivosRemessas" })" onclick="GerarArquivoRemessa.modalGerarRemessaRecebimentos(this);">
+                            <i class="far fa-file"></i> Gerar Arquivo Remessa
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+
+            <div class="pull-right margin-right-5">
+                <label class="" data-toggle="tooltip" title="Selecionar Todos">
+                    <input type="checkbox" name="marcarTodos" data-childs="checkRegistro[]" id="checkMarcarTodos" style="margin-left: 2px;" />
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <div class="box-body">
+
+        @boxCabecalho()
+        
+        @if (!Model.listaTituloReceitaPagamento.Any()) {
+            <div class="col-sm-12">
+                <div class="alert alert-info">
+                    Nenhuma receita foi encontrada.
+                </div>
+            </div>
+        }
+
+        @foreach (var OItem in Model.listaTituloReceitaPagamento) {
+
+            bool flagVencido = !OItem.dtPagamento.HasValue && OItem.dtVencimentoRecebimento < DateTime.Today;
+    
+            bool flagPago = OItem.dtPagamento.HasValue;
+            
+            <div class="box-info-item-dotted margin-top-5 fs-12 @(flagVencido ? "border-red bg-red-very-light" : "") @(flagPago ? "border-green bg-green-very-light" : "")">
+
+                <div class="row">
+                    <div class="col-lg-4 col-sm-4 col-xs-12">
+                        <a href="@Url.Action("editar", "ReceitaDetalhe", new {area = "Financeiro", id = OItem.idTituloReceita, urlRetorno = Request.Url.AbsoluteUri})" class="text-bold text-black" data-toggle="tooltip" title="Título Principal">#@OItem.idTituloReceita</a>
+                        <a href="@Url.Action("editar", "ReceitaDetalhe", new {area = "Financeiro", id = OItem.idTituloReceita, urlRetorno = Request.Url.AbsoluteUri})" class="text-black"><span data-toggle="tooltip" title="@OItem.descricao - @OItem.descricaoParcela" class="">@OItem.descricao - @OItem.descricaoParcela</span></a>
+                    </div>
+
+                    <div class="col-lg-1 col-sm-1 col-xs-3">
+                        <span data-toggle="tooltip" title="@($"Vencimento em {OItem.dtVencimentoRecebimento.exibirData()}")" class="">@OItem.dtVencimentoRecebimento.exibirData()</span>
+                    </div>
+
+                    <div class="col-lg-1 col-sm-1 col-xs-3">
+                        @if (OItem.dtPagamento.HasValue) {
+                            <span data-toggle="tooltip" title="Data de pagamento">
+                                @OItem.dtPagamento.exibirData()
+                            </span>
+                        }
+                    </div>
+                    <div class="col-lg-1 col-sm-1 col-xs-3">
+                        @if (OItem.dtPrevisaoCredito.HasValue) {
+                            <span data-toggle="tooltip" title="Previsão de crédito">
+                                @OItem.dtPrevisaoCredito.exibirData()
+                            </span>
+                        }
+                    </div>
+                    <div class="col-lg-1 col-sm-1 col-xs-3">
+                        @if (OItem.dtCredito.HasValue) {
+                            <span data-toggle="tooltip" title="Data do crédito">
+                                @OItem.dtCredito.exibirData()
+                            </span>
+                        }
+                    </div>
+                    <div class="col-lg-1 col-sm-1 col-xs-3 text-center">
+                        @if (OItem.dtPagamento.HasValue) {
+                            <span data-toggle="tooltip" title="Valor recebido">
+                                @OItem.valorRecebido.toDecimal().ToString("C")
+                            </span>
+                        } else {
+                            <span data-toggle="tooltip" title="Valor recebido com juros">
+                                @OItem.valorComJurosEDescontos().ToString("C")
+                            </span>
+                        }
+                    </div>
+                    <div class="col-lg-1 col-sm-1 col-xs-3 text-center">
+                        @if (OItem.dtPagamento.HasValue) {
+                            <span data-toggle="tooltip" title="Valor líquido">
+                                @(OItem.valorLiquido().ToString("C"))
+                            </span>
+                        }
+                    </div>
+                    <div class="col-lg-1 col-sm-1 col-xs-12 text-right">
+                        @if (OItem.idArquivoRemessa > 0) {
+                            <strong class="margin-right-5 fs-14" data-toggle="tooltip" title="Arquivo de Remessa n° @OItem.idArquivoRemessa">
+                                <a class="link-black" href="@Url.Action("index", "ArquivoRemessaDetalhes", new {area = "ArquivosRemessas", id = OItem.idArquivoRemessa})">R</a>
+                            </strong>
+                        }
+                        @if (OItem.dtPagamento.HasValue) {
+                            <a href="#" class="text-green fs-14 margin-right-10" data-toggle="tooltip" title="Liquidado!"><i class="fa fa-check"></i></a>
+                        } else {
+                            <a href="#" class="text-red fs-14 margin-right-10" data-toggle="tooltip" title="Em aberto!"><i class="fa fa-times"></i></a>
+                        }
+                    </div>
+                    <div class="col-sm-1 col-xs-12">
+                        <div class="dropdown pull-left margin-right-10">
+                            <a href="javascript:;" class="dropdown-toggle text-black fs-16" type="button" data-toggle="dropdown">
+                                <i class="fa fa-cog"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-right">
+                                <li>
+                                    <a href="@Url.Action("editar", "ReceitaDetalhe", new {area = "Financeiro", id = OItem.idTituloReceita, urlRetorno = Request.Url.AbsoluteUri})">
+                                        <i class="fa fa-search"></i> Detalhes
+                                    </a>
+                                </li>
+
+                            </ul>
+                        </div>
+                        @if (!OItem.dtPagamento.HasValue && OItem.idTituloPagamento > 0) {
+                            <input type="checkbox" name="checkRegistro[]" value="@OItem.idTituloPagamento" class="margin-right-5"/>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+        <div class="clearfix"></div>
+        @(Html.paginarRegistros(Model.listaTituloReceitaPagamento, Html.PagedListPager(Model.listaTituloReceitaPagamento, nroPagina => UtilRequest.linkPaginacao(nroPagina, "listar"), PagedListRenderOptions.OnlyShowFivePagesAtATime)))
+        <div class="clearfix"></div><br />
+    </div>
+</div>
+
+@helper boxCabecalho() {
+    <div class="box-info-item-dotted padding-5 fs-12 hidden-xs">
+        <div class="row">
+            <div class="col-lg-4 col-sm-4 abreviar">
+                <span class="text-bold">Descrição Lançamento</span>
+            </div>
+            <div class="col-lg-4 col-sm-4 abreviar">
+                <div class="row">
+                    <div class="col-sm-6 col-lg-3">
+                        <span data-toggle="tooltip" title="" class="text-bold">Vencimento</span>
+                    </div>
+                    <div class="col-sm-6 col-lg-3">
+                        <span data-toggle="tooltip" title="" class="text-bold">Pagamento</span>
+                    </div>
+                    <div class="col-sm-6 col-lg-3">
+                        <span data-toggle="tooltip" title="" class="text-bold">Previsão</span>
+                    </div>
+                    <div class="col-sm-6 col-lg-3">
+                        <span data-toggle="tooltip" title="" class="text-bold">Crédito</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-1 text-center">
+                <span data-toggle="tooltip" title="" class="text-bold">Recebido</span>
+            </div>
+            <div class="col-md-1 text-center">
+                <span data-toggle="tooltip" title="" class="text-bold">Líquido</span>
+            </div>
+        </div>
+    </div>
+}

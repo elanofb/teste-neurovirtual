@@ -1,0 +1,180 @@
+﻿@media screen and (min-width: 992px) {
+    
+    .left-side { 
+        top: 50px; 
+    }
+    
+    .right-side.strech {
+         margin-left: 0;
+    }
+    
+    .right-side.strech > .content-header {
+         margin-top: 0px;
+    }
+    
+    .left-side.collapse-left {
+         left: -220px;
+    }
+    
+    .left-side.collapse-left {
+         left: -220px;
+    }
+    
+
+}
+
+@media screen and (min-width: 1200px) {
+
+
+    .modal-lg {
+        width: 1080px !important;
+    }
+
+}
+
+@media screen and (max-width: 1220px) and (min-width: 767px) {
+
+    .main-header .logo{
+        width: 200px !important;
+    }
+
+    .main-header .navbar{
+         margin-left:200px;
+    }
+
+    .main-sidebar{
+        width: 200px !important;
+    }
+
+    .content-wrapper{
+        margin-left:200px !important;
+    }
+
+    .sidebar-menu > li > a {
+        padding: 8px 5px 10px 10px;
+        display: block;
+        font-size: 13px;
+    }
+
+    .sidebar-menu .treeview-menu > li > a {
+        font-size: 13px;
+    }
+
+}
+
+/**************** MAX WIDTHS - MANTER SEMPRE DO MAIOR SCREEN PARA O MENOS **************/
+
+/*Give content full width on xs screens*/
+@media screen and (max-width: 1024px) {
+    body {
+        font-size: 12px;
+    }
+
+    .main-header .navbar{
+         margin-left:200px;
+    }
+
+    /** Menus **/
+    .treeview-menu a.menuFinal {
+         font-size: 12px;
+    }
+
+    .sidebar .sidebar-menu a, #boxMenu > .sidebar-menu > .treeview > .treeview-menu > li > a {
+        font-size: 12px;
+    }
+
+    table.table tr th {
+        padding: 5px 5px;
+        font-size: 12px;
+    }
+
+    table.table tr td {
+        font-size: 12px;
+    }
+
+    .box-acoes .fa {
+        font-size: 1.4em;
+    }
+
+    /****** Widgets *******/
+    .small-box {
+        margin-bottom: 10px;
+    }
+
+    .small-box > .inner {
+        padding: 5px;
+    }
+
+    .small-box h3 {
+        font-size: 18px;
+        margin: 0 0 5px 0;
+        padding: 0;
+    }
+
+    .small-box p {
+        margin: 0 0 3px;
+    }
+
+    .small-box > .small-box-footer {
+        font-size: 11px;
+    }
+
+    .small-box .icon .ion {
+        font-size: 75px;    
+    }
+
+    .box-title{
+        font-size:16px !important;
+    }
+
+    /** Buttons **/
+    .btn {
+        font-size: 13px !important;
+    }
+
+    /**Fon sizes */
+    .fs-60 { font-size: 50px !important; }
+    .fs-26 { font-size: 20px !important; }
+    .fs-16 { font-size: 14px !important; }
+    .fs-14 { font-size: 12px !important; }
+
+    /*.modal-lg {
+        width: 900px !important;
+    }*/
+
+    .label-info {
+        padding: 6px 3px;
+        font-size: 9px;
+    }
+
+    #boxMenu > .sidebar-menu > .treeview > .treeview-menu {
+        margin-top: -3px;
+    }
+}
+
+/*Give content full width on xs screens*/
+@media screen and (max-width: 992px) {
+    
+    .right-side {
+         margin-left: 0;
+    }
+
+    body > .header .navbar {
+         margin-left: 0;
+    }
+
+    .logo-topo {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 767px) {
+
+    .main-header .navbar{
+         margin-left:0px;
+    }
+
+    .table-responsive {
+        border: 0;
+      }
+}

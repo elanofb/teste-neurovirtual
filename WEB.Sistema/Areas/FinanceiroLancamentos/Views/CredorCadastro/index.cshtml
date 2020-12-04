@@ -1,0 +1,151 @@
+﻿@model WEB.Areas.FinanceiroLancamentos.ViewModels.CredorCadastroForm
+
+@using DAL.Permissao.Security.Extensions
+@using WEB.Areas.Associacoes.Helpers
+@using WEB.Areas.Pessoas.Helpers
+
+@{
+    Layout = "~/views/shared/associatec/masterpage-edit.cshtml";
+    ViewBag.titlePage = "Credor";
+    ViewBag.subTituloPagina = Model.Credor.Pessoa.nome;
+}
+
+@section scripts {
+    <script type="text/javascript" src="@UtilConfig.linkResourses("Areas/FinanceiroLancamentos/js/credor.js")"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses("Areas/DadosBancarios/js/dados-bancarios-cadastro.js")"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses("Areas/DadosBancarios/js/dados-bancarios-exclusao.js")"></script>
+}
+
+@section styles {
+    <link href="@UtilConfig.linkResourses("css/associatec/list-custom.css")" rel="stylesheet" />
+}
+
+@section navTabs{
+	<ul class="nav nav-tabs">
+	    <li class="active"><a href="#tab-1" data-toggle="tab">Principal</a></li>
+	    @if (Model.Credor.id > 0) {
+	        <li class=""><a href="#tab-2" data-toggle="tab">Dados Bancários</a></li>
+	    }
+	</ul>
+}
+
+@section tabContent{
+    <div id="tab-1" class="tab-pane active">
+        
+        @Html.infoCadastro(Model.Credor.id, Model.Credor.dtCadastro, Model.Credor.dtAlteracao)
+
+        @using(Html.BeginForm("salvar-credor", null, FormMethod.Post, new { role = "form", @class = "default" })) {
+
+            @Html.HiddenFor(m => m.Credor.id)
+
+            @Html.ValidationSummary(false)
+
+            if(User.idOrganizacao() == 0) {
+
+                <div class="col-sm-4 col-md-3">
+                    <label>Organização</label>
+                    @Html.DropDownListFor(m => m.Credor.idOrganizacao, AssociacaoHelper.getInstance.selectList(Model.Credor.idOrganizacao), "Padrão", new { @class = "form-control input-sm" })
+                </div>
+                <div class="clearfix"></div>
+
+            }
+
+            <div class="col-md-7">
+
+                <h4 class="separator-form-icon"><i class="far fa-edit"></i> Dados Principais do Credor</h4>
+
+                <div class="row">
+
+                    <div class="col-md-4">
+                        <label>Pessoa Física ou Jurídica?</label>
+                        @Html.DropDownListFor(m => m.Credor.Pessoa.flagTipoPessoa, TipoPessoaHelper.selectList(Model.Credor.Pessoa.flagTipoPessoa), new {@class = "form-control input-sm", id = "tipoPessoa", onchange = "Credor.exibirDadosPessoa();"})
+                    </div>
+                    <div class="clearfix"></div>
+                
+                    <div class="col-sm-6">
+                        @Html.labelRequired("Nome")
+                        @Html.TextBoxFor(x => x.Credor.Pessoa.nome, new { @class = "form-control input-sm", maxlength = "100" })
+                        @Html.ValidationMessageFor(x => x.Credor.Pessoa.nome)
+                    </div>
+
+                    <div class="col-sm-6 dado-pj">
+                        @Html.labelRequired("Razão Social")
+                        @Html.TextBoxFor(x => x.Credor.Pessoa.razaoSocial, new {@class = "form-control input-sm", maxlength = "100"})
+                        @Html.ValidationMessageFor(x => x.Credor.Pessoa.razaoSocial)
+                    </div>
+                    <div class="clearfix"></div>
+
+                    <div class="col-md-4">
+                        @Html.labelRequired("CNPJ", "info-documento")
+                        @Html.TextBoxFor(x => x.Credor.Pessoa.nroDocumento, new {@class = "form-control input-sm", maxlength = "18", alt = "cnpj"})
+                        @Html.ValidationMessageFor(x => x.Credor.Pessoa.nroDocumento)
+                    </div>
+
+                    <div class="col-md-4 dado-pf">
+                        @Html.Label("RG")
+                        @Html.TextBoxFor(x => x.Credor.Pessoa.rg, new { @class = "form-control input-sm", maxlength = "20" })
+                        @Html.ValidationMessageFor(x => x.Credor.Pessoa.rg)
+                    </div>
+
+                    <div class="col-md-4 dado-pj">
+                        @Html.Label("Inscrição Estadual")
+                        @Html.TextBoxFor(x => x.Credor.Pessoa.inscricaoEstadual, new { @class = "form-control input-sm", maxlength = "20" })
+                        @Html.ValidationMessageFor(x => x.Credor.Pessoa.inscricaoEstadual)
+                    </div>
+
+                    <div class="col-md-4 dado-pj">
+                        @Html.Label("Inscrição Municipal")
+                        @Html.TextBoxFor(x => x.Credor.Pessoa.inscricaoMunicipal, new {@class = "form-control input-sm", maxlength = "20"})
+                        @Html.ValidationMessageFor(x => x.Credor.Pessoa.inscricaoMunicipal)
+                    </div>
+
+                    <div class="col-md-4">
+                        <label>Status</label>
+                        @Html.DropDownListFor(m => m.Credor.ativo, ComboHelper.selectListStatus(Model.Credor.ativo), "...", new { @class = "form-control input-sm" })
+                        @Html.ValidationMessageFor(m => m.Credor.ativo)
+                    </div>
+                    <div class="clearfix"></div>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-5">
+
+                <h4 class="separator-form-icon"><i class="far fa-edit"></i> Dados de contato</h4>
+
+                <div class="row">
+                    
+                    <div class="col-sm-7">
+                        @Html.Label("E-mail principal")
+                        @Html.TextBoxFor(x => x.Credor.Pessoa.emailPrincipal, new { @class = "form-control input-sm", maxlength = "100" })
+                        @Html.ValidationMessageFor(x => x.Credor.Pessoa.emailPrincipal)
+                    </div>
+
+                    <div class="col-sm-5">
+                        <label>1º Telefone</label>
+                        @Html.TextBoxFor(x => x.Credor.Pessoa.nroTelPrincipal, new { @class = "form-control input-sm", maxlength = "16", alt = "phone" })
+                        @Html.ValidationMessageFor(x => x.Credor.Pessoa.nroTelPrincipal)
+                    </div>
+                    <div class="clearfix"></div><br />
+
+                </div>
+
+            </div>
+            <div class="clearfix"></div><br/>
+
+            <div class="text-right">
+                @Html.exibirBotoesFormulario(Url.Action("index", "CredorLista"), "N")
+            </div>
+
+        }
+
+    </div>
+    
+    @if (Model.Credor.id > 0) {
+        <div id="tab-2" class="tab-pane">
+            <div class="carregando content-load" data-url="@Url.Action("partial-listar", "DadosBancariosConsulta", new {Area = "DadosBancarios", idPessoa = Model.Credor.idPessoa})"></div>
+        </div>
+    }
+}
+

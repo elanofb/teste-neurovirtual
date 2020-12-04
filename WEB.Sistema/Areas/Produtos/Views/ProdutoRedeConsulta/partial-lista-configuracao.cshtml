@@ -1,0 +1,49 @@
+﻿@model List<DAL.Produtos.ProdutoRedeConfiguracao>
+@{
+    Layout = null;
+}
+
+<div class="row">
+    <div class="col-sm-12">
+        <table class="table table-bordered table-striped">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nível</th>
+                <th>Comissão</th>
+                <th>Cadastro</th>
+                <th width="80">&nbsp;</th>
+            </tr>
+            </thead>
+            <tbody>
+            
+            @if (Model.Any()) {
+                foreach (var Item in Model) {
+                     <tr>
+                         <td>
+                             <span><i class="far fa-hashtag"></i> @Item.id</span>
+                         </td>
+                         <td>
+                             <span>@Item.nivel</span>
+                         </td>
+                         <td>
+                             <span>@Item.percentualComissao.ToString("F2")%</span>
+                         </td>
+                         <td>
+                             <span>@Item.dtCadastro.exibirData(true)</span>
+                         </td>
+                         <td>
+                             <a href="javascript:;" onclick="ProdutoRedeExclusao.excluir(this)" data-id="@Item.id" data-url="@Url.Action("excluir", "ProdutoRedeExclusao")" class="text-black"><i class="far fa-trash-alt"></i></a>
+                         </td> 
+                     </tr>
+                     
+                 }
+            } else {
+                <tr>
+                    <td colspan="4">Nenhum registro foi encontrado</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>

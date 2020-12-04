@@ -1,0 +1,186 @@
+﻿@model WEB.Areas.FinanceiroLancamentos.ViewModels.ExtratoPorPeriodoVM
+
+@using DAL.Financeiro
+
+@{
+    Layout = null;
+}
+
+<div class="box box-primary">
+
+    <div class="box-header with-border">
+        <div class="box-title">
+            <i class="far fa-chart-bar"></i> Resultados <small class="fs-12"> @Model.listaLancamentos.Count lançamento(s) encontrado(s)</small>
+        </div>
+        <div class="box-tools pull-right">
+            <div class="btn-group margin-right-10">
+                <button type="button" class="btn btn-box-tool dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+                    <i class="fa fa-cog"></i>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                    <li>
+                        <a href="@Url.Action("index", "DespesaCadastro", new { urlRetorno = Request.Url.AbsoluteUri })"><i class="far fa-plus-circle"></i> Nova Despesa</a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("index", "ReceitaCadastro", new { urlRetorno = Request.Url.AbsoluteUri })"><i class="far fa-plus-circle"></i> Nova Receita</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="box-body">
+        
+        @if (!Model.listaLancamentos.Any()) {
+            <div class="alert alert-info">
+                Nenhum lançamento foi encontrado para o período informado.
+            </div>
+        }
+        
+        @if (Model.listaLancamentos.Any()) {
+            
+            <div class="text-right margin-bottom-10 fs-16">
+                <strong>Saldo Inicial: </strong> <span class="@(Model.saldoInicialPeriodo > 0 ? "text-green" : "text-red")">@Model.saldoInicialPeriodo.ToString("C")</span> 
+            </div>
+            
+            <div class="padding-right-25">
+                @boxCabecalho()
+            </div>
+            
+            <div class="padding-right-10" style="max-height: 400px; overflow-y: scroll; overflow-x: hidden;">
+                @foreach (var OLancamento in Model.listaLancamentos) {
+                    @boxItem(OLancamento)    
+                }
+            </div>
+            
+            <div class="clearfix"></div><br/>
+
+            { Html.RenderPartial("partial-resultados", Model); }   
+        }        
+    </div>
+
+</div>
+
+@helper boxCabecalho() {
+    
+    <div class="box-info-item-dotted padding-5 fs-12 hidden-xs">
+        
+        <div class="row">
+            
+            <div class="col-lg-4 col-sm-4 abreviar">
+                <span class="text-bold">Descrição Lançamento</span>
+            </div>
+            
+            <div class="col-lg-3 col-sm-3 abreviar">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <span data-toggle="tooltip" title="" class="text-bold">Data</span>
+                    </div>
+                    <div class="col-sm-6">
+                        <span data-toggle="tooltip" title="" class="text-bold">Macro Conta</span>
+                    </div>
+                </div>
+            </div>            
+            <div class="col-sm-3 abreviar">
+                <div class="row">
+                    <div class="col-sm-6 text-center">
+                        <span data-toggle="tooltip" title="" class="text-bold">Valor</span>
+                    </div>
+                    <div class="col-sm-6 text-center">
+                        <span data-toggle="tooltip" title="" class="text-bold">Saldo</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@helper boxItem(ReceitaDespesaVW OLancamento) {
+
+    if (OLancamento.flagTipoTitulo == "R") {
+        Model.saldoParcialPeriodo += OLancamento.valorLiquido();
+    }
+
+    if (OLancamento.flagTipoTitulo == "D") {
+        Model.saldoParcialPeriodo -= OLancamento.valor;
+    }
+
+    string urlDetalhe = Url.Action("editar", "ReceitaDetalhe", new {area = "Financeiro", id = OLancamento.idTitulo, urlRetorno = Request.Url.AbsoluteUri});
+
+    if (OLancamento.flagTipoTitulo == "D") {
+        
+        urlDetalhe = Url.Action("editar", "DespesaDetalhe", new {area = "Financeiro", id = OLancamento.idTitulo, urlRetorno = Request.Url.AbsoluteUri});
+    }
+
+    <div class="box-info-item-dotted padding-5 margin-top-5 fs-12 border-green bg-green-very-light">
+     
+        <div class="row">
+            
+            <div class="col-lg-4 col-sm-4 abreviar">
+                <a href="@urlDetalhe" class="text-bold text-black" data-toggle="tooltip" title="Título Principal">#@OLancamento.idTitulo</a>
+                <span data-toggle="tooltip" title="@OLancamento.descricaoTitulo" class="">@OLancamento.descricaoTitulo</span>
+            </div>
+            
+            <div class="col-lg-3 col-sm-3 abreviar">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <span data-toggle="tooltip" title="@($"Movimentação em {OLancamento.dtMovimento.exibirData()}")" class="">@OLancamento.dtMovimento.exibirData()</span>
+                    </div>
+                    <div class="col-sm-6">
+                        <span data-toggle="tooltip" title="" class="">@OLancamento.descricaoMacroConta</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3 abreviar">
+                <div class="row">
+                    <div class="col-sm-6 text-right">
+                        
+                        @if (OLancamento.flagTipoTitulo == "R") {
+                            <strong class="text-green" data-toggle="tooltip" title="Valor de Receita">
+                                <i class="fa fa-caret-up"></i> @OLancamento.valorLiquido().ToString("C")
+                            </strong>
+                        }
+                        
+                        @if (OLancamento.flagTipoTitulo == "D") {
+                            <strong class="text-red" data-toggle="tooltip" title="Valor de Despesa">
+                                <i class="fa fa-caret-down"></i> @OLancamento.valor.ToString("C")
+                            </strong>
+                        }
+                        
+                    </div>
+                    <div class="col-sm-6 text-center @(Model.saldoParcialPeriodo < 0 ? "text-red" : "")">
+                        <span data-toggle="tooltip" title="" class="">@Model.saldoParcialPeriodo.ToString("C")</span>
+                    </div>                    
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <div class="pull-right">
+                    @{
+                        var linkTitulo = Url.Action("editar", "ReceitaDetalhe", new {area = "Financeiro", id = OLancamento.idTitulo});
+                        
+                        if (OLancamento.flagTipoTitulo == "D")
+                        {
+                            linkTitulo = Url.Action("editar", "DespesaDetalhe", new {area = "Financeiro", id = OLancamento.idTitulo});
+                        }
+                        
+                        <a title="Ver Detalhes" href="@linkTitulo" target="_blank" class="text-black fs-14">
+                            <i class="fa fa-search"></i>
+                        </a>
+                    }
+                </div>
+                <div class="pull-right margin-right-15">
+                    
+                    @if (OLancamento.dtPagamento.HasValue){
+                        <a href="#" class="text-green fs-14" data-toggle="tooltip" title="Liquidado!"><i class="fa fa-check"></i></a>
+                    }
+                    
+                    @if (!OLancamento.dtPagamento.HasValue){
+                        <a href="#" class="text-red fs-14" data-toggle="tooltip" title="Em aberto!"><i class="fa fa-ban"></i></a>
+                    }                                        
+                </div>
+
+            </div>
+        </div>
+    </div>
+}
+

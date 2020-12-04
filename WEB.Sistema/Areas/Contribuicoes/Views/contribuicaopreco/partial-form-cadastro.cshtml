@@ -1,0 +1,40 @@
+﻿@using WEB.Areas.Associados.Helpers
+@model WEB.Areas.Contribuicoes.ViewModels.ContribuicaoPadraoForm
+
+<div class="panel panel-info">
+    <div class="panel-heading">
+        <h3 class="panel-title">@Html.labelRequired("Tabela de Preços")</h3>
+    </div>
+    <div class="panel-body">
+        @using (Html.BeginForm("salvar", null, FormMethod.Post, new { role = "form", @class = "default" })) {
+            @Html.ValidationSummary(false)
+
+            <div class="row">
+                @Html.legendaRequired()
+
+                <div class="col-sm-4">
+                    <label>@Html.labelRequired("Tipo de Associado")</label>
+                    @Html.DropDownList("idTipoAssociado", TipoAssociadoHelper.getInstance.selectList(0, "", false, true, null), "...", new { @class = "form-control input-sm" })
+                </div>
+                <div class="col-sm-3">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <label>@Html.labelRequired("Taxa de inscrição")</label>
+                            @Html.TextBox("valorTaxa", "", new { @class = "form-control input-sm", alt = "decimal" })
+                        </div>
+
+                        <div class="col-sm-6">
+                            <label>@Html.labelRequired("Valor Final")</label>
+                            @Html.TextBox("valor", "", new { @class = "form-control input-sm", alt = "decimal" })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-1">
+                    <label>&nbsp;</label>
+                    <input type="submit" name="salvar" value="Salvar" class="btn btn-primary" />
+                </div>
+            </div>
+
+        }
+    </div>
+</div>

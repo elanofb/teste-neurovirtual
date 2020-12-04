@@ -1,0 +1,33 @@
+﻿@model WEB.Areas.AvisosNotificacoes.ViewModels.AvisoNotificacaoForm
+
+<h4 class="separator-form-icon"><i class='far fa-edit'></i> Configurações da Notificação</h4>
+
+<div class="row">
+    
+    <div class="col-md-6">
+        <label>Data de Envio</label>
+        @Html.TextBoxFor(x => x.ONotificacaoSistema.dtProgramacaoEnvio, new {@class = "form-control input-sm input-datetimepicker", alt = "datetime"})
+        @Html.ValidationMessageFor(x => x.ONotificacaoSistema.dtProgramacaoEnvio)
+    </div>
+    <div class="clearfix"></div>
+    
+    <div class="col-md-12">
+        @Html.instrucao("Se não informada, a data de hoje será considerada para o envio.")
+    </div>
+    <div class="clearfix"></div>
+    
+    <div class="col-xs-12">
+        <label>Envio E-mail</label>
+        @Html.DropDownListFor(x => x.ONotificacaoSistema.flagEmail, ComboHelper.selectListTrueFalse(Model.ONotificacaoSistema.flagEmail), "...", new { @class = "form-control input-sm" } )
+        @Html.ValidationMessageFor(x => x.ONotificacaoSistema.flagEmail)
+    </div>
+    <div class="clearfix"></div>
+
+    @if (!Model.flagPermiteEnvioMobile) {
+        <div class="col-md-12">
+            @Html.instrucao("Se não informado, a notificação será recebida somente na área do associado.")
+        </div>
+        <div class="clearfix"></div>
+    }
+    
+</div>

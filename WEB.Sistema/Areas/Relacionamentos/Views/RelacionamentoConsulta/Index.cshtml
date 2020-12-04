@@ -1,0 +1,153 @@
+﻿@model WEB.Areas.Relacionamentos.ViewModels.RelacionamentoConsultaVM
+@using PagedList.Mvc
+@using WEB.Areas.Arquivos.Helpers
+
+@{
+    ViewBag.titlePage = "Histórico Relacionamento";
+
+    ViewBag.subTitlePage = "Veja abaixo a lista de ocorrências.";
+}
+
+@section scripts {
+    @Html.includeJSModuloArquivos()
+
+    @Html.includeBootstrapMultiselect()
+    
+    @Html.includeDatePicker()
+    
+    <script type="text/javascript" src="@UtilConfig.linkResourses("js/associatec/default_paginacao.js")"></script>
+        
+    <script type="text/javascript" src="@UtilConfig.linkResourses("Areas/Arquivos/js/arquivo-documento.js")"></script>
+    
+    <script type="text/javascript" src="@UtilConfig.linkResourses("Areas/Relacionamentos/js/relacionamento-consulta.js")"></script>
+    
+    <script type="text/javascript" src="@UtilConfig.linkResourses("Areas/Relacionamentos/js/ocorrencia-relacionamento-cadastro.js")"></script>
+    
+    <script type="text/javascript" src="@UtilConfig.linkResourses("Areas/Pessoas/js/pessoa-relacionamento.js")"></script>
+    
+}
+
+@section styles {
+    @Html.includeCSSModuloArquivos()
+
+    <link href="@UtilConfig.linkResourses("css/associatec/list-custom.css")" rel="stylesheet" />
+}
+
+<div class="box box-primary">
+
+    @Html.headerBox("Filtros de Busca", "fa fa-filter")
+
+    <div class="box-body">
+
+        @{ Html.RenderPartial("partial-filtros", Model); }
+
+    </div>
+
+</div>
+
+
+<div class="box box-primary">
+
+    <div class="box-header with-border">
+        <div class="box-title">
+            <i class="far fa-chart-bar"></i> Resultados <em class="fs-10">@Model.listaPessoaRelacionamentos.TotalItemCount registros encontrados</em>
+        </div>
+        <div class="box-tools pull-right">
+            
+            <div class="dropdown margin-top-5">
+                
+                <a href="javascript:;" class="dropdown-toggle text-black" type="button" data-toggle="dropdown"><i class="fa fa-cog"></i></a>
+
+                <ul class="dropdown-menu dropdown-menu-right">
+                    <li><a href="javascript:;" onclick="DefaultSistema.showModal('@Url.Action("modal-form-cadastro", "PessoaRelacionamentoCadastro", new { Area = "Pessoas", flagRecarregar = true })', PessoaRelacionamento.iniciarAutoCompleteAssociado)"><i class="far fa-plus-circle"></i> Nova Ocorrência</a></li>
+                </ul>
+
+            </div>
+            
+        </div>
+    </div>
+
+    <div class="box-body">
+
+        @if(!Model.listaPessoaRelacionamentos.Any()) {
+            
+            <div class="col-sm-12">
+                <div class="alert alert-info">
+                    Nenhum resultado foi encontrado.
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            
+        }
+
+        @foreach(var OOcorrencia in Model.listaPessoaRelacionamentos) {
+            
+            var urlBoxArquivo = Url.Action("model-lista-arquivos", "PessoaRelacionamentoArquivo", new {area = "Pessoas", idPessoaRelacionamento = OOcorrencia.id});
+            
+            <div class="box-info-item-dotted">
+                    
+                <div class="row">
+
+                    <div class="col-sm-4">
+                        
+                        <span>
+                            <i class="fa fa-hashtag"></i> @OOcorrencia.id - @OOcorrencia.nomePessoa 
+                        </span>
+
+                    </div>
+
+                    <div class="col-sm-3">
+                    
+                        <span data-toggle="tooltip" title="Ocorrência">
+                            <i class="fa fa-tag"></i> @OOcorrencia.descricaoTipoOcorrencia
+                        </span>
+                        
+                    </div>
+
+                    <div class="col-sm-5">
+                        
+                        <div class="row">
+                            
+                            <div class="col-sm-6">
+                                <span data-toggle="tooltip" title="Data da Ocorrência">
+                                    <strong><i class="far fa-calendar-alt"></i> Ocorrência:</strong> @OOcorrencia.dtOcorrencia.exibirData(true)    
+                                </span>
+                            </div>
+                            
+                            <div class="col-sm-6">
+                                <span data-toggle="tooltip" title="Data de Cadastro">
+                                    <strong><i class="far fa-calendar-alt"></i> Cadastro:</strong> @OOcorrencia.dtCadastroOcorrencia.exibirData(true)
+                                </span>
+                            </div>
+                            <div class="clearfix"></div>
+                            
+                        </div>
+
+                    </div>
+                    <div class="clearfix"></div>
+                    
+                    <div class="col-xs-12">
+                        
+                        <span class="fs-12">
+                            @if (OOcorrencia.flagPossuiArquivo)
+                            {
+                                <a href="javascript:;" class="box-acoes" onclick="ArquivoDocumento.showModal('@urlBoxArquivo');">( <i class="fa fa-file-archive fs-14" title="Documentos" alt="Documentos"></i> )</a>    
+                            }                        
+                            <strong>Observações:</strong> @OOcorrencia.observacao 
+                            @if (!OOcorrencia.nomeUsuarioCadastro.isEmpty()) {
+                                <em>(@OOcorrencia.nomeUsuarioCadastro)</em>
+                            }                            
+                        </span>
+                    </div>
+                    <div class="clearfix"></div>
+
+                </div>
+
+            </div>
+        }
+
+        @(Html.paginarRegistros(Model.listaPessoaRelacionamentos, Html.PagedListPager(Model.listaPessoaRelacionamentos, nroPagina => UtilRequest.linkPaginacao(nroPagina, "Index"), PagedListRenderOptions.OnlyShowFivePagesAtATime)))
+        
+    </div>
+    
+</div>

@@ -1,0 +1,70 @@
+﻿@using BLL.Configuracoes
+
+@{
+    
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>@Html.sistema().tituloSistema</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="@UtilConfig.linkResourses("css/associatec/fontawesome/css/all.min.css")" rel="stylesheet" />
+    <link href="@UtilConfig.linkResourses("css/base.min.css")" rel="stylesheet" />
+    <link rel="stylesheet" href="@UtilConfig.linkResourses("Areas/Permissao/css/login.css?v=1.1")" />
+    @RenderSection("styles", required: false)
+</head>
+<body class="bg_body">
+    <div class="navbar navbar-default navbar-static-top" id="barra_navega">
+        <div class="container">
+            <div class="navbar-header padding-top-10 padding-bottom-10">
+                <a id="logo-cliente">
+                    <img alt="@Html.sistema().tituloCaixaLogin" src="@ConfiguracaoImagemBL.linkImagemOrganizacao(1, ConfiguracaoImagemBL.IMAGEM_LOGIN_SISTEMA)" />
+                </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar-ex-collapse"></div>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="container" id="container_login">
+            <div class="row">
+                <div class="col-md-8"></div>
+                <div class="col-md-4" id="box_login">
+                    @if (string.IsNullOrEmpty(Html.sistema().tituloCaixaLogin)) {
+                        <img src="@UtilConfig.linkResourses("img/logos/logotipo_login.png")" width="250" alt="@Html.sistema().tituloSistema" class="center-block" />
+                    } else {
+                        <h4 class="login-titulo">@Html.Raw(Html.sistema().tituloCaixaLogin)</h4>
+                    }
+
+                    <div class="login-processando nao-exibir">
+                        <h5 class="text-center text-blue"> <i class="far fa-spin fa-sync"></i> <label>Carregando</label>..</h5>
+                    </div>
+
+                    @RenderBody()
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section_rodape">
+        <div class="container">
+            <div class="col-md-10">
+
+            </div>
+            <div class="row">
+                <div class="col-md-2 text-center">
+                    <img alt="Brand" src="@UtilConfig.linkResourses("img/logos/sinctec_logo_neg.png")" id="logo_rodape">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <input type="hidden" id="baseUrlGeral" value="@Url.Content("~/")" />
+
+    <script src="@UtilConfig.linkResourses("js/tela-login.min.js")"></script>
+    <script src="@UtilConfig.linkResourses("Areas/Permissao/js/carregador-permissao.js?v=1.0")" type="text/javascript"></script>
+    <script src="@UtilConfig.linkResourses("Areas/Permissao/js/login.js?v=1.0")" type="text/javascript"></script>
+    <script src="@UtilConfig.linkResourses("js/associatec/nav.js?v=1.0")" type="text/javascript"></script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+﻿@using MvcFlashMessages
+@using DAL.Permissao.Security.Extensions
+@using WEB.Areas.Associacoes.Helpers
+@model WEB.Areas.Publicacoes.ViewModels.CategoriaNoticiaForm
+
+@{
+    if(IsPost) {
+        Layout = null;
+		
+    } else { 
+        Layout = "~/views/shared/associatec/masterpage-modal.cshtml";
+    }
+    
+    ViewBag.modalTitle = "Cadastrar uma Nova Categoria";
+}
+
+
+<div id="@(IsPost ? "" : "boxFormCategoriaNoticia")">
+
+	@Html.RenderFlash()
+
+	<div class="col-md-12">
+
+		@using (Ajax.BeginForm("salvar-modal-editar", null, new AjaxOptions {UpdateTargetId = "boxFormCategoriaNoticia", HttpMethod = "POST", OnSuccess = "CategoriaNoticia.onSuccess" }, new {role = "form", @class = "default"})) {
+            @Html.legendaRequired()<br/>
+            @Html.HiddenFor(m => m.CategoriaNoticia.id)
+            @Html.ValidationSummary(false)
+
+            if (User.idOrganizacao() == 0) {
+                <div class="col-sm-4 col-md-4">
+                    <label>Organização</label>
+                    @Html.DropDownListFor(m => m.CategoriaNoticia.idOrganizacao, AssociacaoHelper.getInstance.selectList(Model.CategoriaNoticia.idOrganizacao), "Padrão", new { @class = "form-control input-sm" })
+                </div>
+            }
+
+            <div class="col-md-4">
+                <label>Portal</label>
+                @Html.DropDownListFor(m => m.CategoriaNoticia.idPortal, WEB.Areas.Portais.Helpers.PortalHelper.getInstance.selectList(Model.CategoriaNoticia.idPortal), "...", new { @class = "form-control input-sm" })
+                @Html.ValidationMessageFor(m => m.CategoriaNoticia.idPortal)
+            </div>
+
+            <div class="clearfix"></div>
+
+		    <div class="col-md-12">
+		        @Html.labelRequired("Descrição")
+		        @Html.TextBoxFor(m => m.CategoriaNoticia.descricao, new {@class = "form-control input-sm", maxlength = "100"})
+		        @Html.ValidationMessageFor(m => m.CategoriaNoticia.descricao)
+		    </div>
+
+            
+
+		    <div class="clearfix"></div><br/>
+
+            <div class="col-md-12">
+                <div class="text-right">
+                    <input type="submit" class="btn btn-primary link-loading" value="Salvar" />
+                </div>
+            </div>
+		}
+	</div>
+
+</div>
+<div class="clearfix"></div><br />
+

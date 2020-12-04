@@ -1,0 +1,36 @@
+@using BLL.Configuracoes
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+        <title>@Html.sistema().tituloSistema - @ViewBag.titlePage</title>
+        <link href="@UtilConfig.linkResourses()favicon.ico" rel="shortcut icon" type="image/x-icon" />
+        <link href="@UtilConfig.linkResourses("css/base.min.css")" rel="stylesheet" />
+        @RenderSection("styles", required: false)
+    </head>
+    <body>
+        <div id="container">
+            <div id="header" class="min">
+
+                <p id="dados_empresa">
+                    <img src="@ConfiguracaoImagemBL.urlSistemaPrint" width="250" alt="@Html.sistema().tituloSistema" />
+                    <span id="descricao">
+                        <strong>@Html.sistema().tituloSistema</strong> <br />
+                    </span>
+                </p>
+
+                <div class="clear"></div>
+            </div>
+            <div id="content">
+                @RenderBody()
+            </div>
+            <div class="clear"></div><br />
+        </div>
+
+        <script src="@UtilConfig.linkResourses("js/base.min.js")"></script>
+        <script src="@UtilConfig.linkResourses("js/modulos.min.js")"></script>
+        @RenderSection("scripts", required: false)
+
+    </body>
+</html>

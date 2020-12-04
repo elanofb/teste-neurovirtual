@@ -1,0 +1,9 @@
+﻿@model WEB.Areas.Associados.ViewModels.AssociadoForm
+
+<div class="tab-pane" id="tab-contatos" data-url="@Url.Action()">
+    
+    <div id="boxLoadFormContatos" class="content-load carregando" data-url="@Url.Action("editar", "pessoacontato", new { area = "pessoas", Model.Associado.idPessoa })"></div>
+	<br />
+	<h4 class="separator-form">Contatos Cadastrados para a Empresa</h4>
+	<div id="boxLoadListaContatos" class="content-load carregando" data-url="@Url.Action("partial-listar-contatos", "pessoacontato", new { area = "pessoas", Model.Associado.idPessoa })"></div>
+</div>

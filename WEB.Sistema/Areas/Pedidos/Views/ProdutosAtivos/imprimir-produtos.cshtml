@@ -1,0 +1,59 @@
+﻿@model WEB.Areas.Pedidos.ViewModels.PedidoProducaoImpressaoVM
+
+@{
+    Layout = "~/Areas/Associados/Views/shared/_masterpage-print.cshtml";
+    ViewBag.Title = "Relação de Demanda de Produtos para Impressão";
+}
+
+@section styles {
+    <link href="@UtilConfig.linkResourses("Areas/Pedidos/css/pedido-producao-impressao.css")" rel="stylesheet" />
+}
+
+<table width="100%" cellpadding="7" cellspacing="0" style="border: #000000 1px solid; margin: 0 auto;">
+
+    @{ Html.RenderPartial("partial-impressao-cabecalho", Model); }
+
+    @if (Model.listaTodosPedidos.Any()) {
+
+        <tbody>
+            <tr>
+                <td colspan="3" bgcolor="#EEEEEE" align="center">
+                    <strong class="fs-10">Demanda de Produtos para Produção</strong>
+                </td>
+            </tr>
+        </tbody>
+
+        <tbody>
+            <tr>
+                <td colspan="3" class="no-padding">
+                    <table width="100%" cellpadding="7" cellspacing="0">
+                        <tr bgcolor="#EEEEEE" class="head">
+                            <th width="80%" align="left">PRODUTO</th>
+                            <th align="center">QTDE</th>
+                        </tr>
+
+                        @foreach (var OItemProduto in Model.listaResumoProdutos) {
+                            <tr>
+                                <td>
+                                    @OItemProduto.nome
+                                    @if (!OItemProduto.observacoes.isEmpty()) {
+                                        <br /><span>*@OItemProduto.observacoes</span>
+                                    }
+                                </td>
+                                <td align="center">@OItemProduto.qtd</td>
+                            </tr>
+                        }
+                    </table>
+                </td>
+            </tr>
+        </tbody>
+    }
+
+    <tbody>
+        <tr>
+            <td colspan="3" align="center" class="padding-10">
+                <strong>Copyright &copy; 2013-@DateTime.Today.Year - Associatec - Gestão de Entidades. Direitos reservados Sinctec Sistemas.</strong>
+            </td>
+        </tr>
+    </tbody>
+</table>

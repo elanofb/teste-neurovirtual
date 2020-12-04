@@ -1,0 +1,41 @@
+﻿@model Associado
+@using DAL.Associados
+
+<div>
+    @exibirLabelStatus()
+</div>
+
+<div>
+    @exibirSituacaoFinanceira()
+</div>
+
+<div>
+    
+    <button class="btn btn-default btn-white-sm dropdown-toggle margin-top-10" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Ações <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu">
+        
+    </ul>
+    
+</div>
+
+
+@helper exibirLabelStatus() {
+    
+    if (Model.ativo == "S") {
+            @Html.boxInfo("ATIVO", "bg-green text-center")
+    } else if (Model.ativo == "E") {
+            @Html.boxInfo("EM ADMISSÃO", "bg-yellow text-center")
+
+    } else {
+            @Html.boxInfo("DESATIVADO", "bg-red text-center")
+    }
+
+}
+
+@helper exibirSituacaoFinanceira() {
+
+
+
+}

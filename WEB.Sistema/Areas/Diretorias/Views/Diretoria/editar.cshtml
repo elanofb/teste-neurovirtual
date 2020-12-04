@@ -1,0 +1,109 @@
+﻿@model WEB.Areas.Diretorias.ViewModels.DiretoriaForm
+
+@using DAL.Permissao.Security.Extensions;
+@using WEB.Areas.Arquivos.Helpers
+@using WEB.Areas.Associacoes.Helpers;
+@using WEB.Helpers;
+
+@{
+    Layout = "~/views/shared/associatec/masterpage-edit.cshtml";
+    ViewBag.titlePage = "Diretoria";
+    ViewBag.subTituloPagina = String.Concat(Model.Diretoria.anoInicioGestao, " - ", Model.Diretoria.anoFimGestao);
+}
+
+@section breadcrump{
+    <ol class="breadcrumb">
+        <li><a href="@Url.Action("listar")" class="active fs-14"><i class="fa fa-arrow-left"></i> Voltar</a></li>
+    </ol>
+}
+
+@section navTabs{
+	<ul class="nav nav-tabs">
+		<li class="active"><a href="#tab-1" data-toggle="tab">Principal</a></li>
+	</ul>
+}
+
+@section styles{
+
+    @Html.includeFroalaEditorCSS()
+
+    @Html.includeCSSModuloArquivos()
+
+    <link href="@UtilConfig.linkResourses()css/associatec/list-custom.css" rel="stylesheet" />
+}
+
+@section scripts{
+
+    
+
+    @Html.includeFroalaEditorJS()
+
+    @Html.includeJSModuloArquivosFotos()
+
+    <script src="@UtilConfig.linkResourses()Areas/Diretorias/js/diretoria.js?v=1"></script>
+
+    <script src="@UtilConfig.linkResourses()Areas/Diretorias/js/diretoria-membro.js?v=1"></script>   
+
+}
+
+@section tabContent{
+    <div id="tab-1" class="tab-pane active">
+        
+        @Html.infoCadastro(Model.Diretoria.id, Model.Diretoria.dtCadastro, Model.Diretoria.dtAlteracao)
+
+        @using (Html.BeginForm("editar", null, FormMethod.Post, new { role = "form", @class = "default" })) {
+
+            @Html.HiddenFor(m => m.Diretoria.id)
+
+            @Html.ValidationSummary(false)
+
+            <h4 class="separator-form">Dados Principais</h4>
+
+            <div class="form-horizontal">
+
+                @if (User.idOrganizacao() == 0) {
+
+                    <div class="col-sm-4 col-md-3">
+                        <label>Organização</label>
+                        @Html.DropDownListFor(m => m.Diretoria.idOrganizacao, AssociacaoHelper.getInstance.selectList(Model.Diretoria.idOrganizacao), "Padrão", new { @class = "form-control input-sm" })
+                    </div>
+
+                }
+                
+                <div class="col-md-2">
+                    @Html.labelRequired("Ano do Inicio da Gestão")
+                    @Html.TextBoxFor(m => m.Diretoria.anoInicioGestao, new { @class = "form-control input-sm", maxlength = "4" })
+                    @Html.ValidationMessageFor(m => m.Diretoria.anoInicioGestao)
+                </div>
+
+                <div class="col-md-2">
+                    @Html.labelRequired("Ano do Fim da Gestão")
+                    @Html.TextBoxFor(m => m.Diretoria.anoFimGestao, new { @class = "form-control input-sm", maxlength = "4" })
+                    @Html.ValidationMessageFor(m => m.Diretoria.anoFimGestao)
+                </div>
+
+                <div class="col-md-2">
+                    <label>Status</label>
+                    @Html.DropDownListFor(m => m.Diretoria.ativo, ComboHelper.selectListStatus(Model.Diretoria.ativo), "...", new { @class = "form-control input-sm" })
+                    @Html.ValidationMessageFor(m => m.Diretoria.ativo)
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            <div class="clearfix"></div>
+
+            if (Model.Diretoria.id > 0) {
+                <h4 class="separator-form">Membros da Diretoria <a href="javascript:void(0);" onclick="DiretoriaMembro.modalMembro(this)" data-url="@Url.Action("modal-editar", "DiretoriaMembro", new {area = "Diretorias", id = 0, idDiretoria = Model.Diretoria.id})" class="fs-18 pull-right margin-right-10 margin-bottom-10" title="Cadastrar novo membro" data-toggle="tooltip"><i class="fa fa-plus-circle"></i> </a></h4>
+
+                <div class="form-horizontal">
+                    <div id="boxLoadListaMembros" class="content-load carregando" data-url="@Url.Action("partial-listar", "DiretoriaMembro", new { idDiretoria = Model.Diretoria.id})"></div>
+                </div>
+            }
+            
+            <br />
+            <div class="text-right">
+                @Html.exibirBotoesFormulario(Url.Action("listar"), "N")
+            </div>
+        }
+    </div>
+}
+

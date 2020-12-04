@@ -1,0 +1,74 @@
+﻿@model WEB.Areas.Financeiro.ViewModels.FluxoCaixaDiarioForm
+
+@{
+    ViewBag.titlePage = "Fluxo de Caixa Diário";
+}
+
+@section styles {
+    <link href="@UtilConfig.linkResourses("css/associatec/list-custom.css")" rel="stylesheet"/>
+}
+
+@section scripts {
+    @Html.includeDatePicker()
+    @Html.includeDateRangePicker()
+    @Html.includeJqueryLoading()
+
+    <script src="@UtilConfig.linkResourses("js/associatec/plugins/highcharts/highcharts.js")"></script>
+    <script src="@UtilConfig.linkResourses("Areas/Financeiro/js/fluxo-caixa-diario.js?v1.3")"></script>
+    <script src="@UtilConfig.linkResourses("Areas/Financeiro/js/fluxo-caixa-conciliacao.js")"></script>
+}
+
+@section breadcrump{
+    <ol class="breadcrumb">
+        <li>
+            <a href="javascript:;" onclick="$('.box-filtros').toggle('slow')" class="fs-16">
+                <i class="fa fa-filter"></i>
+            </a>
+        </li>
+    </ol>
+}
+
+<div class="row">
+    <div class="col-sm-12 nao-exibir box-filtros">
+        <div class="card-gray margin-bottom-15">
+            <h4 class="separator-form-icon no-margin"><i class="far fa-filter"></i> Filtros de Busca</h4>
+            
+            @{ Html.RenderPartial("partial-filtros", Model); }
+        </div>
+    </div>
+</div>
+
+    
+<div class="box box-primary">
+    
+    <div class="box-header with-border">
+
+        <div class="box-title"><i class="glyphicon glyphicon-sort"></i> Movimentação Diária</div>
+
+        <div class="box-tools pull-right">
+            <a href="javascript:;" class="btn btn-box-tool" onclick="$('.detalhes-movimentacao').slideDown('fast');">
+                <i class="far fa-plus-circle"></i> Expandir Todos
+            </a>
+            
+            <a href="javascript:;" class="btn btn-box-tool" onclick="$('.detalhes-movimentacao').slideUp('fast');">
+                <i class="far fa-minus-square"></i> Minimizar Todos
+            </a>
+        </div>
+    </div>
+
+    <div class="box-body no-padding">
+        <div id="boxMovimentacaoDiaria" class="minh100" data-url="@Url.Action("partial-movimentacao-diaria")"></div>
+    </div>
+
+</div>
+<div class="clearfix"></div>
+
+<div class="box box-primary">
+
+    @Html.headerBox("Evolução do Caixa", "fa fa-line-chart", false)
+
+    <div class="box-body">
+        <div id="boxGraficoEvolucao"></div>
+    </div>
+</div>
+<div class="clearfix"></div>

@@ -1,0 +1,37 @@
+﻿@model List<DAL.Associados.AssociadoAbrangencia>
+@using DAL.Associados;
+
+<br />
+<div class="text-left">
+	<button class="btn bg-yellow">
+		<i class="far fa-chart-bar"></i> <strong>@Model.Count</strong> Cidade(s) Atendida(s) cadatrada(s)
+	</button>
+</div><br />
+<table border="0" cellpadding="0" cellspacing="0" class="table table-bordered table-striped">
+    <tr>
+        <th class="text-center">UF</th>
+        <th class="text-center">Cidade</th>
+        <th class="text-center width-125">Cadastro</th>
+        <th>&nbsp;</th>
+    </tr>
+    @if(Model.Count > 0) {
+        foreach(AssociadoAbrangencia OAbrangencia in Model) {
+            <tr>
+                <td class="text-center">@OAbrangencia.Cidade.Estado.sigla</td>
+                <td class="text-center">@OAbrangencia.Cidade.nome</td>                
+                <td class="text-center">@OAbrangencia.dtCadastro</td>
+                <td class="text-center box-acoes">
+                    <a href="javascript:void(0);" onclick="DefaultSistema.carregarConteudo(this);" data-url="@Url.Action("editar", "associadoAbrangencia", new{area="associados", id=OAbrangencia.id})" data-target="boxFormAssociadoAbrangencia" title="Editar Abrangencia" data-toggle="tooltip">
+                        <i class="fa fa-edit"></i>
+                    </a> &nbsp;
+					@Html.linkAjaxExcluir(OAbrangencia.id, "N", Url.Action("excluir", "associadoAbrangencia", new { area = "associados" }))
+                </td>
+            </tr>
+        }
+
+    } else {
+        <tr>
+            <td class="text-center" colspan="6">Nenhum Abrangencia cadastrado para esse associado.</td>
+        </tr>
+    }
+</table>

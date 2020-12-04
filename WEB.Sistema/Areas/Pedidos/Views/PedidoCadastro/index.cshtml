@@ -1,0 +1,83 @@
+﻿@model WEB.Areas.Pedidos.ViewModels.PedidoCadastroForm
+
+@{
+    ViewBag.titlePage = "Criação do Pedido";
+    ViewBag.ativarMenuPedidos = "active";
+}
+
+@section scripts{
+    @Html.includeJqueryLoading()
+    @Html.includeDatePicker()
+    
+    <script type="text/javascript" src="@UtilConfig.linkResourses("Areas/Localizacao/js/localizacao.js")"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses("Areas/Pedidos/js/pedido-cadastro.js")"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses("Areas/Pedidos/js/pedido-cadastro-operacao.js")"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses("Areas/Pedidos/js/pedido-cadastro-produto.js")"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses("Areas/Pedidos/js/pedido-cadastro-cupom-desconto.js")"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses("Areas/Pedidos/js/pedido-cadastro-frete.js")"></script>
+    
+    <script type="text/javascript" src="@UtilConfig.linkResourses("areas/financeiro/js/combo-centro-custo.js?v=1")"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses("areas/financeiro/js/combo-macro-conta.js?v=1")"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses("areas/financeiro/js/combo-sub-conta.js?v=1")"></script>
+}
+
+@section styles {
+    <link href="@UtilConfig.linkResourses("css/associatec/list-custom.css")" rel="stylesheet" />
+}
+
+@{
+    var actionForm = Model.Pedido.idPessoa.toInt() == 0 ? "salvar-comprador" : "salvar-pedido";
+}
+
+@using (Html.BeginForm(actionForm, null, FormMethod.Post, new { id = "formPedido", role = "form", @class = "default" })) {
+
+    if (Model.Pedido.idPessoa.toInt() == 0) {
+
+        { Html.RenderPartial("partial-form-comprador", Model); }
+    }
+    
+    if (Model.Pedido.idPessoa > 0) {
+
+        <div class="row">
+            
+            <div class="col-sm-12">
+                @{ Html.RenderPartial("partial-dados-comprador", Model.DadosComprador); }        
+            </div>
+            
+            <div class="col-sm-12">
+                <div id="data-produtos">
+                    @{Html.RenderPartial("~/Areas/Pedidos/Views/PedidoCadastroProduto/partial-produtos.cshtml", Model);}  
+                </div>
+            </div>
+            
+            <div class="col-sm-12">
+                
+                <div class="row">
+                    
+                    <div class="col-sm-6">
+                        
+                        <div id="boxEntrega">
+                            @{Html.RenderPartial("partial-entrega", Model);}
+                        </div>
+
+                    </div>
+                    
+                    <div class="col-sm-6">
+                        
+                        <div id="boxCondicoesPagamento">
+                            @{ Html.RenderPartial("partial-box-valores", Model); }
+                        </div>
+
+                    </div>
+                    <div class="clearfix"></div>
+
+                </div>
+                
+            </div>
+            <div class="clearfix"></div>
+
+        </div>
+
+    }
+
+}

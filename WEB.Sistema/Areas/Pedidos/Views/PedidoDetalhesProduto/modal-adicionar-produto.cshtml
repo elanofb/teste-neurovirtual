@@ -1,0 +1,66 @@
+﻿@model WEB.Areas.Pedidos.ViewModels.PedidoDetalhesProdutoForm
+@using MvcFlashMessages
+@using WEB.Areas.Produtos.Helpers
+
+@{
+    Layout = "~/views/shared/associatec/masterpage-modal.cshtml";
+    if (IsPost) {
+        Layout = null;
+    }
+    ViewBag.modalTitle = "Adicionar Produto";
+}
+
+<div id="boxModalAdicionarProduto">
+
+    @Html.RenderFlash()
+
+    @using(Ajax.BeginForm("salvar", "PedidoDetalhesProduto", new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = "boxModalAdicionarProduto", OnSuccess = "PedidoDetalhesProduto.onSuccess" })) {
+        
+        @Html.ValidationSummary(true, "Alguns campos não foram validados")
+
+        { Html.EnableUnobtrusiveJavaScript(false); }
+
+        @Html.HiddenFor(m => m.OPedidoProduto.idPedido)
+
+        @********** Formulário de inclusão de novos produtos no pedido *******@
+
+        <div class="col-md-9">
+            @Html.labelRequired("Produto")
+            @Html.DropDownListFor(m => m.OPedidoProduto.idProduto, ProdutoHelper.getInstance.selectList(0, Model.OPedidoProduto.idProduto), "Digite o nome do produto", new { @class = "form-control input-sm select2", id = "idProduto", onchange = "PedidoDetalhesProduto.carregarProduto(this.value)" })
+            @Html.ValidationMessageFor(m => m.OPedidoProduto.idProduto)
+        </div>
+        <div class="clearfix"></div>
+        <div class="col-md-3">
+            @Html.labelRequired("Cód.Item")
+            @Html.TextBox("idItem", null, new { @class = "form-control input-sm", id = "idItem", disabled = "disabled" })
+        </div>
+        <div class="col-md-3">
+            <label> Peso </label>
+            @Html.TextBoxFor(m => m.OPedidoProduto.peso, new { id = "peso", @class = "form-control input-sm", @readonly = "readonly", alt = "peso" })
+            @Html.ValidationMessageFor(m => m.OPedidoProduto.peso)
+        </div>
+        <div class="col-md-3">
+            <label> Valor (R$)</label> 
+            @Html.TextBoxFor(m => m.OPedidoProduto.valorItem, new { id = "valorProduto", @class = "form-control input-sm", @readonly = "readonly", alt = "decimal" })
+            @Html.ValidationMessageFor(m => m.OPedidoProduto.valorItem)
+        </div>
+        <div class="col-md-3">
+            <label> Qtde. </label>
+            @Html.TextBoxFor(m => m.OPedidoProduto.qtde, new { @class = "form-control input-sm", type = "number", min = "1" })
+            @Html.ValidationMessageFor(m => m.OPedidoProduto.qtde)
+        </div>
+        <div class="clearfix"></div>
+        <div class="col-md-12">
+            @Html.labelRequired("Observações")
+            @Html.TextBoxFor(m => m.OPedidoProduto.observacoes, new { @class = "form-control input-sm", maxlength = "255" })
+            @Html.ValidationMessageFor(m => m.OPedidoProduto.observacoes)
+        </div>
+        <div class="clearfix"></div>
+        <div class="col-md-12 text-right padtop22">
+            <button class="btn btn-sm btn-primary link-loading">
+                <i class="far fa-hdd"></i> Salvar
+            </button>
+        </div>
+        <div class="clearfix"></div><br />
+    }
+</div>

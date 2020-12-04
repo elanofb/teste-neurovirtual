@@ -1,0 +1,106 @@
+﻿@using MvcFlashMessages
+@using WEB.Areas.Pessoas.Helpers
+@model WEB.Areas.Fornecedores.ViewModels.FornecedorForm
+
+@{
+    if(IsPost) {
+        Layout = null;
+		
+    } else { 
+        Layout = "~/views/shared/associatec/masterpage-modal.cshtml";
+    }
+    
+    ViewBag.modalTitle = "Cadastrar Fornecedor";
+}
+
+
+<div id="@(IsPost ? "" : "boxFormFornecedor")">
+
+	@Html.RenderFlash()
+
+	<div class="col-xs-12">
+		<div class="row">
+		@using (Ajax.BeginForm("salvar-modal-editar", null, new AjaxOptions { UpdateTargetId = "boxFormFornecedor", HttpMethod = "POST", OnSuccess = "Fornecedor.onSuccess" }, new { role = "form", @class = "default" })) {
+			@Html.legendaRequired()
+			@Html.ValidationSummary(false)
+
+			<h4 class="separator-form">Dados Principais do Fornecedor</h4>
+			<div class="col-xs-4">
+				<label>Pessoa Física ou Jurídica?</label>
+				@Html.DropDownListFor(m => m.Fornecedor.Pessoa.flagTipoPessoa, TipoPessoaHelper.selectList(Model.Fornecedor.Pessoa.flagTipoPessoa), new { @class = "form-control input-sm", id = "tipoPessoa", onchange = "Fornecedor.exibirDadosPessoa();" })
+			</div>
+			<div class="clearfix"></div>
+
+			<div class="col-xs-6 dado-pj">
+				@Html.labelRequired("Razão Social")
+				@Html.TextBoxFor(x => x.Fornecedor.Pessoa.razaoSocial, new { @class = "form-control input-sm", maxlength = "100" })
+				@Html.ValidationMessageFor(x => x.Fornecedor.Pessoa.razaoSocial)
+			</div>
+
+			<div class="col-xs-6">
+				@Html.labelRequired("Nome")
+				@Html.TextBoxFor(x => x.Fornecedor.Pessoa.nome, new { @class = "form-control input-sm", maxlength = "100" })
+				@Html.ValidationMessageFor(x => x.Fornecedor.Pessoa.nome)
+			</div>
+			<div class="clearfix"></div>
+
+			<div class="col-xs-4">
+				@Html.labelRequired("CNPJ", "info-documento")
+				@Html.TextBoxFor(x => x.Fornecedor.Pessoa.nroDocumento, new { @class = "form-control input-sm", maxlength = "18", alt = "cnpj" })
+				@Html.ValidationMessageFor(x => x.Fornecedor.Pessoa.nroDocumento)
+			</div>
+
+			<div class="col-xs-4 dado-pf">
+				@Html.Label("RG")
+				@Html.TextBoxFor(x => x.Fornecedor.Pessoa.rg, new { @class = "form-control input-sm", maxlength = "20" })
+				@Html.ValidationMessageFor(x => x.Fornecedor.Pessoa.rg)
+			</div>
+
+			<div class="col-xs-4 dado-pj">
+				@Html.Label("Inscrição Estadual")
+				@Html.TextBoxFor(x => x.Fornecedor.Pessoa.inscricaoEstadual, new { @class = "form-control input-sm", maxlength = "20" })
+				@Html.ValidationMessageFor(x => x.Fornecedor.Pessoa.inscricaoEstadual)
+			</div>
+
+			<div class="col-xs-4 dado-pj">
+				@Html.Label("Inscrição Municipal")
+				@Html.TextBoxFor(x => x.Fornecedor.Pessoa.inscricaoMunicipal, new { @class = "form-control input-sm", maxlength = "20" })
+				@Html.ValidationMessageFor(x => x.Fornecedor.Pessoa.inscricaoMunicipal)
+			</div>
+			<div class="clearfix"></div>
+
+			<h4 class="separator-form">Dados de contato</h4>
+			<div class="col-xs-6">
+				@Html.Label("E-mail principal")
+				@Html.TextBoxFor(x => x.Fornecedor.Pessoa.emailPrincipal, new { @class = "form-control input-sm", maxlength = "100" })
+				@Html.ValidationMessageFor(x => x.Fornecedor.Pessoa.emailPrincipal)
+			</div>
+
+			<div class="col-xs-6">
+				@Html.Label("E-mail secundário")
+				@Html.TextBoxFor(x => x.Fornecedor.Pessoa.emailSecundario, new { @class = "form-control input-sm", maxlength = "100" })
+				@Html.ValidationMessageFor(x => x.Fornecedor.Pessoa.emailSecundario)
+			</div>
+			<div class="clearfix"></div>
+
+			<div class="col-xs-6">
+				<label>1º Telefone</label>
+				<div class="row">
+					<div class="col-xs-12">
+						@Html.TextBoxFor(x => x.Fornecedor.Pessoa.nroTelPrincipal, new { @class = "form-control input-sm", alt = "phone" })
+						@Html.ValidationMessageFor(x => x.Fornecedor.Pessoa.nroTelPrincipal)
+					</div>
+				</div>
+			</div>
+			<div class="clearfix"></div><br/>
+			
+			<div class="text-right">
+				<input type="submit" class="btn btn-primary link-loading" value="Salvar"/>
+			</div>
+		}
+		</div>
+	</div>
+
+</div>
+<div class="clearfix"></div><br />
+

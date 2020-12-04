@@ -1,0 +1,146 @@
+﻿@model WEB.Areas.Associacoes.ViewModels.AssociacaoVM
+@using DAL.Configuracoes
+@using PagedList.Mvc
+@using WEB.Areas.Associacoes.Helpers
+@using WEB.Helpers
+
+@{
+    ViewBag.titlePage = "Associações Cadastradas";
+}
+
+@section styles{
+    <link href="@UtilConfig.linkResourses()css/associatec/list-custom.css" rel="stylesheet" />
+}
+
+@section scripts{
+    
+}
+
+@section breadcrump{
+    <ol class="breadcrumb">
+        <li><a href="javascript:;" onclick="$('.box-filtros').toggle('slow')" class="fs-16"><i class="fa fa-filter"></i></a></li>
+    </ol>
+}
+
+<div class="row">
+    <div class="col-sm-12 nao-exibir box-filtros">
+        
+        <div class="card-gray margin-bottom-15">
+
+            <h4 class="separator-form-icon no-margin"><i class="far fa-filter"></i> Filtros de Busca</h4>
+
+            @using (Html.BeginForm(null, null, FormMethod.Get, new { @class = "filtros" })) {
+                <div class="row">
+
+                    <div class="form-group col-lg-3 col-md-4 col-sm-6">
+                        <label>Organização Gestora</label>
+                        @Html.DropDownList("idOrganizacaoGestora", AssociacaoHelper.getInstance.selectListOrganizacaoGestora(UtilRequest.getInt32("idOrganizacaoGestora"), UtilRequest.getBool("flagStatus"), 0), "Todos", new { @class = "form-control input-sm select2" })
+                    </div>
+
+                    <div class="form-group col-md-2 col-sm-3">
+                        <label>Status</label>
+                        @Html.DropDownList("idStatusOrganizacao", StatusAssociacaoHelper.getInstance.selectList(UtilRequest.getInt32("idStatusOrganizacao")), "Todos", new { @class = "form-control input-sm" })
+                    </div>
+
+                    <div class="form-group col-md-2 col-sm-3">
+                        <label>Habilitado</label>
+                        @Html.DropDownList("flagStatus", ComboHelper.selectListTrueFalse(UtilRequest.getBool("flagStatus")), "Todos", new { @class = "form-control input-sm" })
+                    </div>
+
+                    <div class="clearfix visible-sm"></div>
+
+                    <div class="form-group col-lg-3 col-md-4 col-sm-6">
+                        <label>Buscar</label>
+                        @Html.TextBox("valorBusca", UtilRequest.getString("valorBusca"), new { @class = "form-control input-sm" })
+                    </div>
+
+                    <div class="clearfix visible-md"></div>
+
+                    <div class="form-group col-md-2 col-sm-3">
+                        <label>Tipo de Saída</label>
+                        @Html.buttonFlagTipoSaida(UtilRequest.getString("flagTipoSaida"))
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    <div class="clearfix"></div>
+</div>
+
+<div class="box box-primary">
+
+    <div class="box-header with-border">
+        <div class="box-title">
+            <i class="far fa-chart-bar"></i> Resultados <em class="fs-12">(@Model.listaAssociacoes.TotalItemCount registros localizados)</em>
+        </div>
+
+        <div class="box-tools pull-right">
+            <a href="@Url.Action("editar", "associacao")" class="btn btn-box-tool"><i class="far fa-plus-circle"></i> Cadastrar Associação</a>
+        </div>
+
+    </div>
+
+    <div class="box-body">
+
+        <ul class="products-list product-list-in-box listagem-padrao">
+
+            @if (Model.listaAssociacoes.Any()) {
+                foreach (var item in Model.listaAssociacoes) {
+
+                    var ConfiguracaoOrganizacao = Model.listaConfiguracaoSistema.FirstOrDefault(x => x.idOrganizacao == item.id) ?? new ConfiguracaoSistema();
+
+                    <li class="item bordered-destaque border-@(item.StatusOrganizacao?.classColor ?? "grey")">
+                        <div class="col-sm-4 abreviar">
+                            <span data-toggle="tooltip" title="@item.Pessoa.nome"><i class="fa fa-hashtag"></i>@item.id - @item.Pessoa.nome</span><br />
+                            <span data-toggle="tooltip" title="Associação Gestora: @(item.OrganizacaoGestora?.Pessoa.nome)"><i class="fa fa-group"></i> @(item.OrganizacaoGestora?.Pessoa.nome)</span>
+                        </div>
+
+                        <div class="col-sm-5">
+                            <span><i class="fa fa-id-card"></i> @UtilString.formatCPFCNPJ(item.Pessoa.nroDocumento)</span><br />
+                            <span><i class="fa fa-link"></i> @linkAreaAssociado(ConfiguracaoOrganizacao) </span><br />
+                        </div>
+
+                        <div class="col-sm-2 abreviar">
+                            <span>Habilitado: @Html.linkStatusYesNo(item.id, item.ativo)</span><br />
+                            <span data-toggle="tooltip" title="@(item.StatusOrganizacao?.descricao)">Status: @(item.StatusOrganizacao?.descricao)</span>
+                        </div>
+
+                        <div class="col-sm-1 text-right margin-top-20">
+                            @Html.linkEditar(item.id, "", "text-black")
+                        </div>
+
+                        <div class="clearfix"></div>
+                    </li>
+                }
+            } else {
+                <li class="item">
+                    <div class="col-sm-12">
+                        <p class="alert-warning text-center">
+                            Nenhuma associação encontrado.
+                        </p>
+                    </div>
+                </li>
+            }
+        </ul>
+        @(Html.paginarRegistros(Model.listaAssociacoes, Html.PagedListPager(Model.listaAssociacoes, nroPagina => UtilRequest.linkPaginacao(nroPagina, "listar"), PagedListRenderOptions.OnlyShowFivePagesAtATime)))
+    </div>
+</div>
+
+@helper linkAreaAssociado(ConfiguracaoSistema ConfiguracaoOrganizacao) {
+
+    string dominio = ConfiguracaoOrganizacao.primeiroDominio();
+
+    string rotaCustomizada = ConfiguracaoOrganizacao.rotaCustomizadaLogin;
+
+    if (!dominio.isEmpty()) {
+        <a href="@string.Concat(Request.Url.Scheme, "://", ConfiguracaoOrganizacao.primeiroDominio(), "/AreaAssociados/")" target="_blank">Link Área Associado</a>
+        return;
+    }
+
+    if (!rotaCustomizada.isEmpty()) {
+        <a href="@string.Concat(Request.Url.Scheme, "://", Request.Url.Host, "/AreaAssociados/", rotaCustomizada)" target="_blank">Link Área Associado</a>
+        return;
+    }
+
+    <a href="#">Área Associado não configurada</a>
+}

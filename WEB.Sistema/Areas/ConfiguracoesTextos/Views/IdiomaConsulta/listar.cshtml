@@ -1,0 +1,142 @@
+﻿@model WEB.Areas.ConfiguracoesTextos.ViewModels.IdiomaConsultaVM
+
+@using PagedList.Mvc
+
+@{
+	ViewBag.titlePage = "Idiomas Cadastrados";
+
+}
+
+@section styles {
+	<link href="@UtilConfig.linkResourses("css/associatec/list-custom.css")" rel="stylesheet" />
+}
+
+@section scripts {
+	
+	<script src="@UtilConfig.linkResourses("Areas/ConfiguracoesTextos/js/idioma.js")"></script>
+
+}
+
+<div class="box box-primary">
+
+	@Html.headerBox("Filtros de Busca", "fa fa-filter")
+
+	<div class="box-body">
+
+		@using(Html.BeginForm(null,null,FormMethod.Get,new { @class = "filtros" })) {
+			
+			<div class="row">
+				
+				<div class="form-group col-md-7"></div>
+				
+@*				<div class="form-group col-md-2">*@
+@*					<label>Tipo de Saída</label>*@
+@*					@Html.DropDownList("tipoSaida", TipoSaidaHelper.selectListTipoSaida(UtilRequest.getString("tipoSaida")), new { @class = "form-control input-sm" })*@
+@*				</div>*@
+				
+				<div class="form-group col-md-2">
+					<label>Status</label>
+					@Html.DropDownList("flagAtivo", ComboHelper.selectListStatus(UtilRequest.getBool("flagAtivo")), "Todos", new { @class = "form-control input-sm" })
+				</div>
+				
+				<div class="form-group col-md-3">
+					<label>Buscar</label>
+					@Html.buttonSearch(UtilRequest.getString("valorBusca"))
+				</div>
+				<div class="clearfix"></div>
+				
+			</div>
+        }
+
+	</div>
+
+</div>
+
+<div class="box box-primary">
+
+	<div class="box-header with-border">
+		<div class="box-title">
+			<i class="far fa-chart-bar"></i> Resultados <small class="fs-10">@Model.listaIdiomas.TotalItemCount encontrado(s). </small>
+		</div>
+
+		<div class="box-tools pull-right">
+			<a href="javascript:;" class="text-black" onclick="DefaultSistema.showModal('@Url.Action("modal-editar", "IdiomaCadastro", new { Area = "ConfiguracoesTextos" })')" target="_blank"><i class="far fa-plus"></i> Novo Registro</a>
+		</div>
+	</div>
+
+	<div class="box-body">
+
+		@if (!Model.listaIdiomas.Any()) {
+			<div class="col-md-12 alert alert-info">
+				<p>Nenhum idioma encontrado!</p>
+			</div>
+			<div class="clearfix"></div>
+		}
+		
+		@foreach (var OIdioma in Model.listaIdiomas) {
+			
+			<div class="box-info-item-dotted bordered-destaque">
+        
+				<div class="row">
+            
+					<div class="col-md-3 col-sm-12">
+						
+						<span data-toggle="tooltip" title="Descrição"><i class="far fa-language"></i> @OIdioma.descricao</span>
+						
+					</div>
+					
+					<div class="col-md-3 col-sm-12">
+						
+						<span data-toggle="tooltip" title="Sigla"><i class="fa fa-globe"></i> @OIdioma.sigla</span>
+						
+					</div>
+					
+					<div class="col-md-3 col-sm-12">
+						
+						<div>@Html.linkStatusDefault(OIdioma.id, OIdioma.ativo, "IdiomaCadastro")</div>
+						
+					</div>
+					
+					<div class="col-md-2 col-sm-12">
+						
+						<span data-toggle="tooltip" title="Data de Cadastro"><i class="far fa-calendar-alt"></i> @OIdioma.dtCadastro.exibirData()</span>
+						
+					</div>
+					
+					<div class="col-xs-1 text-right">
+                
+						<div class="dropdown">
+                    
+							<a href="javascript:;" class="dropdown-toggle text-black" type="button" data-toggle="dropdown">
+								<i class="fa fa-cog"></i>
+							</a>
+                    
+							<ul class="dropdown-menu dropdown-menu-right">
+
+								<li>
+									<a href="javascript:;" onclick="DefaultSistema.showModal('@Url.Action("modal-editar", "IdiomaCadastro", new { Area = "ConfiguracoesTextos", OIdioma.id })')" target="_blank">
+										<i class="far fa-edit"></i> Editar
+									</a>
+								</li>
+								<li class="divider"></li>
+								<li>
+									@Html.linkAjaxExcluir(OIdioma.id, "N", Url.Action("excluir", "IdiomaExclusao"), "", "", "Excluir")
+								</li>
+
+							</ul>
+						</div>
+                
+					</div>
+					<div class="clearfix"></div>
+					
+				</div>
+				
+			</div>
+			
+		}
+		
+        @(Html.paginarRegistros(Model.listaIdiomas,Html.PagedListPager(Model.listaIdiomas, nroPagina => UtilRequest.linkPaginacao(nroPagina, "Listar"), PagedListRenderOptions.OnlyShowFivePagesAtATime)))
+
+	</div>
+
+</div>

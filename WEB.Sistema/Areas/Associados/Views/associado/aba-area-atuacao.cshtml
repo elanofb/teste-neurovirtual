@@ -1,0 +1,10 @@
+﻿@model WEB.Areas.Associados.ViewModels.AssociadoForm
+@using BLL.ConfiguracoesTextos.Extensions
+@using DAL.Permissao.Security.Extensions
+
+<div class="tab-pane" id="tab-area-atuacao">
+    <div id="boxLoadFormAssociadoAreaAtuacao" class="content-load carregando" data-url="@Url.Action("editar", "associadoareaatuacao", new {area = "associados", idAssociado = Model.Associado.id, idTipoAssociado = Model.Associado.idTipoAssociado })"></div>
+    <br/>
+    <h4 class="separator-form">@Html.labelTexto(User.idOrganizacao(), "labelAreaAtuacaoPlural") cadastradas</h4>
+    <div id="boxLoadListaAssociadoAreaAtuacao" class="content-load carregando" data-url="@Url.Action("partial-listar-areaatuacao", "associadoareaatuacao", new {area = "associados", id = 0, idAssociado = Model.Associado.id, idTipoAssociado = Model.Associado.idTipoAssociado})"></div>
+</div>

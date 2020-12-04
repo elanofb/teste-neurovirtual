@@ -1,0 +1,163 @@
+﻿@model WEB.Areas.Associados.ViewModels.TipoAssociadoForm
+
+@using (Html.BeginForm("editar", null, FormMethod.Post, new { role = "form", @class = "default" })) {
+
+    @Html.HiddenFor(m => m.TipoAssociado.id)
+
+    @Html.HiddenFor(m => m.TipoAssociado.idOrganizacao)
+
+    @Html.ValidationSummary(false)
+    
+    <div class="form-horizontal">
+        <div class="col-md-4">
+            @Html.Label("Categoria")
+            @Html.DropDownListFor(m => m.TipoAssociado.idCategoria, CategoriaTipoAssociadoHelper.getInstance.selectList(Model.TipoAssociado.idCategoria), "...", new { @class = "form-control input-sm" })
+        </div>
+
+        <div class="col-md-2">
+            <label>Física?</label>
+            @Html.DropDownListFor(m => m.TipoAssociado.flagPessoaFisica, ComboHelper.selectListTrueFalse(Model.TipoAssociado.flagPessoaFisica), "", new { @class = "form-control input-sm " })
+        </div>
+
+        <div class="col-md-2">
+            <label>Juridico?</label>
+            @Html.DropDownListFor(m => m.TipoAssociado.flagPessoaJuridica, ComboHelper.selectListTrueFalse(Model.TipoAssociado.flagPessoaJuridica), "", new { @class = "form-control input-sm " })
+        </div>
+        <div class="col-md-2">
+            <label>Comerciante?</label>
+            @Html.DropDownListFor(m => m.TipoAssociado.flagNaoAssociado, ComboHelper.selectListTrueFalse(Model.TipoAssociado.flagNaoAssociado), "", new { @class = "form-control input-sm " })
+        </div>
+
+        <div class="clearfix"></div>
+
+        <div class="col-md-4">
+            @Html.labelRequired("Nome do Tipo")
+            @Html.TextBoxFor(m => m.TipoAssociado.descricao, new { @class = "form-control input-sm", maxlength = "100" })
+            @Html.ValidationMessageFor(m => m.TipoAssociado.descricao)
+        </div>
+
+
+        <div class="col-md-2">
+            <label>Status</label>
+            @Html.DropDownListFor(m => m.TipoAssociado.ativo, ComboHelper.selectListStatus(Model.TipoAssociado.ativo), "...", new { @class = "form-control input-sm" })
+            @Html.ValidationMessageFor(m => m.TipoAssociado.ativo)
+        </div>
+        <div class="clearfix"></div>
+
+
+        <div class="col-sm-10">
+            <label>Observações</label>
+            @Html.TextAreaFor(m => m.TipoAssociado.observacoes, new { @class = "form-control input-sm", rows = "3" })
+            @Html.ValidationMessageFor(m => m.TipoAssociado.observacoes)
+        </div>
+
+        <div class="clearfix"></div><br/>
+
+        @*<div class="col-sm-10">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3 class="panel-title fs-14">Definições de Cobrança</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <label>Isentos de contribuição?</label>
+                            @Html.DropDownListFor(m => m.TipoAssociado.flagIsento, ComboHelper.selectListTrueFalse(Model.TipoAssociado.flagIsento), "...", new { @class = "form-control input-sm" })
+                            @Html.ValidationMessageFor(m => m.TipoAssociado.flagIsento)
+                            @Html.instrucao("Caso o tipo de membro seja isento de contribuição, membros cadastrados com esse tipo no momento da geração das contribuições, não terão cobrança.")
+                        </div>
+                        <div class="col-sm-12">
+                            <label>Plano de cobrança padrão</label>
+                            @Html.DropDownListFor(m => m.TipoAssociado.idContribuicaoPadrao, ContribuicaoHelper.getInstance.selectList(Model.TipoAssociado.idContribuicaoPadrao), "...", new { @class = "form-control input-sm" })
+                            @Html.ValidationMessageFor(m => m.TipoAssociado.idContribuicaoPadrao)
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-10">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3 class="panel-title fs-14">Definições pós cadastro</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <label>Gerar a 1º cobrança após cadastro?</label>
+                                </div>
+                                <div class="col-sm-8">
+                                    @Html.DropDownListFor(m => m.TipoAssociado.flagGerarCobrancaPosCadastro, ComboHelper.selectListTrueFalse(Model.TipoAssociado.flagGerarCobrancaPosCadastro), "...", new {@class = "form-control input-sm"})
+                                    @Html.ValidationMessageFor(m => m.TipoAssociado.flagGerarCobrancaPosCadastro)
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <label>Vencimento da cobrança (em dias)</label>
+                                </div>
+                                <div class="col-sm-8">
+                                    @Html.TextBoxFor(m => m.TipoAssociado.diasPrazoPrimeiraCobranca, new {@class = "form-control input-sm", type = "number"})
+                                    @Html.ValidationMessageFor(m => m.TipoAssociado.diasPrazoPrimeiraCobranca)
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-4">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <label>Taxa de Inscrição</label>
+                                </div>
+                                <div class="col-sm-8">
+                                    @Html.TextBoxFor(m => m.TipoAssociado.valorTaxaInscricao, new {@class = "form-control input-sm", alt = "decimal"})
+                                    @Html.ValidationMessageFor(m => m.TipoAssociado.valorTaxaInscricao)
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <label>Vencimento da inscrição (em dias)</label>
+                                </div>
+                                <div class="col-sm-8">
+                                    @Html.TextBoxFor(m => m.TipoAssociado.diasPrazoTaxaInscricao, new {@class = "form-control input-sm", type = "number"})
+                                    @Html.ValidationMessageFor(m => m.TipoAssociado.diasPrazoTaxaInscricao)
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-4">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <label>Centro de Custo - Inscrição</label>
+                                    @Html.DropDownListFor(m => m.TipoAssociado.idCentroCustoInscricao, CentroCustoHelper.getInstance.selectList(Model.TipoAssociado.idCentroCustoInscricao), "...", new {@class = "form-control input-sm"})
+                                    @Html.ValidationMessageFor(m => m.TipoAssociado.idCentroCustoInscricao)
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <label>Macro Conta - Inscrição</label>
+                                    @Html.DropDownListFor(m => m.TipoAssociado.idMacroContaInscricao, MacroContaHelper.getInstance.selectList(Model.TipoAssociado.idMacroContaInscricao), "...", new {@class = "form-control input-sm"})
+                                    @Html.ValidationMessageFor(m => m.TipoAssociado.idMacroContaInscricao)
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <label>Conta Bancária - Inscrição</label>
+                                    @Html.DropDownListFor(m => m.TipoAssociado.idContaBancariaInscricao, ContaBancariaHelper.getInstance.selectList(Model.TipoAssociado.idContaBancariaInscricao), "...", new {@class = "form-control input-sm"})
+                                    @Html.ValidationMessageFor(m => m.TipoAssociado.idContaBancariaInscricao)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>*@
+    </div>
+    <div class="clearfix"></div><br />
+
+    <div class="text-right col-sm-12">
+        @Html.exibirBotoesFormulario(Url.Action("listar", new { Model.TipoAssociado.idOrganizacao }), "N", Url.Action("editar", new { Model.TipoAssociado.idOrganizacao, id = 0 }))
+    </div>
+    <div class="clearfix"></div><br />
+}

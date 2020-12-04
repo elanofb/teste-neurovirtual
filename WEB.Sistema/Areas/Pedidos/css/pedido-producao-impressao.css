@@ -1,0 +1,36 @@
+tbody tr td {
+    font: 8pt Arial;
+    line-height: 1.5;
+}
+
+tbody tr td strong {
+    text-transform: uppercase;
+}
+
+tbody tr:not(.noborder) td:not(:last-child) {
+    
+}
+
+tbody tr td {
+    
+}
+
+table.item {
+    
+}
+
+
+tr.head {
+    background-color: #EEEEEE;
+    border-top: 1px solid #CCC;
+}
+
+tr.head td, tr.head th{
+    border-top: 1px solid #CCC;
+    border-bottom: 1px solid #CCC;
+}
+
+
+tr td.div {    
+    padding-bottom: 20px;
+}

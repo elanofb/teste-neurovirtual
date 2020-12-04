@@ -1,0 +1,36 @@
+﻿@model WEB.Areas.Contribuicoes.ViewModels.ContribuicaoPadraoForm
+@using WEB.Areas.Contribuicoes.Helpers
+
+
+<div class="panel panel-info">
+    <div class="panel-heading">
+        <h3 class="panel-title fs-14">Definições de vencimento</h3>
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-sm-8">
+                @Html.labelRequired("Vencimento a partir de")
+                @Html.DropDownListFor(x => x.Contribuicao.idTipoVencimento, TipoVencimentoHelper.getInstance.selectList(Model.Contribuicao.idTipoVencimento), "", new {@class = "form-control input-sm", id = "idTipoVencimento"}.isDisabled(Model.Contribuicao.id > 0))
+                @Html.ValidationMessageFor(x => x.Contribuicao.idTipoVencimento)
+            </div>
+            <div class="col-sm-4 box-vencimento-fixo">
+                <div class="row">
+                    <div class="col-sm-12">
+                        @Html.labelRequired("Calcular valor pro-rata?", "", false)
+                    </div>
+                    <div class="col-sm-12">
+                        @Html.DropDownListFor(x => x.Contribuicao.flagCobrancaProRata, ComboHelper.selectListTrueFalse(Model.Contribuicao.flagCobrancaProRata), "...", new { @class = "form-control input-sm", id = "flagCobrancaProRata" })
+                        @Html.ValidationMessageFor(x => x.Contribuicao.flagCobrancaProRata)
+                    </div>
+                </div>
+                @Html.ValidationMessageFor(x => x.Contribuicao.flagCobrancaProRata)
+            </div>
+            <div class="col-sm-12">
+                <div id="boxVencimentos" class="margin-top-20">
+                    @{ Html.RenderPartial("~/Areas/Contribuicoes/Views/contribuicaovencimento/partial-box-vencimentos.cshtml", Model); }
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+</div>

@@ -1,0 +1,108 @@
+﻿@model WEB.Areas.Associados.Models.ViewModels.PreAtualizacaoDetalheVM
+@using BLL.ConfiguracoesTextos.Extensions
+@using DAL.Permissao.Security.Extensions
+@using WEB.Areas.Arquivos.Helpers
+
+@{
+    string labelAssociado = Html.labelTexto(User.idOrganizacao(), "lblassociado", "Associado").ToString();
+    
+    ViewBag.titlePage = Model.FormAssociadoPJ.Associado.id == 0 ? $"Novo {labelAssociado}" : $"Análise da Atualização de Cadastro do {labelAssociado}";
+    ViewBag.SubtitlePage = Model.FormAssociadoPJ.Associado.id == 0 ? "" : Model.FormAssociadoPJ.Associado.Pessoa.nome;    
+}
+
+@section styles {
+    
+    @Html.includeCSSModuloArquivos()
+     
+    @Html.includeFroalaEditorCSS()
+    
+    <link href="@UtilConfig.linkResourses("Areas/AssociadosDependentes/css/jquery-ui-autocomplete.css")" rel="stylesheet" />
+    
+    @*  Datatable da listagem de historico da pessoa  *@
+	<link href="@UtilConfig.linkResourses("Areas/Pessoas/js/plugins/datatables/media/css/jquery.dataTables.bootstrap.css")" rel="stylesheet" />
+    
+	@* CSS de módulos do cadastro associado *@
+    <link href="@UtilConfig.linkResourses("Areas/Associados/js/plugins/bootstrap-responsive-tabs/dist/main.css")" rel="stylesheet" />
+    <link href="@UtilConfig.linkResourses("Areas/Associados/css/associado.css")" rel="stylesheet"/>
+    <link href="@UtilConfig.linkResourses("css/associatec/list-custom.css?v=1")" rel="stylesheet" />
+        
+    @* CSS para customização das abas *@
+    <link href="@UtilConfig.linkResourses("css/associatec/tab-custom-responsive.css")" rel="stylesheet" />
+    
+    <link href="@UtilConfig.linkResourses("Areas/TarefasPessoais/css/tarefa-pessoal.css")" rel="stylesheet" />
+    
+    <link href="@UtilConfig.linkResourses("Areas/Associados/css/associado-preatualizacao.css")" rel="stylesheet" />
+}
+
+@section scripts{
+    @Html.includeJSModuloArquivos()
+	@Html.includeLocalizacaoJS()
+    @Html.includeDatePicker()
+    
+    @Html.includeJqueryLoading()
+    @Html.includeFileApiJS()
+    @Html.includeBootstrapEditable()
+    @Html.includeFroalaEditorJS()
+
+    <script type="text/javascript" src="@UtilConfig.linkResourses("Areas/AssociadosDependentes/js/jquery-ui-autocomplete.js")"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses("Areas/Associados/js/plugins/bootstrap-responsive-tabs/dist/bootstrap-responsive-tabs.js")"></script>      
+
+    @* JS para cookies e salvar dados voláteis  *@
+	<script type="text/javascript" src="@UtilConfig.linkResourses("Areas/Associados/js/plugins/jquery.cookie/jquery.cookie.js")"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses("Areas/Arquivos/js/arquivo-documento.js")"></script>
+    
+
+	@* JS do módulo de associados *@
+    <script type="text/javascript" src="@UtilConfig.linkResourses("Areas/Associados/js/associado-preatualizacao-cadastro.js")"></script>        
+    
+}
+
+@section breadcrump{
+    <ol class="breadcrumb">
+        <li><a class="active fs-14" href="@Url.Action("index", "PreAtualizacaoConsulta", new {area = "Associados"})"><i class="fa fa-arrow-left"></i> Voltar</a></li>
+    </ol>
+}
+
+<div class="@(Model.FormAssociadoPJ.Associado.id > 0? "box box-default": "")">
+            
+    <div class="col-sm-12">
+        
+        @exibirBlocoCabecalho()
+        
+        @{ Html.RenderPartial("aba-dados-cadastrais-pj", Model.FormAssociadoPJ);}
+        
+        @if (Model.OHistoricoAtualizacao.idAssociado > 0 && Model.OHistoricoAtualizacao.dtAnalise == null){
+            <div class="row margin-top-10">
+                <div class="col-sm-6">
+                    <p class="text-left">
+                        <button onclick="AssociadoPreAtualizacaoCadastro.finalizarAnalise('@Model.FormAssociadoPJ.Associado.id', false)" type="button" class="btn btn-md btn-danger link-loading"><i class="far fa-ban"></i> Reprovar Alteração e Finalizar Análise</button>
+                    </p>
+                </div>
+                                                                    
+                <div class="col-sm-6">
+                    <p class="text-right">
+                        <button type="button" onclick="$('.cadastro').submit()" name="enviar" class="btn btn-md btn-success link-loading"><i class="far fa-check"></i> Alterar Dados e Finalizar Análise</button>
+                    </p>
+                </div>
+            </div>                                                
+        }
+        
+        <div class="clearfix"></div>
+    </div>
+    
+    <div class="clearfix"></div>
+    
+</div>
+
+@helper exibirBlocoCabecalho() {
+    
+    if (Model.FormAssociadoPJ.Associado.id == 0) {
+        return;
+    }
+    
+    if (Model.OHistoricoAtualizacao.dtAnalise == null){
+        <span class="badge bg-blue">A informação destacada em amarelo será atualizada pelo valor do campo acima!</span>    
+    }        
+    
+}
+

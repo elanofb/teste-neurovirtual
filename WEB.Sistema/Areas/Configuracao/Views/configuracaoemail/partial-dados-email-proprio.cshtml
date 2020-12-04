@@ -1,0 +1,44 @@
+﻿@model WEB.Areas.Configuracao.ViewModels.ConfiguracaoEmailForm
+
+
+<h4 class="separator-form-icon"><i class='far fa-edit'></i> Configure os dados de uma conta de e-mail para que o sistema a utilize:</h4>
+<div class="col-md-4">
+	<label>Conta de E-mail</label>
+	@Html.TextBoxFor(m => m.ConfiguracaoEmail.contaEmailSistema, new { @class="form-control input-sm", maxlength="100" })
+</div>
+<div class="col-md-2">
+	<label>Senha da Conta</label>
+	@Html.TextBoxFor(m => m.ConfiguracaoEmail.senhaEmailSistema, new {@class = "form-control input-sm", maxlength = "20"})
+</div>
+<div class="clearfix"></div><br/>
+
+<h4 class="separator-form-icon"><i class='far fa-edit'></i> Configure o servidor POP da Conta de E-mail:</h4>
+<div class="col-md-4">
+	<label>Servidor POP</label>
+	@Html.TextBoxFor(m => m.ConfiguracaoEmail.servidorPOPEmailSistema, new { @class = "form-control input-sm", maxlength = "100" })
+</div>
+<div class="col-md-2">
+	<label>Usar Conexão SSL</label>
+	@Html.DropDownListFor(m => m.ConfiguracaoEmail.flagSSLPOPEmailSistema, WEB.Helpers.ComboHelper.selectListYesNo(Model.ConfiguracaoEmail.flagSSLPOPEmailSistema), new { @class = "form-control input-sm" })
+</div>
+<div class="col-md-2">
+	<label>Porta POP</label>
+	@Html.TextBoxFor(m => m.ConfiguracaoEmail.portaPOPEmailSistema, new { @class = "form-control input-sm", alt = "number_3" })
+</div>
+<div class="clearfix"></div><br />
+
+<h4 class="separator-form-icon"><i class='far fa-edit'></i> Configure o servidor SMTP da Conta de E-mail:</h4>
+<div class="col-md-4">
+	<label>Servidor SMTP</label>
+	@Html.TextBoxFor(m => m.ConfiguracaoEmail.servidorSMTPEmailSistema, new { @class = "form-control input-sm", maxlength = "100" })
+</div>
+<div class="col-md-2">
+	<label>Usar Conexão SSL</label>
+	@Html.DropDownListFor(m => m.ConfiguracaoEmail.flagSSLSMTPEmailSistema, ComboHelper.selectListYesNo(Model.ConfiguracaoEmail.flagSSLPOPEmailSistema), new { @class = "form-control input-sm" })
+</div>
+<div class="col-md-2">
+	<label>Porta SMTP</label>
+	@Html.TextBoxFor(m => m.ConfiguracaoEmail.portaSMTPEmailSistema, new { @class = "form-control input-sm", alt = "number_3" })
+</div>
+<div class="clearfix"></div><br />
+

@@ -1,0 +1,13 @@
+﻿@model WEB.Areas.Produtos.ViewModels.EstoqueEntradaForm
+
+@if (Model.EstoqueEntrada.id > 0)
+{ 
+<div class="form-horizontal">
+	<div class="col-md-6">
+		<a class="btn btn-default bg-gray"><strong>ID:</strong> @Model.EstoqueEntrada.id</a> &nbsp;
+		<a class="btn btn-default bg-gray"><strong>Cadastro:</strong> @Model.EstoqueEntrada.dtCadastro</a> &nbsp;
+		<a class="btn btn-default bg-gray"><strong>Alterado em:</strong> @Model.EstoqueEntrada.dtAlteracao</a>
+	</div>
+</div>
+<div class="clearfix"></div><br />
+}

@@ -1,0 +1,101 @@
+﻿@model WEB.Areas.ConfiguracoesAssociados.ViewModels.AssociadoCampoForm
+
+@{
+    Layout = "~/views/shared/associatec/masterpage-modal.cshtml";
+    ViewBag.modalWidthClass = "lg";
+    ViewBag.modalTitle = "Opções de campos para pessoa física";
+
+    if (IsPost) {
+        Layout = null;
+    }
+
+}
+
+<div>
+
+    <div class="col-sm-4">
+        <ul class="list-group fs-11">
+            <li class="list-group-item bg-blue">Cadastro do Associado</li>
+            <li class="list-group-item">Associado.Pessoa.nome</li>
+            <li class="list-group-item">Associado.idTipoAssociado</li>
+            <li class="list-group-item">Associado.Pessoa.idTipoDocumento</li>
+            <li class="list-group-item">Associado.Pessoa.nroDocumento</li>
+            <li class="list-group-item">Associado.Pessoa.rg</li>
+            <li class="list-group-item">Associado.Pessoa.orgaoEmissorRg</li>
+            <li class="list-group-item">Associado.Pessoa.idEstadoEmissaoRg</li>
+            <li class="list-group-item">Associado.Pessoa.nroCNH</li>
+            <li class="list-group-item">Associado.Pessoa.categoriaCNH</li>
+            <li class="list-group-item">Associado.Pessoa.idOrgaoClasse</li>
+            <li class="list-group-item">Associado.Pessoa.nroRegistroOrgaoClasse</li>
+            <li class="list-group-item">Associado.Pessoa.idEstadoOrgaoClasse</li>
+            <li class="list-group-item">Associado.Pessoa.idPaisOrigem</li>
+            <li class="list-group-item">Associado.Pessoa.idCidadeOrigem</li>
+            <li class="list-group-item">Associado.Pessoa.nomeCidadeOrigem</li>
+            <li class="list-group-item">Associado.Pessoa.dtNascimento</li>
+            <li class="list-group-item">Associado.Pessoa.flagSexo</li>
+            <li class="list-group-item">Associado.Pessoa.nomePai</li>
+            <li class="list-group-item">Associado.Pessoa.nomeMae</li>
+            <li class="list-group-item">Associado.Pessoa.enderecoWeb</li>
+            <li class="list-group-item">Associado.idsAreaAtuacao</li>
+        </ul>
+    </div>
+    <div class="col-sm-4">
+        <ul class="list-group fs-11">
+            <li class="list-group-item">Associado.titulacao</li>
+            <li class="list-group-item">Associado.flagInformativosOnline</li>
+            <li class="list-group-item">Associado.idMeioDivulgacao</li>
+            <li class="list-group-item">Associado.Pessoa.idNivelEscolar</li>
+            <li class="list-group-item">Associado.Pessoa.instituicaoFormacao</li>
+            <li class="list-group-item">Associado.Pessoa.anoFormacao</li>
+            <li class="list-group-item">Associado.Pessoa.nroMatriculaEstudante</li>
+            <li class="list-group-item">Associado.Pessoa.profissao</li>
+            <li class="list-group-item">Associado.Pessoa.login</li>
+            <li class="list-group-item">Associado.Pessoa.senha</li>
+            <li class="list-group-item">Associado.Pessoa.observacoes</li>
+            <li class="list-group-item bg-blue">Cadastro de Dependente</li>
+            <li class="list-group-item">Associado.listaDependentes[x].id</li>
+            <li class="list-group-item">Associado.listaDependentes[x].Pessoa.nome</li>
+            <li class="list-group-item">Associado.listaDependentes[x].Pessoa.nroDocumento</li>
+            <li class="list-group-item bg-blue">Cadastro de Contatos</li>
+            <li class="list-group-item">Associado.Pessoa.listaPessoaContato[x].id</li>
+            <li class="list-group-item">Associado.Pessoa.listaPessoaContato[x].nome</li>
+            <li class="list-group-item">Associado.Pessoa.listaPessoaContato[x].idTipoContato</li>
+            <li class="list-group-item">Associado.Pessoa.listaPessoaContato[x].email</li>
+            <li class="list-group-item">Associado.Pessoa.listaPessoaContato[x].telComercial</li>
+            <li class="list-group-item">Associado.Pessoa.listaPessoaContato[x].telCelular</li>
+            <li class="list-group-item">Associado.Pessoa.listaPessoaContato[x].observacao</li>
+        </ul>
+    </div>
+    <div class="col-sm-4">
+        <ul class="list-group fs-11">
+            <li class="list-group-item bg-blue">Cadastro de E-mails</li>
+            <li class="list-group-item">Associado.Pessoa.listaEmails[x].id</li>
+            <li class="list-group-item">Associado.Pessoa.listaEmails[x].idTipoEmail</li>
+            <li class="list-group-item">Associado.Pessoa.listaEmails[x].email</li>
+            <li class="list-group-item bg-blue">Cadastro de Telefones</li>
+            <li class="list-group-item">Associado.Pessoa.listaTelefones[x].id</li>
+            <li class="list-group-item">Associado.Pessoa.listaTelefones[x].idTipoTelefone</li>
+            <li class="list-group-item">Associado.Pessoa.listaTelefones[x].ddi</li>
+            <li class="list-group-item">Associado.Pessoa.listaTelefones[x].nroTelefone</li>
+            <li class="list-group-item">Associado.Pessoa.listaTelefones[x].flagCelular</li>
+            <li class="list-group-item">Associado.Pessoa.listaTelefones[x].flagFixo</li>
+            <li class="list-group-item">Associado.Pessoa.listaTelefones[x].idOperadoraTelefonia</li>
+            <li class="list-group-item bg-blue">Cadastro de Endereços</li>
+            <li class="list-group-item">Associado.Pessoa.listaEnderecos[x].id</li>
+            <li class="list-group-item">Associado.Pessoa.listaEnderecos[x].idTipoEndereco</li>
+            <li class="list-group-item">Associado.Pessoa.listaEnderecos[x].idPais</li>
+            <li class="list-group-item">Associado.Pessoa.listaEnderecos[x].idEstado</li>
+            <li class="list-group-item">Associado.Pessoa.listaEnderecos[x].uf</li>
+            <li class="list-group-item">Associado.Pessoa.listaEnderecos[x].idCidade</li>
+            <li class="list-group-item">Associado.Pessoa.listaEnderecos[x].nomeCidade</li>
+            <li class="list-group-item">Associado.Pessoa.listaEnderecos[x].cep</li>
+            <li class="list-group-item">Associado.Pessoa.listaEnderecos[x].logradouro</li>
+            <li class="list-group-item">Associado.Pessoa.listaEnderecos[x].complemento</li>
+            <li class="list-group-item">Associado.Pessoa.listaEnderecos[x].zona</li>
+            <li class="list-group-item">Associado.Pessoa.listaEnderecos[x].bairro</li>
+            <li class="list-group-item">Associado.Pessoa.listaEnderecos[x].flagEnviarCorrespondencia</li>
+        </ul>
+    </div>
+
+
+</div>

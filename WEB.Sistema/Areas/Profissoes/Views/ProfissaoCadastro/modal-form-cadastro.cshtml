@@ -1,0 +1,67 @@
+﻿@model WEB.Areas.Profissoes.ViewModels.ProfissaoForm
+@using DAL.Permissao.Security.Extensions
+@using MvcFlashMessages
+@using WEB.Areas.Associacoes.Helpers
+@using WEB.Helpers
+
+@{
+    ViewBag.modalTitle = "Nova Profissão";
+
+    string idBox = "boxFormProfissao";
+    
+    ViewBag.modalWidthClass = "md";
+
+    if (IsPost) {
+        Layout = null;
+        idBox = "";
+    } else {
+        Layout = "~/views/shared/associatec/masterpage-modal.cshtml";
+    }
+}
+
+<div id="@idBox">
+    
+    @using (Ajax.BeginForm("salvar-profissao", "ProfissaoCadastro", new AjaxOptions { HttpMethod = "POST", InsertionMode = InsertionMode.Replace, UpdateTargetId = idBox, OnSuccess = "ProfissaoCadastro.onSuccessForm" }, new { id = "formProfissao" })) {
+        
+        @Html.RenderFlash()
+
+        @Html.HiddenFor(m => m.OProfissao.id)
+
+        @Html.ValidationSummary(false)
+
+        <h4 class="separator-form-icon"><i class="far fa-edit"></i> Dados da Profissão</h4>
+
+        if(User.idOrganizacao() == 0) {
+            <div class="col-sm-4 col-md-3">
+                <label>Organização</label>
+                @Html.DropDownListFor(m => m.OProfissao.idOrganizacao, AssociacaoHelper.getInstance.selectList(Model.OProfissao.idOrganizacao), "Padrão", new {@class = "form-control input-sm"})
+            </div>
+            <div class="clearfix"></div>
+        }
+
+        <div class="col-md-8">
+            <label>Descrição</label>
+            @Html.TextBoxFor(m => m.OProfissao.descricao, new {@class = "form-control input-sm"})
+            @Html.ValidationMessageFor(m => m.OProfissao.descricao)
+        </div>
+
+        <div class="col-md-4">
+            @Html.labelRequired("Status")
+            @Html.DropDownListFor(m => m.OProfissao.ativo, ComboHelper.selectListStatus(Model.OProfissao.ativo ?? true), new {@class = "form-control input-sm"})
+            @Html.ValidationMessageFor(m => m.OProfissao.ativo)
+        </div>
+
+        <div class="clearfix"></div>
+    }
+
+</div>
+
+@section modalFooter{
+        
+    <div class="text-right">
+        <button type="button" data-toggle="tooltip" title="Adicionar" class="btn btn-primary btn-submit" onclick="$('#formProfissao').submit()">
+            <i class="fa fa-hdd"></i> Salvar
+        </button>
+    </div>
+    
+}

@@ -1,0 +1,11 @@
+﻿@model WEB.Areas.MateriaisApoio.ViewModels.MaterialApoioForm
+@if (Model.MaterialApoio.id > 0 && Model.MaterialApoio.dtCadastro != DateTime.MinValue) {
+    <div class="form-horizontal info-cadastro">
+        <div class="col-md-6">
+            <a class="btn btn-default bg-gray"><strong>ID:</strong> @Model.MaterialApoio.id</a> &nbsp;
+            <a class="btn btn-default bg-gray"><strong>Cadastro:</strong> @Model.MaterialApoio.dtCadastro</a> &nbsp;
+            <a class="btn btn-default bg-gray"><strong>Alterado em:</strong> @Model.MaterialApoio.dtAlteracao</a>
+        </div>
+    </div>
+    <div class="clearfix"></div><br />
+}

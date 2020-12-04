@@ -1,0 +1,104 @@
+﻿@model WEB.Areas.AvisosNotificacoes.ViewModels.PessoasNotificadasVW
+
+@using PagedList.Mvc
+@using DAL.Notificacoes
+@using WEB.Areas.AvisosNotificacoes.Extensions
+
+@* <div class="text-right"> *@
+@* *@
+@*     <button type="button" class="btn bg-blue"> *@
+@*         Total enviados: @Model.qtdeEnviados *@
+@*     </button> *@
+@* *@
+@*     <button type="button" class="btn bg-red"> *@
+@*         Total com problema: @Model.qtdeProblemaEnvio *@
+@*     </button> *@
+@* *@
+@*     <button type="button" class="btn bg-red"> *@
+@*         Total na fila: @Model.qtdeFila *@
+@*     </button> *@
+@* *@
+@* </div> *@
+
+<div class="col-sm-6">
+    
+    <button type="button" class="btn btn-sm bg-blue">
+        <i class="fa fa-send"></i> Total enviados: @Model.qtdeEnviados
+    </button>
+    
+    <button type="button" class="btn btn-sm bg-red">
+        <i class="fa fa-exclamation-circle"></i> Total com problema: @Model.qtdeProblemaEnvio
+    </button>
+    
+    <button type="button" class="btn btn-sm bg-black">
+        <i class="fa fa-spinner"></i> Total na fila: @Model.qtdeFila
+    </button>
+    
+</div>
+    
+<div class="col-sm-6">
+    <div class="row">
+        <div class="col-sm-6 pull-right">
+            @using (Ajax.BeginForm("partialUsuariosNotificacao", null, new AjaxOptions { HttpMethod = "POST", OnSuccess = "", UpdateTargetId = "boxAssociadosNotificados", InsertionMode = InsertionMode.Replace }, new { id = "formAssociadosNotificados" })) {
+                @Html.HiddenFor(m => m.idNotificacao)
+                @Html.buttonSearch(UtilRequest.getString("valorBusca"))
+            }
+        </div>
+    </div>
+</div>
+<div class="clearfix"></div><br />
+
+@if (!Model.listaPessoasNotificadas.Any()) {
+    <div class="alert alert-info">
+        Nenhum usuário foi encontrado.
+    </div>
+}
+
+@foreach(NotificacaoSistemaEnvio OItem in Model.listaPessoasNotificadas) {
+
+    <div class="col-sm-12">
+
+        <div class="col-sm-12 box-info-item bordered-destaque @OItem.cssBorderNotificacaoEnvio()">
+
+            <div class="row fs-11">
+
+                <div class="col-md-3">
+                    <span>
+                        <i class="fa fa-user"></i> @OItem.nome
+                    </span>
+                </div>
+
+                <div class="col-lg-4 col-xs-6">
+                    <span data-toggle="tooltip" title="E-mail principal">
+                        <i class="fa fa-envelope"></i> @OItem.email
+                    </span>
+                </div>
+
+                <div class="col-lg-2 col-sm-3 col-xs-3">
+                    <span data-toggle="tooltip" title="Data de envio"><i class="fa fa-share"></i> @OItem.dtEnvioEmail.exibirData()</span> <br />
+                    <span data-toggle="tooltip" title="Data de leitura"><i class="fa fa-calendar"></i> @OItem.dtLeitura.exibirData() </span>
+                </div>
+
+                <div class="col-xs-3 text-right box-acoes">
+
+                    @if(OItem.flagExcluido == true) {
+                        <span data-toggle="tooltip" title="@OItem.motivoExclusao"><i class="fa fa-exclamation-circle"></i></span> <br />
+                    }
+
+                    @if(!OItem.dtEnvioEmail.HasValue && OItem.flagExcluido == false) {
+                        <a href="javascript:void(0);" class="delete-default" data-id="@OItem.id" data-url="@Url.Action(null)" title="Excluir Registro"><i class="fa fa-trash"></i></a>
+                    }
+
+                </div>
+                <div class="clearfix"></div>
+
+            </div>
+
+        </div>
+
+    </div>
+    <div class="clearfix"></div>
+
+}
+
+@(Html.paginarRegistros(Model.listaPessoasNotificadas, Html.PagedListPager(Model.listaPessoasNotificadas, nroPagina => UtilRequest.linkPaginacao(nroPagina, "editar"), PagedListRenderOptions.OnlyShowFivePagesAtATime)))

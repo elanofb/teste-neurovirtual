@@ -1,0 +1,47 @@
+﻿@model IList<DAL.Pedidos.Pedido>
+
+<div class="box box-primary box-success">
+    <div class="box-header">
+        <i class="fa fa-user"></i>
+        <h3 class="box-title">Últimos pedidos cadastrados</h3>
+    </div>
+    <div class="box-body">
+        <div class="table-responsive">
+            <table class="table table-widget table-striped table-hover fs-12">
+                <thead>
+                    <tr>
+                        <th class="text-center">Nº </th>
+                        <th class="text-center">Nome</th>
+                        <th class="text-center">Data</th>
+                        <th class="text-center">Valor</th>
+                        <th class="text-center">Status</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if(Model.Count > 0) {
+                        foreach(DAL.Pedidos.Pedido OPedido in Model) {
+                            <tr>
+                                <td class="fs-12 text-center">@OPedido.id</td>
+                                <td class="fs-12">@OPedido.Pessoa.nome</td>
+                                <td class="fs-12 text-center">@OPedido.dtCadastro.ToShortDateString()</td>
+                                <td class="fs-12">@OPedido.getValorTotal().ToString("C")</td>
+                                <td class="fs-12 text-center">@OPedido.StatusPedido.descricao</td>
+                                <td>
+                                    @Html.link("<i class='fa fa-search'></i>", Url.Action("index","PedidoCadastro", new { OPedido.id , Area = "Pedidos" }),"Visualizar cadastro completo")
+                                </td>
+                            </tr>
+                        }
+                    } else {
+                        <tr>
+                            <td colspan="6" class="text-center">Nenhum pedido cadastrado no momento.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+</div>
+
+<div class="clearfix"></div>

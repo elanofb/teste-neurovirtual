@@ -1,0 +1,143 @@
+﻿@model WEB.Areas.Pedidos.ViewModels.ProdutosAtivosConsultaVM
+
+@using DAL.Pedidos.Extensions
+@using PagedList.Mvc
+@using WEB.Areas.Pedidos.Extensions
+
+<div class="row">
+<div class="col-md-12">
+
+    @if (!Model.listaItens.Any()) {
+        
+        <div class="alert alert-info margin-top-10">
+            Nenhum produto foi encontrado.
+        </div>
+        
+    }
+    
+    @foreach (var OItem in Model.listaItens) {
+        
+        <div class="box-info-item bordered-destaque border-green">
+                
+            <div class="row">
+                
+                <div class="col-md-3 col-sm-3 col-xs-12">
+                    
+                    <div class="row">
+                    
+                        <div class="col-md-12">
+                            
+                            <a href="@Url.Action("index", "PedidoDetalhes", new{ id = OItem.idPedido})" class="text-black">
+                                <strong><i class="fa fa-hashtag"></i><span>@OItem.idPedido</span> - @(OItem.Pedido.Pessoa?.nome.ToUpper())</strong>                                
+                            </a>
+                            
+                        </div>
+
+                        <div class="clearfix"></div>
+                        
+                        <div class="col-md-12">                            
+                           
+                            <span data-toggle="tooltip" title="Número da Conta">
+                                <i class="fas fa-wallet"></i> @(OItem.Pedido.Associado?.nroAssociado)
+                            </span>
+                            
+                        </div>
+                        
+                        <div class="clearfix"></div>
+
+                    </div>
+                </div>
+
+                <div class="col-md-2 col-sm-2">
+                    
+                    <div class="row">
+
+                        <div class="col-md-12">
+                            <span data-toggle="tooltip" title="Compra realizada em @OItem.Pedido.dtCadastro.exibirData(false)">
+                                <i class="fas fa-calendar-alt"></i> @OItem.Pedido.dtCadastro.exibirData(false)
+                            </span>
+                        </div>
+                        
+                        <div class="clearfix"></div>
+                        
+                        <div class="col-md-12">
+                            <span data-toggle="tooltip" title="Termina em em @OItem.dtFimGanhoDiario.exibirData(false)">
+                                <i class="fas fa-calendar-times"></i> @OItem.dtFimGanhoDiario.exibirData(false)
+                            </span>
+                        </div>
+                        
+                    </div>
+                </div>
+                
+                <div class="col-md-4 col-sm-4">
+                    
+                    <div class="row">
+                        
+                        <div class="col-md-12">
+                            <span data-toggle="tooltip" title="@(OItem.Produto?.nome)">
+                                <strong><i class="far fa-tag"></i> (@OItem.idProduto) @(OItem.Produto?.nome)</strong> 
+                            </span>
+                        </div>
+                        
+                        <div class="clearfix"></div>
+                        
+                        <div class="col-md-12">
+                            <span>
+                                <strong><i class="far fa-coins"></i>  Ganho Diário: </strong> @OItem.valorGanhoDiario
+                            </span>
+                        </div>
+                        
+                        <div class="clearfix"></div>
+                        
+                        <div class="col-md-12">
+                            <span>
+                                <strong><i class="far fa-sitemap"></i> Pontos para Rede: </strong> @OItem.qtdePontosPlanoCarreira.toInt()
+                            </span>
+                        </div>
+                        
+                    </div>
+                </div>
+                
+                <div class="col-md-2 col-sm-2">
+                    
+                    <div class="row">
+                        
+                        <div class="col-md-12">
+                            <span>
+                                <strong><i class="fa fa-usd"></i>Valor: </strong> @OItem.valorItem
+                            </span>
+                        </div>
+                        
+                        <div class="clearfix"></div>
+                        
+                        <div class="col-md-12">
+                            <span>
+                                <strong><i class="fa fa-usd"></i>Quantidade: </strong> @OItem.qtde
+                            </span>
+                        </div>
+                        
+                        <div class="clearfix"></div>
+                        
+                    </div>
+                </div>
+                
+                <div class="col-sm-1 col-xs-12 text-right box-acoes">
+                    
+                    <a href="@Url.Action("index", "PedidoDetalhes", new{ id = OItem.idPedido})" title="Visualizar Pedido" data-toggle="tooltip">
+                        <i class="fa fa-search"></i>
+                    </a><br>
+                    
+                    <input type="hidden" value="@OItem.idPedido" class="hide idPedido"/>
+                    
+                </div>
+                
+                <div class="clearfix"></div>
+                
+            </div>
+        </div>
+    }
+    
+    @*(Html.paginarRegistros(Model.listaPedidos, Html.PagedListPager(Model.listaPedidos, nroPagina => UtilRequest.linkPaginacao(nroPagina, ViewContext.RouteData.Values["action"].ToString()))))*@
+
+</div>
+</div>

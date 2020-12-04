@@ -1,0 +1,33 @@
+﻿@using MvcFlashMessages
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>@Html.sistema().tituloSistema</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport" />
+</head>
+<body class="hold-transition sidebar-mini @(Html.sistema().temaInterface)">
+    <div class="wrapper">
+
+        <div class="content-wrapper">
+
+            <section class="content-header">
+                <h1>
+                    @ViewBag.titlePage &nbsp;
+                    @if(ViewBag.subTitlePage != null){
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                        <small>@ViewBag.subTitlePage</small>
+                    }                    
+                </h1>
+            </section>
+            <section class="content">
+                @Html.RenderFlash()
+                @RenderBody()
+            </section>
+        </div>
+
+    </div>
+</body>
+</html>

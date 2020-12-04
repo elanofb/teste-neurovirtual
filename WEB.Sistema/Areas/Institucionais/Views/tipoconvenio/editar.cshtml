@@ -1,0 +1,62 @@
+﻿@using WEB.Areas.Associacoes.Helpers
+@using DAL.Permissao.Security.Extensions
+@model WEB.Areas.Institucionais.ViewModels.TipoConvenioForm
+@{
+    Layout = "~/views/shared/associatec/masterpage-edit.cshtml";
+    ViewBag.titlePage = "Tipos de Convênio";
+}
+
+@section scripts {
+}
+
+@section navTabs{
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#tab-1" data-toggle="tab">Principal</a></li>
+    </ul>
+}
+
+@section tabContent{
+    <div id="tab-1" class="tab-pane active">
+        @{Html.RenderPartial("partial-info-cadastro");}
+
+        @using (Html.BeginForm("editar", null, FormMethod.Post, new { role = "form", @class = "default" }))
+        {
+            @Html.legendaRequired()
+            @Html.HiddenFor(m => m.TipoConvenio.id)
+            @Html.ValidationSummary(false)
+
+            <h4 class="separator-form margin-left-15">Informações Cadastrais</h4>
+
+            if (User.idOrganizacao() == 0) {
+
+                <div class="col-sm-4 col-md-3">
+                    <label>Organização</label>
+                    @Html.DropDownListFor(m => m.TipoConvenio.idOrganizacao, AssociacaoHelper.getInstance.selectList(Model.TipoConvenio.idOrganizacao), "Padrão", new { @class = "form-control input-sm" })
+                </div>
+                            <div class="clearfix"></div>
+
+            }
+            <div class="col-md-2">
+                <label>Status</label>
+                @Html.DropDownListFor(m => m.TipoConvenio.ativo, ComboHelper.selectListStatus(Model.TipoConvenio.ativo), new { @class = "form-control input-sm" })
+                @Html.ValidationMessageFor(m => m.TipoConvenio.ativo)
+            </div>
+            <div class="col-md-4">
+                @Html.labelRequired("Descrição")
+                @Html.TextBoxFor(m => m.TipoConvenio.descricao, new { @class = "form-control input-sm", maxlength = "100" })
+                @Html.ValidationMessageFor(m => m.TipoConvenio.descricao)
+            </div>
+
+            <div class="clearfix"></div>
+            <br /><br />
+
+            <div class="col-sm-12">
+                <div class="text-right">
+                    @Html.exibirBotoesFormulario(Url.Action("listar"), "N")
+                </div>
+            </div>
+        }
+    </div><div class="clearfix"></div>
+}
+
+

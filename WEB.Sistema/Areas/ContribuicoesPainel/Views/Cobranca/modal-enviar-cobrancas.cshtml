@@ -1,0 +1,53 @@
+﻿@model WEB.Areas.ContribuicoesPainel.ViewModels.ContribuicaoEnvioCobrancaForm
+@using MvcFlashMessages
+@using WEB.Helpers
+
+@{
+    Layout = "~/views/shared/associatec/masterpage-modal.cshtml";
+    ViewBag.modalTitle = "Enviar cobrança";
+
+    string idBox = "boxContribuicaoCobranca";
+
+    if (IsPost) {
+        Layout = null;
+        idBox = "";
+    }
+}
+
+<div id="@idBox">
+    @using (Ajax.BeginForm(null, null, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = idBox, OnSuccess = "ContribuicaoCobranca.onSuccessForm", InsertionMode = InsertionMode.Replace }, new { })) {
+
+        { Html.EnableUnobtrusiveJavaScript(false); } 
+        { Html.EnableClientValidation(false); }
+        @Html.ValidationSummary()
+
+        @Html.RenderFlash()
+
+        @Html.HiddenFor(m => m.ContribuicaoCobranca.id)
+
+        @Html.HiddenFor(m => m.ContribuicaoCobranca.idContribuicao)
+
+        <div class="row">
+            <div class="col-sm-6">
+                <label>Enviar somente para vencidos?</label>
+                @Html.DropDownListFor(x => x.ContribuicaoCobranca.flagSomenteVencidos, ComboHelper.selectListTrueFalse(Model.ContribuicaoCobranca.flagSomenteVencidos), "...", new {@class = "form-control input-sm"})
+                @Html.ValidationMessageFor(x => x.ContribuicaoCobranca.flagSomenteVencidos)
+            </div>
+            <div class="clearfix"></div>
+            <div class="col-sm-12">
+                <label>Mensagem de Cobrança</label>
+                @Html.TextAreaFor(x => x.ContribuicaoCobranca.mensagemCobranca, new { rows="5", @class = "form-control input-sm" })
+                @Html.ValidationMessageFor(x => x.ContribuicaoCobranca.mensagemCobranca)
+                @Html.instrucao("Preencha uma mensagem adicional opcionalmente para os associados")
+            </div>
+        </div><br />
+
+        <div class="text-right">
+            <input type="submit" class="btn btn-primary btn-submit link-loading" title="Adicionar" value="Salvar" data-toggle="tooltip" />
+        </div>
+
+        <div class="clearfix"></div>
+        <br />
+    }
+
+</div>

@@ -1,0 +1,186 @@
+﻿@model WEB.Areas.Configuracao.ViewModels.ConfiguracaoSistemaForm
+@using DAL.Permissao.Security.Extensions
+@using WEB.Areas.Associacoes.Helpers
+@using MvcFlashMessages
+
+@{
+    ViewBag.titlePage = "Configurações do Sistema";
+}
+
+@section breadcrump{
+    <ol class="breadcrumb">
+        <li><a href="@Url.Action("listar")" class="active fs-14"><i class="fa fa-arrow-left"></i> Voltar</a></li>
+    </ol>
+}
+
+<div class="row">
+    <div class="col-sm-12 box-primary">
+        <div class="nav-tabs-custom">
+
+            <ul class="nav nav-tabs" role="tablist">
+                <li class="active"><a href="#tab-notificacoes" data-toggle="tab">Sistema</a></li>
+            </ul>
+            @using (Html.BeginForm("editar", null, FormMethod.Post, new { role = "form", @class = "tab-content", enctype = "multipart/form-data" })) {
+                @Html.RenderFlash()
+                @Html.ValidationSummary(false)
+
+                <div id="tab-notificacoes" role="tabpanel" class="tab-pane active">
+                    
+                    <div class="col-sm-12">
+                        
+                        <div class="row">
+                            
+                            @{ Html.RenderPartial("partial-dados-cadastro", Model);}
+
+                            <h4 class="separator-form">Configurações Gerais</h4>
+
+                            @if (User.idOrganizacao() == 0) {
+                                
+                                <div class="col-sm-4 col-md-3">
+                                    <label>Organização</label>
+                                    @Html.DropDownListFor(m => m.ConfiguracaoSistema.idOrganizacao, AssociacaoHelper.getInstance.selectList(Model.ConfiguracaoSistema.idOrganizacao, false), "Padrão", new { @class = "form-control input-sm", type = "number" })
+                                </div>
+                                <div class="clearfix"></div>
+
+                            }
+
+                            <div class="col-sm-4">
+                                <label>Código da Organização</label>
+                                @Html.TextBoxFor(m => m.ConfiguracaoSistema.codigoOrganizacao, new { @class = "form-control input-sm" })
+                                @Html.ValidationMessageFor(m => m.ConfiguracaoSistema.codigoOrganizacao)
+                            </div>
+                            <div class="col-sm-4">
+                                <label>Sigla da Organização</label>
+                                @Html.TextBoxFor(m => m.ConfiguracaoSistema.siglaOrganizacao, new { @class = "form-control input-sm", maxlength = "20" })
+                                @Html.ValidationMessageFor(m => m.ConfiguracaoSistema.siglaOrganizacao)
+                            </div>
+                            
+                            <div class="col-sm-4">
+                                <label>Título Sistema</label>
+                                @Html.TextBoxFor(m => m.ConfiguracaoSistema.tituloSistema, new { @class = "form-control input-sm", maxlength = "100" })
+                                @Html.ValidationMessageFor(m => m.ConfiguracaoSistema.tituloSistema)
+                            </div>
+                            <div class="clearfix"></div>
+                            
+                            <div class="col-sm-6">
+                                
+                                <div class="row">
+                                    
+                                    <div class="col-sm-12">
+                                        <label>Nome Empresa Resumido</label>
+                                        @Html.TextBoxFor(m => m.ConfiguracaoSistema.nomeEmpresaResumo, new { @class = "form-control input-sm", maxlength = "100" })
+                                        @Html.ValidationMessageFor(m => m.ConfiguracaoSistema.nomeEmpresaResumo)
+                                    </div>
+                                    <div class="clearfix"></div>
+
+                                    <div class="col-sm-12">
+                                        <label>Nome Empresa Completo</label>
+                                        @Html.TextBoxFor(m => m.ConfiguracaoSistema.nomeEmpresaCompleto, new { @class = "form-control input-sm", maxlength = "100" })
+                                        @Html.ValidationMessageFor(m => m.ConfiguracaoSistema.nomeEmpresaCompleto)
+                                    </div>
+                                    <div class="clearfix"></div>
+
+                                </div>
+
+                            </div>
+
+                            <div class="col-sm-6">
+                                <label>Domínios</label>
+                                @Html.TextAreaFor(m => m.ConfiguracaoSistema.dominios, new { @class = "form-control input-sm", rows = 4 })
+                                @Html.ValidationMessageFor(m => m.ConfiguracaoSistema.dominios)
+                            </div>
+                            <div class="clearfix"></div>
+
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="row">
+                            <h4 class="separator-form">Interface Sistema</h4>
+
+                            <div class="col-sm-6">
+                                <div class="row">
+                                    <div class="col-sm-12 col-md-6">
+                                        <label>Tema</label>
+                                        @Html.DropDownListFor(m => m.ConfiguracaoSistema.temaInterface, ConfiguracaoSistemaHelper.getInstance.selectListTema(Model.ConfiguracaoSistema.temaInterface), "...", new { @class = "form-control input-sm" })
+                                    </div>
+                                    <div class="clearfix"></div>
+                                    <div class="col-sm-12">
+                                        <label>HTML Logo topo</label>
+                                        @Html.TextAreaFor(m => m.ConfiguracaoSistema.htmlLogoTopo, new { @class = "form-control input-sm", rows = "3", maxlength = "255" })
+                                        @Html.ValidationMessageFor(m => m.ConfiguracaoSistema.htmlLogoTopo)
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <label>HTML Logo topo mini</label>
+                                        @Html.TextAreaFor(m => m.ConfiguracaoSistema.htmlLogoTopoMini, new { @class = "form-control input-sm", rows = "3", maxlength = "100" })
+                                        @Html.ValidationMessageFor(m => m.ConfiguracaoSistema.htmlLogoTopoMini)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <label>CSS Customizado Sistema</label>
+                                @Html.TextAreaFor(m => m.ConfiguracaoSistema.cssCustomizado, new { @class = "form-control input-sm", rows = "7", maxlength = "3000" })
+                                @Html.ValidationMessageFor(m => m.ConfiguracaoSistema.cssCustomizado)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="row">
+                            <h4 class="separator-form">Interface Login</h4>
+
+                            <div class="col-sm-6">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <label>Rota Customizada</label>
+                                        @Html.TextBoxFor(m => m.ConfiguracaoSistema.rotaCustomizadaLogin, new { @class = "form-control input-sm", maxlength = "30" })
+                                    </div>
+                                    <div class="clearfix"></div>
+
+                                    <div class="col-sm-12">
+                                        <label>Customizar BG Login</label>
+                                        @Html.DropDownListFor(m => m.ConfiguracaoSistema.flagBgLoginCustomizado, ComboHelper.selectListTrueFalse(Model.ConfiguracaoSistema.flagBgLoginCustomizado), "...", new { @class = "form-control input-sm" })
+                                        @Html.instrucao("Ao marcar 'SIM', é necessário cadastrar a imagem no menu 'Logotipos'")
+                                    </div>
+                                    <div class="clearfix"></div>
+
+                                    <div class="col-sm-12">
+                                        <label>Título Caixa Login</label>
+                                        @Html.TextBoxFor(m => m.ConfiguracaoSistema.tituloCaixaLogin, new {@class = "form-control input-sm", maxlength = "255"})
+                                        @Html.ValidationMessageFor(m => m.ConfiguracaoSistema.tituloCaixaLogin)
+                                    </div>
+                                    <div class="clearfix"></div>
+
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <label>CSS Customizado Login</label>
+                                @Html.TextAreaFor(m => m.ConfiguracaoSistema.cssCustomizadoLogin, new { @class = "form-control input-sm", rows = "8", maxlength = "1000" })
+                                @Html.ValidationMessageFor(m => m.ConfiguracaoSistema.cssCustomizadoLogin)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+
+                    <div class="col-sm-12">
+                        <div class="row">
+                            <h4 class="separator-form">Configurações da API</h4>
+
+                            <div class="col-sm-4 col-md-3">
+                                <label>Chave de Acesso a API</label>
+                                @Html.TextBoxFor(m => m.ConfiguracaoSistema.apiChaveAcesso, new { @class = "form-control input-sm", maxlength = "20" })
+                                @Html.ValidationMessageFor(m => m.ConfiguracaoSistema.apiChaveAcesso)
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="clearfix"></div><br/>        
+                </div>
+
+                <div class="col-sm-12 text-right">
+                    @Html.botaoSalvar()
+                </div>
+                <div class="clearfix"></div><br />
+                                }
+        </div>
+    </div>
+</div>

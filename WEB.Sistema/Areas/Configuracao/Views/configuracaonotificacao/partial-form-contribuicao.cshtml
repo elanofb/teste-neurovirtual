@@ -1,0 +1,75 @@
+﻿@model WEB.Areas.Configuracao.ViewModels.ConfiguracaoNotificacaoForm
+
+
+
+
+<div class="row">
+    <div class="col-sm-12">
+        <h4 class="separator-form">Mensagens de E-mails Mensalidade:</h4>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="col-sm-12">
+                <label>Título cobrança contribuição</label>
+                @Html.TextBoxFor(m => m.ConfiguracaoNotificacao.tituloEmailCobrancaContribuicao, new { @class = "form-control input-sm", maxlength = "255" })
+                @Html.ValidationMessageFor(m => m.ConfiguracaoNotificacao.tituloEmailCobrancaContribuicao)
+            </div>
+
+            <div class="col-sm-12">
+                <label>Mensagem cobrança contribuição</label>
+
+                @Html.TextAreaFor(m => m.ConfiguracaoNotificacao.corpoEmailCobrancaContribuicao, new { @class = "form-control input-sm froala-editor", rows = "10" })
+
+                @Html.instrucao("Limite de 3.000 caracteres.")<br />
+
+                @Html.ValidationMessageFor(m => m.ConfiguracaoNotificacao.corpoEmailCobrancaContribuicao)
+            </div>
+        </div>
+
+        <div class="col-sm-6">
+            <div class="col-sm-12">
+                <label>Título confirmação pagamento contribuição</label>
+                @Html.TextBoxFor(m => m.ConfiguracaoNotificacao.tituloEmailPagamentoContribuicao, new { @class = "form-control input-sm", maxlength = "255" })
+                @Html.ValidationMessageFor(m => m.ConfiguracaoNotificacao.tituloEmailPagamentoContribuicao)
+            </div>
+
+            <div class="col-sm-12 ">
+                <label>Confirmação pagamento contribuição</label>
+                @Html.TextAreaFor(m => m.ConfiguracaoNotificacao.corpoEmailPagamentoContribuicao, new { @class = "form-control input-sm froala-editor", rows = "10" })
+                @Html.instrucao("Limite de 3.000 caracteres.")<br />
+
+                @Html.ValidationMessageFor(m => m.ConfiguracaoNotificacao.corpoEmailPagamentoContribuicao)
+            </div>
+        </div>
+        
+    </div>
+</div>
+<div class="clearfix"></div><br/>
+
+<div class="row">
+    <div class="col-sm-12">
+        <h4 class="separator-form">Mensagens de E-mails para Contribuições:</h4>
+    </div>
+
+    <div class="col-sm-6">
+        <div class="col-sm-12 no-padding">
+            <label>Mensagem cobrança</label>
+            @Html.TextAreaFor(m => m.ConfiguracaoNotificacao.corpoEmailCobrancaAnuidade, new { @class = "form-control input-sm froala-editor", rows = "10" })
+            @Html.instrucao("Limite de 3.000 caracteres.")<br />
+
+            @Html.ValidationMessageFor(m => m.ConfiguracaoNotificacao.corpoEmailCobrancaAnuidade)
+        </div>
+    </div>
+
+    <div class="col-sm-6">
+        <div class="col-sm-12 no-padding">
+            <label>Confirmação pagamento</label>
+            @Html.TextAreaFor(m => m.ConfiguracaoNotificacao.corpoEmailPagamentoAnuidade, new { @class = "form-control input-sm froala-editor", rows = "10" })
+            @Html.instrucao("Limite de 3.000 caracteres.")<br />
+
+            @Html.ValidationMessageFor(m => m.ConfiguracaoNotificacao.corpoEmailPagamentoAnuidade)
+        </div>
+    </div>
+</div>
+
+<div class="clearfix"></div><br />

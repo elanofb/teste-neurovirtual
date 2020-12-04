@@ -1,0 +1,46 @@
+﻿@model WEB.Areas.AreasAtuacao.ViewModels.AreaAtuacaoForm
+
+@using DAL.Permissao.Security.Extensions
+@using WEB.Areas.Associacoes.Helpers
+
+@using (Html.BeginForm("editar", null, FormMethod.Post, new { role = "form", @class = "default" })){
+	
+	@Html.HiddenFor(m => m.AreaAtuacao.id)
+
+	@Html.ValidationSummary(false)
+
+    <h4 class="separator-form">Dados Principais da Área de Atuação</h4>
+
+	<div class="form-horizontal">
+
+        @if(User.idOrganizacao() == 0) {
+
+            <div class="col-sm-4 col-md-3">
+                <label>Organização</label>
+                @Html.DropDownListFor(m => m.AreaAtuacao.idOrganizacao, AssociacaoHelper.getInstance.selectList(Model.AreaAtuacao.idOrganizacao), "Padrão", new {@class = "form-control input-sm"})
+            </div>
+            <div class="clearfix"></div>
+
+        }
+
+	    <div class="col-md-6">
+			@Html.labelRequired("Descrição")
+			@Html.TextBoxFor(m => m.AreaAtuacao.descricao, new { @class = "form-control input-sm", maxlength="100" })
+			@Html.ValidationMessageFor(m => m.AreaAtuacao.descricao)
+		</div>
+
+		<div class="col-md-2">
+			<label>Status</label>
+			@Html.DropDownListFor(m => m.AreaAtuacao.ativo, ComboHelper.selectListStatus(Model.AreaAtuacao.ativo), "...", new { @class = "form-control input-sm" })
+			@Html.ValidationMessageFor(m => m.AreaAtuacao.ativo)
+		</div>
+		<div class="clearfix"></div>
+
+	</div>
+	<div class="clearfix"></div>
+	<br />
+	<div class="text-right">
+		@Html.exibirBotoesFormulario(Url.Action("listar"), "N")
+	</div>
+
+}

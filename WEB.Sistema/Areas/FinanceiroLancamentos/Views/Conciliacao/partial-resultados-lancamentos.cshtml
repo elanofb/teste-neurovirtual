@@ -1,0 +1,79 @@
+﻿@model WEB.Areas.FinanceiroLancamentos.ViewModels.ConciliacaoVM
+
+@{
+    var valorTotalReceitas = Model.listaLancamentos.Where(x => x.flagTipoTitulo == "R").Select(x => x.valorRealizado > 0 ? x.valorRealizado : 0).Sum() ?? 0;
+    
+    var valorTotalDespesas = Model.listaLancamentos.Where(x => x.flagTipoTitulo == "D").Select(x => x.valorRealizado > 0 ? x.valorRealizado : 0).Sum() ?? 0;
+
+    var valorTotalTarifasTransacoes = Model.listaLancamentos.Where(x => x.flagTipoTitulo == "R").Select(x => x.valorTarifasTransacao > 0 ? x.valorTarifasTransacao : 0).Sum() ?? 0;
+
+    var valorTotalTarifasBancarias = Model.listaLancamentos.Where(x => x.flagTipoTitulo == "R").Select(x => x.valorTarifasBancarias > 0 ? x.valorTarifasBancarias : 0).Sum() ?? 0;
+
+    var valorTotalTaridas = valorTotalTarifasBancarias + valorTotalTarifasTransacoes;
+    
+    var valorResultado = (valorTotalReceitas - (valorTotalDespesas + valorTotalTarifasBancarias + valorTotalTarifasTransacoes));
+}
+    
+<div class="row">
+    
+    <div class="col-sm-12">
+        
+        <h4 class="separator-form-icon">Resultados do Período</h4>
+        
+        <div class="row fs-12">
+            <div class="col-sm-12">
+                <div class="row">
+                    <div class="col-sm-7">
+                        <strong>Receitas</strong>
+                    </div>
+                
+                    <div class="col-sm-5 text-right">
+            
+                        <span class="text-green">
+                            @valorTotalReceitas.ToString("C")
+                        </span>
+                    
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-7">
+                        <strong>Tarifas</strong>
+                    </div>
+                    <div class="col-sm-5 text-right">
+                        <span class="text-red">
+                            - @valorTotalTaridas.ToString("C")
+                        </span>
+                    </div>                    
+                </div>
+                <div class="row">
+                    <div class="col-sm-7">
+                        <strong>Despesas</strong>
+                    </div>
+                    <div class="col-sm-5 text-right">
+                        <span class="text-red">
+                            - @valorTotalDespesas.ToString("C")
+                        </span>
+                    </div>                    
+                </div>
+                
+                <div class="row">
+                    <div class="col-sm-12">
+                        <hr class="margin-top-10 margin-bottom-10">
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-7">
+                        <strong>Resultado</strong>
+                    </div>
+                    <div class="col-sm-5 text-right">
+                        <span class="@(valorResultado > 0 ? "text-green" : "text-red")">
+                            @valorResultado.ToString("C")
+                        </span>
+                    </div>
+                </div>
+            </div>            
+            <div class="clearfix"></div>            
+        </div>        
+    </div>        
+</div>

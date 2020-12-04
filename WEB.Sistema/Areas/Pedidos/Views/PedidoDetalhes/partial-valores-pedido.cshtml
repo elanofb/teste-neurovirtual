@@ -1,0 +1,94 @@
+﻿@model WEB.Areas.Pedidos.ViewModels.PedidoDetalhesVM
+
+@using WEB.Areas.Pedidos.Extensions
+
+<div class="btn btn-block @Model.Pedido.exibirCorStatus() abreviar margin-bottom-15">
+    @(Model.Pedido.StatusPedido?.descricao ?? "-")
+</div>
+
+
+<div class="row">
+
+    <div class="col-sm-5">
+        <label>
+            <i class="fa fa-usd"></i> Meio Pagamento:
+        </label>
+    </div>
+
+    <div class="col-sm-7 text-right">
+        <p class="campo-info">
+            @Model.Pedido.MeioPagamento.descricao.defaultIfEmpty("-")
+        </p>
+    </div>
+</div>
+
+<div class="row">
+
+    <div class="col-sm-7">
+        <label>
+            <i class="fa fa-usd"></i> Valor dos Produtos:
+        </label>
+    </div>
+
+    <div class="col-sm-5 text-right">
+        <p class="campo-info">
+            @Model.Pedido.valorProdutos.ToString("C")
+        </p>
+    </div>
+</div>
+
+<div class="row">
+
+    <div class="col-sm-7">
+        <label>
+            <i class="fa fa-usd"></i> Valor do Frete:
+        </label>
+    </div>
+
+    <div class="col-sm-5 text-right">
+        <p class="campo-info text-yellow">
+            @if (Model.Pedido.flagFreteGratis == true) {
+                <span class="text-green">GRÁTIS</span>
+            } else {
+                <span>+ @Model.Pedido.valorFrete.exibirValor()</span>
+            }
+
+        </p>
+    </div>
+</div>
+
+<div class="row">
+
+    <div class="col-sm-7">
+        <label>
+            <i class="fa fa-usd"></i> Descontos:
+        </label>
+    </div>
+
+    <div class="col-sm-5 text-right">
+        <p class="campo-info text-red">
+            - @Model.Pedido.valorDesconto.exibirValor()
+        </p>
+    </div>
+</div>
+
+<div class="row">
+
+    <div class="col-sm-12"><hr class="margin-top-10 margin-bottom-10"></div>
+</div>
+
+<div class="row">
+
+    <div class="col-sm-7">
+        <label>
+            <i class="fa fa-usd"></i> Total:
+        </label>
+    </div>
+
+    <div class="col-sm-5 text-right">
+        <p class="campo-info text-green">
+            @Model.Pedido.getValorTotal().ToString("C")
+        </p>
+    </div>
+
+</div>

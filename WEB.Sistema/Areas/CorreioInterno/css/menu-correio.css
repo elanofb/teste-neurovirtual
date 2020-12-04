@@ -1,0 +1,15 @@
+.submenu-correio{
+	position: relative !important;
+	float: none !important;
+	margin: 0 !important;
+	padding: 0 !important;
+}
+
+.submenu-correio a{
+	padding: 10px 40px !important;
+	display: block;
+}
+
+.nav.nav-pills .open i.fa-angle-left{
+	transform: rotate(-90deg);
+}

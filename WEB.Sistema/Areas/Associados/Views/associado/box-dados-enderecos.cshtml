@@ -1,0 +1,72 @@
+﻿@model WEB.Areas.Associados.ViewModels.AssociadoForm
+
+<div class="col-sm-6 col-xs-12">
+    <div class="box-info-item">
+        <div>
+            <strong><i class="fa fa-map-marker"></i> Endereço Residencial</strong><br />
+            <span><i class="fa fa-address-card"></i> @("Rua Engenheiro eurico arnaldo guedes de araújo".ToUpper().abreviar(40, "")), 109</span><br/>
+            <span><i class="fa fa-address-card"></i><strong> Bairro:</strong> Vila Nova Esperança (Zona leste)</span><br />
+            <span><i class="fa fa-map"></i> 03309-020</span> (São João da Boa Vista/SP)<br/>
+            <span><strong>Comp: </strong></span> Perto do posto de gasolina atrás do Erick<br />
+        </div>
+    </div>
+    <div class="box-info-item">
+        <div>
+            <strong><i class="fa fa-mobile"></i> (11) 99807.2042</strong> <em>(Celular)</em>
+        </div>
+    </div>
+</div>
+<div class="clearfix"></div>
+
+@*<div class="col-sm-4 col-md-4">
+    @Html.labelRequired("1º Telefone", "fs-10")
+    <div class="row">
+        <div class="col-sm-3 no-padding-right">
+            @Html.TextBoxFor(m => m.Associado.Pessoa.ddiTelPrincipal, new {@class = "form-control input-sm", placeholder = "DDI", alt = "number_3"})
+        </div>
+        <div class="col-sm-3 no-padding-right">
+            @Html.TextBoxFor(m => m.Associado.Pessoa.dddTelPrincipal, new {@class = "form-control input-sm", placeholder = "DDD", alt = "number_3"})
+        </div>
+        <div class="col-sm-6">
+            @Html.TextBoxFor(m => m.Associado.Pessoa.nroTelPrincipal, new {@class = "form-control input-sm", placeholder = "Fone", alt = "number_10"})
+        </div>
+    </div>
+    @Html.ValidationMessageFor(m => m.Associado.Pessoa.ddiTelPrincipal)
+    @Html.ValidationMessageFor(m => m.Associado.Pessoa.dddTelPrincipal)
+    @Html.ValidationMessageFor(m => m.Associado.Pessoa.nroTelPrincipal)
+</div>
+<div class="col-sm-4 col-md-4">
+    <label class="fs-10">2º Telefone</label>
+    <div class="row">
+        <div class="col-sm-3 no-padding-right">
+            @Html.TextBoxFor(m => m.Associado.Pessoa.ddiTelSecundario, new { @class = "form-control input-sm", placeholder = "DDI", alt = "number_3" })
+        </div>
+        <div class="col-sm-3 no-padding-right">
+            @Html.TextBoxFor(m => m.Associado.Pessoa.dddTelSecundario, new { @class = "form-control input-sm", placeholder = "DDD", alt = "number_3" })
+        </div>
+        <div class="col-sm-6">
+            @Html.TextBoxFor(m => m.Associado.Pessoa.nroTelSecundario, new { @class = "form-control input-sm", placeholder = "Fone", alt = "number_10" })
+        </div>
+    </div>
+    @Html.ValidationMessageFor(m => m.Associado.Pessoa.ddiTelSecundario)
+    @Html.ValidationMessageFor(m => m.Associado.Pessoa.dddTelSecundario)
+    @Html.ValidationMessageFor(m => m.Associado.Pessoa.nroTelSecundario)
+</div>
+<div class="col-sm-4 col-md-4">
+    <label class="fs-10">3º Telefone</label>
+    <div class="row">
+        <div class="col-sm-3 no-padding-right">
+            @Html.TextBoxFor(m => m.Associado.Pessoa.ddiTelTerciario, new {@class = "form-control input-sm", placeholder = "DDI", alt = "number_3"})
+        </div>
+        <div class="col-sm-3 no-padding-right">
+            @Html.TextBoxFor(m => m.Associado.Pessoa.dddTelTerciario, new {@class = "form-control input-sm", placeholder = "DDD", alt = "number_3"})
+        </div>
+        <div class="col-sm-6">
+            @Html.TextBoxFor(m => m.Associado.Pessoa.nroTelTerciario, new {@class = "form-control input-sm", placeholder = "Fone", alt = "number_10"})
+        </div>
+    </div>
+    @Html.ValidationMessageFor(m => m.Associado.Pessoa.ddiTelTerciario)
+    @Html.ValidationMessageFor(m => m.Associado.Pessoa.dddTelTerciario)
+    @Html.ValidationMessageFor(m => m.Associado.Pessoa.nroTelTerciario)
+
+</div>*@

@@ -1,0 +1,96 @@
+﻿@model WEB.Areas.Localizacao.ViewModels.PaisVM
+
+@{
+    ViewBag.titlePage = String.Format("Editar País {0}", Model.Pais.nome);
+}
+
+@section breadcrump{
+    <ol class="breadcrumb">
+        <li><a href="@Url.Action("listar")" class="active fs-14"><i class="fa fa-arrow-left"></i> Voltar</a></li>
+    </ol>
+}
+
+<div class="row">
+    <div class="col-sm-12 box-primary">
+        <div class="nav-tabs-custom">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#tab-1" data-toggle="tab">Principal</a></li>
+            </ul>
+            <div id="tab-1" class="tab-pane active">
+
+                @{ Html.RenderPartial("partial-info-cadastro"); }
+
+                @using(Html.BeginForm("editar", null, FormMethod.Post, new { role = "form", @class = "default" })) {
+                    
+                    @Html.HiddenFor(m => m.Pais.id)
+
+                    @Html.legendaRequired()<br />
+
+                    { Html.EnableClientValidation(false); }
+
+                    { Html.EnableUnobtrusiveJavaScript(false); }
+
+                    @Html.ValidationSummary(true, "Alguns campos não foram validados.")
+
+                    @Html.ValidationSummary(false)
+
+                    <div class="form-horizontal">
+
+                        <div class="col-md-6">
+
+                            <div class="box box-default">
+                                <div class="box-header with-border">
+                                    <h3 class="box-title">Dados do País</h3>
+                                </div>
+                                <div class="box-body">
+                                    <div class="row">
+
+                                        <div class="col-md-3">
+                                            @Html.labelRequired("ID")
+                                            @Html.TextBoxFor(m => m.Pais.id, new { @class = "form-control input-sm", maxlength = "3" }.isReadOnly(true))
+                                            @Html.ValidationMessageFor(m => m.Pais.id)
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <label>Status</label>
+                                            @Html.DropDownListFor(m => m.Pais.ativo, ComboHelper.selectListStatus(Model.Pais.ativo), new { @class = "form-control input-sm" })
+                                            @Html.ValidationMessageFor(m => m.Pais.ativo)
+                                        </div>
+                                        <div class="clearfix"></div>
+
+                                        <div class="col-md-8">
+                                            @Html.labelRequired("País")
+                                            @Html.TextBoxFor(m => m.Pais.nome, new { @class = "form-control input-sm", maxlength = "100" })
+                                            @Html.ValidationMessageFor(m => m.Pais.nome)
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            @Html.labelRequired("Código BACEN")
+                                            @Html.TextBoxFor(m => m.Pais.idPaisBACEN, new { @class = "form-control input-sm" })
+                                            @Html.ValidationMessageFor(m => m.Pais.idPaisBACEN)
+                                        </div>
+
+                                        <div class="clearfix"></div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="clearfix"></div>
+
+                    </div>
+
+                    <div class="col-md-12 text-right">
+                        @Html.exibirBotoesFormulario(Url.Action("listar"), Model.Pais.flagSistema, Url.Action("editar", new { id = 0 }))
+                    </div>
+                    <div class="clearfix"></div><br />
+
+                }
+
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+</div>
+

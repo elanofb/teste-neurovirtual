@@ -1,0 +1,48 @@
+﻿@model WEB.Areas.Configuracao.ViewModels.ConfiguracaoNotificacaoForm
+
+<div class="row">
+    <div class="col-sm-6">
+        <h4 class="separator-form">Cadastro de novo usuário</h4>
+        <div class="col-sm-12 no-padding">
+            <label>Título</label>
+            @Html.TextBoxFor(m => m.ConfiguracaoNotificacao.novoUsuarioTitulo, new { @class = "form-control input-sm", maxlength = "100" })
+            @Html.ValidationMessageFor(m => m.ConfiguracaoNotificacao.novoUsuarioTitulo)
+        </div>
+        <div class="col-sm-12 no-padding">
+            <label>Corpo do E-mail</label>
+            @Html.TextAreaFor(m => m.ConfiguracaoNotificacao.novoUsuarioCorpo, new { @class = "form-control input-sm froala-editor", rows = "10" })
+            @Html.ValidationMessageFor(m => m.ConfiguracaoNotificacao.novoUsuarioCorpo)
+        </div>
+    </div>
+
+    <div class="col-sm-6">
+        <h4 class="separator-form">Reenvio de senha para o usuário</h4>
+        <div class="col-sm-12 no-padding">
+            <label>Título</label>
+            @Html.TextBoxFor(m => m.ConfiguracaoNotificacao.reenvioSenhaUsuarioTitulo, new { @class = "form-control input-sm", maxlength = "100" })
+            @Html.ValidationMessageFor(m => m.ConfiguracaoNotificacao.reenvioSenhaUsuarioTitulo)
+        </div>
+        <div class="col-sm-12 no-padding">
+            <label>Corpo do E-mail</label>
+            @Html.TextAreaFor(m => m.ConfiguracaoNotificacao.reenvioSenhaUsuarioCorpo, new { @class = "form-control input-sm froala-editor", rows = "10" })
+            @Html.ValidationMessageFor(m => m.ConfiguracaoNotificacao.reenvioSenhaUsuarioCorpo)
+        </div>
+    </div>
+
+    <div class="clearfix"></div><br/>
+
+    <div class="col-sm-6">
+        <h4 class="separator-form">Recuperação de senha do usuário</h4>
+        <div class="col-sm-12 no-padding">
+            <label>Título</label>
+            @Html.TextBoxFor(m => m.ConfiguracaoNotificacao.recuperacaoSenhaUsuarioTitulo, new { @class = "form-control input-sm", maxlength = "100" })
+            @Html.ValidationMessageFor(m => m.ConfiguracaoNotificacao.recuperacaoSenhaUsuarioTitulo)
+        </div>
+        <div class="col-sm-12 no-padding">
+            <label>Corpo do E-mail</label>
+            @Html.TextAreaFor(m => m.ConfiguracaoNotificacao.recuperacaoSenhaUsuarioCorpo, new { @class = "form-control input-sm froala-editor", rows = "10" })
+            @Html.ValidationMessageFor(m => m.ConfiguracaoNotificacao.recuperacaoSenhaUsuarioCorpo)
+        </div>
+    </div>
+</div>
+<div class="clearfix"></div><br />

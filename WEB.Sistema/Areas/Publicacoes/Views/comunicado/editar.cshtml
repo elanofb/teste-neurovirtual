@@ -1,0 +1,100 @@
+﻿@model WEB.Areas.Publicacoes.ViewModels.ComunicadoForm
+
+@using DAL.Permissao.Security.Extensions
+@using WEB.Areas.Associacoes.Helpers
+
+@{
+    Layout = "~/views/shared/associatec/masterpage-edit.cshtml";
+
+    ViewBag.titlePage = "Comunicado";
+    ViewBag.subTituloPagina = Model.Noticia.titulo;
+}
+
+@section styles{
+    @Html.includeFroalaEditorCSS()
+}
+
+@section scripts{
+    
+    @Html.includeFroalaEditorJS()
+    
+    @Html.includeDatePicker()
+
+    <script src="@UtilConfig.linkResourses()Areas/Publicacoes/js/comunicado.js"></script>
+}
+
+@section navTabs{
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#tab-1" data-toggle="tab">Principal</a></li>
+    </ul>
+}
+
+@section tabContent{
+    <div id="tab-1" class="tab-pane active">
+        
+        @Html.infoCadastro(Model.Noticia.id, Model.Noticia.dtCadastro, Model.Noticia.dtAlteracao)
+
+        @using (Html.BeginForm("editar", "comunicado", FormMethod.Post)) {
+
+            { Html.EnableClientValidation(false); }
+
+            @Html.ValidationSummary(true, "Alguns campos não foram validados.")
+
+            @Html.HiddenFor(x => x.Noticia.id)
+
+            <h4 class="separator-form">Dados Principais do Comunicado</h4>
+            
+            if(User.idOrganizacao() == 0) {
+                 <div class="col-sm-4 col-md-4">
+                     <label>Organização</label>
+                     @Html.DropDownListFor(m => m.Noticia.idOrganizacao, AssociacaoHelper.getInstance.selectList(Model.Noticia.idOrganizacao), "Padrão", new {@class = "form-control input-sm"})
+                 </div>
+            }
+
+            <div class="col-md-3 col-lg-2">
+                @Html.Label("Portal")
+                @Html.DropDownListFor(m => m.Noticia.idPortal, WEB.Areas.Portais.Helpers.PortalHelper.getInstance.selectList(Model.Noticia.idPortal), "...", new { @class = "form-control input-sm" })
+                @Html.ValidationMessageFor(x => x.Noticia.idPortal)
+            </div>
+
+            <div class="clearfix"></div>
+
+            <div class="col-md-6">
+                @Html.labelRequired("Titulo")<br/>
+                @Html.TextBoxFor(x => x.Noticia.titulo, new {@class = "form-control input-sm"})
+                @Html.ValidationMessageFor(x => x.Noticia.titulo)
+            </div>
+
+            <div class="clearfix"></div>
+
+            <div class="col-md-6">
+                @Html.labelRequired("Autor")<br />
+                @Html.TextBoxFor(x => x.Noticia.autor, new { @class = "form-control input-sm" })
+                @Html.ValidationMessageFor(x => x.Noticia.autor)
+            </div>
+
+            <div class="col-md-3 col-lg-2">
+                @Html.labelRequired("Data do Comunicado")<br/>
+                @Html.TextBoxFor(x => x.Noticia.dtNoticia, new {@class = "form-control input-sm input-datepicker", @alt = "date"})
+                @Html.ValidationMessageFor(x => x.Noticia.dtNoticia)
+            </div>
+            <div class="col-md-2">
+                <label>Status</label>
+                @Html.DropDownListFor(m => m.Noticia.ativo, WEB.Helpers.ComboHelper.selectListStatus(Model.Noticia.ativo), new {@class = "form-control input-sm"})
+                @Html.ValidationMessageFor(m => m.Noticia.ativo)
+            </div>
+            <div class="clearfix"></div><br />
+            
+            <div class="col-md-10">
+                @Html.TextAreaFor(x => x.Noticia.descricao, new {@class = "form-control input-sm", id = "editor", rows = "10"})
+                @Html.ValidationMessageFor(x => x.Noticia.descricao)
+            </div>
+            <div class="clearfix"></div><br />
+
+            <div class="text-right">
+                @Html.exibirBotoesFormulario(Url.Action("listar"), "N")
+            </div>
+        }
+    </div>
+    <div class="clearfix"></div>
+}

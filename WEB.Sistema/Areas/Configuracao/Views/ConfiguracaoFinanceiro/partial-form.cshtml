@@ -1,0 +1,30 @@
+﻿@using DAL.Permissao.Security.Extensions
+@using WEB.Areas.Associacoes.Helpers
+@using WEB.Areas.Permissao.Helpers
+@model WEB.Areas.Configuracao.ViewModels.ConfiguracaoFinanceiroForm
+
+@if (User.idOrganizacao() == 0){
+    <h4 class="separator-form">Associação</h4>
+    <div class="col-md-3 col-sm-6">
+        <label>Associação</label>
+        @Html.DropDownListFor(m => m.ConfiguracaoFinanceiro.idOrganizacao, AssociacaoHelper.getInstance.selectList(Model.ConfiguracaoFinanceiro.idOrganizacao), "Padrão  Sistema", new { @class = "form-control input-sm", type = "number" })
+    </div>
+}
+<div class="clearfix"></div>
+
+<h4 class="separator-form">Configuração financeira de despesas</h4>
+<div class="col-md-4">
+    <label>Aprovar Contas</label>
+    @Html.DropDownListFor(m => m.ConfiguracaoFinanceiro.flagAprovarContas, ComboHelper.selectListTrueFalse(Model.ConfiguracaoFinanceiro.flagAprovarContas), "...", new {@class = "form-control input-sm"})
+</div>
+
+<div class="col-md-3">
+    <label>Usuário Aprovação (Padrão)</label>
+    @Html.DropDownListFor(m => m.ConfiguracaoFinanceiro.idUsuarioAprovacaoContas, UsuarioSistemaHelper.getInstance.selectList(Model.ConfiguracaoFinanceiro.idUsuarioAprovacaoContas, 0), "...", new {@class = "form-control input-sm select2"})
+    @Html.instrucao("O usuário poderá ser alterado nos cadastros de macro contas.")
+</div>
+
+<div class="clearfix"></div><br />
+
+
+

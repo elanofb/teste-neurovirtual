@@ -1,0 +1,31 @@
+﻿@model WEB.Areas.Produtos.ViewModels.ProdutoRedeForm
+@using MvcFlashMessages
+
+@{
+    Layout = null;
+}
+
+<div id="@(IsPost ? "" : "boxFormAdicionarItem")">
+    @Html.RenderFlash()
+
+    @using (Ajax.BeginForm("salvar", null, new AjaxOptions { UpdateTargetId = "boxFormAdicionarItem", HttpMethod = "POST", OnSuccess = "ProdutoRedeConfiguracao.onSuccessForm" }, new { role = "form", @class = "default" })) {
+        @Html.HiddenFor(m => m.ProdutoRede.idProduto)
+        @Html.ValidationSummary(false)
+        <div class="row">
+            <div class="col-xs-4 col-md-2">
+                @Html.labelRequired("Nível")
+                @Html.TextBoxFor(m => m.ProdutoRede.nivel, new {@class = "form-control input-sm", type = "number"})
+                @Html.ValidationMessageFor(m => m.ProdutoRede.nivel)
+            </div>
+            <div class="col-xs-4 col-md-2">
+                @Html.labelRequired("Comissão")
+                @Html.TextBoxFor(m => m.ProdutoRede.percentualComissao, new {@class = "form-control input-sm", alt = "decimal"})
+                @Html.ValidationMessageFor(m => m.ProdutoRede.percentualComissao)
+            </div>
+            <div class="col-xs-4 col-md-2" style="padding-top: 17px">
+                <input type="submit" value="Adicionar" class="btn btn-primary" />
+            </div>
+        </div>
+
+    }
+</div>

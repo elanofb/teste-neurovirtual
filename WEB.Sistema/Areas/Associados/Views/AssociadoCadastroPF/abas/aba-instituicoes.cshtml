@@ -1,0 +1,10 @@
+﻿@model DAL.Associados.Associado
+
+<div class="tab-pane" id="tab-instituicoes">
+    
+    <div id="boxLoadFormInstituicao" class="content-load carregando" data-url="@Url.Action("editar", "associadoinstituicao", new {area = "Associados", idAssociado = Model.id})"></div>
+
+    <div id="boxLoadListainstituicao" class="content-load carregando" data-url="@Url.Action("partial-listar-instituicoes", "associadoinstituicao", new {area = "Associados", idAssociado = Model.id})"></div>
+    <br/>
+
+</div>

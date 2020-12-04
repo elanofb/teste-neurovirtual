@@ -1,0 +1,100 @@
+﻿@model WEB.Areas.Configuracao.ViewModels.ConfiguracaoEmailForm
+@using DAL.Notificacoes
+@using DAL.Permissao.Security.Extensions
+@using WEB.Areas.Associacoes.Helpers
+@{
+    ViewBag.titlePage = "Configurações de E-mail";
+}
+
+
+@section scripts{
+    @Html.includeFroalaEditorJS()
+    <script src="@UtilConfig.linkResourses("Areas/Configuracao/js/plugins/bootstrap-fileinput/js/fileinput.min.js")"></script>
+    <script src="@UtilConfig.linkResourses("Areas/Configuracao/js/plugins/colorpicker/bootstrap-colorpicker.js")"></script>
+    <script src="@UtilConfig.linkResourses("Areas/Configuracao/js/configuracao-email.js?v=1.2")"></script>
+    @Html.Raw(Html.scripts().scriptFroala)
+}
+
+@section styles {
+    @Html.includeFroalaEditorCSS()
+    <link href="@UtilConfig.linkResourses("Areas/Configuracao/js/plugins/bootstrap-fileinput/css/fileinput.min.css")" rel="stylesheet" />
+    <link href="@UtilConfig.linkResourses("Areas/Configuracao/js/plugins/colorpicker/bootstrap-colorpicker.css")" rel="stylesheet" />
+}
+
+@section breadcrump{
+    <ol class="breadcrumb">
+        <li><a href="@Url.Action("listar")" class="active fs-14"><i class="fa fa-arrow-left"></i> Voltar</a></li>
+    </ol>
+}
+
+
+<div class="row">
+    <div class="col-sm-12 box-primary">
+
+        <div class="nav-tabs-custom">
+
+            <ul class="nav nav-tabs" role="tablist">
+                <li class="active"><a href="#tab-emails" data-toggle="tab">Dados Principais</a></li>
+            </ul>
+            @using (Html.BeginForm("editar", null, FormMethod.Post, new { role = "form", @class = "tab-content", enctype = "multipart/form-data" })) {
+
+                @Html.ValidationSummary(false)
+
+                <div id="tab-emails" role="tabpanel" class="tab-pane active">
+                    
+                    @if (User.idOrganizacao() == 0){
+                        <h4 class="separator-form-icon"><i class='far fa-edit'></i> Configurações Gerais</h4>
+                        <div class="col-md-3 col-sm-6">
+                            <label>Associação</label>
+                            @Html.DropDownListFor(m => m.ConfiguracaoEmail.idOrganizacao, AssociacaoHelper.getInstance.selectList(Model.ConfiguracaoEmail.idOrganizacao), "Padrão  Sistema", new { @class = "form-control input-sm", type = "number" })
+                        </div>
+                    }
+                    <div class="clearfix"></div>
+
+
+                    <h4 class="separator-form-icon"><i class='far fa-edit'></i> Configuração do corpo de e-mails:</h4>
+                    <div class="col-md-12">
+                        <label>HTML Masterpage para os e-mails</label>
+                        @Html.TextAreaFor(m => m.ConfiguracaoEmail.masterpageEmail, new { @class="form-control input-sm", rows="20", maxlength="3000" })
+                        @Html.instrucao("Limite de 3000 caracteres.")
+                    </div>
+
+                    <div class="col-md-6">
+                        <label>HTML Assinatura dos e-mails</label>
+                        @Html.TextAreaFor(m => m.ConfiguracaoEmail.assinaturaEmail, new { @class="form-control input-sm", rows="7", maxlength="500" })
+                    </div>
+                    <div class="clearfix"></div><br />
+                    
+                    <h4 class="separator-form-icon"><i class='far fa-edit'></i> Configuração de Gateway:</h4>
+                    
+                    <div class="col-md-3">
+                        <label>Modo de Envio</label>
+                        @Html.DropDownListFor(m => m.ConfiguracaoEmail.idGatewayNotificacao, GatewayNotificacaoHelper.getInstance.selectList(Model.ConfiguracaoEmail.idGatewayNotificacao), "...", new { @class = "form-control input-sm", onchange = "ConfiguracaoEmail.onChangeGatewayNotificacao(this)" })
+                    </div>
+                    
+                    <div class="col-md-3">
+                        <label>E-mail de Resposta</label>
+                        @Html.TextBoxFor(m => m.ConfiguracaoEmail.emailResposta, new { @class="form-control input-sm", maxlength = "100" })
+                    </div>
+                    <div class="clearfix"></div><br />
+                    
+                    <div id="boxDadosEmailProprio" class="box-configuracoes-gateway @(Model.ConfiguracaoEmail.idGatewayNotificacao != GatewayNotificacaoConst.EMAIL_PROPRIO ? "hide" : "")">
+                        @{ Html.RenderPartial("partial-dados-email-proprio", Model); }
+                    </div>
+                    
+                    <div id="boxDadosIntegracao" class="box-configuracoes-gateway @(Model.ConfiguracaoEmail.idGatewayNotificacao == GatewayNotificacaoConst.EMAIL_PROPRIO ? "hide" : "")">
+                        @{ Html.RenderPartial("partial-dados-integracao", Model); }
+                    </div>
+                    
+                </div>
+                <div class="text-right">
+                    
+                    <input type="submit" name="enviar" value="Salvar Configurações" class="btn btn-primary"/>
+                    
+                </div>
+                
+            }
+            
+        </div>
+    </div>
+</div>

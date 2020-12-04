@@ -1,0 +1,29 @@
+﻿@model WEB.Areas.Associados.ViewModels.AssociadoForm
+<div class="col-md-2 col-lg-2">
+    @Html.labelRequired("Doc")
+    @Html.DropDownListFor(m => m.Associado.Pessoa.idTipoDocumento, TipoDocumentoHelper.getInstance.selectList( Model.Associado.Pessoa.idTipoDocumento), new { @class = "form-control input-sm idTipoDocumentoAssociado" })
+    @Html.ValidationMessageFor(m => m.Associado.Pessoa.idTipoDocumento)
+</div>
+
+<div class="col-md-3 col-lg-3">
+    @Html.labelRequired("Nº Doc")
+    @Html.TextBoxFor(m => m.Associado.Pessoa.nroDocumento, new { @class = "form-control input-sm", id = "nroDocumento", maxlength = "14", style = "width:100%" })
+    @Html.ValidationMessageFor(m => m.Associado.Pessoa.nroDocumento)
+</div>
+
+<div class="col-md-3 col-lg-3 info-pf">
+    <label>RG</label>
+    @Html.TextBoxFor(m => m.Associado.Pessoa.rg, new { @class = "form-control input-sm", maxlength = "20" })
+    @Html.ValidationMessageFor(m => m.Associado.Pessoa.rg)
+</div>
+
+<div class="col-md-3 info-pj">
+    <label>Inscrição Est.</label>
+    @Html.TextBoxFor(m => m.Associado.Pessoa.inscricaoEstadual, new { @class = "form-control input-sm", maxlength = "20" })
+    @Html.ValidationMessageFor(m => m.Associado.Pessoa.inscricaoEstadual)
+</div>
+<div class="col-md-3 info-pj">
+    <label>Inscrição Mun.</label>
+    @Html.TextBoxFor(m => m.Associado.Pessoa.inscricaoMunicipal, new { @class = "form-control input-sm", maxlength = "20" })
+    @Html.ValidationMessageFor(m => m.Associado.Pessoa.inscricaoMunicipal)
+</div>

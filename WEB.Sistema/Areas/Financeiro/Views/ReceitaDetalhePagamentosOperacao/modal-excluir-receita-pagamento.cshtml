@@ -1,0 +1,52 @@
+﻿@using MvcFlashMessages
+@model WEB.Areas.Financeiro.ViewModels.ReceitaPagamentoExcluirForm
+
+@{
+    ViewBag.modalTitle = $"Excluir o pagamento {Model.TituloReceitaPagamento.descricaoParcela}";
+    ViewBag.modalWidthClass = "md";
+    Layout = IsPost ? null : "~/views/shared/associatec/masterpage-modal.cshtml";
+}
+
+<div id="@(IsPost ? null : "boxFormExcluirReceitaPagamento")">
+
+    @Html.RenderFlash()
+
+    @using (Ajax.BeginForm("excluir-receita-pagamento", null, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "boxFormExcluirReceita", InsertionMode = InsertionMode.Replace, OnSuccess = "ReceitaDetalhePagamento.onSuccessExclusaoReceitaPagamento" }, new { id = "formExclusaoReceitaPagamento", @class = "default col-md-12" })) {
+        @Html.legendaRequired()<br />
+        {Html.EnableClientValidation(false);}
+        @Html.ValidationSummary(false)
+        @Html.HiddenFor(m => m.TituloReceitaPagamento.id)
+        @Html.HiddenFor(m => m.TituloReceitaPagamento.idTituloReceita)
+        @Html.HiddenFor(m => m.TituloReceitaPagamento.descricaoParcela)
+        @Html.HiddenFor(m => m.flagHabilitarAtualizarProximos)
+        @Html.HiddenFor(m => m.flagHabilitarAtualizarTodos)
+
+        <div class="row">
+            <div class="col-md-8 no-padding-bottom">
+                @Html.labelRequired("Motivo da exclusao")
+            </div>
+            <div class="clearfix"></div>
+            <div class="col-md-12 no-padding-top">
+                @Html.TextAreaFor(x => x.TituloReceitaPagamento.motivoExclusao, new { @class = "form-control input-sm", rows = "4", maxlength = 500})
+            </div>
+            
+            @if (Model.flagHabilitarAtualizarTodos || Model.flagHabilitarAtualizarProximos) {
+                <div class="col-md-6">
+                    <label>Excluir </label>
+                    @Html.DropDownListFor(x => x.flagAtualizarOutros, Model.selectList(Model.flagAtualizarOutros), "somente este", new {@class="form-control input-sm"})
+                </div>
+            }
+        </div>
+        <div class="clearfix"></div><br />
+
+    }
+</div>
+
+@section modalFooter{
+    <div class="col-md-12">
+        <div class="text-right">
+            <input type="button" value="Cancelar" class="btn btn-default" data-dismiss="modal" aria-hidden="true" />
+            <input type="button" value="Confirmar Exclusão" class="btn btn-danger link-loading" onclick="$('#formExclusaoReceitaPagamento').submit();" />
+        </div>
+    </div>
+}

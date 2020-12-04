@@ -1,0 +1,63 @@
+﻿@model DAL.PedidosTemp.PedidoProdutoTemp
+
+<div class="list-group-item">
+                        
+    <div class="row">
+                        
+        <div class="col-xs-12">
+                            
+            <span>
+                <strong class="titulo">
+                    <i class="fa fa-hashtag"></i>@Model.idProduto -
+                </strong>
+                @Model.nomeProduto (@(Model.qtde)x)
+            </span>
+                                    
+            <a href="javascript:;" class="pull-right" data-toggle="tooltip" title="Remover"
+               onclick="PedidoCadastroProduto.removerProduto('@Model.idProduto')">
+                
+                <i class="fa fa-trash"></i>
+            </a>
+
+        </div>
+        <div class="clearfix"></div>
+                                
+        <div class="margin-top-5">
+
+            <div class="col-sm-2">
+                <p class="no-margin" data-toggle="tooltip" title="Ganho Diário">
+                    <span><i class="fab fa-bitcoin"></i> Ganho Diário: </span> @Model.valorGanhoDiario
+                </p>
+            </div>
+            
+            <div class="col-sm-2">
+                <p class="no-margin" data-toggle="tooltip" title="Duração em Dias">
+                    <span><i class="fas fa-clock"></i> Duração em Dias: </span> @Model.qtdeDiasDuracao
+                </p>
+            </div>
+                                                
+            <div class="col-sm-4">
+                <p class="no-margin text-right" data-toggle="tooltip" title="Valor Unitário">
+                    <span><i class="fa fa-usd"></i> Valor Unid.: </span> @Model.valorItem.ToString("C")
+                </p>
+            </div>
+                                    
+            <div class="col-sm-4">
+                <p class="no-margin text-right" data-toggle="tooltip" title="Valor Total">
+                    <span><i class="fa fa-usd"></i> Total.: </span> @((Model.valorItem * Model.qtde).ToString("C"))
+                </p>
+            </div>
+            <div class="clearfix"></div>
+            @if (!Model.observacoes.isEmpty()) {
+                <div class="col-sm-12">
+                    <p class="no-margin text-left" data-toggle="tooltip" title="Observações">
+                        <span><i class="fa fa-comment-o" aria-hidden="true"></i> Obs.: </span> @(Model.observacoes)
+                    </p>
+                </div>
+            }            
+
+        </div>
+
+    </div>
+
+</div>

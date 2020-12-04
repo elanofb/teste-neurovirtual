@@ -1,0 +1,84 @@
+﻿@model WEB.Areas.ContasBancarias.ViewModels.ContaBancariaTransferenciaForm
+
+@using WEB.Areas.ContasBancarias.Helpers
+@using WEB.Helpers
+
+@{
+    Layout = "~/views/shared/associatec/masterpage-modal.cshtml";
+
+    if (IsPost) {
+        Layout = null;
+    }
+
+    ViewBag.modalTitle = "Transferência entre Contas";
+}
+
+<div id="boxModalTransferencia">
+    
+    @using(Ajax.BeginForm("salvar-movimentacao", new AjaxOptions { HttpMethod = "POST", InsertionMode = InsertionMode.Replace, UpdateTargetId = "boxModalTransferencia", OnSuccess = "ContaBancariaTransferencia.onSuccessForm" })) {
+
+        { Html.EnableClientValidation(false); }
+
+        <div class="col-md-8">
+            
+            <div class="row">
+                
+                <div class="col-xs-12">
+                    @Html.labelRequired("Conta de Origem")
+                    @Html.DropDownListFor(m => m.ContaBancariaMovimentacao.idContaBancariaOrigem, ContaBancariaHelper.getInstance.selectList(Model.ContaBancariaMovimentacao.idContaBancariaOrigem), "...", new { @class = "form-control input-sm" })
+                    @Html.ValidationMessageFor(m => m.ContaBancariaMovimentacao.idContaBancariaOrigem)
+                </div>
+                <div class="clearfix"></div>
+
+                <div class="col-xs-12">
+                    @Html.labelRequired("Conta Destino")
+                    @Html.DropDownListFor(m => m.ContaBancariaMovimentacao.idContaBancariaDestino, ContaBancariaHelper.getInstance.selectList(Model.ContaBancariaMovimentacao.idContaBancariaDestino), "...", new { @class = "form-control input-sm" })
+                    @Html.ValidationMessageFor(m => m.ContaBancariaMovimentacao.idContaBancariaDestino)
+                </div>
+                <div class="clearfix"></div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-4">
+            
+            <div class="row">
+                
+                <div class="col-md-12 col-sm-6">
+                    @Html.labelRequired("Valor da Transferência")
+                    @Html.TextBoxFor(m => m.ContaBancariaMovimentacao.valor, new { @class = "form-control input-sm", alt = "decimal" })
+                    @Html.ValidationMessageFor(m => m.ContaBancariaMovimentacao.valor)
+                </div>
+
+                <div class="col-md-12 col-sm-6">
+                    @Html.labelRequired("Data da Transferência")
+                    @Html.TextBoxFor(m => m.ContaBancariaMovimentacao.dtOperacao, new { @class = "form-control input-sm input-datepicker", alt = "date" })
+                    @Html.ValidationMessageFor(m => m.ContaBancariaMovimentacao.dtOperacao)
+                </div>
+                <div class="clearfix"></div>
+
+            </div>
+
+        </div>
+        <div class="clearfix"></div>
+
+        <div class="col-xs-12">
+            <label>Observações</label>
+            @Html.TextAreaFor(m => m.ContaBancariaMovimentacao.observacoes, new { @class = "form-control input-sm", rows = 5 })
+            @Html.ValidationMessageFor(m => m.ContaBancariaMovimentacao.observacoes)
+        </div>
+        <div class="clearfix"></div><br />
+
+        <div class="col-xs-12 text-right">
+            
+            <button class="btn btn-primary link-loading">
+                <i class="far fa-hdd"></i> Salvar
+            </button>
+
+        </div>
+        <div class="clearfix"></div>
+
+    }
+
+</div>

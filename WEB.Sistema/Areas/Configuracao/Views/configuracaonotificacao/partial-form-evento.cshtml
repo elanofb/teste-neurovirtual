@@ -1,0 +1,60 @@
+﻿@model WEB.Areas.Configuracao.ViewModels.ConfiguracaoNotificacaoForm
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="col-sm-12 no-padding">
+            <label>Mensagem nova inscrição evento</label>
+            @Html.TextAreaFor(m => m.ConfiguracaoNotificacao.corpoEmailNovaInscricaoEvento, new { @class = "form-control input-sm froala-editor", rows = "10" })
+            @Html.instrucao("Limite de 3.000 caracteres.")<br />
+            <a href="javascript:void(0)" class="fs-11 for-popover" data-placement="top" data-trigger="focus" data-url="#hashtags-email-inscricao-evento" data-title="Hash Tags"><i class="fa fa-question-circle"></i> Hash tags do sistema</a>
+
+            @Html.ValidationMessageFor(m => m.ConfiguracaoNotificacao.corpoEmailNovaInscricaoEvento)
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="col-sm-12 no-padding">
+            <label>Mensagem cobrança inscrição</label>
+            @Html.TextAreaFor(m => m.ConfiguracaoNotificacao.corpoEmailCobrancaInscricaoEvento, new { @class = "form-control input-sm froala-editor", rows = "10" })
+            @Html.instrucao("Limite de 3.000 caracteres.")<br />
+
+            @Html.ValidationMessageFor(m => m.ConfiguracaoNotificacao.corpoEmailCobrancaInscricaoEvento)
+        </div>
+    </div>
+</div>
+<div class="clearfix"></div>
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="col-sm-12 no-padding">
+            <label>Confirmação pagamento inscrição</label>
+            @Html.TextAreaFor(m => m.ConfiguracaoNotificacao.corpoEmailPagamentoInscricao, new { @class = "form-control input-sm froala-editor", rows = "10" })
+            @Html.instrucao("Limite de 3.000 caracteres.")<br />
+
+            @Html.ValidationMessageFor(m => m.ConfiguracaoNotificacao.corpoEmailPagamentoInscricao)            
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="col-sm-12 no-padding">
+            <label>Mensagem isenção de inscrição</label>
+            @Html.TextAreaFor(m => m.ConfiguracaoNotificacao.corpoEmailIsencaoInscricao, new { @class = "form-control input-sm froala-editor", rows = "10" })
+            @Html.instrucao("Limite de 3.000 caracteres.")<br />
+
+            @Html.ValidationMessageFor(m => m.ConfiguracaoNotificacao.corpoEmailIsencaoInscricao)
+        </div>
+    </div>
+</div>
+<div class="clearfix"></div>
+
+<div class="row">
+    <div class="col-sm-6">
+        <h4 class="separator-form">E-mails para envio do certificado:</h4>
+        <div class="col-sm-12 no-padding">
+            <label>Mensagem envio de certificado</label>
+            @Html.TextAreaFor(m => m.ConfiguracaoNotificacao.corpoEmailEnvioCerficadoEvento, new { @class = "form-control input-sm froala-editor", rows = "10" })
+            @Html.instrucao("Limite de 3.000 caracteres.")<br />
+
+            @Html.ValidationMessageFor(m => m.ConfiguracaoNotificacao.corpoEmailEnvioCerficadoEvento)
+        </div>
+    </div>
+</div>
+<div class="clearfix"></div><br/>

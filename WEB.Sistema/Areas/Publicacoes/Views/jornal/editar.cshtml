@@ -1,0 +1,166 @@
+﻿@model WEB.Areas.Publicacoes.ViewModels.JornalForm
+
+@using DAL.Permissao.Security.Extensions
+@using WEB.Areas.Arquivos.Helpers
+@using WEB.Areas.Associacoes.Helpers
+
+@{
+    Layout = "~/views/shared/associatec/masterpage-edit.cshtml";
+
+    ViewBag.titlePage = "Jornal";
+    ViewBag.subTituloPagina = Model.Jornal.titulo;
+}
+
+@section styles{
+	
+	@Html.includeCSSModuloArquivos()
+
+	@Html.includeFroalaEditorCSS()
+
+}
+
+@section scripts{
+
+    @Html.includeDatePicker()
+
+	@Html.includeJSModuloArquivosFotos()
+
+	@Html.includeFroalaEditorJS()
+
+    <script src="@UtilConfig.linkResourses()Areas/Publicacoes/js/jornal.js?v=1"></script>
+
+}
+
+@section navTabs{
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#tab-1" data-toggle="tab">Principal</a></li>
+    </ul>
+}
+
+@section tabContent{
+    <div id="tab-1" class="tab-pane active">
+
+        @Html.infoCadastro(Model.Jornal.id, Model.Jornal.dtCadastro, Model.Jornal.dtAlteracao)
+
+        @using (Html.BeginForm("editar", "jornal", FormMethod.Post, new {enctype = "multipart/form-data"})) {
+
+            { Html.EnableClientValidation(false); }
+
+            @Html.ValidationSummary(true, "Alguns campos não foram validados")
+
+            @Html.HiddenFor(m => m.Jornal.id)
+
+            <div id="tab-1" class="tab-pane active">
+
+                <h4 class="separator-form">Dados Principais do Jornal</h4>
+
+                <div class="col-md-12">
+
+                    <div class="row">
+
+                        <div class="col-md-6">
+
+                            <div class="row">
+
+                                @if (User.idOrganizacao() == 0) {
+                                    <div class="col-sm-5 col-md-4">
+                                        <label>Organização</label>
+                                        @Html.DropDownListFor(m => m.Jornal.idOrganizacao, AssociacaoHelper.getInstance.selectList(Model.Jornal.idOrganizacao), "Padrão", new {@class = "form-control input-sm"})
+                                    </div>
+                                    
+                                }
+
+                                <div class="col-sm-4">
+                                    <label>Portal</label>
+                                    @Html.DropDownListFor(m => m.Jornal.idPortal, WEB.Areas.Portais.Helpers.PortalHelper.getInstance.selectList(Model.Jornal.idPortal), "...", new { @class = "form-control input-sm" })
+                                    @Html.ValidationMessageFor(m => m.Jornal.idPortal)
+                                </div>
+
+                                <div class="clearfix"></div>
+                                <div class="col-md-8">
+                                    <label>Autor</label><br/>
+                                    @Html.TextBoxFor(x => x.Jornal.autor, new {@class = "form-control input-sm"})
+                                    @Html.ValidationMessageFor(x => x.Jornal.autor)
+                                </div>
+
+                                <div class="col-md-4">
+                                    @Html.labelRequired("Data do Jornal")
+                                    @Html.TextBoxFor(x => x.Jornal.dtJornal, new {@class = "form-control input-sm input-datepicker", @alt = "date"})
+                                    @Html.ValidationMessageFor(x => x.Jornal.dtJornal)
+                                </div>
+
+                                <div class="clearfix"></div>
+
+                                <div class="col-md-12">
+                                    @Html.labelRequired("Título")
+                                    @Html.TextBoxFor(x => x.Jornal.titulo, new {@class = "form-control input-sm", maxlength = "255"})
+                                    @Html.ValidationMessageFor(x => x.Jornal.titulo)
+                                </div>
+
+                                <div class="clearfix"></div>
+
+                                <div class="col-md-12">
+                                    <label>Chamada</label><br/>
+                                    @Html.TextBoxFor(x => x.Jornal.chamada, new {@class = "form-control input-sm", maxlength = "400"})
+                                    @Html.ValidationMessageFor(x => x.Jornal.chamada)
+                                </div>
+
+                                <div class="clearfix"></div>
+
+                                <div class="col-md-5">
+                                    <label>Somente para Associados?</label>
+                                    @Html.DropDownListFor(m => m.Jornal.flagSomenteAssociado, ComboHelper.selectListTrueFalse(Model.Jornal.flagSomenteAssociado), "...", new {@class = "form-control input-sm"})
+                                    @Html.ValidationMessageFor(m => m.Jornal.flagSomenteAssociado)
+                                </div>
+
+                                <div class="col-md-4">
+                                    @Html.labelRequired("Status")
+                                    @Html.DropDownListFor(m => m.Jornal.ativo, ComboHelper.selectListStatus(Model.Jornal.ativo), "...", new {@class = "form-control input-sm"})
+                                    @Html.ValidationMessageFor(m => m.Jornal.ativo)
+                                </div>
+
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <h4 class="separator-form">Fotos</h4>
+                            <div class="col-md-12 no-padding-left">
+                                @Html.inputFileSimples("arrayArquivos")
+                                @Html.ValidationMessageFor(m => m.arrayArquivos)
+
+                                <div class="clearfix"></div>
+                                @if (Model.Jornal.id > 0) {
+                                    <h4 class="separator-form">Fotos Cadastradas</h4>
+                                    <div class="carregando" id="boxArquivosListar" data-target="boxArquivosListar" data-url="@Url.Action("partial-lista-fotos", "ArquivoFoto", new { Area = "Arquivos", entidade = DAL.Entities.EntityTypes.JORNAL, idReferencia = Model.Jornal.id })"></div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <h4 class="separator-form">Detalhes do Jornal</h4>
+                    <div class=''>
+                        <div class='box-header'>
+                            <div class="pull-right box-tools">
+                            </div>
+                        </div>
+                        <div class='box-body pad'>
+                            @Html.TextAreaFor(x => x.Jornal.descricao, new {@id = "editor", @class = "form-control input-sm", rows = "7"})
+                            @Html.ValidationMessageFor(x => x.Jornal.descricao)
+                        </div>
+                    </div>
+                </div>
+
+                <div class="clearfix"></div><br/>
+
+                <div class="text-right">
+                    @Html.exibirBotoesFormulario(Url.Action("listar"), "N", Url.Action("editar"))
+                </div>
+
+                <div class="clearfix"></div>
+
+            </div>
+        }
+    </div>
+}

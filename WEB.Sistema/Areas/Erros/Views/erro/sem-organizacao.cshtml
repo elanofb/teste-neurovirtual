@@ -1,0 +1,23 @@
+﻿@using DAL.Permissao.Security.Extensions
+@{
+    ViewBag.Title = "Ops, Não identificamos sua associação.";
+
+    string urlVoltar = string.IsNullOrEmpty(UtilRequest.getString("ReturnUrl")) ? Url.Action("index", "home", new {area = ""}) : UtilRequest.getString("ReturnUrl");
+}
+
+<div>
+    @if (User.idOrganizacao() == 0) {
+        <div class="alert alert-warning">
+            <h4>Erro 401</h4>
+            Você precisa estar vinculado à uma <strong>Associação</strong> para acessar esse módulo.
+        </div>
+    }
+
+    @if (User.idOrganizacao() > 0) {
+        <div class="alert alert-success">
+            <h4>Associação OK!</h4>
+            Seu acesso já está vinculado à uma Associação, <a href="@urlVoltar">clique aqui para voltar</a>, ou utilize os menus do sistema.
+        </div>
+    }
+
+</div>

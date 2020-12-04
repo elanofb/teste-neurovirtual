@@ -1,0 +1,97 @@
+﻿@model LancamentoDespesasVM
+
+@using WEB.Areas.ContasBancarias.Helpers
+@using WEB.Areas.FinanceiroLancamentos.Helpers
+@using WEB.Areas.LancamentoRecebimentos.ViewModels
+@using WEB.Areas.Financeiro.Helpers
+@using WEB.Helpers
+
+@{
+    ViewBag.titlePage = "Lançamentos a Pagar - Itens Excluídos";
+    string dtInicio = ViewBag.dtInicio.ToString();
+    string dtFim = ViewBag.dtFim.ToString();
+}
+
+@section styles {
+    <link href="@UtilConfig.linkResourses()css/associatec/list-custom.css" rel="stylesheet" />
+    <link href="@UtilConfig.linkResourses()css/associatec/modulos/widgets.css" rel="stylesheet" />
+}
+
+@section scripts{
+    @Html.includeDatePicker()
+    @Html.includeJqueryLoading()
+    @Html.includeBootstrapMultiselect()
+    <script src="@UtilConfig.linkResourses()Areas/Financeiro/js/auxiliares.js"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses()areas/FinanceiroLancamentos/js/lancamentos-despesas.js?v=1.4"></script>
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="box box-primary">
+            @Html.headerBox("Filtros de Busca", "fa fa-filter")
+            <div class="box-body padding-top-20 padding-bottom-20">
+                @using (Html.BeginForm(null, null, FormMethod.Get, new { @class = "filtros" })) {
+                    <div class="col-lg-2 col-sm-6 col-xs-6">
+                        <label>Pesquisar Por?</label>
+                        @Html.DropDownList("pesquisarPor", FinanceiroLancamentosHelper.getDtPesquisaFinanceiroPagarExcluidas(UtilRequest.getString("pesquisarPor")), new { @class = "form-control input-sm" })
+                    </div>
+
+                    <div class="col-lg-3 col-sm-6 col-xs-6">
+                        <label>Data</label><br />
+                        <div class="input-group">
+                            @Html.TextBox("dtInicio", dtInicio, new { @class = "form-control input-sm input-datepicker", alt = "date" })
+                            <span class="input-group-addon">-</span>
+                            @Html.TextBox("dtFim", dtFim, new { @class = "form-control input-sm input-datepicker", alt = "date" })
+                        </div>
+                    </div>
+
+                    <div class="col-lg-2 col-sm-6 col-xs-6">
+                        <label>Situação</label>
+                        @Html.DropDownList("flagPago", FinanceiroLancamentosHelper.getSituacao(UtilRequest.getString("flagPago")), new { @class = "form-control input-sm" })
+                    </div>
+
+                    <div class="col-lg-2 col-sm-6 col-xs-6">
+                        <label>Centro de Custo</label>
+                        @Html.DropDownList("idCentroCusto", CentroCustoHelper.getInstance.selectList(UtilRequest.getInt32("idCentroCusto")), "Todos", new { @class = "form-control input-sm" })
+                    </div>
+
+                    <div class="col-lg-3 col-sm-6 col-xs-6">
+                        <label>Macro Conta</label>
+                        @Html.DropDownList("idMacroConta", MacroContaHelper.getInstance.selectList(UtilRequest.getInt32("idMacroConta")), "Todos", new {@class = "form-control input-sm"})
+                    </div>
+
+                    <div class="clearfix visible-lg"></div>
+
+                    <div class="col-lg-2 col-sm-6 col-xs-6">
+                        <label>Tipo de Saída</label>
+                        @Html.DropDownList("flagTipoSaida", TipoSaidaHelper.selectListTipoSaida(UtilRequest.getString("flagTipoSaida")), new { @class = "form-control input-sm" })
+                    </div>
+
+                    <div class="col-lg-3 col-sm-6 col-xs-6">
+                        <label>Conta Bancária</label>
+                        @Html.DropDownList("idContaBancaria", ContaBancariaHelper.getInstance.selectList(UtilRequest.getInt32("idContaBancaria")), "Todos", new { @class = "form-control input-sm" })
+                    </div>
+
+                    <div class="col-lg-4 col-sm-6 col-xs-6">
+                        <label>Credor</label>
+                        @Html.ListBox("listaCredores", CredorHelper.getInstance.multiSelectList(UtilRequest.getListString("listaCredores")), new { @class = "form-control input-sm multiSelectCredor" })
+                    </div>
+
+                    <div class="col-lg-3 col-sm-6 col-xs-6">
+                        <label>Descrição</label>
+                        @Html.buttonSearch()
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="clearfix"></div>
+</div>
+
+
+
+<div class="clearfix"></div>
+
+@{ Html.RenderPartial("partial-lista-itens"); }
+

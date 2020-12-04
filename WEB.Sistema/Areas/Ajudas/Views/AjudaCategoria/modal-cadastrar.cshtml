@@ -1,0 +1,62 @@
+﻿@using MvcFlashMessages
+@using WEB.Areas.Permissao.Helpers
+@using WEB.Helpers
+@model WEB.Areas.Ajudas.ViewModels.AjudaCategoriaForm
+
+@{
+    Layout = IsPost ? null : "~/views/shared/associatec/masterpage-modal.cshtml";
+
+    ViewBag.modalTitle = "Cadastrar Categoria de Ajuda";
+}
+
+<div id="@(IsPost ? "" : "boxFormAjudaCategoria")">
+
+    @Html.RenderFlash()
+
+    <div class="col-xs-12">
+        <div class="row">
+            @using (Ajax.BeginForm("salvar", null, new AjaxOptions { UpdateTargetId = "boxFormAjudaCategoria", HttpMethod = "POST", OnSuccess = "AjudaCategoria.onSuccessAjudaCategoria" }, new { role = "form", @class = "default" })) {
+                
+                @Html.legendaRequired()
+
+                @Html.ValidationSummary(false)
+
+                @Html.HiddenFor(x => x.AjudaCategoria.id)
+
+                <h4 class="separator-form">Dados Principais da Macro Conta</h4>
+
+                <div class="form-horizontal">
+                    
+                    <div class="col-sm-8">
+                        @Html.labelRequired("Descrição")
+                        @Html.TextBoxFor(m => m.AjudaCategoria.descricao, new {@class = "form-control input-sm", maxlength = "100"})
+                        @Html.ValidationMessageFor(m => m.AjudaCategoria.descricao)
+                    </div>
+
+                    <div class="clearfix"></div>
+
+                    <div id="boxUsuarioAprovacao" class="col-md-5">
+                        <label>Grupo de Recursos</label>
+                        @Html.DropDownListFor(m => m.AjudaCategoria.idRecursoGrupo, RecursoGrupoHelper.selectList(Model.AjudaCategoria.idRecursoGrupo), "...", new {@class = "form-control input-sm"})
+                    </div>
+
+                    <div class="col-md-3">
+                        <label>Status</label>
+                        @Html.DropDownListFor(m => m.AjudaCategoria.ativo, ComboHelper.selectListStatus(Model.AjudaCategoria.ativo), new {@class = "form-control input-sm"})
+                        @Html.ValidationMessageFor(m => m.AjudaCategoria.ativo)
+                    </div>
+                    <div class="clearfix"></div>
+
+                </div>
+                
+                <div class="clearfix"></div><br/>
+
+                <div class="text-right">
+                    <input type="submit" class="btn btn-primary link-loading" value="Salvar" />
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<div class="clearfix"></div><br />
+

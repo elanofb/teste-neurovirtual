@@ -1,0 +1,121 @@
+﻿@model WEB.Areas.AssociadosOperacoes.ViewModels.AssociadoEnvioNovaSenhaForm
+
+@{
+    ViewBag.modalTitle = "Envio de Nova Senha";
+    ViewBag.modalWidthClass = "lg";
+
+    if (UtilRequest.getBool("IsPost") == true) {
+        Layout = null;
+    } else {
+        Layout = "~/views/shared/associatec/masterpage-modal.cshtml";
+    }
+
+}
+
+<div id="boxFormEnvioSenha">
+    
+	@using (Ajax.BeginForm("enviar-senha", null, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "boxFormEnvioSenha", InsertionMode = InsertionMode.Replace, OnSuccess = "AssociadoEnvioNovaSenha.onSuccessForm" }, new { id = "formEnvioNovaSenha", @class = "default" })) {
+        
+		{ Html.EnableClientValidation(false); }
+
+		@Html.Hidden("IsPost", true)
+
+        <div class="field" style="display:none">
+            @Html.EditorFor(m => m.idsAssociados)
+        </div>
+
+	    <div class="row">
+
+	        <div class="col-md-7">
+
+	            <div class="row">
+
+	                <div class="col-md-12">
+
+	                    @Html.labelRequired("Senha de Acesso")
+                        
+	                    <div class="input-group input-group-lg">
+                            
+	                        @Html.TextBoxFor(m => m.novaSenha, new {@class = "form-control input-lg" })
+
+	                        <div class="input-group-btn">
+
+	                            <button type="button" class=" btn btn-lg btn-primary" onclick="AssociadoEnvioNovaSenha.gerarSenhaAleatoria();">
+	                                <i class="fa fa-sync"></i> Gerar senha aleatória
+	                            </button>
+
+	                        </div>
+
+	                    </div>
+
+	                    @Html.ValidationMessageFor(m => m.novaSenha)
+
+	                </div>
+	                <div class="clearfix"></div>
+
+	            </div>
+
+	        </div>
+
+	        <div class="col-md-5">
+
+	            <label>@Model.listaAssociados.Count() membros selecionados</label>
+
+	            <div id="boxAssociadosSelecionados" class="hide">
+                    
+	                @if (Model.listaAssociados.Count() > 1000) {
+
+	                    <div class="alert alert-info">
+	                        
+	                        Você selecionou mais de 1000 membros para enviar uma nova senha, por motivo de desempenho,
+	                        a lista com o detalhe dos membros não será exibida, porém todos os membros selecionados
+	                        receberão a nova senha informada.
+
+	                    </div>
+
+	                }
+                    
+	                @if (Model.listaAssociados.Count() <= 1000) {
+
+	                    foreach (var OAssociado in Model.listaAssociados) {
+
+	                        <div class="box-info-item">
+
+	                            <div class="row">
+
+	                                <div class="col-md-12">
+
+	                                    <span class="titulo">
+	                                        <i class="fa fa-user"></i> @OAssociado.nome
+	                                    </span><br>
+
+	                                    <span># @(OAssociado.nroAssociado ?? OAssociado.id)</span> <em>(@OAssociado.descricaoTipoAssociado)</em>
+
+	                                </div>
+
+	                            </div>
+
+	                        </div>
+
+	                    }
+
+	                }
+
+	            </div>
+
+	        </div>
+
+            <div class="clearfix"></div>
+
+	    </div>
+        
+
+	}
+</div>
+
+@section modalFooter{
+	<div class="text-right">
+		<input type="button" value="Cancelar" class="btn btn-default" data-dismiss="modal" aria-hidden="true" />
+		<input type="button" value="Enviar Senha" class="btn btn-primary link-loading" onclick="$('#formEnvioNovaSenha').submit();" />
+	</div>
+}

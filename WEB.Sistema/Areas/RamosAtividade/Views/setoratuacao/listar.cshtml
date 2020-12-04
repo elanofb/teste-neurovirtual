@@ -1,0 +1,103 @@
+﻿@model PagedList.IPagedList<SetorAtuacao>
+@using PagedList.Mvc
+@using DAL.RamosAtividade
+@using WEB.Areas.RamosAtividade.Helpers
+
+@{
+	ViewBag.titlePage = "Setores de Atuação Cadastrados";
+}
+
+<div class="box box-primary">
+
+	@Html.headerBox("Filtros de Busca", "fa fa-filter")
+
+	<div class="box-body">
+
+		@using (Html.BeginForm(null, null, FormMethod.Get, new { @class = "" })){
+
+		    <div class="form-group col-xs-4">
+		    </div>
+
+		    <div class="form-group col-xs-3">
+		        <label>Ramo de Atividade</label>
+		        @Html.DropDownList("idRamoAtividade", RamoAtividadeHelper.getInstance.selectList(UtilRequest.getInt32("idRamoAtividade")), "Todos", new {@class = "form-control input-sm"})
+		    </div>
+
+		    <div class="form-group col-xs-2">
+		        <label>Status</label>
+		        @Html.DropDownList("flagAtivo", ComboHelper.selectListTrueFalse(UtilRequest.getBool("flagAtivo")), "Todos", new {@class = "form-control input-sm"})
+		    </div>
+
+		    <div class="form-group col-xs-3">
+		        <label>Buscar</label>
+		        @Html.buttonSearch(UtilRequest.getString("valorBusca"))
+		    </div>
+		    <div class="clearfix"></div>
+
+        }
+
+	</div>
+
+</div>
+
+<div class="box box-primary">
+
+	@Html.headerBox("Resultados", "fa fa-list")
+
+	<div class="box-body">
+
+	    <div class="btn-group">
+
+	        <a href="javascript:void(0);" data-url="@Url.Action("excluir")" class="btn btn-default btn-flat" title="Remover itens selecionados" onclick="return DefaultAction.removeAll(this);">
+	            <i class="fa fa-trash"></i>
+	        </a>
+
+	        <a href="@Url.Action("editar")" class="btn btn-default btn-flat" title="Adicionar novo registro">
+	            <i class="far fa-plus-circle"></i>
+	        </a>
+
+	    </div>
+
+        <table class="table table-bordered table-striped dataTable">
+			<thead>
+				<tr role="row">
+					<th class="width-50 text-center"><input type="checkbox" name="marcarTodos" data-childs="checkRegistro[]" id="checkMarcarTodos" /></th>
+					<th>Ramo de Atividade</th>
+                    <th>Setor de Atuação</th>
+				    <th class="width-150">Cadastro</th>
+                    <th class="width-100">Status</th>
+					<th width="100">&nbsp;</th>
+				</tr>
+			</thead>
+			<tbody>
+			
+                @if(!Model.Any()) {
+                    <tr>
+                        <td class="text-center" colspan="6">Nenhum registro cadastrado</td>
+                    </tr>
+                }
+			
+                @foreach (var Item in Model){
+					<tr>
+						<td class="text-center"><input type="checkbox" name="checkRegistro[]" value="@Item.id" /></td>
+						<td>@Item.RamoAtividade.descricao</td>
+                        <td>@Item.descricao</td>
+					    <td class="text-center">@Item.dtCadastro.exibirData(true)</td>
+					    <td class="text-center">
+					        @Html.linkStatusDefault(Item.id, Item.ativo)
+					    </td>
+						<td class="text-center box-acoes">
+							<a href="@Url.Action("editar", new{id=Item.id})" title="Editar Registro"><i class="fa fa-edit"></i></a>
+							<a href="javascript:void(0);" class="delete-default" data-id="@Item.id" data-url="@Url.Action("excluir")" title="Excluir Registro"><i class="fa fa-trash"></i></a>
+						</td>
+					</tr>
+				}
+				
+			</tbody>
+		</table>
+
+		@(Html.paginarRegistros(Model, Html.PagedListPager(Model, nroPagina => UtilRequest.linkPaginacao(nroPagina, "listar"), PagedListRenderOptions.OnlyShowFivePagesAtATime)))
+
+	</div>
+
+</div>

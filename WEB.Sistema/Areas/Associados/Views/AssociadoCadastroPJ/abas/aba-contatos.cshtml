@@ -1,0 +1,11 @@
+﻿@model int
+
+<div class="tab-pane" id="tab-contatos" data-url="@Url.Action()">
+    
+    <h4 class="separator-form-icon"><i class="far fa-edit"></i> Dados do Contato</h4>
+    <div id="boxLoadFormContatos" class="content-load carregando" data-url="@Url.Action("editar", "pessoacontato", new {area = "pessoas", idPessoa = Model})"></div>
+    <br/>
+
+    <h4 class="separator-form-icon"><i class="far fa-edit"></i> Contatos da Empresa</h4>
+    <div id="boxLoadListaContatos" class="content-load carregando" data-url="@Url.Action("partial-listar-contatos", "pessoacontato", new {area = "pessoas", idPessoa = Model})"></div>
+</div>

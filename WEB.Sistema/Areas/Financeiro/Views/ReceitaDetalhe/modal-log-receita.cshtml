@@ -1,0 +1,52 @@
+﻿@model WEB.Areas.Financeiro.ViewModels.ReceitaLogVM
+@using WEB.Helpers
+
+@{
+    Layout = "~/views/shared/associatec/masterpage-modal.cshtml";
+    ViewBag.modalTitle = "Log de Alterações da receita - " + Model.TituloReceita.descricao;
+    ViewBag.modalWidthClass = "lg";
+
+    if (IsPost) {
+        Layout = null;
+    }
+}
+
+<div id="boxLogAlteracao">
+    <div class="table-responsive" id="list">
+        <div class="dataTables_wrapper form-inline" role="grid">
+            <table class="table table-bordered table-striped dataTable">
+                <thead>
+                    <tr role="row">
+                        <th>Campo</th>
+                        <th>Valor Antigo</th>
+                        <th>Valor Novo</th>
+                        <th>Justificativa</th>
+                        <th>Usuario</th>
+                        <th>IP</th>
+                        <th>Dt. Alteração</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @if (Model.listaLogAlteracao.Count > 0) {
+                        foreach (var Item in Model.listaLogAlteracao) {
+                            <tr>
+                                <td>@(Item.nomeCampoDisplay.isEmpty() ? Item.nomeCampoAlterado : Item.nomeCampoDisplay)</td>
+                                <td>@(Item.oldValueSelect.isEmpty() ? Item.valorAntigo : Item.oldValueSelect)</td>
+                                <td>@(Item.newValueSelect.isEmpty() ? Item.valorNovo : Item.newValueSelect)</td>
+                                <td>@Item.justificativa</td>
+                                <td>@Item.UsuarioAlteracao.nome</td>
+                                <td>@Item.ip</td>
+                                <td>@Item.dtAlteracao.exibirData(true)</td>
+                            </tr>
+                        }
+                    } else {
+                        <tr>
+                            <td colspan="7" class="text-center">Nenhum log localizado.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

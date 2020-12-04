@@ -1,0 +1,49 @@
+﻿@model WEB.Areas.Associados.ViewModels.ResumoSaldoWidget
+
+<div class="row">
+    <div class="col-sm-3">
+        <div class="info-box">
+            <span class="info-box-icon bg-aqua"><i class="far fa-chart-line"></i></span>
+            <div class="info-box-content">
+                <span class="info-box-text">Saldo Total</span>
+                <span class="info-box-number">
+                    @Model.saldoTotal.ToString("N4")
+                </span>
+            </div>
+        </div>
+    </div>            
+    <div class="col-sm-3">
+        <div class="info-box">
+            <span class="info-box-icon bg-blue"><i class="far fa-users"></i></span>
+            <div class="info-box-content">
+                <span class="info-box-text">Consumidores</span>
+                <span class="info-box-number">
+                    @Model.saldoConsumidores.ToString("N4") 
+                </span>
+            </div>
+        </div>
+    </div>            
+    <div class="col-sm-3">
+        <div class="info-box">
+            <span class="info-box-icon bg-yellow"><i class="far fa-building"></i></span>
+            <div class="info-box-content">
+                <span class="info-box-text">Comerciantes</span>
+                <span class="info-box-number">
+                    @Model.saldoEstabelecimentos.ToString("N4")
+                </span>
+            </div>
+        </div>
+    </div>            
+    <div class="col-sm-3">
+        <div class="info-box">
+            <span class="info-box-icon bg-green">BTK</span>
+            <div class="info-box-content">
+                <span class="info-box-text">Saldo SINCTEC</span>
+                <span class="info-box-number">
+                    @Model.saldoLinkey.ToString("N4")
+                </span>
+            </div>
+        </div>
+    </div>            
+    
+</div>

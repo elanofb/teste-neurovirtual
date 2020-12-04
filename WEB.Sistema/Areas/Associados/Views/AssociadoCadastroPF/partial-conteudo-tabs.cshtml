@@ -1,0 +1,45 @@
+﻿@model WEB.Areas.Associados.ViewModels.AssociadoCadastroPFForm
+
+@{ Html.RenderPartial("aba-dados-cadastrais");}
+
+@if (Model.Associado.id > 0) {
+
+    if (Model.ConfiguracaoAssociadoPF.flagAbaContato == true) {
+        { Html.RenderPartial("abas/aba-contatos", Model.Associado.idPessoa); }
+    }
+
+    if (Model.ConfiguracaoAssociadoPF.flagAbaAreasAtuacao == true) {
+        { Html.RenderPartial("abas/aba-area-atuacao", Model.Associado); }
+    }
+
+    { Html.RenderPartial("abas/aba-documentos", Model.Associado); }
+
+
+    { Html.RenderPartial("abas/aba-historico", Model.Associado); }
+    
+    { Html.RenderPartial("~/Areas/Associados/Views/associado/aba-movimentacao.cshtml", Model.Associado.id); }
+    
+    { Html.RenderPartial("abas/aba-conta-bancaria", Model.Associado); }
+    
+    { Html.RenderPartial("abas/aba-produtos-ativos", Model.Associado); }
+    
+    { Html.RenderPartial("abas/aba-pontuacao", Model.Associado); }
+    
+
+    if (Model.ConfiguracaoAssociadoPF.flagAbaInstituicoes == true) {
+        { Html.RenderPartial("abas/aba-instituicoes", Model.Associado); }
+    }
+
+    if (Model.ConfiguracaoAssociadoPF.flagAbaContribuicoes == true) {
+        { Html.RenderPartial("abas/aba-cobrancas", Model.Associado); }
+    }
+
+    if (Model.ConfiguracaoAssociadoPF.flagAbaDependentes == true) {
+        { Html.RenderPartial("abas/aba-dependentes", Model.Associado); }
+    }
+
+    if (Model.ConfiguracaoAssociadoPF.flagAbaPedidos == true) {
+        { Html.RenderPartial("abas/aba-pedidos", Model.Associado); }
+    }
+
+}

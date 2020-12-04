@@ -1,0 +1,41 @@
+﻿@model WEB.Areas.Pedidos.ViewModels.PedidoAcaoForm
+
+@{
+    Layout = "~/views/shared/associatec/masterpage-modal.cshtml";
+
+    if (IsPost) {
+        Layout = null;
+    }
+
+    ViewBag.modalTitle = "Preparar Pedido";
+}
+
+<div id="boxModalAcao">
+    
+    @using(Ajax.BeginForm("preparar", "PedidoAcaoPreparacao", new AjaxOptions { InsertionMode = InsertionMode.Replace, OnSuccess = "PedidoAcao.onSuccess" })) {
+        
+        @Html.ValidationSummary(true, "Alguns campos não foram validados")
+
+        { Html.EnableUnobtrusiveJavaScript(false); }
+
+        @Html.HiddenFor(m => m.id)
+        
+        <div class="col-md-12">
+            <label>Observações</label>
+            @Html.TextAreaFor(x => x.observacoes, new {@class = "form-control input-sm", rows = 6 })
+            @Html.ValidationMessageFor(x => x.observacoes)
+        </div>
+        <div class="clearfix"></div><br />
+
+        <div class="col-xs-12 text-right">
+            
+            <button class="btn btn-primary link-loading">
+                <i class="fa fa-check"></i> Confirmar
+            </button>
+
+        </div>
+        <div class="clearfix"></div>
+
+    }
+
+</div>

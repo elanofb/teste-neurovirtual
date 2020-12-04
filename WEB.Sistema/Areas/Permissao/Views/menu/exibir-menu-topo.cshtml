@@ -1,0 +1,70 @@
+﻿@model WEB.Areas.Permissao.ViewModels.PermissaoVM
+@using DAL.Permissao
+
+<div class="collapse navbar-collapse pull-left" id="navbar-collapse">
+    <ul class="nav navbar-nav">
+        @foreach (var OGrupo in Model.listaGrupos) {
+
+            string urlAction = String.IsNullOrEmpty(OGrupo.controller) ? "#" : Url.Action(OGrupo.action, OGrupo.controller, new { OGrupo.area });
+
+            @showMenu(OGrupo.id, OGrupo.descricao, urlAction, OGrupo.iconeClasse)
+        }
+    </ul>
+
+</div>
+
+
+@helper showMenu(int idMenuGrupo, string textoMenu, string urlAction, string iconeMenu) {
+
+bool flagDesenvolvedor = (Model.idPerfilAcesso == PerfilAcessoConst.DESENVOLVEDOR);
+
+bool flagExibir = Model.listaPermissoes.Any(x => x.idGrupo == idMenuGrupo);
+
+if (!flagExibir && !flagDesenvolvedor) { return; }
+
+bool flagTemSubmenus = Model.listaPermissoes.Any(x => x.idGrupo == idMenuGrupo && x.idRecurso > 0);
+
+if (!flagTemSubmenus && urlAction == "#") { return; }
+
+string className = (flagTemSubmenus && urlAction == "#" ? "dropdown" : "");
+
+    <li class="@className">
+        <a href="@urlAction" class="@className-toggle" data-toggle="@className" aria-expanded="@(flagTemSubmenus? "true": "")">
+            @textoMenu
+        </a>
+
+        @if (flagTemSubmenus && urlAction == "#") {
+            @showSubMenu(idMenuGrupo)
+        }
+    </li>
+}
+
+@helper showSubMenu(int idMenuGrupo) {
+
+     var listaSubMenus = Model.listaPermissoes.Where(x => x.idGrupo == idMenuGrupo && x.idRecurso > 0 && x.AcessoRecurso.flagExcluido == "N" && (x.AcessoRecurso.idRecursoPai == null || x.AcessoRecurso.idRecursoPai == 0))
+                        .OrderBy(x => x.AcessoRecurso.ordemExibicao)
+                        .ToList();
+
+    <ul class="dropdown-menu" role="menu">
+        @foreach (var SubMenu in listaSubMenus) {
+            if (SubMenu.AcessoRecurso == null) {
+                continue;
+            }
+
+            string areaName = SubMenu.AcessoRecurso.area;
+            string actionPadrao = string.IsNullOrEmpty(SubMenu.AcessoRecurso.actionPadrao) ? "index" : SubMenu.AcessoRecurso.actionPadrao;
+            string controller = SubMenu.AcessoRecurso.controller;
+
+            if (SubMenu.AcessoRecurso.nomeDisplay.Contains("------")) {
+                <li class="divider" role="separator"></li>
+            } else {
+                <li>
+                    <a href="@Url.Action(actionPadrao, controller, new {area = areaName})">
+                        @SubMenu.AcessoRecurso.nomeDisplay
+                    </a>
+                </li>
+            }
+
+        }
+    </ul>
+}

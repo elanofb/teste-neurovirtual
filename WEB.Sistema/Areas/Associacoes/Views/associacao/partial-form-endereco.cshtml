@@ -1,0 +1,54 @@
+﻿@model  WEB.Areas.Associacoes.ViewModels.AssociacaoForm
+@using WEB.Areas.Localizacao.Helpers
+
+@Html.HiddenFor(m => m.Associacao.Pessoa.listaEnderecos[0].idTipoEndereco)
+@Html.HiddenFor(m => m.Associacao.Pessoa.listaEnderecos[0].id)
+
+
+<div class="col-xs-4 col-md-5 col-lg-4">
+    <label>CEP</label>
+    <div class="input-group">
+        @Html.TextBoxFor(m => m.Associacao.Pessoa.listaEnderecos[0].cep, new { @class = "form-control input-sm", alt = "cep", rel = "cepEndereco", onkeyup = "Localizacao.carregarEndereco('Endereco');" })
+        <span class="input-group-addon">
+            <a href="javascript:void(Localizacao.carregarEndereco('Endereco'));"><i id="buscarEnderecol" class="fa fa-search"></i></a>
+        </span>
+    </div>
+    @Html.ValidationMessageFor(m => m.Associacao.Pessoa.listaEnderecos[0].cep)
+</div>
+
+<div class="clearfix"></div>
+
+<div class="col-sm-9">
+	<label>Endereço</label>
+    @Html.TextBoxFor(m => m.Associacao.Pessoa.listaEnderecos[0].logradouro, new { @class = "form-control input-sm", id= "endereco", rel="logradouroEndereco", maxlength="100" })
+    @Html.ValidationMessageFor(m => m.Associacao.Pessoa.listaEnderecos[0].logradouro)
+</div>
+<div class="col-sm-3">
+    <label>Número</label>
+    @Html.TextBoxFor(m => m.Associacao.Pessoa.listaEnderecos[0].numero, new { @class = "form-control input-sm", id= "numeroEndereco", rel="numeroEndereco", maxlength="30" })
+    @Html.ValidationMessageFor(m => m.Associacao.Pessoa.listaEnderecos[0].numero)
+</div>
+
+<div class="col-sm-6">
+    <label>Complemento</label>
+    @Html.TextBoxFor(m => m.Associacao.Pessoa.listaEnderecos[0].complemento, new { @class = "form-control input-sm", rel="complementoEndereco", maxlength="30" })
+    @Html.ValidationMessageFor(m => m.Associacao.Pessoa.listaEnderecos[0].complemento)
+</div>
+
+<div class="col-sm-6">
+	<label>Bairro</label>
+    @Html.TextBoxFor(m => m.Associacao.Pessoa.listaEnderecos[0].bairro, new { @class = "form-control input-sm", rel ="bairroEndereco", maxlength="80" })
+    @Html.ValidationMessageFor(m => m.Associacao.Pessoa.listaEnderecos[0].bairro)
+</div>
+
+<div class="col-sm-4">
+    <label for="idEstado" class="optional">UF</label>
+    @Html.DropDownListFor(m => m.Associacao.Pessoa.listaEnderecos[0].idEstado, EstadoHelper.selectList(Model.Associacao.Pessoa.listaEnderecos[0].idEstado), "...", new {@class = "form-control input-sm", id = "idEstado", rel = "idEstadoEndereco", onchange = "Locate.loadCities('Endereco');"})
+    @Html.ValidationMessageFor(m => m.Associacao.Pessoa.listaEnderecos[0].idEstado)
+</div>
+
+<div class="col-sm-8">
+	<label for="idCidade" class="optional">Cidade</label>
+    @Html.DropDownListFor(m => m.Associacao.Pessoa.listaEnderecos[0].idCidade, CidadeHelper.selectList(UtilNumber.toInt32(Model.Associacao.Pessoa.listaEnderecos[0].idEstado), UtilNumber.toInt32(Model.Associacao.Pessoa.listaEnderecos[0].idCidade) ), "Selecione...", new { @class = "form-control input-sm", id ="idCidade", rel="idCidadeEndereco" })
+    @Html.ValidationMessageFor(m => m.Associacao.Pessoa.listaEnderecos[0].idCidade)
+</div>

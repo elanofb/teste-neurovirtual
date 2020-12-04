@@ -1,0 +1,59 @@
+﻿@model  WEB.Areas.Arquivos.ViewModels.ArquivoUploadFotoVM
+    
+@using MvcFlashMessages
+
+@{
+    Layout = null;
+}
+
+<div class="row">
+    
+    <div class="col-md-12">
+        
+        @Html.RenderFlash()
+
+        @using (Html.BeginForm("salvar", "ArquivoFoto", FormMethod.Post, new { enctype = "multipart/form-data", id = "formArquivoFoto" })) {
+
+            @Html.ValidationSummary(true, "Erro. Não foi possível concluir a operação, verifique os campos.")
+
+            @Html.HiddenFor(m => m.tipoExibicao, new { id = "tipoExibicao" })
+            
+            @Html.HiddenFor(m => m.OArquivo.id)
+
+            @Html.HiddenFor(m => m.OArquivo.entidade, new { id = "entidadeArquivo" })
+
+            @Html.HiddenFor(m => m.OArquivo.categoria, new { id = "categoriaArquivo" })
+
+            @Html.HiddenFor(m => m.OArquivo.idReferenciaEntidade, new { id = "idReferenciaEntidade" })
+            
+            <div class="row">
+
+                <div class="col-xs-12">
+                    @Html.inputFileSimples("FileUpload", "false")
+                    @Html.ValidationMessageFor(m => m.FileUpload)
+                </div>
+                <div class="clearfix"></div>
+
+                <div class="col-xs-12">
+                    <label>Legenda</label>
+                    @Html.TextBoxFor(m => m.OArquivo.legenda, new { id = "legenda", @class ="form-control input-sm" })
+                    @Html.ValidationMessageFor(m => m.OArquivo.legenda)
+                </div>
+                <div class="clearfix"></div>
+
+                <div class="col-xs-12 padtop22 text-right">
+                    
+                    <button type="button" class="btn btn-primary link-loading" onclick="ArquivoFoto.uploadArquivo(this.form);">
+                        Salvar
+                    </button>
+
+                </div>
+                <div class="clearfix"></div><br />
+
+            </div>
+        }
+
+    </div>
+    <div class="clearfix"></div>
+    
+</div>

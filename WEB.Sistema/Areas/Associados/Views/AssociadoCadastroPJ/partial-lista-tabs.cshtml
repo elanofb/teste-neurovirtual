@@ -1,0 +1,74 @@
+﻿@model WEB.Areas.Associados.ViewModels.AssociadoCadastroPJForm
+@using BLL.ConfiguracoesTextos.Extensions
+@using DAL.Permissao.Security.Extensions
+
+<li class="active"><a href="#tab-dados-cadastrais" data-toggle="tab">Dados Cadastrais</a></li>
+
+@if (Model.Associado.id > 0) {
+
+    if (Model.ConfiguracaoAssociadoPJ.flagAbaContato == true) {
+        <li><a href="#tab-contatos" data-toggle="tab">Contatos</a></li>
+    }
+
+    if (Model.ConfiguracaoAssociadoPJ.flagAbaAreasAtuacao == true) {
+        <li><a href="#tab-area-atuacao" data-toggle="tab">@Html.labelTexto(User.idOrganizacao(), "lblareaatuacao", "Área de Atuacao")</a></li>
+    }
+
+    if (Model.ConfiguracaoAssociadoPJ.flagAbaDependentes == true) {
+        <li><a href="#tab-dependentes" data-toggle="tab">@Html.labelTexto(User.idOrganizacao(), "lbldependentes", "Dependentes")</a></li>
+    }
+
+    <li><a href="#tab-documentos" data-toggle="tab">Documentos</a></li>
+
+    <li><a href="#tab-historico" data-toggle="tab">Histórico</a></li>
+    
+    <li><a href="#tab-movimentacao" data-toggle="tab">Movimentações</a></li>
+
+    if (Model.ConfiguracaoAssociadoPJ.flagAbaInstituicoes == true) {
+        <li><a href="#tab-instituicoes" data-toggle="tab">@Html.labelTexto(User.idOrganizacao(), "lblinstituicoes", "Instituições")</a></li>
+    }
+
+    if (Model.ConfiguracaoAssociadoPJ.flagAbaContribuicoes == true) {
+        <li><a href="#tab-cobrancas" data-toggle="tab">Cobranças</a></li>
+    }
+
+    if(Model.ConfiguracaoAssociadoPJ.flagAbaVeiculos == true) {
+        <li><a href="#tab-veiculos" data-toggle="tab">Veículos</a></li>
+    }
+
+    if (Model.ConfiguracaoAssociadoPJ.flagAbaPedidos == true) {
+        <li><a href="#tab-pedidos" data-toggle="tab">Pedidos</a></li>
+    }
+    
+    if (Model.ConfiguracaoAssociadoPJ.flagDadosOutrasOrganizacoes == true) {
+        <li><a href="#tab-outras-organizacoes" data-toggle="tab">@Html.labelTexto(User.idOrganizacao(), "lblOutrasOrganizacoes", "Outras Organizações")</a></li>
+    }
+    
+    <li><a href="#tab-contas-bancarias" data-toggle="tab">Contas Bancárias</a></li>
+    
+    <li><a href="#tab-produtos-ativos" data-toggle="tab">Produtos Ativos</a></li>
+    
+    <li><a href="#tab-pontuacao" data-toggle="tab">Pontos</a></li>
+@*
+    if (Model.ConfiguracaoAssociadoPF.flagAbaTitulos == true) {
+        <li><a href="#tab-titulos" data-toggle="tab">Títulos</a></li>
+    }
+
+    if (Model.ConfiguracaoAssociadoPF.flagAbaContribuicoes == true) {
+        <li><a href="#tab-cobrancas" data-toggle="tab">Cobranças</a></li>
+    }
+
+
+    if (Model.ConfiguracaoAssociadoPF.flagAbaEventos == true) {
+        <li><a href="#tab-eventos" data-toggle="tab">Eventos</a></li>
+    }
+
+    if (Model.ConfiguracaoAssociadoPF.flagAbaAnuncios == true) {
+        <li><a href="#tab-anuncios" data-toggle="tab">Anúncios</a></li>
+    }
+
+    if (Model.ConfiguracaoAssociadoPF.flagAbaCarteirinha == true) {
+        <li><a href="#tab-carteirinha" data-toggle="tab">Carteirinha</a></li>
+    }*@
+
+}

@@ -1,0 +1,67 @@
+﻿@model WEB.Areas.Associados.ViewModels.AssociadoCadastroPFForm
+@using DAL.Associados
+@using System.Web.Script.Serialization
+
+<div class="row cabecario-associado">
+    <div class="col-sm-12">
+        @*<strong>#@Model.Associado.id </strong>&nbsp;&nbsp;*@
+        @if (!Model.Associado.nroAssociado.isEmpty()) {
+            <strong>Nº @Model.Associado.nroAssociado</strong>
+        }
+    </div>
+
+    <div class="col-sm-12">
+        <div class="row">
+            <div class="col-sm-6">
+                <span><i class="fa @(Model.Associado.Pessoa.flagTipoPessoa == "J" ? "fa-building-o" : "glyphicons glyphicons-user")"></i> @Model.Associado.Pessoa.nome.ToUpper()</span>
+            </div>
+            <div class="col-sm-6">
+                @(Model.Associado.Pessoa.flagTipoPessoa == "J" ? "Pessoa Jurídica" : "Pessoa Física")
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12">
+        <div class="row">
+            <div class="col-sm-6">
+                <span><i class="fa fa-id-card"></i> @UtilString.formatCPFCNPJ(Model.Associado.Pessoa.nroDocumento)</span><br/>
+                @if (Model.ConfiguracaoMembro.idChaveBinaria > 0) {
+                    <span data-toggle="tooltip" title="Posição na Rede">
+                        <i class="fa fa-sitemap"></i> 
+                        @ConfiguracaoMembroExtensions.descricaoChveBinaria(Model.ConfiguracaoMembro.idChaveBinaria.toByte())
+                    </span><br/>
+                }
+                @{var listaTipoAssociado = TipoAssociadoHelper.getInstance.selectList(0, Model.Associado.Pessoa.flagTipoPessoa);}
+                @Html.Hidden("sourceTipoAssociado", new JavaScriptSerializer().Serialize(listaTipoAssociado.Select(x => new { value = x.Value, text = x.Text}).ToList()))
+
+                <span><i class="fa fa-users"></i> 
+                    <a href="#" data-pk="@(Model.Associado.id)"
+                       data-name="valor"
+                       data-title="Plano de Comissão"
+                       data-url="@Url.Action("alterar-tipo-associado", "AssociadoAcao")"
+                       data-type="select"
+                       data-value="@Model.Associado.TipoAssociado.id"
+                       class="id-tipo-associado text-black editable editable-click">
+                        @Model.Associado.TipoAssociado.nomeDisplay
+                    </a>    
+                </span><br/>
+                
+                <span>
+                    <i class="fa fa-check"></i>Cadastro em @Model.Associado.dtCadastro.exibirData()<br/>
+                </span>  
+            </div>
+            <div class="col-sm-6">
+                @UtilDate.calcularIdade(Model.Associado.Pessoa.dtNascimento)
+                <br/>
+                <em class="fs-10">
+                    <i class="fa fa-check"></i>Indicado por <strong>@(Model.Associado.Indicador?.Pessoa?.nome)</strong><br/>
+                    <i class="fa fa-check"></i>Cadastro originado em @Model.Associado.descricaoOrigemCadastro()
+                    @if (Model.Associado.Unidade != null){
+                        <br/>
+                        <i class="fa fa-check"></i>
+                        <span>Cadastrado na unidade @Model.Associado.Unidade.Pessoa.nome</span>
+                    }
+                </em><br/>
+            </div>
+        </div>
+    </div>
+</div>

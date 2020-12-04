@@ -1,0 +1,38 @@
+﻿@model DAL.AssociadosContribuicoes.AssociadoContribuicao
+
+@{
+    ViewBag.modalTitle = string.Format("Exclusão - {0}", Model.Contribuicao.descricao);
+    ViewBag.modalWidthClass = "md";
+    Layout = IsPost ? null : "~/views/shared/associatec/masterpage-modal.cshtml";
+}
+
+<div id="boxFormExclusao">
+    @Html.showFlashMessage()
+    @using (Ajax.BeginForm("excluir-contribuicao", null, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "boxFormExclusao", InsertionMode = InsertionMode.Replace, OnSuccess = "AssociadoContribuicaoExclusao.onSuccessFormExclusao" }, new { id = "formExclusao", @class = "default col-md-12" })) {
+        @Html.legendaRequired()<br />
+        { Html.EnableClientValidation(false); }
+        @Html.ValidationSummary(false)
+        @Html.HiddenFor(m => m.id)
+        @Html.HiddenFor(m => m.Contribuicao.descricao)
+
+        <div class="col-md-8">
+            @Html.labelRequired("Informe o motivo para exclusão da cobrança")
+        </div>
+        <div class="clearfix"></div>
+        <div class="col-md-12">
+            @Html.TextArea("observacoes", "", new { @class = "form-control input-sm", rows = "4" })
+            @Html.ValidationMessage("observacoes")
+        </div>
+        <div class="clearfix"></div><br />
+
+    }
+
+    <div class="clearfix"></div>
+</div>
+
+@section modalFooter{
+    <div class="text-right">
+        <input type="button" value="Cancelar" class="btn btn-default" data-dismiss="modal" aria-hidden="true" />
+        <input type="button" value="Confirmar Exclusão" class="btn btn-danger link-loading" onclick="$('#formExclusao').submit();" />
+    </div>
+}

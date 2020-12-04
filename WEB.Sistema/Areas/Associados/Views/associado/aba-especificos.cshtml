@@ -1,0 +1,76 @@
+﻿@model WEB.Areas.Associados.ViewModels.AssociadoForm
+
+
+<div class="tab-pane" id="@(IsPost? "": "tab-dados-especificos")">
+
+    @using (Ajax.BeginForm("salvar-dados-especificos", null, new {}, new AjaxOptions {HttpMethod = "POST", UpdateTargetId = "tab-dados-especificos", InsertionMode = InsertionMode.Replace, OnSuccess = "Associado.onSuccessEspecifico"}, new {})) {
+
+        @Html.HiddenFor(x => x.Associado.id)
+
+        @Html.HiddenFor(x => x.Associado.Pessoa.id)
+
+        @exibirBlocoEstudante()
+
+        @exibirBlocoProfissional()
+
+        @exibirBlocosPJ()
+
+        { Html.RenderPartial("box-dados-customizados");}
+
+        <div class="row">
+            @{ Html.RenderPartial("box-como-conheceu"); }
+        </div>
+
+        <br/>
+        <p class="text-right">
+            <button type="submit" class="btn btn-primary link-loading">Salvar Dados</button>
+        </p>
+    }
+</div>
+
+@helper exibirBlocosPJ() {
+
+    if (Model.Associado.Pessoa.flagTipoPessoa != "J") {
+        return;
+    }
+
+    <div class="row">
+        <div class="col-sm-12">
+            @{ Html.RenderPartial("box-dados-empresariais");}
+        </div>
+    </div>
+
+}
+
+@helper exibirBlocoEstudante() {
+
+    if (Model.Associado.Pessoa.flagTipoPessoa != "F") {
+        return;
+    }
+
+    if (Model.Associado.TipoAssociado.flagEstudante == false) {
+        return;
+    }
+
+
+}
+
+
+@helper exibirBlocoProfissional() {
+
+    if (Model.Associado.Pessoa.flagTipoPessoa == "J") {
+        return;
+    }
+
+    if (Model.Associado.TipoAssociado.flagEstudante) {
+        return;
+    }
+
+    <div class="row">
+        <div class="col-sm-12">
+            @{ Html.RenderPartial("box-dados-profissionais");}
+        </div>
+    </div>
+
+
+}

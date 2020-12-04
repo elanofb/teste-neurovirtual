@@ -1,0 +1,58 @@
+﻿@using DAL.Atendimentos
+@model WEB.Areas.Atendimentos.ViewModels.AtendimentoForm
+
+<div class="box box-primary">
+                    
+    <div class="box-header with-border">
+                        
+        <h3 class="box-title">
+            <i class="fa fa-headphones"></i> Informações 
+            
+            @if (Model.Atendimento.idStatusAtendimento == AtendimentoStatusConst.EM_ATENDIMENTO) {
+                <small>(Iniciado em @Model.Atendimento.dtInicioAtendimento.exibirData(true) por @(Model.Atendimento.UsuarioInicioAtendimento?.nome ?? ""))</small>
+            }
+
+        </h3>
+              
+    </div>
+                    
+    <div class="box-body">
+                        
+        <div class="col-md-6">
+
+            <p><span class="titulo"><i class="fa fa-user"></i> @Model.Atendimento.nome</span></p>
+
+            <p><i class="fa fa-envelope"></i> @Model.Atendimento.email</p>
+                    
+            <p><i class="fa fa-phone"></i> @(Model.Atendimento.nroTelefone.isEmpty() ? "Não Informado" : UtilString.formatPhone(Model.Atendimento.nroTelefone))</p>
+                    
+        </div>
+        
+        <div class="col-md-6">
+            
+            <p><strong><i class="fa fa-tag"></i> Tipo:</strong> @(Model.Atendimento.AtendimentoTipo?.descricao ?? "-")</p>
+            
+            <p><strong><i class="fa fa-tag"></i> Área:</strong> @(Model.Atendimento.AtendimentoArea?.descricao ?? "-")</p>
+            
+            @if (Model.Atendimento.valor > 0){
+                
+                <p><strong><i class="fa fa-tag"></i> BTK's:</strong> @(Model.Atendimento.valor.toDecimal().ToString("F2"))</p>
+
+            }
+            
+            <p><i class="fa fa-calendar"></i> Cadastro em @Model.Atendimento.dtCadastro.exibirData(true)</p>
+
+        </div>
+        <div class="clearfix"></div><br />
+                
+        <div class="col-md-12 margin-bottom-20">
+            <p><strong>Mensagem Inicial:</strong> @Html.Raw(Model.Atendimento.mensagem)</p>
+        </div>
+        <div class="clearfix"></div>
+
+        <div id="boxBotoesAcao" class="content-load carregando" data-url="@Url.Action("partial-botoes-acao", "Atendimento", new { id = Model.Atendimento.id })"></div>
+
+    </div>
+
+</div>
+         

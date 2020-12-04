@@ -1,0 +1,80 @@
+﻿@model WEB.Areas.Produtos.ViewModels.ProdutoComposicaoVM
+@using PagedList.Mvc
+
+@{
+    Layout = null;
+}
+<div id="adicionarItem" class="box-body collapse">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="form-horizontal">
+                @{Html.RenderAction("partial-form-adicionar-item", "Produto", new { Area = "Produtos", Model.idProduto });}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="clearfix"></div>
+
+<div class="box-header with-border">
+    <div class="box-title">
+        <i class="fa fa-tag"></i> Composição do Produto
+    </div>
+    <div class="box-tools pull-right">
+
+        <a href="javascript:;" data-toggle="collapse" data-target="#adicionarItem" class="btn btn-box-tool"><i class="far fa-plus-circle"></i> Adicionar Item</a>
+    </div>
+</div>
+
+<div class="box-body">
+
+    @if (!Model.listaProdutoComposicao.Any()) {
+        <div class="alert alert-info">
+            Nenhum item foi encontrado.
+        </div>
+    }
+
+    @foreach (var OProdutoComposicao in Model.listaProdutoComposicao) {
+        <div class="box-info-item">
+
+            <div class="row">
+
+                <div class="col-md-3 col-xs-6">
+                    <span data-toggle="tooltip" title="Item"><i class="fa fa-align-justify"></i> @OProdutoComposicao.ProdutoItem.descricao</span>
+                </div>
+
+                <div class="col-md-3 col-sm-3 col-xs-6">
+                    <span data-toggle="tooltip" title="Valor"><i class="fa fa-balance-scale"></i> @OProdutoComposicao.valorUnidadeMedida @OProdutoComposicao.UnidadeMedida.sigla</span><br />
+                </div>
+
+                <div class="col-md-3 col-sm-3 col-xs-6">
+                    @Html.linkStatusDefault(OProdutoComposicao.id, OProdutoComposicao.ativo)<br />
+                </div>
+
+                <div class="col-sm-2 col-xs-6">
+                    <span data-toggle="tooltip" title="Data de Cadastro"><i class="fa fa-calendar"></i> @OProdutoComposicao.dtCadastro.exibirData()</span>
+                </div>
+
+                <div class="col-sm-1 col-xs-6">
+                    <div class="dropdown pull-right">
+                        <a href="javascript:;" class="dropdown-toggle text-black" type="button" data-toggle="dropdown">
+                            <i class="fa fa-cog"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-right">
+                            <li>@Html.linkAjaxExcluir(OProdutoComposicao.id, "N", Url.Action("excluirComposicao"), "", "", "Excluir")</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="clearfix"></div>
+
+            </div>
+
+            <div class="clearfix"></div>
+        </div>
+    }
+
+    @(Html.paginarRegistros(Model.listaProdutoComposicao, Html.PagedListPager(Model.listaProdutoComposicao, nroPagina => UtilRequest.linkPaginacao(nroPagina, "listar"), PagedListRenderOptions.OnlyShowFivePagesAtATime)))
+    <div class="clearfix"></div>
+</div>
+<div class="clearfix"></div>

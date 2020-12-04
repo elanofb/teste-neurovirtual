@@ -1,0 +1,35 @@
+﻿@model DAL.Arquivos.ArquivoUpload
+@using DAL.Arquivos.Extensions
+
+<div class="row">
+    <div class="col-md-12 text-center">
+        <div id="userpic" class="userpic" style="background-image: url(@Model.linkImagem("h200"))">
+            <div class="js-preview userpic__preview"></div>
+            <div class="btn btn-ar js-fileapi-wrapper text-center">
+                <div class="js-upload fs-12" style="display: none;">
+                    <div class="progress progress-success">
+                        <div class="js-progress bar"></div>
+                    </div>
+                    <span class="btn-txt">Carregando</span>
+                </div>
+                <div class="js-browse fs-12">
+                    <span class="btn-txt text-blue"><strong>Alterar</strong></span>
+                    <input type="file" name="FileUpload" />
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+
+        <p class="fs-10">
+            Resolução mínima: 150 x 200
+        </p>
+
+        @if (Model.id > 0) {
+            <p class="fs-12">
+                <a href="@Url.Action("exibir-arquivo", "Exibicao", new { area ="Arquivos", idArquivo = Model.id})" target="_blank"><i class="fa fa-download"></i> Download Foto</a>
+            </p>
+        }
+    </div>
+</div>
+
+<div class="clearfix"></div>

@@ -1,0 +1,51 @@
+﻿@using DAL.Financeiro
+@model List<DAL.Financeiro.ReceitaDespesaVW>
+
+@{
+    var tipoBuscaPeriodo = UtilRequest.getString("tipoBuscaPeriodo");
+}
+
+<table class="table table-hover no-margin">
+                            
+    <tbody>            
+        @foreach(var OPagamento in Model) {
+
+            <tr class="fs-12">     
+                <td width="70%">
+                    <div data-toggle="tooltip" title="@OPagamento.descricaoTitulo" class="abreviar">
+                        <i class="fa fa-chevron-right"></i> @OPagamento.descricaoTitulo
+                    </div>
+                </td>
+                
+                <td width="30%" class="text-right">
+                    @if (OPagamento.flagTipoTitulo.Equals("R")) {
+                        <strong class="text-green">
+                            <i class="fa fa-caret-up"></i> @OPagamento.valorLiquido().ToString("C")
+                        </strong>
+                    }
+
+                    @if (OPagamento.flagTipoTitulo.Equals("D")) {
+                        <strong class="text-red">
+                            <i class="fa fa-caret-down"></i> @OPagamento.valor.ToString("C")
+                        </strong>
+                    }
+                </td>
+                <td>
+                    @{
+                        var linkTitulo = Url.Action("editar", "ReceitaDetalhe", new {area = "Financeiro", id = OPagamento.idTitulo});
+                        
+                        if (OPagamento.flagTipoTitulo == "D")
+                        {
+                            linkTitulo = Url.Action("editar", "DespesaDetalhe", new {area = "Financeiro", id = OPagamento.idTitulo});
+                        }
+                        
+                        <a title="Ver Detalhes" href="@linkTitulo" target="_blank" class="text-black fs-14">
+                            <i class="fa fa-search"></i>
+                        </a>
+                    }
+                </td>
+            </tr>
+        }
+
+    </tbody>
+</table>

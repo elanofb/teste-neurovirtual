@@ -1,0 +1,43 @@
+﻿@using WEB.Areas.Mailings.Helpers
+@model  WEB.Areas.Associados.ViewModels.AssociadoListaEmailForm
+@{
+	Layout = null;				
+}
+
+<div id="boxFormAssociadoListaEmail" >
+	@Html.showFlashMessage()
+	@using (Ajax.BeginForm("editar", "associadolistaemail", new{area="associados"}, new AjaxOptions { HttpMethod = "POST", InsertionMode = InsertionMode.Replace, UpdateTargetId = "boxFormAssociadoListaEmail", OnSuccess = "AssociadoListaEmail.onSuccessForm" }, new { @class = "" })) {
+
+		{ Html.EnableClientValidation(false); }
+		@Html.legendaRequired()<br />
+		@Html.HiddenFor(m => m.Mailing.id)
+		@Html.HiddenFor(m => m.Mailing.idAssociado, new { @class = "nao-limpar" })
+		
+		@Html.ValidationSummary(true, "Algumas informações precisam ser corrigidas abaixo.")
+
+	    <div class="col-md-2">
+	        @Html.labelRequired("Grupo de E-mail")
+	        @Html.DropDownListFor(m => m.Mailing.idTipoMailing, TipoMailingHelper.selectList(Model.Mailing.idTipoMailing, Model.idTipoAssociado), "...", new {@class = "form-control input-sm"})
+	        @Html.ValidationMessageFor(m => m.Mailing.idTipoMailing)
+	    </div>
+
+        <div class="col-md-3">
+            @Html.labelRequired("Nome")
+            @Html.TextBoxFor(m => m.Mailing.nome, new { @class = "form-control input-sm", maxlength = "100" })
+            @Html.ValidationMessageFor(m => m.Mailing.nome)
+        </div>
+
+        <div class="col-md-3">
+            @Html.labelRequired("E-mail")
+            @Html.TextBoxFor(m => m.Mailing.email, new { @class = "form-control input-sm", maxlength = "150" })
+            @Html.ValidationMessageFor(m => m.Mailing.email)
+        </div>
+        <div class="clearfix"></div><br />
+
+		<div class="text-right">
+			<input type="button" name="limpar" value="Limpar" class="btn btn-default link-loading" onclick="DefaultSistema.limparForm(this.form)" />
+			<input type="submit" name="salvar" value="Salvar" class="btn btn-primary" />
+		</div>
+	}
+</div>
+<div class="clearfix"></div>

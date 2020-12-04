@@ -1,0 +1,101 @@
+﻿@model WEB.Areas.Associacoes.ViewModels.AssociacaoModulosContratadosVM
+
+<div class="row">
+
+    <div class="col-md-6">
+
+        <div class="box box-primary">
+
+            @Html.headerBox("Módulos Contratados", "fa fa-align-justify")
+            
+            <div class="box-body">
+                
+                <table class="table table-striped">
+                    
+                    <thead>
+                        <tr>
+                            <th>Módulo</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    
+                    <tbody>
+                    
+                        @if (!Model.listaModulosAtivos.Any()) { 
+                            <tr>
+                                <td colspan="2">
+                                    Nenhum módulo contratado no momento.
+                                </td>
+                            </tr>
+                        }                
+                        
+                        @foreach (var OModulo in Model.listaModulosAtivos) {
+
+                            <tr>
+                                <td>@OModulo.descricao</td>
+                                <td class="text-right">
+                                    @Html.CheckBox("flagModuloAtivo", true, new { @class = "check-toggle", data_idOrganizacao = Model.idOrganizacao, data_idRecursoGrupo = OModulo.id })    
+                                </td>
+                            </tr>
+
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+    
+    </div>
+    
+    <div class="col-md-6">
+
+        <div class="box box-primary">
+
+            @Html.headerBox("Módulos Disponíveis", "fa fa-align-justify")
+            
+            <div class="box-body">
+                
+                <table class="table table-striped">
+                    
+                    <thead>
+                    <tr>
+                        <th>Módulo</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    
+                    <tbody>
+                    
+                    @if (!Model.listaModulosInativos.Any()) { 
+                    <tr>
+                        <td colspan="2">
+                            Nenhum módulo disponível no momento.
+                        </td>
+                    </tr>
+                    }                
+                        
+                    @foreach (var OModulo in Model.listaModulosInativos) {
+
+                        <tr>
+                            <td>@OModulo.descricao</td>
+                            <td class="text-right">
+                                @Html.CheckBox("flagModuloAtivo", false, new { @class = "check-toggle", data_idOrganizacao = Model.idOrganizacao, data_idRecursoGrupo = OModulo.id })    
+                            </td>
+                        </tr>
+
+                    }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+    
+    </div>
+
+</div>

@@ -1,0 +1,56 @@
+﻿@model WEB.Areas.Permissao.ViewModels.AlterarSenhaForm
+@using DAL.Permissao.Security.Extensions
+
+@{
+	ViewBag.titlePage = "Alteração de Senha";
+}
+
+@if (User.flagAlterarSenha() == "S") {
+	<div class="alert alert-info margin-top-10">
+		Olá, nesse acesso você precisa alterar sua senha antes de continuar utilizando o sistema.
+	</div>
+}
+<div class="row">
+    <div class="col-sm-12 box-primary">
+        <div class="nav-tabs-custom">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#tab-1" data-toggle="tab">Principal</a></li>
+            </ul>
+            <div id="tab-1" class="tab-pane active">
+                @using (Html.BeginForm("alterar-senha", null, FormMethod.Post, new { role = "form", @class = "default" })) {
+
+                    @Html.ValidationSummary(false)
+
+                    <div class="form-horizontal">
+
+                        <div class="col-md-4">
+                            <label>Senha</label>
+                            @Html.PasswordFor(m => m.senhaAtual, new { @class = "form-control input-sm", maxlength = "12" })
+                            @Html.ValidationMessageFor(m => m.senhaAtual)
+                        </div>
+                        <div class="col-md-4">
+                            <label>Nova Senha (Limite de 12 caracteres)</label>
+                            @Html.PasswordFor(m => m.senha, new { @class = "form-control input-sm", maxlength = "12" })
+                            @Html.ValidationMessageFor(m => m.senha)
+                        </div>
+                        <div class="col-md-4">
+                            <label>Confirme a Senha</label>
+                            @Html.PasswordFor(m => m.confirmarSenha, new { @class = "form-control input-sm", maxlength = "12" })
+                            @Html.ValidationMessageFor(m => m.confirmarSenha)
+                        </div>
+                    </div>
+                    <div class="clearfix"></div><br/>
+
+                    <div class="col-sm-12">
+                        <div class="text-right">
+                            <button type="submit" class="btn btn-primary"><i class="far fa-hdd"></i> Alterar senha</button>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div><br />
+                }
+
+            </div><div class="clearfix"></div>
+        </div>
+    </div>
+</div>
+

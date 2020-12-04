@@ -1,0 +1,92 @@
+﻿@model List<DAL.Notificacoes.NotificacaoSistemaEnvio>
+
+@{
+    Layout = "~/views/shared/associatec/masterpage.cshtml";
+    ViewBag.titlePage = "Avisos do Sistema";
+}
+
+@section styles {
+    <link href="@UtilConfig.linkResourses()css/associatec/list-custom.css" rel="stylesheet" />
+}
+
+@section scripts{
+    <script src="@UtilConfig.linkResourses()Areas/AvisosNotificacoes/js/aviso-sistema-lista.js"></script>
+}
+
+<div class="box box-primary">
+    <div class="box-header with-border">
+        <div class="box-title">
+            <i class="far fa-chart-bar"></i> Resultados <em class="fs-12">@Model.Count() avisos não lidos</em>
+        </div>
+        <div class="box-tools pull-right">
+
+            <div class="btn-group">
+                <button type="button" class="btn btn-box-tool dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+                    Ações <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                    <li>
+                        <a href="javascript:;" data-url="@Url.Action("registrar-leitura", "AvisoSistemaLista")" onclick="AvisoSistemaLista.registrarLeitura(this)">
+                            <i class="fa fa-envelopepen-o"></i> Confirmar leitura
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="@Url.Action("avisos-lidos")"><i class="fa fa-envelopepen"></i>Ver avisos lidos</a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="btn-group pull-right">
+                <label class="btn btn-default btn-xs" data-toggle="tooltip" title="Selecionar Todos">
+                    <input type="checkbox" name="marcarTodos" data-childs="checkRegistro[]" id="checkMarcarTodos" style="margin-left: 2px;" />
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <div class="box-body">
+        <div class="row">
+            @if (!Model.Any()) {
+                <div class="alert alert-info">
+                    Nenhum associado foi encontrado.
+                </div>
+            }
+
+            @foreach(var OItem in Model) {
+
+                <div class="col-sm-12">
+        
+                    <div class="col-sm-12 box-info-item bordered-destaque border-gray">
+
+                        <div class="row text-black">
+                
+                            <div class="col-sm-7">
+                                <span><i class="fa fa-hashtag"></i>@OItem.id - @OItem.NotificacaoSistema.titulo</span> <br />
+                            </div>
+
+                            <div class="col-sm-3" data-toggle="tooltip" title="Cadastro da notificação">
+                                <span><i class="fa fa-calendar"></i>@OItem.dtCadastro.exibirData(true)</span> <br />
+                            </div>
+                            
+                            <div class="col-sm-2 text-right">
+                                <a href="javascript:;" data-url="@Url.Action("registrar-leitura", "AvisoSistemaLista")" data-id="@OItem.id" onclick="AvisoSistemaLista.registrarLeitura(this)" data-toggle="tooltip" title="Confirmar leitura"><i class="fa fa-envelopepen-o text-black"></i></a>&nbsp;
+                                <input type="checkbox" name="checkRegistro[]" value="@OItem.id" /> 
+                            </div>
+
+                            <div class="col-sm-12">
+                                <span><i class="fa fa-envelope"></i>@OItem.NotificacaoSistema.notificacao</span>
+                            </div>
+                            <div class="clearfix"></div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="clearfix"></div>
+            }
+        </div>
+    </div>
+</div>
+<div class="clearfix"></div><br />

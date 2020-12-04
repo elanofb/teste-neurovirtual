@@ -1,0 +1,85 @@
+﻿@using MvcFlashMessages
+@using WEB.Areas.Bancos.Helpers
+@using ComboHelper = WEB.Helpers.ComboHelper
+@model WEB.Areas.Api.Pessoas.ViewModels.ContaBancariaCadastroDTO
+
+@{
+    Layout = IsPost ? null : "~/Areas/AreaAssociados/views/shared/masterpage-modal.cshtml";
+
+    ViewBag.modalTitle = "Cadastrar Conta Bancária";
+}
+
+<div id="boxCadastroConta">
+    
+    @Html.RenderFlash()
+        
+    @using (Ajax.BeginForm("salvar", "ContaBancariaCadastro", new AjaxOptions{HttpMethod = "POST", UpdateTargetId = "boxFormPendencia", InsertionMode = InsertionMode.Replace, OnSuccess = "PessoaContaBancariaCadastro.onSuccessForm"}, new{id = "formContaBancaria", @class = "default"})){
+        
+        { Html.EnableClientValidation(false);}
+
+        @Html.HiddenFor(m => m.idPessoa)
+
+        <div class="row">
+
+            <div class="col-md-9">
+                @Html.labelRequired("Banco")
+                @Html.DropDownListFor(m => m.idBanco, BancoHelper.getInstance.selectList(Model.idBanco), "...", new{@class = "form-control input-sm"})
+                @Html.ValidationMessageFor(m => m.idBanco)
+            </div>
+            <div class="clearfix"></div>
+
+        </div>
+
+        <div class="row">
+
+            <div class="col-md-3">
+                @Html.labelRequired("Agência")
+                @Html.TextBoxFor(m => m.nroAgencia, new{@class = "form-control input-sm"})
+                @Html.ValidationMessageFor(m => m.nroAgencia)
+            </div>
+
+            <div class="col-md-2">
+                <label>Digito</label>
+                @Html.TextBoxFor(m => m.nroDigitoAgencia, new{@class = "form-control input-sm"})
+                @Html.ValidationMessageFor(m => m.nroDigitoAgencia)
+            </div>
+
+            <div class="col-md-4">
+                @Html.labelRequired("Número da Conta")
+                @Html.TextBoxFor(m => m.nroContaBancaria, new{@class = "form-control input-sm"})
+                @Html.ValidationMessageFor(m => m.nroContaBancaria)
+            </div>
+
+            <div class="clearfix"></div>
+
+        </div>
+
+        <div class="row">
+
+            <div class="col-md-3">
+                @Html.labelRequired("Conta Corrente?")
+                @Html.DropDownListFor(m => m.flagContaCorrente, ComboHelper.selectListTrueFalse(Model.flagContaCorrente), "...", new{@class = "form-control input-sm"})
+                @Html.ValidationMessageFor(m => m.flagContaCorrente)
+            </div>
+
+            <div class="col-md-3">
+                @Html.labelRequired("Conta Poupança?")
+                @Html.DropDownListFor(m => m.flagContaPoupanca, ComboHelper.selectListTrueFalse(Model.flagContaPoupanca), "...", new{@class = "form-control input-sm"})
+                @Html.ValidationMessageFor(m => m.flagContaPoupanca)
+            </div>
+
+            <div class="clearfix"></div>
+
+        </div>
+
+    }
+</div>
+
+@section modalFooter{
+    <div class="text-right">
+        <input type="button" value="Cancelar" class="btn btn-default" data-dismiss="modal" aria-hidden="true" />
+        <button class="btn btn-primary link-loading" onclick="$('#formContaBancaria').submit();">
+            Salvar
+        </button>
+    </div>
+}

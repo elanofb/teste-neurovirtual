@@ -1,0 +1,21 @@
+﻿@model DAL.Pessoas.Pessoa
+
+<div>
+    <strong><i class="fa fa-user"></i> Responsável: </strong> @(!Model.nomeResponsavelCadastro.isEmpty() ? Model.nomeResponsavelCadastro : "Não informado")
+</div>
+
+@if (!Model.documentoResponsavelCadastro.isEmpty()) {
+
+    <div>
+        <strong><i class="fa fa-id-card"></i> Documento: </strong> @UtilString.formatCPFCNPJ(Model.documentoResponsavelCadastro)
+    </div>
+    
+}
+
+@if (!Model.obsResponsavelCadastro.isEmpty()) {
+
+    <div>
+        <strong>Observações: </strong> @Model.obsResponsavelCadastro
+    </div>
+    
+}

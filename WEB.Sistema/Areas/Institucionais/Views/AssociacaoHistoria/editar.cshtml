@@ -1,0 +1,123 @@
+﻿@model WEB.Areas.Institucionais.ViewModels.AssociacaoHistoriaForm
+
+@using DAL.Permissao.Security.Extensions
+@using WEB.Areas.Associacoes.Helpers
+@using MvcFlashMessages
+
+@{
+    ViewBag.titlePage = "História";
+}
+
+@section styles{
+
+    @Html.includeFroalaEditorCSS()
+
+    <link href="@UtilConfig.linkResourses()Areas/Arquivos/js/plugins/bootstrap-fileinput/css/fileinput.min.css" rel="stylesheet" />
+    <link href="@UtilConfig.linkResourses()Areas/Arquivos/js/plugins/jqueryFancybox/jquery.fancybox.css" rel="stylesheet" />
+
+}
+
+@section scripts{
+
+    @Html.includeDatePicker()
+
+    @Html.includeFroalaEditorJS()
+
+    <script src="@UtilConfig.linkResourses()Areas/Institucionais/js/historia.js?v=1.1"></script>
+    <script src="@UtilConfig.linkResourses()Areas/Arquivos/js/plugins/jqueryFancybox/jquery.fancybox.js"></script>
+}
+
+
+
+
+@section breadcrump{
+    <ol class="breadcrumb">
+        <li><a href="@Url.Action("listar")" class="active fs-14"><i class="fa fa-arrow-left"></i> Voltar</a></li>
+    </ol>
+}
+
+<div class="row">
+    
+    <div class="col-sm-12 box-primary">
+        <div class="nav-tabs-custom">
+
+            <ul class="nav nav-tabs" role="tablist">
+                <li class="active"><a href="#tab-1" data-toggle="tab">Principal</a></li>
+            </ul>
+            @using (Html.BeginForm("editar", null, FormMethod.Post, new {role = "form", @class = "tab-content", enctype = "multipart/form-data"})) {
+
+                @Html.RenderFlash()
+                @Html.ValidationSummary(false)
+
+                <div id="tab-1" role="tabpanel" class="tab-pane active">
+
+                    <div class="col-sm-12">
+
+                        <div class="row">
+                            
+                            @Html.infoCadastro(Model.AssociacaoHistoria.id, Model.AssociacaoHistoria.dtCadastro, Model.AssociacaoHistoria.dtExclusao)
+
+                            <div class="clearfix"></div>
+
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+
+                    <div class="col-sm-12">
+
+                        <h4 class="separator-form">Dados da História</h4>
+
+                        <div class="row">
+
+                            @if (User.idOrganizacao() == 0) {
+                                <div class="col-sm-4 col-md-3">
+                                    <label>Organização</label>
+                                    @Html.DropDownListFor(m => m.AssociacaoHistoria.idOrganizacao, AssociacaoHelper.getInstance.selectList(Model.AssociacaoHistoria.idOrganizacao), "Padrão", new { @class = "form-control input-sm", type = "number" })
+                                </div>
+                            }
+
+                            <div class="col-md-4">
+                                <label>Título</label><br />
+                                @Html.TextBoxFor(x => x.AssociacaoHistoria.titulo, new { @class = "form-control input-sm", maxlength = "255" })
+                                @Html.ValidationMessageFor(x => x.AssociacaoHistoria.titulo)
+                            </div>
+
+                            <div class="col-md-3">
+                                <label>Status</label>
+                                @Html.DropDownListFor(m => m.AssociacaoHistoria.ativo, ComboHelper.selectListStatus(Model.AssociacaoHistoria.ativo), "...", new { @class = "form-control input-sm" })
+                                @Html.ValidationMessageFor(m => m.AssociacaoHistoria.ativo)
+                            </div>
+
+                            <div class="clearfix"></div>
+
+                            <div class="col-md-12">
+                                <h4 class="separator-form">Conteúdo da História</h4>
+                                <div class=''>
+                                    <div class='box-header'>
+                                        <div class="pull-right box-tools">
+                                        </div>
+                                    </div>
+                                    <div class='box-body pad'>
+                                        @Html.TextAreaFor(x => x.AssociacaoHistoria.conteudo, new { @id = "editor", @class = "form-control input-sm", rows = "4" })
+                                        @Html.ValidationMessageFor(x => x.AssociacaoHistoria.conteudo)
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="clearfix"></div>
+
+                        </div>
+                    </div>
+                    <div class="clearfix"></div><br/>
+
+                </div>
+
+                <div class="col-sm-12 text-right">
+                    @Html.botaoSalvar()
+                </div>
+                <div class="clearfix"></div><br/>
+
+            }
+        </div>
+    </div>
+</div>

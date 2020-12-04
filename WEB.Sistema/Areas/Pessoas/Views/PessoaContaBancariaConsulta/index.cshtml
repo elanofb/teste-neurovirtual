@@ -1,0 +1,67 @@
+﻿@model WEB.Areas.Pessoas.ViewModels.ContaBancariaListaRetorno
+@using MvcFlashMessages
+
+@Html.RenderFlash()
+
+<div class="row">
+
+    <div class="col-md-3 col-sm-5 ">
+
+        <button class="btn bg-yellow margin-top-25">
+            <i class="far fa-chart-bar"></i> <strong>@Model.listaResultados.Count</strong> conta(s) cadatrada(s)
+        </button>
+        
+    </div>
+
+    <div class="clearfix"></div><br/>
+</div>
+
+<table class="table dataTable table-bordered table-striped fs-12" width="100%">
+    <thead>
+    <tr>
+        <th width="30">ID</th>
+        <th width="150">Banco</th>
+        <th width="150">Agência</th>
+        <th width="150">Número da Conta</th>
+        <th width="150">Tipo</th>
+        <th width="50">&nbsp;</th>
+    </tr>
+    </thead>
+    <tbody>
+    @if (Model.listaResultados.Count > 0){
+        
+        foreach (var OConta in Model.listaResultados){
+            
+            <tr>
+                <td class="text-center">@OConta.id</td>
+                <td class="text-left">
+                    @OConta.nomeBanco                    
+                </td>                                
+                <td class="text-left">
+                    @OConta.nroAgencia @(!OConta.nroDigitoAgencia.isEmpty()? $" - {OConta.nroDigitoAgencia}": "")                     
+                </td>
+                <td class="text-left">
+                    @OConta.nroContaBancaria                     
+                </td>
+                
+                <td class="text-left">
+                    @if (OConta.flagContaCorrente == true){
+                        <span>Conta Corrente</span>
+                    }                     
+                    
+                    @if (OConta.flagContaPoupanca == true){
+                        <span>Conta Poupança</span>
+                    }
+                    
+                </td>
+                <td>&nbsp;</td>
+            </tr>
+            
+        }
+    }else{
+        <tr>
+            <td colspan="6" class="text-center">Nenhuma conta bancária foi encontrada</td>
+        </tr>
+    }
+    </tbody>
+</table>

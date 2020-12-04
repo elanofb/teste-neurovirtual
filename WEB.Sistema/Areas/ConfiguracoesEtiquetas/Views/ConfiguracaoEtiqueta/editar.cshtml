@@ -1,0 +1,252 @@
+﻿@model WEB.Areas.ConfiguracoesEtiquetas.ViewModels.ConfiguracaoEtiquetaForm
+@using MvcFlashMessages
+@using WEB.Helpers
+
+@{
+    ViewBag.titlePage = "Configurações de Etiquetas";
+}
+
+@section scripts{
+    @Html.includeFroalaEditorJS()
+    <script src="@UtilConfig.linkResourses()Areas/ConfiguracoesEtiquetas/js/configuracoes-etiquetas.js"></script>
+}
+
+@section styles{
+    @Html.Raw(Html.scripts().scriptFroala)
+    @Html.includeFroalaEditorCSS()
+
+    <style>.popover-content { height: 250px; overflow: hidden; overflow-y: auto; }</style>
+}
+
+@section breadcrump{
+    <ol class="breadcrumb">
+        <li><a href="@Url.Action("index", new { Model.ConfiguracaoEtiqueta.idOrganizacao })" class="active fs-14"><i class="fa fa-arrow-left"></i> Voltar</a></li>
+    </ol>
+}
+
+<div class="row">
+    
+    <div class="col-sm-12 box-primary">
+        <div class="nav-tabs-custom">
+
+            <ul class="nav nav-tabs" role="tablist">
+                <li class="active"><a href="#tab-1" data-toggle="tab">Principal</a></li>
+            </ul>
+            @using (Html.BeginForm("editar", null, FormMethod.Post, new {role = "form", @class = "tab-content", enctype = "multipart/form-data"})) {
+
+                @Html.RenderFlash()
+                @Html.ValidationSummary(false)
+                @Html.HiddenFor(m => m.ConfiguracaoEtiqueta.id)
+                @Html.HiddenFor(m => m.ConfiguracaoEtiqueta.idOrganizacao)
+
+                <div id="tab-1" role="tabpanel" class="tab-pane active">
+
+                    <div class="col-sm-12">
+                        <div class="row">
+                            @Html.infoCadastro(Model.ConfiguracaoEtiqueta.id, Model.ConfiguracaoEtiqueta.dtCadastro, null)
+                        </div>
+                    </div>
+                    <div class="clearfix"></div><br/>
+                    
+                    <div class="col-sm-12">
+
+                        <h4 class="separator-form">Configurações Impressão Etiquetas</h4>
+
+                        <div class="row">
+                            
+                            <div class="col-md-12">
+                                @Html.labelRequired("Descrição")
+                                @Html.TextBoxFor(m => m.ConfiguracaoEtiqueta.descricao, new {@class = "form-control input-sm"})
+                                @Html.ValidationMessageFor(m => m.ConfiguracaoEtiqueta.descricao)
+                            </div>
+                            
+                            <div class="clearfix"></div>
+
+                            <div class="col-md-2">
+                                <label><br />Altura (mm)</label>
+                                @Html.TextBoxFor(m => m.ConfiguracaoEtiqueta.height, new { @class = "form-control input-sm", alt = "decimal" })
+                            </div>
+                            
+                            <div class="col-md-2">
+                                <label><br/>Largura (mm)</label>
+                                @Html.TextBoxFor(m => m.ConfiguracaoEtiqueta.width, new { @class = "form-control input-sm", alt = "decimal" })
+                            </div>
+                            
+                            <div class="col-md-2">
+                                <label>Qtde. Etiquetas<br />Por Linha</label>
+                                @Html.TextBoxFor(m => m.ConfiguracaoEtiqueta.qtdeEtiquetasLinha, new { @class = "form-control input-sm", type = "number" })
+                            </div>
+                            
+                            <div class="col-md-2">
+                                <label>Qtde. Linhas<br />Por Página</label>
+                                @Html.TextBoxFor(m => m.ConfiguracaoEtiqueta.qtdeLinhasPagina, new { @class = "form-control input-sm", type = "number" })
+                            </div>
+                            
+                            <div class="col-md-2">
+                                <label>Margem Superior<br />da Pagina (mm)</label>
+                                @Html.TextBoxFor(m => m.ConfiguracaoEtiqueta.margPagTop, new { @class = "form-control input-sm", alt = "decimal" })
+                            </div>
+                            
+                            <div class="col-md-2">
+                                <label>Margem Esquerda<br />da Pagina (mm)</label>
+                                @Html.TextBoxFor(m => m.ConfiguracaoEtiqueta.margPagLef, new { @class = "form-control input-sm", alt = "decimal" })
+                            </div>
+
+                            <div class="clearfix"></div>
+                            
+                            <div class="col-md-2">
+                                <label>Margem Superior<br />da Etiqueta (mm)</label>
+                                @Html.TextBoxFor(m => m.ConfiguracaoEtiqueta.margEtiquetaTop, new { @class = "form-control input-sm", alt = "decimal" })
+                            </div>
+                            
+                            <div class="col-md-2">
+                                <label>Margem à Esquerda<br />da Etiqueta (mm)</label>
+                                @Html.TextBoxFor(m => m.ConfiguracaoEtiqueta.margEtiquetaLef, new { @class = "form-control input-sm", alt = "decimal" })
+                            </div>
+
+                            <div class="col-md-2">
+                                <label>Margem Inferior<br />da Etiqueta (mm)</label>
+                                @Html.TextBoxFor(m => m.ConfiguracaoEtiqueta.margEtiquetaBot, new { @class = "form-control input-sm", alt = "decimal" })
+                            </div>
+                            
+                            <div class="col-md-2">
+                                <label>Margem à Direita<br />da Etiqueta (mm)</label>
+                                @Html.TextBoxFor(m => m.ConfiguracaoEtiqueta.margEtiquetaRig, new { @class = "form-control input-sm", alt = "decimal" })
+                            </div>
+
+                            <div class="col-md-2">
+                                <label><br />Impressora Térmica?</label>
+                                @Html.DropDownListFor(m => m.ConfiguracaoEtiqueta.flagImpressoraTermica, ComboHelper.selectListTrueFalse(Model.ConfiguracaoEtiqueta.flagImpressoraTermica), "...", new { @class = "form-control input-sm" })
+                            </div>
+                            
+                            <div class="clearfix"></div><br/>
+
+                            <div class="col-md-6">
+                                <label class="w100p">
+                                    Html da Etiqueta 
+                                    @*<i class="fa fa-hashtag fs-12 pull-right margbot5 for-popover" data-placement="top" data-toggle="tooltip" data-url="#hashs-etiqueta-produto" data-title="Hash Tags"></i>*@
+                                </label>
+                                @Html.TextAreaFor(m => m.ConfiguracaoEtiqueta.html, new { @class = "form-control input-sm froala-editor" })
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label class="">Css Customizado</label>
+                                @Html.TextAreaFor(m => m.ConfiguracaoEtiqueta.cssCustomizado, new { @class = "form-control input-sm", rows = 23 })
+                            </div>
+
+                            <div class="clearfix"></div>
+                        </div>
+
+                    </div>
+                    <div class="clearfix"></div><br/>
+                </div>
+
+                <div class="col-sm-12 text-right">
+                    @Html.botaoSalvar()
+                </div>
+                <div class="clearfix"></div><br/>
+            }
+        </div>
+    </div>
+</div>
+
+@*<div class="hidden" id="hashs-etiqueta-produto">
+    <table class="table" cellpadding="10" cellspacing="2">
+        <tr>
+            <td><strong>#ID_PRODUTO#</strong></td> 
+            <td>Id gerado pelo sistema</td>
+        </tr>
+        <tr>
+            <td><strong>#CODIGO_PRODUTO#</strong></td> 
+            <td>Código informado no cadastro</td>
+        </tr>
+        <tr>
+            <td><strong>#NOME_PRODUTO#</strong></td> 
+            <td>Nome do produto</td>
+        </tr>
+        <tr>
+            <td><strong>#TIPO_PRODUTO#</strong></td> 
+            <td>Tipo do Produto</td>
+        </tr>
+        <tr>
+            <td><strong>#FORNECEDOR# </strong></td> 
+            <td>Fornecedor</td>
+        </tr>
+        <tr>
+            <td><strong>#IMG_TOPO# </strong></td> 
+            <td>Url da logo do sistema</td>
+        </tr>
+        <tr>
+            <td><strong>#NOME_ORGANIZACAO# </strong></td> 
+            <td>Nome configurado do sistema</td>
+        </tr>
+        <tr>
+            <td><strong>#SIGLA_UNIDADE# </strong></td> 
+            <td>Sigla da unidade atual</td>
+        </tr>
+        <tr>
+            <td><strong>#NOME_UNIDADE# </strong></td> 
+            <td>Nome da unidade atual</td>
+        </tr>
+        <tr>
+            <td><strong>#ARMAZEM# </strong></td> 
+            <td>Nome do armazém atual</td>
+        </tr>
+        <tr>
+            <td><strong>#AREA# </strong></td> 
+            <td>Nome da área do armazenamento atual</td>
+        </tr>
+        <tr>
+            <td><strong>#RUA# </strong></td> 
+            <td>Nome da rua do armazenamento atual</td>
+        </tr>
+        <tr>
+            <td><strong>#PREDIO# </strong></td> 
+            <td>Nome do prédio do armazenamento atual</td>
+        </tr>
+        <tr>
+            <td><strong>#MODULO# </strong></td> 
+            <td>Nome do módulo do armazenamento atual</td>
+        </tr>
+        <tr>
+            <td><strong>#ENDERECAMENTO_PRODUTO# </strong></td> 
+            <td>Endereçamento completo</td>
+        </tr>
+        <tr>
+            <td><strong>#COMPOSICAO_PRODUTO# </strong></td> 
+            <td>Lista ca composição separado por '|'</td>
+        </tr>
+        <tr>
+            <td><strong>#COMPOSICAO_PRODUTO_C_ATRIBUTOS# </strong></td> 
+            <td>Lista da composição separado por '|' com seus atributos entre '()'</td>
+        </tr>
+        <tr>
+            <td><strong>#COMPOSICAO_PRODUTO_C_ATRIBUTOS_S_TITULO# </strong></td> 
+            <td>Lista da composição separado por '|' com seus atributos sem os titulos, entre '()'</td>
+        </tr>
+        <tr>
+            <td><strong>#ATRIBUTOS_PRODUTO# </strong></td> 
+            <td>Lista de atributos separados por '|'</td>
+        </tr>
+        <tr>
+            <td><strong>#ATRIBUTOS_PRODUTO_S_TITULO# </strong></td> 
+            <td>Lista de atributos sem o titulo separados por '|'</td>
+        </tr>
+        <tr>
+            <td><strong>#CODIGO_LOTE# </strong></td> 
+            <td>Código do Lote</td>
+        </tr>
+        <tr>
+            <td><strong>#ID_CODIGO_BARRAS# </strong></td> 
+            <td>Código de barras com base no id gerado pelo sistema</td>
+        </tr>
+        <tr>
+            <td><strong>#CODIGO_BARRAS# </strong></td> 
+            <td>Código de barras com base no código informado no cadastro</td>
+        </tr>
+        <tr>
+            <td><strong>#INFO_IMPRESSAO# </strong></td> 
+            <td>Informações do momento a impressão</td>
+        </tr>
+    </table>
+</div>*@

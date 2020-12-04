@@ -1,0 +1,111 @@
+﻿@model WEB.Areas.DadosBancarios.ViewModels.DadosBancariosForm
+
+@using MvcFlashMessages
+@using WEB.Areas.Bancos.Helpers
+@using WEB.Areas.ContasBancarias.Helpers
+
+@{
+
+    if(IsPost) {
+        Layout = null;
+    } else{
+        Layout = "~/views/shared/associatec/masterpage-modal.cshtml";
+    }
+    
+    ViewBag.modalTitle = "Cadastrar Conta Bancária";
+    ViewBag.modalId = "modalFormContaBancaria";
+}
+
+<div id="@(IsPost ? "" : "boxFormContaBancaria")">
+
+    @Html.RenderFlash()
+
+    <div class="col-md-12">
+        
+        @using (Ajax.BeginForm("salvar", null, new AjaxOptions { UpdateTargetId = "boxFormContaBancaria", HttpMethod = "POST", OnSuccess = "DadosBancariosCadastro.onSuccessForm" }, new {role = "form", id = "formContaBancaria", @class = "default"})) {
+		    
+            @Html.legendaRequired()
+			
+            @Html.HiddenFor(m => m.DadoBancario.id)
+           
+            @Html.HiddenFor(m => m.DadoBancario.idPessoa)
+		    
+            <div class="row">
+                @Html.ValidationSummary(false)
+            </div>
+		    
+            <div class="row">
+                
+                <div class="col-xs-7">
+                    @Html.labelRequired("Banco")
+                    @Html.DropDownListFor(m => m.DadoBancario.idBanco, BancoHelper.getInstance.selectList(Model.DadoBancario.idBanco), "...", new { @class = "form-control input-sm" })
+                    @Html.ValidationMessageFor(m => m.DadoBancario.idBanco)
+                </div>
+                
+                <div class="col-xs-5">
+                    @Html.labelRequired("Tipo da Conta")
+                    @Html.DropDownListFor(m => m.DadoBancario.flagTipoConta, TipoContaHelper.selectList(Model.DadoBancario.flagTipoConta), "...", new { @class = "form-control input-sm" })
+                    @Html.ValidationMessageFor(m => m.DadoBancario.flagTipoConta)
+                </div>
+                <div class="clearfix"></div>
+                
+                <div class="col-xs-2">
+                    @Html.labelRequired("Agência")
+                    @Html.TextBoxFor(m => m.DadoBancario.nroAgencia, new { @class = "form-control input-sm", @maxlenght="10" })
+                    @Html.ValidationMessageFor(m => m.DadoBancario.nroAgencia)
+                    @Html.instrucao("Use apenas números!")
+                </div>
+                
+                <div class="col-xs-3">
+                    @Html.labelRequired("Conta")
+                    @Html.TextBoxFor(m => m.DadoBancario.nroConta, new { @class = "form-control input-sm", @maxlenght="20" })
+                    @Html.ValidationMessageFor(m => m.DadoBancario.nroConta)
+                    @Html.instrucao("Use apenas números!")
+                </div>
+                
+                <div class="col-xs-2">
+                    @Html.Label("Dígito")
+                    @Html.TextBoxFor(m => m.DadoBancario.digitoConta, new { @class = "form-control input-sm", @maxlenght="5" })
+                    @Html.ValidationMessageFor(m => m.DadoBancario.digitoConta)
+                </div>
+                
+                <div class="col-xs-5">
+                    @Html.labelRequired("Ativo")
+                    @Html.DropDownListFor(m => m.DadoBancario.ativo, ComboHelper.selectListStatus(Model.DadoBancario.ativo), "...", new { @class = "form-control input-sm" })
+                    @Html.ValidationMessageFor(m => m.DadoBancario.ativo)
+                </div>
+                
+                <div class="clearfix"></div>
+                
+                <div class="col-xs-7">
+                    @Html.Label("Nome do Titular")
+                    @Html.TextBoxFor(m => m.DadoBancario.nomeTitular, new { @class = "form-control input-sm", @maxlenght="50" })
+                    @Html.ValidationMessageFor(m => m.DadoBancario.nomeTitular)
+                </div>
+                
+                <div class="col-xs-5">
+                    @Html.Label("Documento do Titular")
+                    @Html.TextBoxFor(m => m.DadoBancario.documentoTitular, new { @class = "form-control input-sm", @maxlenght="14" })
+                    @Html.ValidationMessageFor(m => m.DadoBancario.documentoTitular)
+                    @Html.instrucao("Use apenas números!")
+                </div>
+                
+                <div class="clearfix"></div>
+                
+                <div class="col-xs-12">
+                    @Html.Label("Observações")
+                    @Html.TextAreaFor(m => m.DadoBancario.observacoes, new { @class = "form-control input-sm", rows="4" })                    
+                </div>
+			    
+            </div>       
+        }
+    </div>
+
+</div>
+<div class="clearfix"></div><br />
+
+@section modalFooter{
+    <div class="text-right">
+        <button type="button" onclick="$('#formContaBancaria').submit()" class="btn btn-primary link-loading"><i class="far fa-hdd"></i> Salvar Dados</button>
+    </div>
+}

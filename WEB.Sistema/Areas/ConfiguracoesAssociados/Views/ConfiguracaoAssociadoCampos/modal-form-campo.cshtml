@@ -1,0 +1,235 @@
+﻿@model WEB.Areas.ConfiguracoesAssociados.ViewModels.AssociadoCampoForm
+@using DAL.ConfiguracoesAssociados
+@using MvcFlashMessages
+@using WEB.Areas.Associados.Helpers
+
+@{
+    Layout = "~/views/shared/associatec/masterpage-modal.cshtml";
+    ViewBag.modalWidthClass = "lg";
+    ViewBag.modalTitle = "Configuração de campos";
+
+    if (IsPost) {
+        Layout = null;
+    }
+
+    string idBox = IsPost ? "" : "boxFormCampo";
+
+    var idTipoCampoCadastro = Model.AssociadoCampo.idTipoCampoCadastro;
+
+    var flagNaoAssociado = idTipoCampoCadastro == TipoCampoCadastroConst.NA_PJ || idTipoCampoCadastro == TipoCampoCadastroConst.NA_PF;
+    var tipoPessoa = idTipoCampoCadastro == TipoCampoCadastroConst.PJ || idTipoCampoCadastro == TipoCampoCadastroConst.NA_PJ ? "J" : "F";
+}
+
+<div id="@idBox">
+    
+@Html.RenderFlash()
+
+@using (Ajax.BeginForm("salvar-form-campo", null, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = idBox, OnSuccess = "AssociadoCampo.onSuccessForm", InsertionMode = InsertionMode.Replace }, new { })) {
+    @Html.showFlashMessage()
+        
+    @Html.HiddenFor(m => m.AssociadoCampo.id)
+    @Html.HiddenFor(m => m.idCampoClone)
+
+    @Html.HiddenFor(m => m.AssociadoCampo.idTipoCampoCadastro)
+
+    @Html.HiddenFor(m => m.AssociadoCampo.idOrganizacao)
+
+    <div class="col-sm-4 col-md-4">
+        @Html.labelRequired("Label")
+        @Html.TextBoxFor(x => x.AssociadoCampo.label, new {@class = "form-control input-sm", maxlength = "50"})
+        @Html.ValidationMessageFor(x => x.AssociadoCampo.label)
+    </div>
+
+    <div class="col-sm-5 col-md-4">
+        <label>Campo name <a class="link-black pointer" data-toggle="tooltip" title="Visualizar campos disponíveis" onclick="DefaultSistema.showModal('@Url.Action("modal-opcoes-campos-pf")')"><i class="fa fa-search"></i></a></label>
+        @Html.TextBoxFor(x => x.AssociadoCampo.name, new {@class = "form-control input-sm", maxlength = "100"})
+        @Html.ValidationMessageFor(x => x.AssociadoCampo.name)
+    </div>
+
+    <div class="col-sm-3">
+        @Html.Label("Campo ID")
+        @Html.TextBoxFor(x => x.AssociadoCampo.idDOM, new { @class = "form-control input-sm", maxlength = "50" })
+        @Html.ValidationMessageFor(x => x.AssociadoCampo.idDOM)
+    </div>
+    <div class="clearfix"></div>
+
+    <div class="col-sm-3 col-md-2">
+        @Html.labelInfo("Área Associado", "Informa se o campo será exibido na área do associado")
+        @Html.DropDownListFor(x => x.AssociadoCampo.flagAreaAssociado, ComboHelper.selectListTrueFalse(Model.AssociadoCampo.flagAreaAssociado), new {@class = "form-control input-sm"})
+        @Html.ValidationMessageFor(x => x.AssociadoCampo.flagAreaAssociado)
+    </div>
+    <div class="col-sm-3 col-md-2">
+        @Html.labelInfo("Área Adm", "Informa se o campo será exibido em ambiente administrativo")
+        @Html.DropDownListFor(x => x.AssociadoCampo.flagAreaAdm, ComboHelper.selectListTrueFalse(Model.AssociadoCampo.flagAreaAdm), new {@class = "form-control input-sm"})
+        @Html.ValidationMessageFor(x => x.AssociadoCampo.flagAreaAdm)
+    </div>
+
+    <div class="col-sm-3 col-md-2">
+        @Html.labelInfo("Cadastro", "Informa se o campo será exibido em momento de cadastro")
+        @Html.DropDownListFor(x => x.AssociadoCampo.flagCadastro, ComboHelper.selectListTrueFalse(Model.AssociadoCampo.flagCadastro), new {@class = "form-control input-sm"})
+        @Html.ValidationMessageFor(x => x.AssociadoCampo.flagCadastro)
+    </div>
+
+    <div class="col-sm-3 col-md-2">
+        @Html.labelInfo("Edição", "Informa se o campo será exibido em momento de edição")
+        @Html.DropDownListFor(x => x.AssociadoCampo.flagEdicao, ComboHelper.selectListTrueFalse(Model.AssociadoCampo.flagEdicao), new {@class = "form-control input-sm"})
+        @Html.ValidationMessageFor(x => x.AssociadoCampo.flagEdicao)
+    </div>
+
+    <div class="col-sm-3 col-md-2">
+        @Html.Label("Obrigatório?")
+        @Html.DropDownListFor(x => x.AssociadoCampo.flagObrigatorio, ComboHelper.selectListTrueFalse(Model.AssociadoCampo.flagObrigatorio), new { @class = "form-control input-sm" })
+        @Html.ValidationMessageFor(x => x.AssociadoCampo.flagObrigatorio)
+    </div>
+
+    <div class="col-sm-3 col-md-2">
+        @Html.Label("Status")
+        @Html.DropDownListFor(x => x.AssociadoCampo.ativo, ComboHelper.selectListStatus(Model.AssociadoCampo.ativo), "...", new { @class = "form-control input-sm" })
+        @Html.ValidationMessageFor(x => x.AssociadoCampo.ativo)
+    </div>
+
+    <div class="clearfix margin-bottom-10"></div>
+        
+    <div class="col-sm-4">
+        @Html.labelRequired("Grupo")
+        @Html.DropDownListFor(x => x.AssociadoCampo.idAssociadoCampoGrupo, AssociadoCampoGrupoHelper.getInstance.selectList(Model.AssociadoCampo.idAssociadoCampoGrupo, Model.AssociadoCampo.idTipoCampoCadastro, Model.AssociadoCampo.idOrganizacao), "...", new {@class = "form-control input-sm"})
+        @Html.ValidationMessageFor(x => x.AssociadoCampo.idAssociadoCampoGrupo)
+    </div>
+
+    <div class="col-sm-4">
+        @Html.labelRequired("Tipo de Campo")
+        @Html.DropDownListFor(x => x.AssociadoCampo.idTipoCampo, ConfiguracaoTipoCampoHelper.getInstance.selectList(Model.AssociadoCampo.idTipoCampo), "...", new {@class = "form-control input-sm", id = "idTipoCampo", onchange = "AssociadoCampo.changeTipoCampo()"})
+        @Html.ValidationMessageFor(x => x.AssociadoCampo.idTipoCampo)
+    </div>
+    <div class="col-sm-2">
+        @Html.Label("Valor Padrão")
+        @Html.TextBoxFor(x => x.AssociadoCampo.valorPadrao, new { @class = "form-control input-sm", maxlength = "50" })
+        @Html.ValidationMessageFor(x => x.AssociadoCampo.valorPadrao)
+    </div>
+    <div class="col-sm-2">
+        @Html.Label("Valor Fixo")
+        @Html.TextBoxFor(x => x.AssociadoCampo.valorFixo, new { @class = "form-control input-sm", maxlength = "50" })
+        @Html.ValidationMessageFor(x => x.AssociadoCampo.valorFixo)
+    </div>
+    <div class="no-display" id="boxDadosCampoSelect">
+            
+        <div class="col-sm-4 no-display" id="boxNameHelper">
+            <label>Classe Helper</label>
+            @Html.TextBoxFor(x => x.AssociadoCampo.nameHelper, new { @class = "form-control input-sm", maxlength = "255" })
+            @Html.ValidationMessageFor(x => x.AssociadoCampo.nameHelper)
+        </div>
+
+        <div class="col-sm-4 no-display" id="boxMethodHelper">
+            @Html.labelInfo("Metodo Helper", "Padrão selectList")
+            @Html.TextBoxFor(x => x.AssociadoCampo.methodHelper, new {@class = "form-control input-sm", maxlength = "100"})
+            @Html.ValidationMessageFor(x => x.AssociadoCampo.methodHelper)
+        </div>
+
+        <div class="col-sm-4 no-display" id="boxParamHelper">
+            @Html.labelInfo("Params Helper", "Separados por vírgula")
+            @Html.TextBoxFor(x => x.AssociadoCampo.parametrosHelper, new {@class = "form-control input-sm", maxlength = "100"})
+            @Html.ValidationMessageFor(x => x.AssociadoCampo.parametrosHelper)
+        </div>
+
+        <div class="col-sm-4 no-display" id="boxNameDescription">
+            @Html.labelInfo("Name Description", "Campo onde o valor de apresentação será buscado")
+            @Html.TextBoxFor(x => x.AssociadoCampo.nameDescription, new { @class = "form-control input-sm", maxlength = "100" })
+            @Html.ValidationMessageFor(x => x.AssociadoCampo.nameDescription)
+        </div>
+        
+        <div class="col-sm-2">
+            <label>Multi Select</label>
+            @Html.DropDownListFor(x => x.AssociadoCampo.flagMultiSelect, ComboHelper.selectListTrueFalse(Model.AssociadoCampo.flagMultiSelect), "...", new { @class = "form-control input-sm" })
+            @Html.ValidationMessageFor(x => x.AssociadoCampo.flagMultiSelect)
+        </div>
+
+        <div class="col-sm-2">
+            <label>Exibir opção vazia?</label>
+            @Html.DropDownListFor(x => x.AssociadoCampo.flagExibirOptionVazio, ComboHelper.selectListTrueFalse(Model.AssociadoCampo.flagExibirOptionVazio), new { @class = "form-control input-sm" })
+            @Html.ValidationMessageFor(x => x.AssociadoCampo.flagExibirOptionVazio)
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="col-sm-2">
+        <label>Função Filtro</label>
+        @Html.DropDownListFor(m => m.AssociadoCampo.idFuncaoFiltro, WEB.Areas.ConfiguracoesAssociados.Helpers.FuncaoFiltroHelper.getInstance.selectList(Model.AssociadoCampo.idFuncaoFiltro), "...", new { @class = "form-control input-sm", maxlength = 100 })
+        @Html.ValidationMessageFor(m => m.AssociadoCampo.idFuncaoFiltro)
+    </div>
+
+    <div class="col-sm-2">
+        @Html.Label("Minlength")
+        @Html.TextBoxFor(x => x.AssociadoCampo.minlength, new { @class = "form-control input-sm", type = "number", maxlength = "1" })
+        @Html.ValidationMessageFor(x => x.AssociadoCampo.minlength)
+    </div>
+
+    <div class="col-sm-2">
+        @Html.Label("Maxlength")
+        @Html.TextBoxFor(x => x.AssociadoCampo.maxlength, new {@class = "form-control input-sm", type = "number", maxlength = "5"})
+        @Html.ValidationMessageFor(x => x.AssociadoCampo.maxlength)
+    </div>
+
+    <div class="col-sm-2">
+        @Html.Label("Máscara de Dado")
+        @Html.TextBoxFor(x => x.AssociadoCampo.mask, new { @class = "form-control input-sm", maxlength = "20" })
+        @Html.ValidationMessageFor(x => x.AssociadoCampo.mask)
+    </div>
+
+    <div class="clearfix"></div>
+
+    <div class="col-sm-4">
+        @Html.Label("CSS Box")
+        @Html.TextBoxFor(x => x.AssociadoCampo.cssClassBox, new {@class = "form-control input-sm", maxlength = "50"})
+        @Html.ValidationMessageFor(x => x.AssociadoCampo.cssClassBox)
+    </div>
+
+    <div class="col-sm-4">
+        @Html.Label("CSS Campo")
+        @Html.TextBoxFor(x => x.AssociadoCampo.cssClassCampo, new {@class = "form-control input-sm", maxlength = "50"})
+        @Html.ValidationMessageFor(x => x.AssociadoCampo.cssClassCampo)
+    </div>
+    <div class="col-sm-2">
+        @Html.Label("Ordem Exibição")
+        @Html.TextBoxFor(x => x.AssociadoCampo.ordemExibicao, new { @class = "form-control input-sm", type = "number", maxlength = "5" })
+        @Html.ValidationMessageFor(x => x.AssociadoCampo.ordemExibicao)
+    </div>
+
+    <div class="clearfix margin-bottom-10"></div>
+    
+    <div class="col-sm-8">
+        <div class="row">
+            <div class="col-sm-12">
+                @Html.Label("Instruções")
+                @Html.TextBoxFor(x => x.AssociadoCampo.textoInstrucoes, new {@class = "form-control input-sm", maxlength = "100"})
+                @Html.ValidationMessageFor(x => x.AssociadoCampo.textoInstrucoes)
+            </div>
+            <div class="clearfix"></div>
+
+            <div class="col-sm-12">
+                @Html.Label("HTML Após")
+                @Html.TextAreaFor(x => x.AssociadoCampo.htmlAfterBox, new {@class = "form-control input-sm", rows = 3, maxlength = "255"})
+                @Html.ValidationMessageFor(x => x.AssociadoCampo.htmlAfterBox)
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-4">
+        @Html.labelInfo("Tipo Associado Exibição", "Selecione os tipo de associado que devem ver esses campos. Se não marcar nenhum, o campo ficará visível para todos.")
+        @if (idTipoCampoCadastro == TipoCampoCadastroConst.DP || idTipoCampoCadastro == TipoCampoCadastroConst.NA_DP) {
+            @Html.ListBoxFor(m => m.AssociadoCampo.idsTipoAssociado, TipoAssociadoHelper.getInstance.multiSelectListDependente(Model.AssociadoCampo.idsTipoAssociado, Model.AssociadoCampo.idOrganizacao), new { @class = "multiSelecTipoAssociado form-control input-sm " })
+        } else {
+            @Html.ListBoxFor(m => m.AssociadoCampo.idsTipoAssociado, TipoAssociadoHelper.getInstance.multiSelectList(Model.AssociadoCampo.idsTipoAssociado, tipoPessoa, flagNaoAssociado, true, null, Model.AssociadoCampo.idOrganizacao), new { @class = "multiSelecTipoAssociado form-control input-sm " })
+        }
+    </div>
+
+    <div class="clearfix"></div>
+        
+    <div class="col-sm-12 padtop22 text-right">
+        <button type="submit" class="btn btn-primary btn-submit link-loading" title="Adicionar">Salvar</button>
+    </div>
+
+    <div class="clearfix"></div>
+    <br />
+}
+
+</div>
+

@@ -1,0 +1,84 @@
+﻿@using DAL.Permissao.Security.Extensions
+@using WEB.Areas.Associacoes.Helpers
+@using WEB.Areas.Produtos.Helpers
+@model WEB.Areas.Produtos.ViewModels.ProdutoItemForm
+
+@{
+	Layout = "~/views/shared/associatec/masterpage-edit.cshtml";
+	ViewBag.titlePage = "Itens de Produto";
+}
+
+@section breadcrump{
+    <ol class="breadcrumb">
+        <li><a href="@Url.Action("listar")" class="active fs-14"><i class="fa fa-arrow-left"></i> Voltar</a></li>
+    </ol>
+}
+
+
+@section navTabs{
+	<ul class="nav nav-tabs">
+		<li class="active"><a href="#tab-1" data-toggle="tab">Principal</a></li>
+	</ul>
+}
+
+@section tabContent{
+	<div id="tab-1" class="tab-pane active">
+		
+	    @Html.infoCadastro(Model.ProdutoItem.id, Model.ProdutoItem.dtCadastro, Model.ProdutoItem.dtAlteracao)
+
+	    @using (Html.BeginForm("editar", null, FormMethod.Post, new { role = "form", @class = "default" })) {
+			
+			@Html.HiddenFor(m => m.ProdutoItem.id)
+
+			@Html.ValidationSummary(false)
+
+			<div class="form-horizontal">
+                
+			    <h4 class="separator-form">Dados Principais</h4>
+                
+			    @if (User.idOrganizacao() == 0) {
+			        <div class="col-sm-4 col-md-3">
+			            <label>Organização</label>
+			            @Html.DropDownListFor(m => m.ProdutoItem.idOrganizacao, AssociacaoHelper.getInstance.selectList(Model.ProdutoItem.idOrganizacao), "Padrão", new {@class = "form-control input-sm"})
+			        </div>
+			        <div class="clearfix"></div>
+			    }
+
+			    <div class="col-md-4">
+			        @Html.labelRequired("Descrição")
+			        @Html.TextBoxFor(m => m.ProdutoItem.descricao, new { @class = "form-control input-sm", maxlength = "100" })
+			        @Html.ValidationMessageFor(m => m.ProdutoItem.descricao)
+			    </div>
+                
+			    <div class="col-md-2">
+			        @Html.labelRequired("Unidade de Medida")
+					@Html.DropDownListFor(m => m.ProdutoItem.idUnidadeMedida, UnidadeMedidaHelper.getInstance.selectList(Model.ProdutoItem.idUnidadeMedida),"...", new { @class = "form-control input-sm" })
+					@Html.ValidationMessageFor(m => m.ProdutoItem.idUnidadeMedida)
+				</div>
+                
+			    <div class="col-md-2">
+			        @Html.labelRequired("Status")
+					@Html.DropDownListFor(m => m.ProdutoItem.ativo, ComboHelper.selectListStatus(Model.ProdutoItem.ativo), new { @class = "form-control input-sm" })
+					@Html.ValidationMessageFor(m => m.ProdutoItem.ativo)
+				</div>
+			    <div class="clearfix"></div>
+                
+			    <div class="col-sm-8">
+			        <label>Observação</label>
+			        @Html.TextAreaFor(m => m.ProdutoItem.observacoes, new { @class = "form-control input-sm", rows = "4" })
+			        @Html.ValidationMessageFor(m => m.ProdutoItem.observacoes)
+			    </div>
+
+			</div>
+			<div class="clearfix"></div><br />
+
+			<div class="col-xs-12 text-right">
+	            @Html.exibirBotoesFormulario(Url.Action("listar"), "N")
+			</div>
+	        <div class="clearfix"></div>
+
+		}
+
+	</div>
+}
+

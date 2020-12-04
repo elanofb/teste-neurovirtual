@@ -1,0 +1,71 @@
+﻿@model WEB.Areas.Financeiro.ViewModels.ReceitaDetalhe
+@using DAL.Financeiro
+
+@{
+	ViewBag.titlePage = String.Concat("Detalhes da Receita ", Model.TituloReceita.descricao);
+}
+
+<div class="col-xs-12 box box-solid">
+	<div class="margin-top-10">
+		<h4 class="separator-form">Informações da Receita</h4>
+		<div class="row margin-top-10">
+			@Html.boxInfo("ID RECEITA", Model.TituloReceita.id.ToString(), "col-xs-2")
+			@Html.boxInfo("CRIADO EM", Model.TituloReceita.dtCadastro.exibirData(), "col-xs-2")
+			<div class="col-md-2"></div>
+
+			@if (Model.TituloReceita.dtQuitacao.HasValue) {
+				@Html.boxInfo("SITUAÇÃO", "Quitado", "col-xs-2", "bg-green")
+				@Html.boxInfo("DATA QUITAÇÃO", Model.TituloReceita.dtQuitacao.exibirData(), "col-xs-2", "bg-green")
+			} else {
+				@Html.boxInfo("SITUAÇÃO", "Pendente", "col-xs-2", "bg-yellow")
+			}
+
+		</div>
+		<div class="row margin-top-10">
+			@Html.boxInfo("PAGADOR", Model.TituloReceita.nomePessoa, "col-xs-6")
+			@Html.boxInfo("DOCUMENTO", Model.TituloReceita.documentoPessoa, "col-xs-2")
+			@Html.boxInfo("E-MAIL", Model.TituloReceita.emailPrincipal, "col-xs-4")
+		</div>
+		<div class="row margin-top-10">
+			@Html.boxInfo("PAGAMENTO REFERENTE À", Model.TituloReceita.descricaoTitulo(), "col-xs-6")
+			@Html.boxInfo("VALOR TOTAL", Model.TituloReceita.valorTotal.exibirValor(), "col-xs-2")
+		</div>
+		<div class="row margin-top-10">
+			@Html.boxInfo("TIPO DA RECEITA", Model.TituloReceita.TipoReceita.descricao, "col-xs-3")
+
+			@Html.boxInfo("REF.", Model.TituloReceita.idReceita.ToString(), "col-xs-1")
+
+			<div class="col-xs-2"></div>
+
+			@Html.boxInfo("VALOR DESCONTO", Model.TituloReceita.valorDesconto.exibirValor(), "col-md-2")
+
+			@Html.boxInfo("MOTIVO DESCONTO", Model.TituloReceita.motivoDesconto, "col-md-4")
+		</div>
+		<div class="row margin-top-10">
+			@Html.boxInfo("OBSERVAÇÕES", Model.TituloReceita.observacao, "col-xs-12")
+		</div>
+		<h4 class="separator-form">Informações do Recibo</h4>
+		<div class="row margin-top-10">
+			@Html.boxInfo("NOME", Model.TituloReceita.nomeRecibo, "col-xs-6")
+			@Html.boxInfo("DOCUMENTO", Model.TituloReceita.documentoRecibo, "col-xs-2")
+		</div>
+
+		<h4 class="separator-form">Operações de Pagamento</h4>
+		<div class="">
+			<ul class="nav nav-tabs" role="tablist">
+				<li role="presentation" class="active"><a href="#pagamentos" aria-controls="pagamentos" role="tab" data-toggle="tab">Pagamentos</a></li>
+				<li role="presentation"><a href="#logs" aria-controls="logs" role="tab" data-toggle="tab">Log de Operações</a></li>
+			</ul>
+			<div class="tab-content">
+				<div role="tabpanel" class="tab-pane active" id="pagamentos">
+					@{Html.RenderPartial("partial-lista-pagamentos", Model.listaPagamentos);}
+				</div>
+				<div role="tabpanel" class="tab-pane" id="logs">
+					@{Html.RenderPartial("partial-lista-pagamentos-cancelados", Model.listaPagamentosCancelados);}
+				</div>
+			</div>
+		</div>
+
+		<div class="clearfix"></div>
+	</div>
+</div>

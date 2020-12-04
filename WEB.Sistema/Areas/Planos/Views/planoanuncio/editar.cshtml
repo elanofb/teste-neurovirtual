@@ -1,0 +1,119 @@
+﻿@using WEB.Areas.Arquivos.Helpers
+@model WEB.Areas.Planos.ViewModels.PlanoAnuncioForm
+
+@{
+    Layout = "~/views/shared/associatec/masterpage-edit.cshtml";
+    ViewBag.titlePage = "Editar Anúncio";
+    ViewBag.ativarMenuTabelas = "active";
+}
+
+@section scripts{
+    @Html.includeDatePicker()
+    @Html.includeJSModuloArquivosFotos()
+    <script src="@UtilConfig.linkResourses()Areas/planos/js/anuncio.js"></script>
+}
+
+@section styles {
+    @Html.includeCSSModuloArquivos()
+}
+
+@section navTabs{
+    <ul class="nav nav-tabs">
+        <li><a href="@Url.Action("editar", "planocontratacao", new { area = "Planos", id = Model.Anuncio.idPlanoContratacao })">Dados da Contratação</a></li>
+        <li class="active"><a href="#tab-1" data-toggle="tab">Anúncio</a></li>
+    </ul>
+}
+
+@section tabContent{
+    <div id="tab-1" class="tab-pane active">
+        @{Html.RenderPartial("partialInfoCadastro");}
+
+        @using (Html.BeginForm("editar", "planoanuncio", FormMethod.Post, new { enctype = "multipart/form-data" })) {
+            @Html.Hidden("Anuncio.idTipoAnuncio", (int)DAL.Anuncios.TipoAnuncioEnum.VITRINE)
+            @Html.HiddenFor(m => m.Anuncio.id)
+            @Html.HiddenFor(m => m.Anuncio.idPlanoContratacao)
+            @Html.HiddenFor(m => m.Anuncio.dtCadastro)
+
+            <div id="tab-1" class="tab-pane active">
+                <div class="col-md-12">
+                    <h4 class="separator-form">Informações Cadastrais</h4>
+
+                    <div class="col-md-7 no-padding">
+
+                        <div class="col-md-12">
+                            @Html.labelRequired("Título")<br />
+                            @Html.TextBoxFor(x => x.Anuncio.titulo, new { @class = "form-control input-sm", maxlength = "255" })
+                            @Html.ValidationMessageFor(x => x.Anuncio.titulo)
+                        </div>
+                        <div class="clearfix"></div>
+
+                        <div class="col-md-12">
+                            @Html.labelRequired("Telefones")<br />
+                            @Html.TextBoxFor(x => x.Anuncio.telefone, new { @class = "form-control input-sm", maxlength = "255" })
+                            @Html.ValidationMessageFor(x => x.Anuncio.telefone)
+                        </div>
+                        <div class="clearfix"></div>
+
+                        <div class="col-md-12">
+                            @Html.labelRequired("E-Mails")<br />
+                            @Html.TextBoxFor(x => x.Anuncio.email, new { @class = "form-control input-sm", maxlength = "255" })
+                            @Html.ValidationMessageFor(x => x.Anuncio.email)
+                        </div>
+                        <div class="clearfix"></div>
+
+
+                        <div class="col-md-12">
+                            <label>Site</label><br />
+                            @Html.TextBoxFor(x => x.Anuncio.site, new { @class = "form-control input-sm", maxlength = "100" })
+                            @Html.ValidationMessageFor(x => x.Anuncio.site)
+                        </div>
+                        <div class="clearfix"></div>
+
+                    </div>
+                    <div class="col-md-5">
+                        <h4 class="separator-form">Logomarca</h4>
+                        <div class="col-md-12 no-padding-left">
+                            @Html.inputFileSimples("OArquivo")
+                            @Html.ValidationMessageFor(m => m.OArquivo)
+
+                            <div class="clearfix"></div>
+                            @if (Model.Anuncio.id > 0) {
+                                <h4 class="separator-form">Logomarca Cadastrada</h4>
+                                <div class="content-load carregando" id="boxArquivosListar" data-target="boxArquivosListar" data-url="@Url.Action("partial-lista-fotos", "ArquivoFoto", new { area = "Arquivos", entidade = DAL.Entities.EntityTypes.ANUNCIO, idReferencia = Model.Anuncio.id })"></div>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12 padding-left-20 padding-right-10">
+                    <div class="col-md-12">
+                        <label>Chamada</label><br />
+                        @Html.TextBoxFor(x => x.Anuncio.chamada, new { @class = "form-control input-sm", maxlength = "400" })
+                        @Html.ValidationMessageFor(x => x.Anuncio.chamada)
+                    </div>
+                    <div class="clearfix"></div><br />
+    
+                    <h4 class="separator-form">Detalhes do Anúnciante</h4>
+                    <div class='box-header'>
+                        <div class="pull-right box-tools">
+                        </div>
+                    </div>
+                    <div class='box-body pad'>
+                        @Html.TextAreaFor(x => x.Anuncio.descricao, new { @id = "editor", @class = "form-control input-sm textarea" })
+                        @Html.ValidationMessageFor(x => x.Anuncio.descricao)
+                    </div>
+                </div>
+
+                <div class="clearfix"></div><br />
+
+                <div class="text-right">
+                    <a href="@Url.Action("listar")" class=" btn btn-default">Voltar</a>&nbsp;
+                    <input type="submit" name="enviar" value="Salvar" class="btn btn-primary" />
+                </div>
+
+                <div class="clearfix"></div>
+
+            </div>
+        }
+    </div>
+}

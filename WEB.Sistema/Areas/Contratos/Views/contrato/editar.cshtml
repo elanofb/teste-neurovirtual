@@ -1,0 +1,246 @@
+﻿@model WEB.Areas.Contratos.ViewModels.ContratoForm
+@using DAL.Entities
+@using WEB.Areas.Fornecedores.Helpers
+@using WEB.Areas.Financeiro.Helpers
+@using WEB.Areas.Pessoas.Helpers
+
+@{
+    Layout = "~/views/shared/associatec/masterpage-edit.cshtml";
+    ViewBag.titlePage = "Editar Contrato";
+}
+
+@section styles{
+    <link href="@UtilConfig.linkResourses()Areas/Contratos/js/plugins/bootstrap-fileinput/css/fileinput.min.css" rel="stylesheet" />
+}
+
+@section scripts{
+    @Html.includeDatePicker()
+    @Html.includeSelect2()
+    <script src="@UtilConfig.linkResourses()Areas/Contratos/js/plugins/bootstrap-fileinput/js/fileinput.min.js"></script>
+    <script src="@UtilConfig.linkResourses()Areas/Contratos/js/contrato.js"></script>
+}
+
+
+@section breadcrump{
+    <ol class="breadcrumb">
+        <li><a href="@Url.Action("listar")" class="active fs-14"><i class="fa fa-arrow-left"></i> Voltar</a></li>
+    </ol>
+}
+
+@section navTabs{
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#tab-1" data-toggle="tab">Principal</a></li>
+    </ul>
+}
+
+@section tabContent{
+
+    <div id="tab-1" class="tab-pane active">
+        @{Html.RenderPartial("partial-info-cadastro");}
+
+        @using (Html.BeginForm("salvar", null, FormMethod.Post, new { enctype = "multipart/form-data", id = "form_contrato" })) {
+            { Html.EnableClientValidation(false); }
+            @Html.legendaRequired()
+            @Html.ValidationSummary(false)
+            @Html.HiddenFor(m => m.Contrato.id)
+            @Html.HiddenFor(m => m.Contrato.dtCadastro)
+
+            <div class="form-horizontal col-md-6">
+                <h4 class="separator-form">Informações Cadastrais</h4>
+
+                @*<div class="col-md-2 200">
+                        <label class="no-padding">Status Atual:</label>
+                        @Html.DropDownListFor(m => m.Contrato.idStatusContrato, StatusContratoHelper.selectList(Model.Contrato.idStatusContrato), "...", new { @class = String.Concat("form-control input-sm ", (Model.Contrato.idStatusContrato == (int)StatusContratoEnum.CANCELADO ? "bg-red" : "bg-blue")) }.isDisabled(Model.Contrato.id > 0))
+                    </div>
+
+                    <div class="col-md-1 padtop22">
+                        <input type="submit" name="renovar" value="Renovar" class="btn btn-primary" />
+                    </div>
+
+                    <div class="col-md-1 padtop22">
+                        <input type="submit" name="cancelar" value="Cancelar" class="btn btn-danger" />
+                    </div>
+
+                    <div class="clearfix"></div><br />*@
+
+
+                <div class="col-md-6">
+                    @Html.labelRequired("Operação Financeira")
+                    @Html.DropDownListFor(m => m.Contrato.flagOperacaoFinanceira, OperacaoFinanceiraHelper.selectList(Model.Contrato.flagOperacaoFinanceira), "...", new { @class = "form-control input-sm", id = "flagOperacaoFinanceira", onchange = "Contrato.verificarOperacaoFinanceira();" })
+                    @Html.ValidationMessageFor(m => m.Contrato.flagOperacaoFinanceira)
+                </div>
+
+                <div class="col-md-6 debito hide">
+                    @Html.labelRequired("Contratado")
+                    @Html.DropDownListFor(m => m.Contrato.idFornecedor, FornecedorHelper.getInstance.selectList(Model.Contrato.idFornecedor), "...", new { @class = "form-control input-sm" })
+                    @Html.ValidationMessageFor(m => m.Contrato.idFornecedor)
+                </div>
+
+                <div class="col-md-6 credito hide">
+                    @Html.labelRequired("Contratante")
+                    @Html.DropDownListFor(m => m.Contrato.idPessoaContratante, PessoaHelper.getInstance.selectListAssociadoNaoAssociado(Model.Contrato.idPessoaContratante), "...", new { @class = "form-control input-sm select2" })
+                    @Html.ValidationMessageFor(m => m.Contrato.idPessoaContratante)
+                </div>
+
+                <div class="clearfix"></div>
+
+                <div class="col-md-6">
+                    @Html.labelRequired("Tipo")
+                    @Html.DropDownListFor(m => m.Contrato.idTipoContrato, TipoContratoHelper.getInstance.selectList(Model.Contrato.idTipoContrato), "...", new { @class = "form-control input-sm" })
+                    @Html.ValidationMessageFor(m => m.Contrato.idTipoContrato)
+                </div>
+
+                <div class="col-md-6">
+                    <label>Número Contrato</label>
+                    @Html.TextBoxFor(m => m.Contrato.nroContrato, new { @class = "form-control input-sm" })
+                    @Html.ValidationMessageFor(m => m.Contrato.nroContrato)
+                </div>
+
+                @*<div class="col-md-4">
+                        @Html.labelRequired("Contrato já foi renovado ?")
+                        @Html.DropDownListFor(m => m.Contrato.flagRenovado, ComboHelper.selectListYesNo(Model.Contrato.flagRenovado), "...", new { @class = "form-control input-sm" })
+                        @Html.ValidationMessageFor(m => m.Contrato.flagRenovado)
+                    </div>*@
+
+                <div class="clearfix"></div>
+
+                <div class="col-md-12">
+                    @Html.labelRequired("Título <small class=\"legenda-label\">(faça uma curta sinopse sobre o contratro.)</small>")
+                    @Html.TextBoxFor(x => x.Contrato.titulo, new { @class = "form-control input-sm", maxlength = "255" })
+                    @Html.ValidationMessageFor(m => m.Contrato.titulo)
+                </div>
+
+                <div class="clearfix"></div>
+
+                <div class="col-md-12">
+                    @Html.labelRequired("Objeto do Contrato")
+                    @Html.TextAreaFor(x => x.Contrato.objetoContrato, new { @class = "form-control input-sm", maxlength = "255", rows = 4 })
+                    @Html.ValidationMessageFor(m => m.Contrato.objetoContrato)
+                </div>
+
+                @*<div class="col-md-2">
+                        <label>Contrato já foi renovado ? </label>
+                        @Html.DropDownListFor(m => m.flagRenovado, WEB.Helpers.ComboHelper.selectListYesNo(Model.flagRenovado), "...", new { @class = "form-control input-sm" })
+                        @Html.ValidationMessageFor(m => m.flagRenovado)
+                    </div>*@
+
+                <div class="clearfix"></div>
+            </div>
+
+            <div class="form-horizontal col-md-6">
+
+                <h4 class="separator-form">Vigencia do Contrato</h4>
+
+                <div class="col-md-3">
+                    @Html.labelRequired("Inicio Vigência")
+                    @Html.TextBoxFor(m => m.Contrato.dtInicioVigencia, new { @class = "form-control input-sm datepicker", alt = "date" })
+                    @Html.ValidationMessageFor(m => m.Contrato.dtInicioVigencia)
+                </div>
+
+                <div class="col-md-3">
+                    @Html.labelRequired("Fim Vigência")
+                    @Html.TextBoxFor(m => m.Contrato.dtFimVigencia, new { @class = "form-control input-sm datepicker", alt = "date" })
+                    @Html.ValidationMessageFor(m => m.Contrato.dtFimVigencia)
+                </div>
+                <div class="clearfix"></div><br />
+
+                <h4 class="separator-form">Dados Financeiros</h4>
+
+                <div class="boxFinanceiro col-md-5 hide">
+                    <label>Centro de Custo</label>
+                    @Html.DropDownListFor(m => m.Contrato.idCentroCusto, CentroCustoHelper.getInstance.selectList(Model.Contrato.idCentroCusto), "...", new { @class = "form-control input-sm" })
+                    @Html.ValidationMessageFor(m => m.Contrato.idCentroCusto)
+                </div>
+
+                <div class="boxFinanceiro col-md-5 hide">
+                    <label>Macro Conta</label>
+                    @Html.DropDownListFor(m => m.Contrato.idMacroConta, MacroContaHelper.getInstance.selectList(Model.Contrato.idMacroConta), "...", new { @class = "form-control input-sm" })
+                    @Html.ValidationMessageFor(m => m.Contrato.idMacroConta)
+                </div>
+
+                <div class="boxFinanceiro col-md-5 hide">
+                    <label>Sub-Conta</label>
+                    @Html.DropDownListFor(m => m.Contrato.idSubConta, CategoriaTituloHelper.getInstance.selectList(Model.Contrato.idSubConta, 0), "...", new { @class = "form-control input-sm" })
+                    @Html.ValidationMessageFor(m => m.Contrato.idSubConta)
+                </div>
+
+                <div class="col-md-3">
+                    @Html.labelRequired("Valor Total")
+                    @Html.TextBoxFor(m => m.Contrato.valorTotal, new { @class = "form-control input-sm", alt = "decimal" })
+                    @Html.ValidationMessageFor(m => m.Contrato.valorTotal)
+                </div>
+
+                <div class="clearfix"></div>
+            </div>
+            <div class="clearfix"></div><br />
+
+            <div class="form-horizontal col-md-6">
+                <h4 class="separator-form">Configurações de Impostos</h4>
+                <div class="col-md-6">
+                    <label>Inserir Impostos?</label>
+                    @Html.DropDownListFor(m => m.Contrato.flagInserirImpostos, ComboHelper.selectListTrueFalse(Model.Contrato.flagInserirImpostos), "...", new { @class = "form-control input-sm", id = "flagInserirImpostos", onChange = "Contrato.mostrarCampos(this, 'impostos', 'True')" })
+                </div>
+                <div class="clearfix"></div>
+
+                <div id="impostos" class="@(Model.Contrato.flagInserirImpostos == true ? "" : "hidden")">
+
+                    <div class="col-md-3 col-sm-6">
+                        <label>ICMS</label>
+                        @Html.TextBoxFor(m => m.Contrato.icms, new { @class = "form-control input-sm", @alt = "decimal" })
+                        @Html.ValidationMessageFor(m => m.Contrato.icms)
+                    </div>
+                    <div class="col-md-3 col-sm-6">
+                        <label>PIS</label>
+                        @Html.TextBoxFor(m => m.Contrato.pis, new { @class = "form-control input-sm", @alt = "decimal" })
+                        @Html.ValidationMessageFor(m => m.Contrato.pis)
+                    </div>
+                    <div class="col-md-3 col-sm-6">
+                        <label>COFINS</label>
+                        @Html.TextBoxFor(m => m.Contrato.cofins, new { @class = "form-control input-sm", @alt = "decimal" })
+                        @Html.ValidationMessageFor(m => m.Contrato.cofins)
+                    </div>
+                    <div class="col-md-3 col-sm-6">
+                        <label>ISS</label>
+                        @Html.TextBoxFor(m => m.Contrato.iss, new { @class = "form-control input-sm", @alt = "decimal" })
+                        @Html.ValidationMessageFor(m => m.Contrato.iss)
+                    </div>
+                </div>
+                <div class="clearfix"></div><br />
+            </div>
+            <div class="form-horizontal col-md-6">
+                
+                <div class="col-md-12">
+                    @if (Model.Contrato.id == 0) {
+                        <h4 class="separator-form">Upload</h4>
+                        @Html.labelRequired("Arquivos do Contrato")
+                        @Html.inputFileSimples("OArquivoContrato")
+                        @Html.ValidationMessageFor(m => m.OArquivoContrato)
+
+                        <div class="clearfix"></div>
+                    }
+
+                    @if (Model.Contrato.id > 0) {
+                        <h4 class="separator-form">Arquivos cadastrados</h4>
+                        <div class="content-load carregando" id="boxArquivosListar" data-target="boxArquivosListar" data-url="@Url.Action("listar-galeria-documentos", "Arquivo", new {area = "arquivos", entidade = EntityTypes.CONTRATO, idReferencia = Model.Contrato.id})"></div>
+                    }
+                </div>
+            </div>
+                <div class="clearfix"></div>
+                <br />
+
+
+                <div class="text-right">
+                    <a href="@Url.Action("listar")" class=" btn btn-default">Voltar</a>&nbsp;
+                    @if (Model.Contrato.id == 0) {
+                        <input type="button" name="voltar" value="Limpar" class="btn btn-default bg-gray" onclick="document.forms[0].reset();" /><span>&nbsp;</span>
+                        <input type="button" name="enviar" value="Salvar" class="btn btn-primary" onclick="Contrato.exibirMensagemConfirmacao();" />
+                    }
+                </div>
+
+
+        }
+        <div class="clearfix"></div>
+    </div>
+    <div class="clearfix"></div>
+}
+

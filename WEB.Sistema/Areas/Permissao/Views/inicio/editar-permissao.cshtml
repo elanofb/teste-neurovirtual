@@ -1,0 +1,98 @@
+﻿@model WEB.Areas.Permissao.ViewModels.PermissaoVM
+@using DAL.Permissao
+@using DAL.Permissao.Security.Extensions
+
+@{
+    ViewBag.titlePage = "Módulos do Sistema";
+
+    if (Model.PerfilAcesso.id > 0) {
+        ViewBag.subTituloPagina = "Configurar Permissões para o Perfil \"" + Model.PerfilAcesso.descricao + "\"";
+    }
+}
+
+@section styles{
+    <link type="text/css" rel="stylesheet" href="@UtilConfig.linkResourses()Areas/Permissao/css/permissao.css" />
+    <link type="text/css" rel="stylesheet" href="@UtilConfig.linkResourses()Areas/Permissao/js/plugins/jstree/themes/default/style.min.css" />
+    <link type="text/css" rel="stylesheet" href="@UtilConfig.linkResourses()Areas/Permissao/css/context-menu.css" />
+
+}
+
+@section scripts{
+    <script type="text/javascript" src="@UtilConfig.linkResourses("Areas/Permissao/js/plugins/jquery/jquery.context.menu.js")"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses("Areas/Permissao/js/plugins/jstree/jstree.js")"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses("Areas/Permissao/js/permissao.js?v=1.1")"></script>
+}
+
+@section breadcrump{
+    <ol class="breadcrumb">
+        <li><a href="@Url.Action("listar", "perfilacesso")" class="active fs-14"><i class="fa fa-arrow-left"></i> Voltar</a></li>
+    </ol>
+}
+
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="box-content">
+            <div class="alert alert-info alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                <h4><i class="icon fa fa-info"></i> Atenção!</h4>
+                As alterações realizadas nas estruturas dos menus serão ativadas somente no próximo acesso ao sistema.
+            </div>
+            @atualizarPermissao(Model.PerfilAcesso)
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="box-content">
+            <div class="row">
+                <div class="col-sm-12">
+                    @{
+                        int cont = 0;
+                    }
+                    @foreach (var OGrupo in Model.listaGrupos) {
+                        <div class="col-lg-3 col-md-3 col-sm-6 no-padr">
+                            @showItemMenuPrincipal(OGrupo.descricao, OGrupo.iconeClasse)
+                            <div id="recurso-grupo-@OGrupo.id" data-grupo-id="@OGrupo.id" class="subItens boxTree">
+                                @{Html.RenderPartial("exibir-menus-grupo", new ViewDataDictionary {{"idRecursoGrupo", OGrupo.id}, {"idRecursoPai", 0}, {"listRecursos", Model.listaRecursos}, {"listPermissoes", Model.listaPermissoes}});}
+                            </div>
+                        </div>
+
+                        cont++;
+                        if (cont%4 == 0) {
+                            <div class="clearfix"></div><br/>
+                        }
+                    }
+                    <div class="clearfix"></div><br/>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@* Definição de Helpers *@
+@helper showItemMenuPrincipal(string menuItem, string nomeIcone) {
+    <div class="row box-shadow">
+        <p class="a-center">
+            <a href="javascript:void(o)"><i class="@nomeIcone"></i></a>
+            @menuItem
+        </p>
+    </div>
+    <div class="clearfix"></div>
+}
+
+@helper atualizarPermissao(PerfilAcesso OPerfilAcesso) {
+
+    <div class="text-right">
+        @if (OPerfilAcesso.id > 0) {
+
+            if(OPerfilAcesso.flagSistema != "S" || User.idPerfil() == PerfilAcessoConst.DESENVOLVEDOR){
+                @Html.Hidden("idPerfilAcesso", OPerfilAcesso.id)
+                <input type="button" class="btn btn-primary link-loading" value="Salvar Permissões de Acesso" onclick="Recurso.savePermissoes();"/>
+            } else {
+                <a href="#" class="btn btn-md btn-danger"><i class="fa fa-exclamation-triangle"></i> Esse registro é protegido pelo sistema.</a>
+            }
+        }
+    </div>
+}

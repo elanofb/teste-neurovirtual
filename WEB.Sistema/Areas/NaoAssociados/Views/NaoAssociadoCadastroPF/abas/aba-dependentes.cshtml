@@ -1,0 +1,13 @@
+﻿@model DAL.Associados.Associado
+
+
+<div class="tab-pane" id="tab-dependentes">
+    <h4 class="separator-form">
+        Dependentes vinculados aos associados
+        <span class="pull-right fs-14">
+            <a href="javascript:;" onclick="AssociadoDependenteCadastroModal.modalCadastrarDependente(this)" data-url="@Url.Action("modal-cadastrar-dependente", "AssociadoDependenteCadastro", new {area = "AssociadosDependentes", idAssociadoEstipulante = Model.id})"><i class="far fa-plus-circle"></i> Cadastrar Dependente</a>
+        </span>
+    </h4>
+    <div id="boxLoadListaDependentes" class="content-load carregando" data-url="@Url.Action("partial-lista-associado-dependentes", "AssociadoDependente", new {area = "AssociadosDependentes", idAssociado = Model.id})"></div>
+    <div class="clearfix"></div><br/>
+</div>

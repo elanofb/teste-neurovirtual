@@ -1,0 +1,117 @@
+﻿@model WEB.Areas.Publicacoes.ViewModels.ParceiroForm
+
+@using DAL.Permissao.Security.Extensions
+@using WEB.Areas.Arquivos.Helpers
+@using WEB.Areas.Associacoes.Helpers
+@using WEB.Areas.Produtos.Helpers
+
+@{
+    Layout = "~/views/shared/associatec/masterpage-edit.cshtml";
+
+    ViewBag.titlePage = "Parceiro";
+    ViewBag.subTituloPagina = Model.Parceiro.nome;
+}
+
+@section breadcrump{
+    <ol class="breadcrumb">
+        <li><a href="@Url.Action("listar")" class="active fs-14"><i class="fa fa-arrow-left"></i> Voltar</a></li>
+    </ol>
+}
+
+@section scripts{
+
+    @Html.includeDatePicker()
+
+    @Html.includeJSModuloArquivosFotos()
+
+    <script type="text/javascript" src="@UtilConfig.linkResourses()js/_modulos/sistema/anuidade.js"></script>
+}
+
+@section styles {
+    @Html.includeCSSModuloArquivos()
+}
+
+@section navTabs{
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#tab-1" data-toggle="tab">Principal</a></li>
+    </ul>
+}
+
+@section tabContent{
+    <div id="tab-1" class="tab-pane active">
+
+        @Html.infoCadastro(Model.Parceiro.id, Model.Parceiro.dtCadastro, Model.Parceiro.dtAlteracao)
+
+        @using(Html.BeginForm("editar", "parceiro", FormMethod.Post, new { enctype = "multipart/form-data" })) {
+
+            { Html.EnableClientValidation(false); }
+
+            @Html.ValidationSummary(true, "Alguns campos não foram validados.")
+
+            @Html.HiddenFor(m => m.Parceiro.id)
+            
+            <h4 class="separator-form">Dados Principais do Parceiro</h4>
+
+            if(User.idOrganizacao() == 0) {
+                 <div class="col-sm-3 col-md-3">
+                     <label>Organização</label>
+                     @Html.DropDownListFor(m => m.Parceiro.idOrganizacao, AssociacaoHelper.getInstance.selectList(Model.Parceiro.idOrganizacao), "Padrão", new {@class = "form-control input-sm"})
+                 </div>
+            }
+
+            <div class="col-sm-2">
+                <label>Portal</label>
+                @Html.DropDownListFor(m => m.Parceiro.idPortal, WEB.Areas.Portais.Helpers.PortalHelper.getInstance.selectList(Model.Parceiro.idPortal), "...", new { @class = "form-control input-sm" })
+                @Html.ValidationMessageFor(m => m.Parceiro.idPortal)
+            </div>
+
+            <div class="col-sm-2">
+                @Html.LabelFor(x => x.Parceiro.ativo, "Status")
+                @Html.DropDownListFor(x => x.Parceiro.ativo, ComboHelper.selectListYesNo(Model.Parceiro.ativo), "...", new { @Class = "form-control input-sm" })
+            </div>
+            
+            <div class="clearfix"></div>
+
+            <div class="col-sm-7">
+                @Html.LabelFor(x => x.Parceiro.nome, "Nome")
+                @Html.TextBoxFor(x => x.Parceiro.nome, new {@Class = "form-control input-sm"})
+                @Html.ValidationMessageFor(x => x.Parceiro.nome)
+            </div>
+            <div class="clearfix"></div>
+
+            <div class="col-sm-4">
+                @Html.LabelFor(x => x.Parceiro.link, "Link (Url)")
+                @Html.TextBoxFor(x => x.Parceiro.link, new { @Class = "form-control input-sm" })
+                @Html.ValidationMessageFor(x => x.Parceiro.link)
+            </div>
+
+            <div class="col-sm-3">
+                <label>Tipo de Parceiro</label>
+                @Html.DropDownListFor(x => x.Parceiro.idTipoParceiro, TipoParceiroHelper.getInstance.selectList(Model.Parceiro.idTipoParceiro), "...", new { @Class = "form-control input-sm" })
+                @Html.ValidationMessageFor(x => x.Parceiro.idTipoParceiro)
+            </div>
+            <div class="clearfix"></div>
+            
+            <h4 class="separator-form">Selecione a imagem</h4>
+                                                   
+            <div class="col-sm-7">
+                @Html.inputFileSimples("OArquivo")
+                @Html.ValidationMessageFor(m => m.OArquivo)
+            </div>
+
+            <div class="clearfix"></div><br />
+
+            if (Model.Parceiro.id > 0) {
+                <h4 class="separator-form">Fotos Cadastradas</h4>
+                <div class="content-load carregando" id="boxArquivosListar" data-target="boxArquivosListar" data-url="@Url.Action("partial-lista-logotipo", "ArquivoLogotipo", new { area = "Arquivos", entidade = DAL.Entities.EntityTypes.PARCEIRO, idReferencia = Model.Parceiro.id })"></div>
+            }
+            
+            <div class="text-right">
+                @Html.exibirBotoesFormulario(Url.Action("listar"), "N")
+            </div>
+        }
+
+        <div class="clearfix"></div>
+    </div>
+}
+

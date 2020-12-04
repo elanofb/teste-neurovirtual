@@ -1,0 +1,295 @@
+﻿@model ExtratoConsultaVM
+@using WEB.Helpers
+@using WEB.Areas.LancamentoRecebimentos.ViewModels
+
+@{ Layout = null; }
+
+<div class="box box-primary margin-top-10">
+
+<div class="box-header with-border">
+    <div class="box-title">
+        <i class="far fa-chart-bar"></i> Resultados <em class="fs-12">@(Model.listaTituloDespesaPagamento.Count + Model.listaTituloReceitaPagamento.Count) lançamento(s) encontrado(s)</em>
+    </div>
+    <div class="box-tools pull-right">
+
+        <div class="dropdown">
+
+            <a href="javascript:;" class="dropdown-toggle text-black" data-toggle="dropdown" aria-expanded="true">
+                <i class="fa fa-cog"></i>
+            </a>
+
+            <ul class="dropdown-menu" role="menu">
+
+                <li>
+                    <a href="@Url.Action("index", "DespesaCadastro", new {urlRetorno = Request.Url.AbsoluteUri})"><i class="fa fa-plus"></i> Nova Despesa</a>
+                </li>
+
+                <li>
+                    <a href="@Url.Action("index", "ReceitaCadastro", new {urlRetorno = Request.Url.AbsoluteUri})"><i class="fa fa-plus"></i> Nova Receita</a>
+                </li>
+
+            </ul>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="box-body">
+
+    @if (!Model.listaPessoas.Any())
+    {
+        <div class="col-sm-12">
+            <div class="alert alert-info">
+                Nenhum lançamento foi encontrado.
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    }
+
+    @foreach (var OPessoa in Model.listaPessoas)
+    {
+        var listaPagamentosPessoa = Model.listaTituloPagamento.Where(x => x.idPessoa == OPessoa.id).ToList();
+
+        var valorTotalReceitas = listaPagamentosPessoa.Where(x => x.flagTipoTitulo == "R" && x.dtPagamento == null).Select(x => x.valorOriginal.toDecimal()).Sum();
+        var valorTotalLiquidasReceitas = listaPagamentosPessoa.Where(x => x.flagTipoTitulo == "R" && x.dtPagamento != null).Select(x => x.valorLiquido.toDecimal()).Sum();
+
+        valorTotalReceitas = decimal.Add(valorTotalReceitas, valorTotalLiquidasReceitas);
+        
+        var valorTotalDespesas = listaPagamentosPessoa.Where(x => x.flagTipoTitulo == "D").Select(x => x.valorOriginal.toDecimal()).Sum();
+
+        var flagTodasQuitadas = !listaPagamentosPessoa.Exists(x => !x.dtPagamento.HasValue);
+        
+        var valorSaldo = valorTotalReceitas - valorTotalDespesas;
+
+        <div class="@(flagTodasQuitadas ? "border-green bg-green-very-light" : "") box-info-item-dotted no-padding-top fs-12">
+
+            <div class="row">
+
+                <div class="col-sm-12">
+
+                    <div class="row">
+
+                        <div class="col-sm-8">
+                            <h4 class="fs-14 text-bold">
+                                <i class="fa fa-user"></i> <span data-toggle="tooltip" title="Credor/Pagador">@(OPessoa.nome ?? "NÃO DEFINIDO")</span>
+                            </h4>
+                        </div>
+
+                        <div class="col-sm-3">
+                            <div class="row">
+                                <div class="col-md-6 text-center col-sm-offset-6">
+                                    
+                                    <strong class="fs-14 text-bold @(valorSaldo < 0 ? "text-red" : "")" data-toggle="tooltip" title="Soma Total">
+                                        <i class="fa fa-caret-down"></i> @valorSaldo.ToString("C")
+                                    </strong>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="box-options pull-right margin-right-15">
+                            <button type="button" class="btn btn-box-tool" data-widget="collapse-custom" data-id="@OPessoa.id">
+                                <i class="far fa-minus"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="pessoa-@OPessoa.id">
+                        
+                        @foreach (var OItem in listaPagamentosPessoa)
+                        {
+                            bool flagVencido = !OItem.dtPagamento.HasValue && OItem.dtVencimento < DateTime.Today;
+
+                            bool flagPago = OItem.dtPagamento.HasValue;
+
+                            <div class="box-info-item-dotted padding-5 margin-top-5 fs-12 @(flagVencido ? "border-red bg-red-very-light" : "") @(flagPago ? "border-green bg-green-very-light" : "")">
+
+                                <div class="row">
+
+                                    <div class="col-sm-4 abreviar">
+
+                                        <span data-toggle='tooltip' title='@OItem.descricao.abreviar(100, "...") @(!OItem.descParcela.isEmpty() ? " (" + OItem.descParcela + ")" : "")'>
+                                            <i class="fa fa-hashtag"></i>@OItem.id - @OItem.descricao.abreviar(100, "...") @(!OItem.descParcela.isEmpty() ? " (" + OItem.descParcela + ")" : "")
+                                        </span>
+
+                                    </div>
+                                    
+                                    <div class="col-lg-4 col-sm-4 abreviar">
+                        
+                                        <div class="row">
+                            
+                                            <div class="col-md-3 text-center">                                
+                                                <span data-toggle='tooltip' title='Vencimento'>
+                                                    <i class="far fa-calendar"></i> @OItem.dtVencimento.exibirData()</span><br/>
+                                            </div>
+                            
+                                            <div class="col-md-3 text-center">                                
+                                                @if (OItem.dtPagamento.HasValue && OItem.flagTipoTitulo == "R") {
+                                                    <span data-toggle='tooltip' title='Recebimento'>
+                                                        <i class="far fa-calendar"></i> @OItem.dtPagamento.exibirData()</span><br/>
+                                                }else{
+                                                    <span> -- </span><br/>
+                                                }                                
+                                            </div>
+                            
+                                            <div class="col-md-3 text-center">                                
+                                                @if (OItem.dtPrevisaoCredito.HasValue && OItem.flagTipoTitulo == "R") {
+                                                    <span data-toggle='tooltip' title='Previsão de Crédito'>
+                                                        <i class="far fa-calendar"></i> @OItem.dtPrevisaoCredito.exibirData()</span><br/>
+                                                }else{
+                                                    <span> -- </span><br/>
+                                                }                                
+                                            </div>
+                            
+                                            <div class="col-md-3 text-center">                                
+                                                @if (OItem.dtCredito.HasValue) {
+                                                    <span data-toggle='tooltip' title='@(OItem.flagTipoTitulo == "D" ? "Data do Pagamento" : "Data do Crédito")'>
+                                                        <i class="far fa-calendar"></i> @OItem.dtCredito.exibirData()</span><br/>
+                                                }                                
+                                            </div>
+                                            <div class="clearfix"></div>
+                                        </div>
+                                    </div>                                    
+                                    
+                                    <div class="col-sm-3">
+
+                                        @if (OItem.flagTipoTitulo == "R")
+                                        {
+                                            var valorPagamento = flagPago ? OItem.valorRealizado : OItem.valorOriginal; 
+                                            <div class="row">
+                            
+                                                <div class="col-md-6 text-center">
+                                                    <strong class="text-green" data-toggle="tooltip" title="Valor da Receita">
+                                                        <i class="fa fa-caret-up"></i> @valorPagamento.exibirValor()
+                                                    </strong>
+                                                </div>
+                            
+                                                <div class="col-md-6 text-center">
+                                                    <strong class="text-green" data-toggle="tooltip" title="Valor Líquido">
+                                                        <i class="fa fa-caret-up"></i> @OItem.valorLiquido.exibirValor()
+                                                    </strong>
+                                                </div>
+                                            </div>
+                                        }
+
+                                        @if (OItem.flagTipoTitulo == "D")
+                                        {
+                                            <div class="row">
+                                                <div class="col-md-6 text-center">
+                                                    <strong class="text-red" data-toggle="tooltip" title="Valor de Despesa">
+                                                        <i class="fa fa-caret-down"></i> @OItem.valorOriginal.exibirValor()
+                                                    </strong>
+                                                </div>
+                                                <div class="col-md-6 text-center">
+                                                    <strong class="text-red" data-toggle="tooltip" title="Valor Pago">
+                                                        <i class="fa fa-caret-down"></i> @OItem.valorRealizado.exibirValor()
+                                                    </strong>
+                                                </div>
+                                            </div>
+                                        }
+
+                                    </div>
+
+                                    <div class="col-sm-1 text-right">
+
+                                        @if (OItem.idArquivoRemessa > 0) {
+                                            <strong class="margin-right-5 fs-14" data-toggle="tooltip" title="Arquivo de Remessa n° @OItem.idArquivoRemessa">
+                                                <a class="link-black" href="@Url.Action("index", "ArquivoRemessaDetalhes", new { area = "ArquivosRemessas", id = OItem.idArquivoRemessa })">R</a>
+                                            </strong>
+                                        }
+                                        
+                                        @if (flagPago){
+                                            <a href="#" class="text-green fs-14 margin-right-10" data-toggle="tooltip" title="Pago">
+                                                <i class="fa fa-check"></i>
+                                            </a>
+                                        }
+
+                                        @if (!flagPago){
+                                            <a href="#" class="text-red fs-14 margin-right-10" data-toggle="tooltip" title="Em aberto">
+                                                <i class="fa fa-ban"></i>
+                                            </a>
+                                        }
+
+                                        <div class="dropdown pull-right margin-right-5">
+
+                                            <a href="javascript:;" class="dropdown-toggle text-black fs-14" data-toggle="dropdown" aria-expanded="true">
+                                                <i class="fa fa-cog"></i>
+                                            </a>
+
+                                            <ul class="dropdown-menu" role="menu">
+
+                                                @if (OItem.flagTipoTitulo == "R")
+                                                {
+                                                    <li>
+                                                        <a href="@Url.Action("editar", "ReceitaDetalhe", new {area = "Financeiro", id = OItem.idTitulo})" target="_blank" class="text-black fs-14">
+                                                            <i class="fa fa-search"></i> Ver Detalhes
+                                                        </a>
+                                                    </li>
+
+                                                    if (!flagPago)
+                                                    {
+                                                        if (OItem.descParcela.isEmpty())
+                                                        {
+                                                            <li>
+                                                                <a href="javascript:;" onclick="ExtratoPessoa.modalRegistrarPagamentoReceita('@OItem.id')">
+                                                                    <i class="far fa-money-bill"></i> Registrar Pagamento
+                                                                </a>
+                                                            </li>
+                                                        }
+
+                                                        if (!OItem.descParcela.isEmpty())
+                                                        {
+                                                            <li>
+                                                                <a href="javascript:;" onclick="ExtratoPessoa.modalRegistrarPagamentoReceitaParcela('@OItem.id')">
+                                                                    <i class="far fa-money-bill"></i> Registrar Pagamento
+                                                                </a>
+                                                            </li>
+                                                        }
+                                                    }
+                                                }
+
+                                                @if (OItem.flagTipoTitulo == "D")
+                                                {
+                                                    <li>
+                                                        <a href="@Url.Action("editar", "DespesaDetalhe", new {area = "Financeiro", id = OItem.idTitulo})" target="_blank" class="text-black fs-14">
+                                                            <i class="fa fa-search"></i> Ver Detalhes
+                                                        </a>
+                                                    </li>
+
+                                                    if (!flagPago)
+                                                    {
+                                                        <li>
+                                                            <a href="javascript:;" onclick="ExtratoPessoa.modalRegistrarPagamentoDespesa('@OItem.id')">
+                                                                <i class="far fa-money-bill"></i> Registrar Pagamento
+                                                            </a>
+                                                        </li>
+                                                    }
+                                                }
+
+                                            </ul>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+                            <div class="clearfix"></div>
+                        }
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+        <div class="clearfix"></div>
+    }
+
+    <div class="clearfix"></div>
+
+</div>
+
+</div>

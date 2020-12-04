@@ -1,0 +1,85 @@
+﻿@*@model WEB.ViewModels.ConfiguracoesVM
+@{
+    Layout = "~/views/shared/associatec/masterpage-edit.cshtml";
+    ViewBag.titlePage = "Configurações - Redes Sociais";
+}
+
+@section navTabs{
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#tab-1" data-toggle="tab">Principal</a></li>
+    </ul>
+}
+
+@section tabContent{
+
+    @using(Html.BeginForm("redessociais", "configuracoes", FormMethod.Post, new { })){
+        @Html.HiddenFor(x => x.id)
+        <div id="tab-1" class="tab-pane active">
+
+            <div class="col-md-3">
+                <div class="input-group">
+                    <span class="input-group-addon">
+                        <span class="fa fa-facebook"></span>
+                    </span>
+                    @Html.TextBoxFor(x => x.linkFacebook, new Dictionary<string, Object> { { "class", "form-control" }, { "data-toggle", "tooltip" }, { "title" ,"Facebook" } })
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="input-group">
+                    <span class="input-group-addon">
+                        <span class="fa fa-twitter"></span>
+                    </span>
+                    @Html.TextBoxFor(x => x.linkTwitter, new Dictionary<string, Object> { { "class", "form-control" }, { "data-toggle", "tooltip" }, { "title", "Twitter" } })
+                </div>
+            </div>
+
+
+
+            <div class="clearfix"></div>
+            <br />
+
+            <div class="col-md-3">
+                <div class="input-group">
+                    <span class="input-group-addon">
+                        <span class="fa fa-google-plus"></span>
+                    </span>
+                    @Html.TextBoxFor(x => x.linkGooglePlus, new Dictionary<string, Object> { { "class", "form-control" }, { "data-toggle", "tooltip" }, { "title", "Google Plus" } })
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="input-group">
+                    <span class="input-group-addon">
+                        <span class="fa fa-linkedin"></span>
+                    </span>
+                    @Html.TextBoxFor(x => x.linkLinkedin, new Dictionary<string, Object> { { "class", "form-control" }, { "data-toggle", "tooltip" }, { "title", "LinkedIn" } })
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            <br />
+
+            <div class="col-md-6">
+
+                <div class="input-group">
+                    <span class="input-group-addon">
+                        <span class="fa fa-youtube"></span>
+                    </span>
+                    @Html.TextBoxFor(x => x.linkYouTube, new Dictionary<string, Object> { { "class", "form-control" }, { "data-toggle", "tooltip" }, { "title", "YouTube" } })
+                </div>
+
+            </div>
+
+            <div class="clearfix"></div>
+            <br />
+
+            <div class="text-right">
+                <input type="submit" name="enviar" value="Salvar" class="btn btn-primary" />
+            </div>
+
+        </div>
+
+    }
+
+}*@
+

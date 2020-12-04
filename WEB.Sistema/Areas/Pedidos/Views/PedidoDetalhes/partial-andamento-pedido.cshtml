@@ -1,0 +1,60 @@
+﻿@model WEB.Areas.Pedidos.ViewModels.PedidoDetalhesVM
+
+<p class="campo-info">
+    @Html.labelTrueFalse(true, $"Iniciado em: { Model.Pedido.dtCadastro.exibirData(true) }")
+</p>
+                
+<p class="campo-info @(Model.Pedido.dtFaturamento.HasValue ? "text-green" : "")">
+
+    <i class="@(Model.Pedido.dtFaturamento.HasValue ? "fa fa-check" : "glyphicon glyphicon-hourglass")"></i> 
+
+    Faturado em: @Model.Pedido.dtFaturamento.exibirData(true, "...")
+    
+</p>
+
+<p class="campo-info @(Model.Pedido.dtQuitacao.HasValue ? "text-green" : "")">
+
+    <i class="@(Model.Pedido.dtQuitacao.HasValue ? "fa fa-check" : "glyphicon glyphicon-hourglass")"></i> 
+
+    Quitado em: @Model.Pedido.dtQuitacao.exibirData(true, "...")
+    
+</p>
+
+<p class="campo-info @(Model.Pedido.dtAtendimento.HasValue ? "text-green" : "")">
+    <i class="@(Model.Pedido.dtAtendimento.HasValue ? "fa fa-check" : "glyphicon glyphicon-hourglass")"></i> 
+    Atendido em: @Model.Pedido.dtAtendimento.exibirData(true, "...")
+</p>
+
+@*
+<p class="campo-info @(Model.Pedido.dtPreparacao.HasValue ? "text-green" : "")">
+
+    <i class="@(Model.Pedido.dtPreparacao.HasValue ? "fa fa-check" : "glyphicon glyphicon-hourglass")"></i> 
+
+    Preparado em: @Model.Pedido.dtPreparacao.exibirData(true, "...")
+    
+</p>
+
+<p class="campo-info @(Model.Pedido.dtExpedicao.HasValue ? "text-green" : "")">
+
+    <i class="@(Model.Pedido.dtExpedicao.HasValue ? "fa fa-check" : "glyphicon glyphicon-hourglass")"></i> 
+
+    Expedido em: @Model.Pedido.dtExpedicao.exibirData(true, "...")
+    
+</p>
+*@
+
+<p class="campo-info @(Model.Pedido.dtFinalizado.HasValue ? "text-green" : "")">
+
+    <i class="@(Model.Pedido.dtFinalizado.HasValue ? "fa fa-check" : "glyphicon glyphicon-hourglass")"></i> 
+
+    Finalizado em: @Model.Pedido.dtFinalizado.exibirData(true, "...")
+    
+</p>
+                  
+@if (Model.Pedido.dtCancelamento.HasValue) {
+
+    <p class="campo-info text-red">
+        <i class="fa fa-times-circle"></i> Cancelado em: @Model.Pedido.dtCancelamento.exibirData(true)
+    </p>
+
+}

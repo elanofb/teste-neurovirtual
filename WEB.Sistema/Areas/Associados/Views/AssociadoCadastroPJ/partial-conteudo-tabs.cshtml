@@ -1,0 +1,33 @@
+﻿@model WEB.Areas.Associados.ViewModels.AssociadoCadastroPJForm
+
+@{ Html.RenderPartial("aba-dados-cadastrais");}
+
+@if (Model.Associado.id > 0) {
+
+    if (Model.ConfiguracaoAssociadoPJ.flagAbaContato == true) {
+        { Html.RenderPartial("abas/aba-contatos", Model.Associado.idPessoa); }
+    }
+
+    if (Model.ConfiguracaoAssociadoPJ.flagAbaDependentes == true) {
+        { Html.RenderPartial("abas/aba-dependentes", Model.Associado); }
+    }
+
+    { Html.RenderPartial("~/Areas/Associados/Views/AssociadoCadastroPF/abas/aba-documentos.cshtml", Model.Associado); }
+
+    { Html.RenderPartial("~/Areas/Associados/Views/AssociadoCadastroPF/abas/aba-historico.cshtml", Model.Associado); }
+    
+    { Html.RenderPartial("~/Areas/Associados/Views/associado/aba-movimentacao.cshtml", Model.Associado.id); }
+
+    if (Model.ConfiguracaoAssociadoPJ.flagAbaPedidos == true) {
+        { Html.RenderPartial("~/Areas/Associados/Views/AssociadoCadastroPF/abas/aba-pedidos.cshtml", Model.Associado); }
+    }
+    
+    { Html.RenderPartial("abas/aba-conta-bancaria", Model.Associado); }
+    
+    { Html.RenderPartial("abas/aba-produtos-ativos", Model.Associado); }
+
+    { Html.RenderPartial("abas/aba-pontuacao", Model.Associado); }
+    
+
+
+}

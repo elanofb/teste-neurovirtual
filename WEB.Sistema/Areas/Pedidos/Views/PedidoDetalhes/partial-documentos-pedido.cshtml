@@ -1,0 +1,36 @@
+﻿@model WEB.Areas.Pedidos.ViewModels.PedidoDetalhesVM
+@{
+    Layout = "";
+
+    var urlEditarDocumentos  = Url.Action("editar-documento"         , "arquivo", new {area = "arquivos", idReferencia = Model.Pedido.Associado.id, entidade = Model.Pedido.id});
+    var urlListarDocumentos  = Url.Action("listar-galeria-documentos", "arquivo", new {area = "arquivos", idReferencia = Model.Pedido.Associado.id, entidade = Model.Pedido.id});
+    
+    //Url.Action("listar-galeria-documentos", "PessoaRelacionamentoArquivo", new {area = "Pessoas", Model.idPessoa});
+}
+
+<div class="box-header with-border">
+    <h3 class="box-title">
+        <i class="far fa-file-alt"></i>
+        Documentos Enviados
+    </h3>
+</div>
+
+<div class="row box-body">
+    <div class="col-md-5 col-sm-12">
+        <h4 class="separator-form-icon">
+            <i class="fa-edit far"></i>
+            Cadastrar Documentos/Arquivos
+        </h4>
+        <div id="boxLoadFormDocumentos" class="carregando content-load" data-url="@urlEditarDocumentos"></div>
+    </div>
+
+    <div class="col-md-6 col-md-offset-1 col-sm-12">
+        <h4 class="separator-form-icon">
+            <i class="fa-edit far"></i>
+            Documentos e Arquivos Cadastrados
+        </h4>
+        <div id="boxLoadListaDocumentos" class="" data-url="@urlListarDocumentos"></div>
+    </div>
+    
+    <div class="clearfix"></div><br />
+</div>

@@ -1,0 +1,161 @@
+﻿@model WEB.Areas.ContribuicoesPainel.ViewModels.PainelCobrancaVM
+@using MvcFlashMessages
+@using WEB.Areas.Contribuicoes.Helpers
+@using WEB.Helpers
+@using WEB.Areas.Associados.Helpers
+
+@{
+    ViewBag.titlePage = "Painel de Cobranças";
+}
+
+@section scripts{
+    @Html.includeBootstrapMultiselect()
+    @Html.includeDatePicker()
+    @Html.includeJqueryLoading()
+    @Html.includeFroalaEditorJS()
+    <script src="@UtilConfig.linkResourses()js/associatec/plugins/webui-popover/src/jquery.webui-popover.js" type="text/javascript"></script>
+    
+    <script src="@UtilConfig.linkResourses()Areas/ContribuicoesPainel/js/contribuicao-painel-cobranca.js?v=1.8"></script>
+    <script src="@UtilConfig.linkResourses()Areas/ContribuicoesPainel/js/contribuicao-cobranca.js?v=1.8"></script>
+    <script src="@UtilConfig.linkResourses()Areas/ContribuicoesPainel/js/contribuicao-cobranca-boleto.js?v=1.3"></script>
+    <script src="@UtilConfig.linkResourses()Areas/AssociadosContribuicoes/js/associado-contribuicao-exclusao.js?v=1.2"></script>
+    <script src="@UtilConfig.linkResourses()Areas/AssociadosContribuicoes/js/associado-contribuicao-isencao.js?v=1"></script>
+    <script src="@UtilConfig.linkResourses()Areas/AssociadosContribuicoes/js/associado-contribuicao-email.js?v=1"></script>
+    <script src="@UtilConfig.linkResourses()Areas/AssociadosContribuicoes/js/associado-contribuicao-padrao.js?v=1"></script>
+    <script src="@UtilConfig.linkResourses()Areas/AssociadosConsultas/js/associado-consulta.js"></script>
+    <script src="@UtilConfig.linkResourses()Areas/AssociadosNotificacoes/js/associado-contribuicao-cobranca.js"></script>
+    <script src="@UtilConfig.linkResourses()Areas/Financeiro/js/desconto-antecipacao.js?v=1.2"></script>
+    <script src="@UtilConfig.linkResourses()Areas/FinanceiroParcelamentos/js/titulo-receita-parcelamento.js?v=1.0"></script>
+    <script src="@UtilConfig.linkResourses()Areas/Financeiro/js/receita-baixa.js"></script>
+}
+
+
+
+@section styles{
+    @Html.includeFroalaEditorCSS()
+    <link href="@UtilConfig.linkResourses()js/associatec/plugins/webui-popover/src/jquery.webui-popover.css" rel="stylesheet" />
+
+    <link href="@UtilConfig.linkResourses()css/associatec/modulos/widgets.css" rel="stylesheet" />
+    <link href="@UtilConfig.linkResourses()css/associatec/modulos/dropdown-menu.css" rel="stylesheet" />
+    <link href="@UtilConfig.linkResourses()css/associatec/list-custom.css" rel="stylesheet" />
+}
+
+@section breadcrump{
+    <ol class="breadcrumb">
+        <li><a class="active fs-14" href="@Url.Action("listar", "Contribuicao", new {area="Contribuicoes"})"><i class="fa fa-arrow-left"></i> Voltar</a></li>
+    </ol>
+}
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="box box-primary">
+            <div class="box-header with-border">
+                <h3 class="box-title">
+                    <i class="fa fa-search"></i> Filtros de Pesquisa <small class="fs-11">(Informe abaixo os dados da contribuição que deseja pesquisar)</small>
+                </h3>
+            </div>
+            <div class="box-body">
+                <div class="row">
+                    @using (Html.BeginForm(null, null, FormMethod.Get, new {@class = "no-margin", id= "formFiltro" })) {
+                        @Html.Hidden("flagAcao", "", new {id = "flagAcao"})
+                        @Html.Hidden("tipoSaida", "", new { id = "tipoSaida" })
+
+                        <div class="col-xs-6 col-sm-4 col-md-4 col-lg-3">
+                            <label>Tipo de Associado</label><br />
+                            @Html.ListBox("idsTipoAssociado", TipoAssociadoHelper.getInstance.multiSelectList(UtilRequest.getListInt("idsTipoAssociado")), new { @class = "form-control input-sm input-multiselect", multiple = "multiple" })
+                        </div>
+                        <div class="col-xs-6 col-sm-4 col-md-3 col-lg-4">
+                            <label>Plano/Contribuição</label>
+                            @Html.DropDownList("idContribuicao", ContribuicaoHelper.getInstance.selectList(UtilRequest.getInt32("idContribuicao")), "Todos", new {@class = "form-control input-sm"})
+                        </div>
+                        <div class="col-xs-6 col-sm-4 col-md-2 col-lg-1">
+                            <label>Ano</label>
+                            @Html.TextBox("ano", UtilRequest.getString("ano"), new { @class = "form-control input-sm", alt="number_4" })
+                        </div>
+                        <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 boxVencimento">
+                            <label>Vencimento</label>
+                            @Html.DropDownList("mesDiaVencimento", new SelectList(new List<object>()), "Todos", new {@class = "form-control input-sm", id = "dtVencimento", data_selected = UtilRequest.getString("mesDiaVencimento")})
+                        </div>
+
+                        <div class="col-xs-6 col-sm-4 col-md-2 col-lg-2" id="boxVencimentoVariado">
+                            <label>Mês</label><br />
+                            @Html.DropDownList("mes", ComboHelper.selectListMeses(UtilRequest.getString("mes")), "", new { @class = "form-control input-sm" })
+                        </div>
+
+                        <div class="clearfix visible-lg"></div>
+
+                        <div class="col-xs-6 col-sm-4 col-md-4 col-lg-3">
+                            <label>Status Cobrança</label>
+                            @Html.DropDownList("flagSituacao", ContribuicaoHelper.getInstance.selectListSituacao(UtilRequest.getString("flagSituacao")), "Todos", new { @class = "form-control input-sm" })
+                        </div>
+                        <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2">
+                            <label>Situação Financeira</label>
+                            @Html.DropDownList("flagSituacaoContribuicao", SituacaoContribuicaoHelper.getSituacao(UtilRequest.getString("flagSituacaoContribuicao")), "Todas", new { @class = "form-control input-sm" })
+                        </div>
+                        <div class="col-xs-6 col-sm-4 col-md-2 col-lg-2">
+                            <label>Status Associado</label>
+                            @Html.DropDownList("ativo", AssociadoHelper.selectListAtivo(UtilRequest.getString("ativo")), "Todos", new { @class = "form-control input-sm" })
+                        </div>
+                        <div class="col-xs-6 col-sm-8 col-md-3 col-lg-3">
+                            <label>Buscar</label>
+                            @Html.buttonSearch(UtilRequest.getString("valorBusca"), "", "bt-submit")
+                        </div>
+
+                    }
+                </div>
+            </div>
+            <div class="clearfix"></div><br/>
+        </div>
+    </div>
+</div>
+
+@Html.RenderFlash()
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="box box-primary">
+            <div class="box-header with-border">
+                <h3 class="box-title">
+                    <i class="far fa-chart-bar"></i> Relação de Associados
+                </h3>
+                <div class="box-tools pull-right">
+                    <div class="btn-group">
+                        
+                        @if (Model.listaBoletos != null && Model.listagemFiltrada.Any()){
+
+                            <a href="@Url.Action("listar", "ListaBoletos")@UtilRequest.getQueryString()" class="btn btn-box-tool text-black"><strong>@Model.qtdeBoletosGerados</strong> boleto(s) gerado(s) <i class="fa fa-file-pdf-o"></i></a>
+
+                        }&nbsp;&nbsp;
+
+                        <button type="button" class="btn btn-box-tool dropdown-toggle text-black" data-toggle="dropdown">
+                            Ações <i class="fa fa-caret-down"></i>
+                        </button>
+
+                        <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                            <li><a href="javascript:void(0)" onclick="ContribuicaoCobranca.gerarCobrancas(this, false)" data-url="@Url.Action("gerar-cobrancas", "Cobranca")" data-toggle="tooltip" title="O sistema irá gerar a cobrança para os associados selecionados">Gerar cobrança para selecionados</a></li>
+                            <li><a href="javascript:void(0)" onclick="ContribuicaoCobrancaBoleto.gerarBoletos(this, false)" data-url="@Url.Action("gerar-boletos", "CobrancaBoleto")" data-toggle="tooltip" title="O sistema irá gerar boletos todos os associados selecionados abaixo">Gerar boleto bancário para selecionados</a></li>
+                            <li><a href="javascript:void(0)" onclick="AssociadoContribuicaoCobranca.abrirModalGeracaoEmailCobranca('@(Model.Contribuicao?.id)', null)" data-toggle="tooltip" title="O sistema irá enviar um e-mail de cobrança para os associados selecionados">Enviar e-mail de cobrança para selecionados</a></li>
+                            @*<li><a href="javascript:void(0)" onclick="ContribuicaoCobranca.enviarCobranca(this)" data-url="@Url.Action("modal-enviar-cobrancas", "Cobranca")" data-toggle="tooltip" title="O sistema irá enviar e-mail de cobrança">Enviar cobrança para a lista</a></li>*@
+                            <li class="divider"></li>
+                            <li><a href="javascript:void(0)" onclick="ContribuicaoCobranca.gerarCobrancas(this, true)" data-url="@Url.Action("gerar-cobrancas", "Cobranca")" data-toggle="tooltip" title="O sistema irá gerar a cobrança para os associados que não possuem">Gerar cobrança para todos</a></li>
+                            <li><a href="javascript:void(0)" onclick="ContribuicaoCobrancaBoleto.gerarBoletos(this, true)" data-url="@Url.Action("gerar-boletos", "CobrancaBoleto")" data-toggle="tooltip" title="O sistema irá gerar boletos todos os associados">Gerar boleto bancário para todos</a></li>
+                            <li><a href="javascript:void(0)" onclick="ContribuicaoPainelCobranca.abrirModalGeracaoEmailCobrancaTodos('@(Model.Contribuicao?.id)')" data-toggle="tooltip" title="O sistema irá enviar um e-mail de cobrança para todos os associados">Enviar e-mail de cobrança para todos</a></li>
+                            <li class="divider"></li>
+                            <li><a href="javascript:void(0)" onclick="ContribuicaoPainelCobranca.exportarDadosExcel()" data-toggle="tooltip" title="O sistema irá exportar os dados para planilha em excel"><i class="far fa-file-excel"></i> Exportar dados para Excel</a></li>
+                            <li class="divider"></li>
+                            <li><a href="javascript:void(0)" onclick="AssociadoContribuicaoExclusao.excluirSelecionados()" data-toggle="tooltip" title="Excluir todos as cobranças selecionadas"><i class="far fa-trash"></i> Excluir Cobranças</a></li>
+                        </ul>
+
+                    </div>
+                </div>
+            </div>
+            <div class="box-body">
+                @{ Html.RenderPartial("partial-widget-resultados");}
+                <br/>
+                @{ Html.RenderPartial("partial-relacao-associados", Model);}
+
+            </div>
+            <div class="clearfix"></div><br />
+        </div>
+    </div>
+</div>

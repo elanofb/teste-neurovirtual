@@ -1,0 +1,41 @@
+﻿@model WEB.Areas.Produtos.ViewModels.ProdutoComposicaoForm
+@using MvcFlashMessages
+@using WEB.Areas.Produtos.Helpers
+
+@{
+    Layout = null;
+}
+
+<div id="@(IsPost ? "" : "boxFormAdicionarItem")">
+
+    @Html.RenderFlash()
+
+    <div class="col-md-12">
+
+        @using (Ajax.BeginForm("adiconar-item", null, new AjaxOptions { UpdateTargetId = "boxFormAdicionarItem", HttpMethod = "POST", OnSuccess = "ProdutoComposicao.onSuccess" }, new { role = "form", @class = "default" })) {
+            @Html.HiddenFor(m => m.ProdutoComposicao.idProduto)
+            @Html.ValidationSummary(false)
+            <div class="row">
+                <div class="col-xs-2">
+                    @Html.labelRequired("Item")
+                    @Html.DropDownListFor(m => m.ProdutoComposicao.idProdutoItem, ProdutoItemHelper.getInstance.selectList(Model.ProdutoComposicao.idProdutoItem), "...", new { @class = "form-control input-sm select2" })
+                    @Html.ValidationMessageFor(m => m.ProdutoComposicao.idProdutoItem)
+                </div>
+                <div class="col-xs-2">
+                    @Html.labelRequired("Unidade de Medida")
+                    @Html.DropDownListFor(m => m.ProdutoComposicao.idUnidadeMedida, UnidadeMedidaHelper.getInstance.selectList(Model.ProdutoComposicao.idUnidadeMedida), "...", new { @class = "form-control input-sm" })
+                    @Html.ValidationMessageFor(m => m.ProdutoComposicao.idUnidadeMedida)
+                </div>
+                <div class="col-xs-2">
+                    @Html.labelRequired("Valor")
+                    @Html.TextBoxFor(m => m.ProdutoComposicao.valorUnidadeMedida, new { @class = "form-control input-sm" })
+                    @Html.ValidationMessageFor(m => m.ProdutoComposicao.valorUnidadeMedida)
+                </div>
+                <div class="col-xs-3" style="padding-top: 17px">
+                    <input type="submit" value="Adicionar" class="btn btn-success" />
+                </div>
+            </div>
+
+        }
+    </div>
+</div>

@@ -1,0 +1,97 @@
+﻿@model WEB.Areas.Associados.ViewModels.AssociadoPreAtualizacaoCadastroPJForm
+@using DAL.Configuracoes.Const
+@using DAL.ConfiguracoesAssociados
+@using MvcFlashMessages
+@using WEB.Areas.ConfiguracoesAssociados.Helpers
+
+@{
+    Layout = null;
+}
+
+<div class="tab-pane active" id="@(IsPost ? "" : "tab-dados-cadastrais")">
+    @Html.RenderFlash()
+    <div class="row">
+        
+        @using (Ajax.BeginForm("salvarCadastro", "AssociadoCadastroPJ", new{Area = "Associados"}, new AjaxOptions{HttpMethod = "POST", UpdateTargetId = "", InsertionMode = InsertionMode.Replace, OnSuccess = "AssociadoPreAtualizacaoCadastro.onSuccessForm"}, new{@class = "cadastro"})){
+
+            @Html.ValidationSummary(false)
+            { Html.EnableClientValidation(false); }
+            @Html.HiddenFor(m => m.Associado.id)
+            @Html.HiddenFor(m => m.flagRetornoAjax) 
+            
+            if (Model.listaGrupos.Any()){
+                foreach (var OGrupo in Model.listaGrupos){
+                    @boxGrupoCampos(OGrupo)
+                }
+                <div class="clearfix"></div><br/>                
+            }else{
+                <div class="col-sm-12">
+                    <div class="alert alert-warning">
+                        <div class="text-center">Não existem configurações de cadastro disponíveis.</div>
+                    </div>
+                </div>
+            }
+            <div class="clearfix"></div><br/>
+        }
+    </div>
+</div>
+
+@helper boxGrupoCampos(ConfiguracaoAssociadoCampoGrupo OGrupo) {
+
+var listaCampos = Model.listaCampos.Where(x => x.idAssociadoCampoGrupo == OGrupo.id).ToList();
+
+    if (!listaCampos.Any()) {
+        return;
+    }
+    
+    <div class="@(OGrupo.cssBoxGrupo.isEmpty() ? "col-sm-12" : OGrupo.cssBoxGrupo)">        
+        <h4 class="separator-form-icon"><i class="far fa-edit"></i> @OGrupo.descricao</h4>
+        
+        <div class="row">
+            @foreach (var OCampo in listaCampos){
+                @boxCampo(OCampo)
+            }
+        </div>
+    </div>
+    @Html.Raw(OGrupo.htmlAposBox)
+}
+
+@helper boxCampo(ConfiguracaoAssociadoCampo OCampo) {
+        
+    if (OCampo.idTipoCampo == ConfiguracaoTipoCampoConst.HIDDEN) {
+        @Html.buildField(OCampo, false)
+        return;
+    }
+    
+    <div class="@OCampo.cssClassBox">
+        
+        @(OCampo.flagObrigatorio == true ? Html.labelRequired(OCampo.label) : Html.Label(OCampo.label))
+        
+        @Html.buildField(OCampo, false)
+        
+        @exibirValorAlterado(OCampo)
+        
+        @if (!OCampo.textoInstrucoes.isEmpty()){
+            @Html.instrucao(OCampo.textoInstrucoes)
+        }
+        @Html.Raw(OCampo.htmlAposCampo)
+    </div>
+
+    @Html.Raw(OCampo.htmlAfterBox)
+}
+
+@helper exibirValorAlterado(ConfiguracaoAssociadoCampo OCampo){
+
+    if (OCampo.valorPadrao.isEmpty()){
+        return;
+    }
+            
+    if (OCampo.valorPadrao == OCampo.valorAtual){
+        return;
+    }
+                                
+    OCampo.flagReadOnly = true;
+    OCampo.valorAtual = OCampo.valorPadrao;
+    
+    @Html.buildField(OCampo, false);    
+}

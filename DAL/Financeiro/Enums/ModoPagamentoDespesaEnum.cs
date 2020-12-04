@@ -1,0 +1,60 @@
+﻿namespace DAL.Financeiro {
+
+	public enum ModoPagamentoDespesaEnum {
+		
+		CONTA_CORRENTE_OUTRO_TITULAR = 1,
+		
+		CONTA_CORRENTE_MESMO_TITULAR = 2,
+		
+		CONTA_CORRENTE_CARTAO_SALARIO = 3,
+		
+		CONTA_POUPANCA = 4,
+		
+		CHEQUE_PAGAMENTO = 5,
+		
+		DOC_C = 6, 
+
+        DOC_D = 7,
+
+        ORDEM_PAGAMENTO = 8,
+
+        BOLETO_BANCARIO = 9,
+
+		BOLETO_OUTROS_BANCOS = 10,
+
+		NOTA_FISCAL_LIQ_ELETRONICA = 11,
+
+		CONTAS_CONCESSIONARIAS = 12,
+
+		DARF_NORMAL = 13,
+
+		DARF_SIMPLES = 14,
+
+		DARJ = 15,
+
+		GARE = 16,
+
+		GNRE = 17,
+
+		GPS = 18,
+
+		FGTS = 19,
+
+		IPTU = 20,
+
+		IPVA = 21,
+
+		DPVAT = 22,
+
+		TED_OUTRO_TITULAR = 23,
+
+		TED_MESMO_TITULAR = 24,
+		
+		CARTAO_CREDITO = 25,
+		
+		DEPOSITO_BANCARIO = 26,
+		
+		DINHEIRO = 27
+
+	}
+}

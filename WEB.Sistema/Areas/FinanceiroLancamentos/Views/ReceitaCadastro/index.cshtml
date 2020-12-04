@@ -1,0 +1,276 @@
+﻿@model WEB.Areas.FinanceiroLancamentos.ViewModels.ReceitaCadastroForm
+@using DAL.Financeiro
+@using WEB.Areas.ContasBancarias.Helpers
+@using WEB.Areas.Financeiro.Helpers
+@using WEB.Areas.FinanceiroLancamentos.Helpers
+@using MvcFlashMessages
+
+@{
+    ViewBag.titlePage = "Novo Lançamento a receber";
+}
+
+@section scripts {
+    
+    @Html.includeDatePicker()
+    @Html.includeJqueryLoading()
+    @Html.includeBootstrapMultiselect()
+    <script src="@UtilConfig.linkResourses()areas/financeiro/js/combo-centro-custo.js?v=1"></script>
+    <script src="@UtilConfig.linkResourses()areas/financeiro/js/combo-macro-conta.js?v=1"></script>
+    <script src="@UtilConfig.linkResourses()areas/financeiro/js/combo-sub-conta.js?v=1"></script>
+    <script src="@UtilConfig.linkResourses()Areas/FinanceiroLancamentos/js/devedor.js?v3.1"></script>
+    <script src="@UtilConfig.linkResourses()areas/financeirolancamentos/js/receita-cadastro.js?v3.1"></script>
+}
+
+@section breadcrump {
+    <ol class="breadcrumb">
+        <li><a class="active fs-14" href="@(Model.urlRetorno.isEmpty() ? Url.Action("listar", "LancamentoRecebimento") : Model.urlRetorno)"><i class="fa fa-arrow-left"></i> Voltar</a></li>
+    </ol>
+}
+
+<div class="box box-primary">
+
+    <div class="box-header with-border">
+        <h3 class="box-title"><i class="far fa-money-bill"></i> Dados da Receita
+        </h3>
+    </div>
+
+    <div class="box-body">
+        <div class="col-sm-12 no-padding">
+
+            @Html.RenderFlash()
+
+            @using (Html.BeginForm("index", null, FormMethod.Post, new {role = "form", @class = "default no-margin"})) {
+                @Html.HiddenFor(x => x.TituloReceita.id)
+                @Html.HiddenFor(x => x.TituloReceita.idTipoReceita)
+                @Html.HiddenFor(x => x.flagTipoRepeticao)
+                @Html.HiddenFor(x => x.flagValorTotalParcelamento)
+
+                {
+                    Html.EnableClientValidation(false);
+                }
+
+                @Html.legendaRequired()<br/>
+
+                @Html.ValidationSummary(false)
+
+                <div class="form-horizontal">
+                    <div class="row">
+                        <div class="col-md-6">
+                            
+                            <h4 class="separator-form-icon"><i class="far fa-edit"></i> Dados da receita</h4>
+                            
+                            <div class="row">
+                                
+                                <div class="col-md-8">
+                                    @Html.labelRequired("Titulo")
+                                    @Html.TextBoxFor(m => m.TituloReceita.descricao, new {@class = "form-control input-sm"})
+                                    @Html.ValidationMessageFor(m => m.TituloReceita.descricao)
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label>Dt. Competência</label>
+                                    @Html.TextBoxFor(m => m.TituloReceita.dtCompetencia, new {@class = "form-control input-sm input-datepicker", alt = "date", id = "dtCompetencia"})
+                                    @Html.ValidationMessageFor(m => m.TituloReceita.dtCompetencia)
+                                </div>
+
+                                <div class="col-md-12">
+                                    <label>Observações</label>
+                                    @Html.TextAreaFor(m => m.TituloReceita.observacao, new {@class = "form-control input-sm", rows = "4"})
+                                    @Html.ValidationMessageFor(m => m.TituloReceita.observacao)
+                                </div>
+                                
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-6">
+                            
+                            <h4 class="separator-form-icon"><i class="far fa-edit"></i> Classificação da conta</h4>
+                            <div class="row">
+
+                                <div class="col-md-6">
+                                    @Html.Label("Centro de Custo")
+                                    @Html.DropDownListFor(m => m.TituloReceita.idCentroCusto, CentroCustoHelper.getInstance.selectList(Model.TituloReceita.idCentroCusto), "...", new {id = "idCentroCusto", @class = "form-control input-sm idCentroCusto"})
+                                    @Html.ValidationMessageFor(m => m.TituloReceita.idCentroCusto)
+                                </div>
+
+                                <div class="col-md-6">
+                                    @Html.Label("Macro Conta")
+                                    @Html.DropDownListFor(m => m.TituloReceita.idMacroConta, Enumerable.Empty<SelectListItem>(), "Selecione o Centro de Custo", new {id = "idMacroConta", @class = "form-control input-sm idMacroConta"})
+                                    @Html.ValidationMessageFor(m => m.TituloReceita.idMacroConta)
+                                </div>
+
+                                <div class="col-md-6">
+                                    @Html.Label("Sub Conta")
+                                    @Html.DropDownListFor(m => m.TituloReceita.idCategoria, CategoriaTituloHelper.getInstance.selectList(Model.TituloReceita.idCategoria, 0), "...", new {@class = "form-control input-sm idSubConta"})
+                                    @Html.ValidationMessageFor(m => m.TituloReceita.idCategoria)
+                                </div>
+
+                                <div class="col-md-6">
+                                    @Html.Label("Conta Bancária")
+                                    @Html.DropDownListFor(m => m.TituloReceita.idContaBancaria, ContaBancariaHelper.getInstance.selectList(Model.TituloReceita.idContaBancaria, false), "...", new {@class = "form-control input-sm"})
+                                    @Html.ValidationMessageFor(m => m.TituloReceita.idContaBancaria)
+                                </div>
+                                <div class="clearfix"></div>
+                                <h4 class="separator-form-icon margin-left-15"><i class="far fa-edit"></i> Meios de Pagamento Permitidos</h4>
+
+                                <div class="col-md-6">
+                                    @Html.Label("Cartão de Crédito")
+                                    @Html.DropDownListFor(m => m.TituloReceita.flagCartaoCreditoPermitido, ComboHelper.selectListTrueFalse(Model.TituloReceita.flagCartaoCreditoPermitido), "...", new {@class = "form-control input-sm"})
+                                    @Html.ValidationMessageFor(m => m.TituloReceita.flagCartaoCreditoPermitido)
+                                    @Html.instrucao("Precisa estar configurado")
+                                </div>
+
+                                <div class="col-md-6">
+                                    @Html.Label("Boleto Bancário")
+                                    @Html.DropDownListFor(m => m.TituloReceita.flagBoletoBancarioPermitido, ComboHelper.selectListTrueFalse(Model.TituloReceita.flagBoletoBancarioPermitido), "...", new {@class = "form-control input-sm"})
+                                    @Html.ValidationMessageFor(m => m.TituloReceita.flagBoletoBancarioPermitido)
+                                    @Html.instrucao("Precisa estar configurado")
+                                </div>
+
+                                <div class="col-md-6">
+                                    @Html.Label("Depósito Bancário")
+                                    @Html.DropDownListFor(m => m.TituloReceita.flagDepositoPermitido, ComboHelper.selectListTrueFalse(Model.TituloReceita.flagDepositoPermitido), "...", new {@class = "form-control input-sm"})
+                                    @Html.ValidationMessageFor(m => m.TituloReceita.flagDepositoPermitido)
+                                    @Html.instrucao("Precisa estar configurado")
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                        
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h4 class="separator-form-icon"><i class="far fa-edit"></i> Devedor</h4>
+                            <div class="row">
+
+                                <div class="col-sm-12">
+                                    @Html.DropDownListFor(m => m.idReferenciaPessoa, DevedorHelper.getInstance.selectList(Model.idReferenciaPessoa), "...", new {@class = "form-control input-sm idDevedor"})
+                                    @Html.ValidationMessageFor(m => m.idReferenciaPessoa)
+                                </div>
+
+                                <div class="col-md-6 no-display">
+                                    @Html.Label("Documento")
+                                    @Html.TextBox("nroDocumentoDevedor", "", new {@class = "form-control input-sm nroDocumentoDevedor", disabled = "disabled", alt = "cpf"})
+                                </div>
+
+                                <div class="col-md-6 no-display">
+                                    @Html.Label("N° Telefone")
+                                    @Html.TextBox("nroTelefoneDevedor", "", new {@class = "form-control input-sm nroTelefoneDevedor", disabled = "disabled", alt = "phone"})
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="clearfix hidden-md hidden-lg"></div>
+
+                        <div class="col-md-6">
+                            <h4 class="separator-form-icon"><i class="far fa-edit"></i> Documentos</h4>
+                            <div class="row">
+
+                                @*<div class="col-md-6">
+                                    @Html.Label("Nro. Nota Fiscal")
+                                    @Html.TextBoxFor(m => m.TituloReceita.nroNotaFiscal, new {@class = "form-control input-sm"})
+                                    @Html.ValidationMessageFor(m => m.TituloReceita.nroNotaFiscal)
+                                </div>*@
+
+                                <div class="col-md-6">
+                                    @Html.Label("Nro. Documento")
+                                    @Html.TextBoxFor(m => m.TituloReceita.nroDocumento, new {@class = "form-control input-sm"})
+                                    @Html.ValidationMessageFor(m => m.TituloReceita.nroDocumento)
+                                </div>
+
+                                <div class="col-md-6">
+                                    @Html.Label("Nro. Contrato")
+                                    @Html.TextBoxFor(m => m.TituloReceita.nroContrato, new {@class = "form-control input-sm"})
+                                    @Html.ValidationMessageFor(m => m.TituloReceita.nroContrato)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h4 class="separator-form-icon"><i class="far fa-edit"></i> Repetição</h4>
+
+                            <div class="row">
+                                <div class="btn-group col-xs-12 col-md-6">
+                                    <button type="button" class="btn btn-default btn-repeticao btn-repeticao-nenhuma col-xs-6" onclick="ReceitaCadastro.changeBtnRepeticao(this)" value="@TipoRepeticaoConst.NENHUMA">Nenhuma</button>
+                                    <button type="button" class="btn btn-default btn-repeticao btn-repeticao-parcelamento col-xs-6" onclick="ReceitaCadastro.changeBtnRepeticao(this)" value="@TipoRepeticaoConst.PARCELAMENTO">Parcelamento</button>
+                                    @*<button type="button" class="btn btn-repeticao btn-default col-md-4" onclick="DespesaCadastro.repeticaoRecorrente(this)" value="@TipoRepeticaoConst.RECORRENTE">Recorrente</button>*@
+                                </div>
+                            </div>
+
+                            <div class="clearfix"></div>
+
+                            <div id="boxDadosPagamento">
+                                @if (Model.flagTipoRepeticao == TipoRepeticaoConst.NENHUMA) {
+                                    {
+                                        Html.RenderPartial("partial-dados-pagamento", Model);
+                                    }
+                                }
+
+                                @if (Model.flagTipoRepeticao == TipoRepeticaoConst.PARCELAMENTO) {
+                                    {
+                                        Html.RenderPartial("partial-dados-pagamento-parcelado", Model);
+                                    }
+                                }
+                            </div>
+                        </div>
+                        
+                    </div>    
+
+                </div>
+                <div class="clearfix"></div><br/><br/>
+                <div class="col-md-12">
+                    <div class="text-right">
+                        @Html.exibirBotoesFormulario(Url.Action("listar", "LancamentoRecebimento"), "N")
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="clearfix"></div>
+    </div>
+
+</div>
+
+
+@*
+
+    <div class="col-md-3 no-display boxRepeticao boxValor">
+        <label class="width-100p">Valor</label>
+        @Html.TextBoxFor(m => m.TituloReceita.valorTotal, new { @class = "form-control input-sm", alt = "decimal", id = "valorTotal" })
+        @Html.ValidationMessageFor(m => m.TituloReceita.valorTotal)
+    </div>
+
+    <div class="col-md-3 no-display boxRepeticao boxValorParcela">
+        <label class="width-100p">Valor da Parcela <i class="fa fa-usd fs-12 pull-right margin-bottom-5" data-toggle="tooltip" title="Clique para informar o valor total da eeceita para o sistema calcular cada parcela" onclick="ReceitaCadastro.changeInputAmountFull()"></i></label>
+        @Html.TextBoxFor(m => m.valorParcelas, new { @class = "form-control input-sm", alt = "decimal", id = "valorParcelas" })
+        @Html.ValidationMessageFor(m => m.valorParcelas)
+    </div>
+
+    <div class="col-md-4 no-display boxRepeticao boxDtVencimento">
+        @Html.Label("Dt. Vencimento")
+        @Html.TextBoxFor(m => m.TituloReceita.dtVencimento, new { @class = "form-control input-sm input-datepicker", alt = "date", id = "dtVencimento" })
+        @Html.ValidationMessageFor(m => m.TituloReceita.dtVencimento)
+    </div>
+
+    <div class="col-md-5 no-display boxRepeticao boxQntdParcelas">
+        <div class="no-padding col-xs-10">
+            @Html.Label("Qntd. Parcelas")
+            @Html.TextBoxFor(m => m.TituloReceita.qtdeRepeticao, new { @class = "form-control input-sm", type = "number", id = "qtdeRepeticao", onfocusout = "ReceitaCadastro.gerarParcelas()" })
+            @Html.ValidationMessageFor(m => m.TituloReceita.qtdeRepeticao)
+        </div>
+
+        <div class="col-xs-2 margin-top-30 padding-left-10 text-right">
+            <i data-toggle="tooltip" title="Gerar as parcelas" class="fa fa-clone fs-16" onclick="ReceitaCadastro.gerarParcelas()"></i>
+        </div>
+    </div>
+
+    <div class="clearfix"></div><br /><br />
+
+    <div id="boxLoadParcelas">
+        @if (Model.TituloReceita.listaTituloReceitaPagamento.Count() > 1) {
+            Html.RenderPartial("partial-gerar-receitas-pagamento-form", Model);
+        }
+    </div>*@

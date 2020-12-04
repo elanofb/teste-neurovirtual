@@ -1,0 +1,205 @@
+﻿@model PagedList.IPagedList<Atendimento>
+
+@using System.Web.Mvc.Html
+@using PagedList.Mvc
+@using DAL.Atendimentos
+@using DAL.Permissao.Security.Extensions
+@using WEB.Areas.Atendimentos.Helpers
+@using WEB.Areas.Permissao.Helpers
+
+@{
+    ViewBag.titlePage = "Saques Atendidos/Realizados";
+}
+
+@section scripts {
+    @Html.includeDatePicker()
+    
+    <script src="@UtilConfig.linkResourses()Areas/Atendimentos/js/atendimento.js"></script>
+}
+
+@section styles {
+    <link href="@UtilConfig.linkResourses()css/associatec/list-custom.css" rel="stylesheet" />
+}
+
+<div class="box box-primary">
+
+    @Html.headerBox("Filtros de Busca", "fa fa-filter")
+    
+    <div class="box-body">
+    
+        @using (Html.BeginForm(null, null, FormMethod.Get, new { @class = "filtros" })) {
+            
+            <div class="form-group col-md-3 col-sm-6 col-xs-12">
+                <label>Usuário</label>
+                @Html.DropDownList("idUsuario", UsuarioSistemaHelper.getInstance.selectListPorUnidade(UtilRequest.getInt32("idUsuario"), 0, User.idUnidade()), "...", new { @class = "form-control input-sm select2" })
+            </div>
+            
+            @*<div class="form-group col-md-3 col-sm-6 col-xs-12">
+                <label>Status</label>
+                @Html.DropDownList("idStatus", AtendimentoHelper.getInstance.selectListStatus(UtilRequest.getInt32("idStatus")), "...", new { @class = "form-control input-sm" })
+            </div>*@
+            
+            <div class="form-group col-md-3 col-sm-6 col-xs-12">
+                <label>Data de Solicitação</label>
+                
+                <div class="input-group">
+                    @Html.TextBox("dtAberturaInicio", UtilRequest.getString("dtAberturaInicio"), new { @class = "form-control input-sm input-datepicker", alt = "date" })
+                    <span class="input-group-addon input-group-sm">-</span>
+                    @Html.TextBox("dtAberturaFim", UtilRequest.getString("dtAberturaFim"), new { @class = "form-control input-sm input-datepicker", alt = "date" })
+                </div>
+            </div>
+            
+            <div class="form-group col-md-3 col-sm-6 col-xs-12">
+                <label>Buscar</label>
+                @Html.buttonSearch(UtilRequest.getString("valorBusca"))
+            </div>
+            <div class="clearfix"></div>
+
+        }
+    </div>
+</div>
+
+<div class="box box-primary">
+    
+    @Html.headerBox($"{ Model.TotalItemCount } Saques Atendidos", "fa fa-headphones", false, "")
+    
+    <div class="box-body">
+        
+        @if (!Model.Any()){
+            <div class="alert alert-info">
+                Nenhuma solicitação encontrado.
+            </div>
+        }
+
+        <div class="row">
+        
+            @{ var cont = 1; }
+            
+            @foreach (var Item in Model){
+
+                <div class="col-md-4 col-sm-6">
+
+                    <div class="box-info-item">
+
+                        <div class="row">
+
+                            <div class="col-xs-12 margin-bottom-5">
+                                
+                                @if (Item.idStatusAtendimento == AtendimentoStatusConst.FINALIZADO){
+                                    
+                                    var htmlTitle = $"Atendido por <br />" +
+                                                    $"Usuário: {Item.UltimoUsuarioAtendimento?.nome} <br />" +
+                                                    $"Finalização: {Item.dtFinalizacaoAtendimento.exibirData(true)}";
+                                    
+                                    <span data-toggle="tooltip" data-html="true" title="@htmlTitle">
+                        
+                                        <span class="titulo">
+                                            <i class="fa fa-hashtag"></i> @Item.id
+                                        </span> <small>(<i class="fa fa-check"></i> finalizado)</small>
+
+                                    </span>
+
+                                }
+                                else{
+
+                                    <span class="titulo">
+                                        <i class="fa fa-hashtag"></i> @Item.id
+                                    </span>
+
+                                }
+
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+
+                            <div class="col-xs-9">
+
+                                <div class="fs-11">
+                                    
+                                    <i class="fa fa-user"></i> @Item.nome <strong>(Conta #@(Item.Associado?.nroAssociado))</strong> <br/>                                
+                                
+                                    <strong><i class="fa fa-tag"></i> Tipo:</strong> @(Item.AtendimentoTipo?.descricao ?? "-")<br/>
+
+                                    <strong><i class="fa fa-tag"></i> Área:</strong> @(Item.AtendimentoArea?.descricao ?? "-")<br/>
+
+                                    @if (Item.valor > 0){
+                                        <strong><i class="fa fa-tag"></i> BTK's:</strong>
+                                        @(Item.valor.toDecimal().ToString("F2"))
+                                    }
+
+                                    <br/>
+                                    
+                                    <strong><i class="fa fa-calendar"></i> Último atendimento:</strong> @Item.dtUltimoAtendimento.exibirData(true)<br>
+                                        
+                                    <strong><i class="fa fa-calendar"></i> Última interação:</strong> @Item.dtUltimaInteracao.exibirData(true)<br>
+                                        
+                                    <i class="fa fa-calendar"></i> Cadastro em @Item.dtCadastro.exibirData(true)<br>
+
+                                </div>
+
+                            </div>
+
+                            <div class="col-xs-3">
+
+                                <div class="text-right">
+
+                                    @exibirBotaoAcao(Item)
+
+                                </div>
+
+                            </div>
+                            <div class="clearfix"></div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                if (cont % 3 == 0){
+                    <div class="clearfix visible-lg visible-md"></div>
+                }
+
+                if (cont % 2 == 0){
+                    <div class="clearfix visible-sm"></div>
+                }
+
+                {
+                    cont++;
+                }
+
+            }
+
+        </div>
+        
+        @(Html.paginarRegistros(Model, Html.PagedListPager(Model, nroPagina => UtilRequest.linkPaginacao(nroPagina, "index"), PagedListRenderOptions.OnlyShowFivePagesAtATime)))
+
+    </div>
+</div>
+
+@helper exibirBotaoAcao(Atendimento OAtendimento) {
+    
+    <div class="dropdown">
+        
+        <span class="dropdown-toggle box-acoes" type="button" data-toggle="dropdown">
+            <a href="javascript:;">
+                <i class="fa fa-cog no-margin"></i> <span class="caret text-black"></span>
+            </a>
+        </span>
+        
+        <ul class="dropdown-menu">
+            
+            <li>
+                <a href="@Url.Action("detalhe", "SaqueAtendimentoDetalhe", new {OAtendimento.id})">
+                    <i class="fa fa-search"></i> Ver Detalhes
+                </a>
+            </li>                        
+            
+        </ul>
+        
+    </div>
+
+    
+}

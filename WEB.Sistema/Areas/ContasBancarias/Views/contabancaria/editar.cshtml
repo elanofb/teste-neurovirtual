@@ -1,0 +1,251 @@
+﻿@model WEB.Areas.ContasBancarias.ViewModels.ContaBancariaForm
+@using WEB.Areas.Bancos.Helpers
+@using WEB.Areas.ContasBancarias.Helpers
+@using WEB.Areas.Localizacao.Helpers
+@using WEB.Helpers
+
+@{
+    Layout = "~/views/shared/associatec/masterpage-edit.cshtml";
+    ViewBag.titlePage = "Contas Bancárias";
+    ViewBag.subTitlePage = "Cadastro e Edição";
+}
+
+@section breadcrump{
+    <ol class="breadcrumb">
+        <li><a href="@Url.Action("listar")" class="active fs-14"><i class="fa fa-arrow-left"></i> Voltar</a></li>
+    </ol>
+}
+
+@section scripts {
+    <script src="@UtilConfig.linkResourses("Areas/Localizacao/js/localizacao.js")"></script>    
+}
+
+@section styles {
+    <link href="@UtilConfig.linkResourses("css/associatec/list-custom.css")" rel="stylesheet" />
+}
+
+@section navTabs{
+    <ul class="nav nav-tabs">
+        
+        <li class="active"><a href="#tab-1" data-toggle="tab">Principal</a></li>
+        
+        @if(Model.ContaBancaria.id > 0) {
+            <li><a href="#tab-movimentacoes" data-toggle="tab">Transferências</a></li>
+        }
+
+    </ul>
+}
+
+@section tabContent{
+    <div id="tab-1" class="tab-pane active">
+        @{Html.RenderPartial("partial-info-cadastro");}
+
+        @using(Html.BeginForm("editar",null,FormMethod.Post,new { role = "form", @class = "default" })) {
+            
+            @Html.legendaRequired()<br />
+            
+            @Html.HiddenFor(m => m.ContaBancaria.id)
+
+            @Html.ValidationSummary(true,"Confira os erros do formulário.")            
+            
+            <h4 class="separator-form-icon"><i class="far fa-edit"></i> Dados da Conta</h4>
+            <div class="row">
+                <div class="col-md-3 col-lg-2">
+                    <label>Status</label>
+                    @Html.DropDownListFor(m => m.ContaBancaria.ativo, ComboHelper.selectListStatus(Model.ContaBancaria.ativo), new {@class = "form-control input-sm"})
+                    @Html.ValidationMessageFor(m => m.ContaBancaria.ativo)
+                </div>
+                
+                <div class="col-md-5 col-lg-4">
+                    @Html.labelRequired("Titulo")
+                    @Html.TextBoxFor(m => m.ContaBancaria.descricao, new {@class = "form-control input-sm", maxlength = "100"})
+                    @Html.ValidationMessageFor(m => m.ContaBancaria.descricao)
+                    @Html.instrucao("Utilize um título onde você consiga identificar a conta facilmente.")
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-3 col-lg-2">
+                    @Html.Label("Tipo Conta")
+                    @Html.DropDownListFor(m => m.ContaBancaria.tipoConta, TipoContaHelper.selectList(Model.ContaBancaria.tipoConta), "...", new {@class = "form-control input-sm"})
+                    @Html.ValidationMessageFor(m => m.ContaBancaria.tipoConta)
+                </div>
+            
+                <div class="col-md-6 col-lg-4">
+                    @Html.labelRequired("Banco")
+                    @Html.DropDownListFor(m => m.ContaBancaria.idBanco, BancoHelper.getInstance.selectList(Model.ContaBancaria.idBanco), "...", new {@class = "form-control input-sm"})
+                    @Html.ValidationMessageFor(m => m.ContaBancaria.idBanco)
+                </div>
+                <div class="col-md-2">
+                    <label>Operação</label>
+                    @Html.TextBoxFor(m => m.ContaBancaria.operacaoConta, new {@class = "form-control input-sm", maxlength = "5", alt = ""})
+                    @Html.ValidationMessageFor(m => m.ContaBancaria.operacaoConta)
+                </div>
+
+                @*<div class="col-md-2">
+                    @Html.Label("Receber Depósito ?")
+                    @Html.DropDownListFor(m => m.ContaBancaria.flagDeposito, ComboHelper.selectListTrueFalse(Model.ContaBancaria.flagDeposito), new { @class = "form-control input-sm" })
+                    @Html.ValidationMessageFor(m => m.ContaBancaria.flagDeposito)
+                </div>*@
+                <div class="clearfix"></div>
+
+                <div class="col-md-3 col-lg-2 ">
+                    @Html.Label("Agência")
+                    @Html.TextBoxFor(m => m.ContaBancaria.nroAgencia, new {@class = "form-control input-sm", maxlength = "100", alt = ""})
+                    @Html.ValidationMessageFor(m => m.ContaBancaria.nroAgencia)
+                </div>
+
+                <div class="col-md-2">
+                    <label>Dígito Ag.</label>
+                    @Html.TextBoxFor(m => m.ContaBancaria.digitoAgencia, new {@class = "form-control input-sm", maxlength = "1", alt = ""})
+                    @Html.ValidationMessageFor(m => m.ContaBancaria.digitoAgencia)
+                </div>
+
+                <div class="col-md-3 col-lg-2">
+                    @Html.Label("Número Conta")
+                    @Html.TextBoxFor(m => m.ContaBancaria.nroConta, new {@class = "form-control input-sm", maxlength = "10", alt = ""})
+                    @Html.ValidationMessageFor(m => m.ContaBancaria.nroConta)
+                </div>
+
+                <div class="col-md-2">
+                    <label>Dígito Conta</label>
+                    @Html.TextBoxFor(m => m.ContaBancaria.digitoConta, new {@class = "form-control input-sm", maxlength = "1", alt = ""})
+                    @Html.ValidationMessageFor(m => m.ContaBancaria.digitoConta)
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="row">
+                        <div class="col-sm-4 col-lg-2">
+                            @Html.labelRequired("Saldo Inicial")
+                            @Html.TextBoxFor(m => m.ContaBancaria.saldoInicial, new {@class = "form-control input-sm", alt = "signed-decimal"})
+                            @Html.ValidationMessageFor(m => m.ContaBancaria.saldoInicial)
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            @Html.instrucao("Esse valor será considerado para efeitos de movimentação e saldo atual da conta")
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            
+            <div class="row margin-top-15 margin-bottom-15">
+                <div class="col-sm-6">
+                    <h4 class="separator-form-icon"><i class="far fa-edit"></i> Dados do Titular</h4>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            @Html.Label("Documento do Titular")
+                            @Html.TextBoxFor(m => m.ContaBancaria.documentoTitular, new {@class = "form-control input-sm", id = "documentoTitular"})
+                            @Html.ValidationMessageFor(m => m.ContaBancaria.documentoTitular)
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-9">
+                            @Html.Label("Nome Titular")
+                            @Html.TextBoxFor(m => m.ContaBancaria.nomeTitular, new {@class = "form-control input-sm", maxlength = "100", alt = ""})
+                            @Html.ValidationMessageFor(m => m.ContaBancaria.nomeTitular)
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <h4 class="separator-form-icon"><i class="far fa-edit"></i> Dados para geração remessa</h4>
+                    <div class="row">
+                        <div class="col-sm-6 col-lg-4">
+                            @Html.Label("Carteira")
+                            @Html.TextBoxFor(m => m.ContaBancaria.codigoCarteira, new {@class = "form-control input-sm"})
+                            @Html.ValidationMessageFor(m => m.ContaBancaria.codigoCarteira)
+                        </div>
+                        <div class="col-sm-6 col-lg-4">
+                            @Html.Label("Qtde Dígitos nosso número")
+                            @Html.TextBoxFor(m => m.ContaBancaria.qtdeDigitosNossoNumero, new {@class = "form-control input-sm", maxlength = "2", type = "number"})
+                            @Html.ValidationMessageFor(m => m.ContaBancaria.qtdeDigitosNossoNumero)
+                        </div>
+                        <div class="col-sm-6 col-lg-4">
+                            @Html.Label("Código Cedente")
+                            @Html.TextBoxFor(m => m.ContaBancaria.codigoCedente, new {@class = "form-control input-sm", maxlength = "20", type = "text"})
+                            @Html.ValidationMessageFor(m => m.ContaBancaria.qtdeDigitosNossoNumero)
+                        </div>
+                        <div class="col-sm-6 col-lg-4">
+                            @Html.Label("Código do Convênio")
+                            @Html.TextBoxFor(m => m.ContaBancaria.codigoConvenio, new {@class = "form-control input-sm", maxlength = "20", type = "text"})
+                            @Html.ValidationMessageFor(m => m.ContaBancaria.codigoConvenio)
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+
+            <h4 class="separator-form-icon"><i class="far fa-map-marker"></i> Dados de Endereço</h4>
+            <div class="row">
+                <div class="col-md-2">
+                    @Html.Label("CEP")
+                    <div class="input-group">
+                        @Html.TextBoxFor(m => m.ContaBancaria.cep, new {@class = "form-control input-sm", alt = "cep", rel = "cepContaBancaria", onkeyup = "Localizacao.carregarEndereco('ContaBancaria');"})
+                        <span class="input-group-addon">
+                            <a href="javascript:void(Localizacao.carregarEndereco('ContaBancaria'));"><i id="buscarContaBancaria" class="fa fa-search"></i></a>
+                        </span>
+                    </div>
+                    @Html.ValidationMessageFor(m => m.ContaBancaria.cep)
+                </div>
+
+                <div class="col-md-5">
+                    @Html.Label("Endereço")
+                    @Html.TextBoxFor(m => m.ContaBancaria.logradouro, new {@class = "form-control input-sm", maxlength = "100", rel = "logradouroContaBancaria"})
+                    @Html.ValidationMessageFor(m => m.ContaBancaria.logradouro)
+                </div>
+                <div class="col-md-2">
+                    <label>Número</label>
+                    @Html.TextBoxFor(m => m.ContaBancaria.numero, new {@class = "form-control input-sm", maxlength = "20"})
+                    @Html.ValidationMessageFor(m => m.ContaBancaria.numero)
+                </div>
+                <div class="clearfix"></div>
+
+                <div class="col-md-2">
+                    <label>Complemento</label>
+                    @Html.TextBoxFor(m => m.ContaBancaria.complemento, new {@class = "form-control input-sm", maxlength = "50"})
+                    @Html.ValidationMessageFor(m => m.ContaBancaria.complemento)
+                </div>
+                <div class="col-md-4">
+                    @Html.Label("Bairro")
+                    @Html.TextBoxFor(m => m.ContaBancaria.bairro, new {@class = "form-control input-sm", maxlength = "80", rel = "bairroContaBancaria"})
+                    @Html.ValidationMessageFor(m => m.ContaBancaria.bairro)
+                </div>
+                <div class="col-md-5">
+                    @Html.Label("UF/Cidade")
+                    <div class="form-inline enderecoComercialBrasil">
+                        @Html.DropDownListFor(m => m.ContaBancaria.idEstado, EstadoHelper.selectList(Model.ContaBancaria.idEstado), "...", new {@class = "form-control input-sm width-60", id = "idEstadoContaBancaria", rel = "idEstadoContaBancaria", onchange = "Localizacao.carregarCidades('ContaBancaria', '');"})
+                        @Html.DropDownListFor(m => m.ContaBancaria.idCidade, CidadeHelper.selectList(Model.ContaBancaria.idEstado, Model.ContaBancaria.idCidade), "...", new Dictionary<string, Object> {{"class", "form-control input-sm no-padding width-200"}, {"rel", "idCidadeContaBancaria"}, {"data-toogle", "select2"}})
+                        <div class="clearfix"></div>
+                        @Html.ValidationMessageFor(m => m.ContaBancaria.idEstado)
+                        @Html.ValidationMessageFor(m => m.ContaBancaria.idCidade)
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+
+                <div class="clearfix"></div><br/>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="text-right">
+                        @Html.exibirBotoesFormulario(Url.Action("listar"), "N", Url.Action("editar", new { id = 0}))
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+    
+    @if(Model.ContaBancaria.id > 0) {
+
+        <div id="tab-movimentacoes" class="tab-pane active">
+            
+            <div class="content-load carregando" data-url="@Url.Action("partial-lista-movimentacoes", "ContaMovimentacao", new { Area = "ContasBancarias", idContaBancaria = Model.ContaBancaria.id })"></div>        
+
+        </div>
+
+    }
+
+    <div class="clearfix"></div>
+}
+

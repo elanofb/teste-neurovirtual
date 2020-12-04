@@ -1,0 +1,132 @@
+﻿@model WEB.Areas.Financeiro.ViewModels.DespesaForm
+@using DAL.Entities
+@using WEB.Areas.Arquivos.Helpers
+
+@{
+    ViewBag.titlePage = "Lançamento a pagar Nº " + Model.TituloDespesa.id;
+}
+
+@section styles{
+
+    @Html.includeCSSModuloArquivos()
+    @Html.includeToastCSS()
+
+    <link href="@UtilConfig.linkResourses("Areas/Arquivos/js/plugins/jqueryFancybox/jquery.fancybox.css")" rel="stylesheet"/>
+    <link href="@UtilConfig.linkResourses("areas/financeiro/css/financeiro.css")" rel="stylesheet" />
+    <link href="@UtilConfig.linkResourses("css/associatec/list-custom.css")" rel="stylesheet" />
+}
+
+@section scripts {
+
+    @Html.includeLocalizacaoJS()
+    @Html.includeDatePicker()
+    @Html.includeJqueryLoading()
+    @Html.includeBootstrapEditable()
+    
+    @Html.includeJSModuloArquivos()
+    @Html.includeBootstrapMultiselect()
+    
+    @Html.includeToastJS()
+
+    <script type="text/javascript" src="@UtilConfig.linkResourses("Areas/Arquivos/js/plugins/jqueryFancybox/jquery.fancybox.js")"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses("Areas/Arquivos/js/arquivo-documento.js")"></script>
+
+    <script type="text/javascript" src="@UtilConfig.linkResourses("areas/financeiro/js/combo-centro-custo.js?v=1")"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses("areas/financeiro/js/combo-macro-conta.js?v=1")"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses("areas/financeiro/js/combo-sub-conta.js?v=1")"></script>
+
+    <script type="text/javascript" src="@UtilConfig.linkResourses("areas/financeiro/js/despesa-detalhe.js")"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses("areas/financeiro/js/despesa-detalhe-pagamento.js")"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses("areas/financeiro/js/despesa-registrar-pagamento.js")"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses("areas/financeiro/js/despesa-pagamento-clone.js")"></script>
+    
+    <script type="text/javascript" src="@UtilConfig.linkResourses("Areas/FinanceiroLancamentos/js/credor.js")"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses("Areas/FinanceiroLancamentos/js/despesa-clone.js")"></script>
+}
+
+@section breadcrump {
+    <ol class="breadcrumb">
+        <li><a class="active fs-14" href="@(Model.urlRetorno.isEmpty() ? Url.Action("listar", "LancamentoDespesas", new {area = "FinanceiroLancamentos"}) : Model.urlRetorno)"><i class="fa fa-arrow-left"></i> Voltar</a></li>
+    </ol>
+}
+
+<div class="box box-primary">
+
+    <div class="box-header with-border">
+
+        <h3 class="box-title @(Model.TituloDespesa.dtExclusao.HasValue ? "text-red" : "")">
+            <i class="far fa-money-bill"></i> Despesa -
+            <a href="#" class="info-editavel editable editable-click" data-type="text" data-source="#" data-pk="@Model.TituloDespesa.id" data-name="descricao" data-value="@Model.TituloDespesa.descricao" data-title="Descrição">
+                @Model.TituloDespesa.descricao
+            </a>             
+            
+            @(Model.TituloDespesa.dtExclusao.HasValue ? "(REMOVIDO)" : "")
+        </h3>
+
+        <div class="box-tools pull-right">
+            
+            <div class="btn-group">
+                
+                <a href="javascript:;" class="dropdown-toggle text-black" data-toggle="dropdown" aria-expanded="false">
+                    <i class="far fa-cog"></i>
+                </a>
+                
+                <ul class="dropdown-menu" role="menu">
+
+                    <li>
+                        <a href="@Url.Action("index", "DespesaCadastro", new { area = "FinanceiroLancamentos", Model.urlRetorno })" class="box-acoes">
+                            <i class="far fa-plus-circle"></i> Nova Despesa
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="javascript:;" class="box-acoes" onclick="DespesaClone.abrirModal('@Url.Action("modal-clonar-despesa", "DespesaClone", new { Area = "FinanceiroLancamentos", id = Model.TituloDespesa.id })');">
+                            <i class="far fa-copy"></i> Replicar Título
+                        </a>
+                    </li>
+                    
+                    <li><a href="javascript:;" class="box-acoes" onclick="DefaultSistema.showModal('@Url.Action("modal-log-despesa", "DespesaDetalhe", new {id = Model.TituloDespesa.id})');"><i class="far fa-file fs-14"></i> Log de Alterações</a></li>
+
+                    <li><a href="javascript:;" class="box-acoes" onclick="ArquivoDocumento.showModal('@Url.Action("partial-documento", "arquivo", new {area = "arquivos", id = 0, idReferencia = Model.TituloDespesa.id, entidade = EntityTypes.TITULODESPESA, flagView = Model.TituloDespesa.dtExclusao.HasValue})');"><i class="far fa-file-archive fs-14"></i> Documentos</a></li>
+                    
+                    @if (Model.TituloDespesa.dtExclusao == null && Model.TituloDespesa.dtQuitacao == null) {
+                        <li>
+                            <a href="javascript:void(0);" class="box-acoes" data-url="@Url.Action("modal-clonar-despesa-pagamento", "DespesaPagamentoClone", new {idTituloDespesa = Model.TituloDespesa.id})" onclick="DespesaPagamentoClone.modalClonarPagamento(this);">
+                                <i class="far fa-clone fs-14"></i> Adicionar Pagamento
+                            </a>
+                        </li>
+                    }
+
+                    @if (!Model.TituloDespesa.dtExclusao.HasValue) {
+
+                        <li role="presentation" class="divider"></li>
+                        
+                        <li><a href="javascript:;" class="box-acoes" onclick="DefaultSistema.showModal('@Url.Action("modal-excluir-despesa", "DespesaDetalheOperacao", new {area = "Financeiro", id = Model.TituloDespesa.id})')"><i class="far fa-trash-alt fs-14"></i> Excluir Despesa</a></li>                                                                                                                                                                                                        
+                    }
+                    
+                </ul>
+                
+            </div>
+            
+        </div>
+        
+    </div>
+
+    <div class="box-body">
+        <div class="carregando" id="BoxLoadDadosEditar" data-url="@Url.Action("partial-info-titulo", "DespesaDetalhe", new {id = Model.TituloDespesa.id})"></div>
+    </div>
+</div>
+
+@if (Model.TituloDespesa.dtExclusao == null) {
+    <div class="row">
+        <div class="col-lg-12">
+            <div id="BoxLoadListPagamentos" class="box box-primary carregando" data-url="@Url.Action("partial-lista-pagamentos", "DespesaDetalhePagamento", new {area = "Financeiro", idTituloDespesa = Model.TituloDespesa.id})"></div>
+        </div>
+    </div>    
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div id="BoxLoadListPagamentosExcluidos" class="content-load carregando" data-url="@Url.Action("partial-lista-pagamentos-excluidos", "DespesaDetalhePagamento", new {area = "Financeiro", idTituloDespesa = Model.TituloDespesa.id})"></div>
+    </div>
+</div>

@@ -1,0 +1,85 @@
+﻿@model List<DAL.Pedidos.Pedido>
+@using DAL.Pedidos
+
+<tbody>
+    <tr>
+        <td colspan="3" class="no-padding">
+            <table width="100%" cellpadding="7" cellspacing="0">
+                <tbody>
+
+                    @foreach (var OPedido in Model) {
+
+                        <tr class="head">
+                            <td width="150" class="fs-20 text-center">
+                                <label class="barcode39">@string.Concat("*", OPedido.id, "*")</label>
+                            </td>
+
+                            <td width="300" class="fs-12">
+                                <strong>Pedido #@OPedido.id</strong><br />
+                                <span class="fs-10">@OPedido.StatusPedido.descricao</span>
+                            </td>
+
+                            <td class="fs-12">
+                                <strong>@OPedido.nomePessoa</strong><br />
+                                <span class="fs-10">@OPedido.getValorTotal().ToString("C")</span>
+                            </td>
+
+                            <td width="50" class="fs-10">
+                                @OPedido.dtCadastro.exibirData()
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                @if (OPedido.listaPedidoEntrega.Any()) {
+                                    var OPedidoEntrega = OPedido.listaPedidoEntrega.FirstOrDefault();
+
+                                    <span>@(OPedidoEntrega.logradouro), @(OPedidoEntrega.numero) @(OPedidoEntrega.complemento)</span>
+                                    <br />
+                                    <span>
+                                        @OPedidoEntrega.bairro - @(OPedidoEntrega.Cidade?.nome) / @(OPedidoEntrega.Cidade?.Estado?.sigla)
+                                    </span>
+                                    <br />
+                                    @OPedidoEntrega.cep
+                                    <br /><br />
+                                    <strong style="@(OPedidoEntrega.dtAgendamentoEntrega < DateTime.Now ? "color:red;" : "")">@OPedidoEntrega.dtAgendamentoEntrega.exibirData() @(OPedidoEntrega.dtAgendamentoEntrega < DateTime.Now ? "(ATRASADO)" : "")</strong>
+                                }
+                            </td>
+                            <td colspan="2">
+                                <table width="100%" class="produtos">
+                                    @if (OPedido.listaProdutos.Any()) {
+                                        <tr>
+                                            <th align="left">PRODUTO</th>
+                                            <th align="center">QTDE</th>
+                                        </tr>
+                                    }
+
+                                    @foreach (PedidoProduto OPedidoProduto in OPedido.listaProdutos) {
+
+                                        <tr>
+                                            <td width="300">
+                                                @OPedidoProduto.nomeProduto
+                                                @if (!OPedidoProduto.observacoes.isEmpty()) {
+                                                    <br />
+                                                    <span>*@OPedidoProduto.observacoes</span>
+                                                }
+                                            </td>
+
+                                            <td align="center" width="50">@OPedidoProduto.qtde.toInt()</td>
+                                        </tr>
+                                    }
+                                </table>
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" class="div">
+                                <hr />
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </td>
+    </tr>
+</tbody>

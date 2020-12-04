@@ -1,0 +1,33 @@
+﻿
+@using WEB.Areas.Associacoes.Helpers
+
+@{
+    Layout = null;
+}
+
+<div class="form-horizontal">
+    <div class="col-sm-6">
+        <div class="box box-default">
+            <div class="box-header with-border">
+                <h3 class="box-title">Vinculos de Organizações</h3>
+            </div>
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-sm-8">
+                        <label>Organização</label>
+                        @Html.DropDownList("idOrganizacaoVinculo", AssociacaoHelper.getInstance.selectList(0, false), "...", new Dictionary<string, object> { { "class", "form-control input-sm no-padding select2" }, { "data-toogle", "select2" }, { "style", "width:100%" } })
+                    </div>
+                    <div class="col-sm-4">
+                        <label>&nbsp; </label>
+                        <button type="button" name="enviar" class="btn btn-sm btn-primary margin-top-20 link-loading" data-idusuario="@UtilRequest.getInt32("idUsuario")" data-url="@Url.Action("vincular-organizacao", "UsuarioOrganizacao", new { area = "UsuariosOrganizacoes" })" onclick="UsuarioOrganizacao.vincularOrganizacao(this);"><i class="fa fa-plus"></i> Vincular </button>
+                    </div>
+                    <div class="clearfix"></div><br />
+
+                    <div id="boxOrganizacoesVinculadas">
+                        @{ Html.RenderAction("partial-lista-organizacoes-vinculadas", "UsuarioOrganizacao", new { area = "UsuariosOrganizacoes", id = UtilRequest.getInt32("idUsuario") }); }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

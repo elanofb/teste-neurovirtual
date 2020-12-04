@@ -1,0 +1,125 @@
+﻿@using DAL.Pedidos
+@using MvcFlashMessages
+@using WEB.Helpers
+@model WEB.Areas.Pedidos.ViewModels.PedidoMovimentacaoForm
+
+@{
+    ViewBag.modalTitle = "Movimentação de Pedidos";
+    ViewBag.modalWidthClass = "lg";
+
+    if (UtilRequest.getBool("IsPost") == true) {
+        Layout = null;
+    } else {
+        Layout = "~/views/shared/associatec/masterpage-modal.cshtml";
+    }
+
+}
+
+<div id="boxFormMovimentacaoPedidos">
+	
+	@Html.RenderFlash()
+
+	@using (Ajax.BeginForm("modal-selecionar-pedidos", null, new AjaxOptions{HttpMethod = "POST", UpdateTargetId = "boxFormMovimentacaoPedidos", InsertionMode = InsertionMode.Replace, OnSuccess = "PedidoMovimentacao.onSuccessForm"}, new{id = "formMovimentacaoPedidos", @class = "default"})){
+		
+		{ Html.EnableClientValidation(false); }
+		
+		@Html.Hidden("IsPost", true)
+		
+		@Html.HiddenFor(m => m.flagTodos)
+		
+		<div class="field" style="display: none">
+			@Html.EditorFor(m => m.idsPedidos)
+		</div>
+		
+		<div class="field" style="display: none">
+			@Html.EditorFor(m => m.idsPedidosSelecionados)
+		</div>
+		
+		if (Model.flagTodos != true){
+			 <div class="row">
+			
+				 <div class="form-group col-md-10">
+					 <label>Buscar pedidos</label>
+					 @Html.buttonSearch("", "campo-busca", "link-loading")
+				 </div>			
+
+			 </div>	 
+		}
+		
+		
+		<div class="row">		
+
+			<div class="col-md-12">
+				
+				<label id="qtdPedidosSelecionados">@Model.listaPedidos.Count pedido(s) selecionado(s)</label>
+				
+				<div id="boxPedidos">				
+																				
+					@foreach (var OPedido in Model.listaPedidos){
+						
+						<div class="box-info-item">
+
+							<div class="row">
+
+								<div class="col-md-6">
+									
+									<span class="titulo">
+										<i class="fa fa-user"></i> (@OPedido.id) @OPedido.Pessoa.nome
+									</span><br>
+									
+								</div>
+								
+								<div class="col-md-2">
+									
+									<span class="">
+										<i class="fa fa-calendar"></i> @OPedido.dtCadastro.exibirData()
+									</span><br>
+									
+								</div>
+																
+								<div class="col-md-3">
+									
+									<span class="">
+										<i class="fa fa-calendar"></i> @OPedido.StatusPedido.descricao
+									</span><br>
+									
+								</div>
+								
+								@if (Model.flagTodos != true) {
+									<div class="col-md-1">
+									
+										<span class="pointer" onclick="PedidoMovimentacao.removerPedidoLista('@OPedido.id')">
+											<i class="fa fa-trash"></i>
+										</span><br>
+									
+									</div>
+								}
+								
+							</div>
+
+						</div>
+
+					}
+					
+				</div>
+
+			</div>
+
+			<div class="clearfix"></div>
+
+		</div>
+
+	}
+</div>
+
+@section modalFooter{
+	<div class="text-right">
+		@if (UtilRequest.getBool("flagMontagem") != true) {
+			
+			<input type="button" value="Enviar para Montagem" class="btn btn-primary link-loading" onclick="PedidoMovimentacao.movimentarPedidos('@StatusPedidoConst.EM_MONTAGEM', 'Montagem')"/>
+			
+		}
+		
+		<input type="button" value="Enviar para Expedição" class="btn btn-success link-loading" onclick="PedidoMovimentacao.movimentarPedidos('@StatusPedidoConst.AGUARDANDO_EXPEDICAO', 'Expedição')"/>
+	</div>
+}

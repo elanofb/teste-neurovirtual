@@ -1,0 +1,72 @@
+﻿@model WEB.Areas.FinanceiroLancamentos.ViewModels.DespesaCadastroForm
+
+@{
+    int count = 0;
+    Layout = null;
+}
+
+<div class="col-md-12 boxParcelas">
+    <div class="box box-primary">
+        <div class="box-header with-border">
+            <h3 class="box-title"><i class="fa fa-clone"></i> Parcelas</h3>
+            <div class="pull-right">Total das Parcelas: <span class="valorTotalLabel">@Model.TituloDespesa.listaTituloDespesaPagamento.Sum(x => x.valorOriginal).ToString("C")</span></div>
+        </div>
+        <div class="box-body">
+            <div id="boxListaParcelamentos">
+                @foreach (var Item in Model.TituloDespesa.listaTituloDespesaPagamento) {
+                    <div class="col-md-12 no-padding">
+
+                        <div class="col-sm-5 col-md-4 no-padding-left">
+                            <label>Desc. Pgto/parcela</label>
+                            @Html.TextBoxFor(m => m.TituloDespesa.listaTituloDespesaPagamento[count].descParcela, new {@class = "form-control input-sm"})
+                            @Html.ValidationMessageFor(m => m.TituloDespesa.listaTituloDespesaPagamento[count].descParcela)
+                        </div>
+
+                        <div class="col-sm-7 col-md-8 no-padding">
+                            <div class="col-sm-4 col-md-2 no-padding-left">
+                                <label>Valor a pagar</label>
+                                @Html.TextBoxFor(m => m.TituloDespesa.listaTituloDespesaPagamento[count].valorOriginal, new { @class = "form-control input-sm valorParcela", alt = "decimal", onfocusout = "DespesaCadastro.calcularTotalParcelas()" })
+                                @Html.ValidationMessageFor(m => m.TituloDespesa.listaTituloDespesaPagamento[count].valorOriginal)
+                            </div>
+                            
+                            <div class="col-sm-4 col-md-2 no-padding-left">
+                                <label>Valor Juros</label>
+                                @Html.TextBoxFor(m => m.TituloDespesa.listaTituloDespesaPagamento[count].valorJuros, new { @class = "form-control input-sm valorJuros", alt = "decimal", onfocusout = "DespesaCadastro.calcularTotalParcelas()" })
+                                @Html.ValidationMessageFor(m => m.TituloDespesa.listaTituloDespesaPagamento[count].valorJuros)
+                            </div>
+                            
+                            <div class="col-sm-4 col-md-2 no-padding-left">
+                                <label>Valor Multa</label>
+                                @Html.TextBoxFor(m => m.TituloDespesa.listaTituloDespesaPagamento[count].valorMulta, new { @class = "form-control input-sm valorMulta", alt = "decimal", onfocusout = "DespesaCadastro.calcularTotalParcelas()" })
+                                @Html.ValidationMessageFor(m => m.TituloDespesa.listaTituloDespesaPagamento[count].valorMulta)
+                            </div>
+                            
+                            <div class="col-sm-4 col-md-2 no-padding-left">
+                                <label>Valor Desconto</label>
+                                @Html.TextBoxFor(m => m.TituloDespesa.listaTituloDespesaPagamento[count].valorDesconto, new { @class = "form-control input-sm valorDesconto", alt = "decimal", onfocusout = "DespesaCadastro.calcularTotalParcelas()" })
+                                @Html.ValidationMessageFor(m => m.TituloDespesa.listaTituloDespesaPagamento[count].valorDesconto)
+                            </div>
+
+                            <div class="col-sm-4 col-md-2 no-padding-left">
+                                <label>Dt. Vencimento</label>
+                                @Html.TextBoxFor(m => m.TituloDespesa.listaTituloDespesaPagamento[count].dtVencimento, new { @class = "form-control input-sm input-datepicker", alt = "date" })
+                                @Html.ValidationMessageFor(m => m.TituloDespesa.listaTituloDespesaPagamento[count].dtVencimento)
+                            </div>
+
+                            <div class="col-sm-4 col-md-2 no-padding-left">
+                                <label>Dt. Competência</label>
+                                @Html.TextBoxFor(m => m.TituloDespesa.listaTituloDespesaPagamento[count].dtCompetencia, new { @class = "form-control input-sm input-datepicker", alt = "date" })
+                                @Html.ValidationMessageFor(m => m.TituloDespesa.listaTituloDespesaPagamento[count].dtCompetencia)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div><hr/>
+                    count++;
+                }
+            </div>
+            <div class="clearfix"></div><br/>
+        </div>
+    </div>
+</div>
+
+

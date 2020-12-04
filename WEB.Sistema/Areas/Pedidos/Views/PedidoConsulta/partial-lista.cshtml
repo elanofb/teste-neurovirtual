@@ -1,0 +1,167 @@
+﻿@model WEB.Areas.Pedidos.ViewModels.PedidoConsultaVM
+
+@using DAL.Pedidos.Extensions
+@using PagedList.Mvc
+@using WEB.Areas.Pedidos.Extensions
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="bordered-gray-bottom-1 white margin-bottom-20 margin-top-20">
+            <div class="row">
+                <div class="col-sm-10">
+                    <strong><i class="far fa-list"></i> @Model.listaPedidos.TotalItemCount REGISTROS ENCONTRADOS</strong>
+                </div>
+
+                @if (Model.flagPodeCancelar) {
+                    <div class="col-sm-2 text-right">
+                        <input type="checkbox" name="marcarTodos" data-childs="checkRegistro[]" id="checkMarcarTodos" class="pull-right">
+                        <div class="dropdown pull-right margin-right-15">
+                            <a href="javascript:;" class="dropdown-toggle text-black fs-14" data-toggle="dropdown" aria-expanded="true">
+                                <i class="fa fa-cog"></i>
+                            </a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li>
+                                    <a href="javascript:;" class="text-red" onclick="PedidoCancelamento.abrirModalCancelamento()">
+                                        <i class="fa fa-times"></i> Cancelar Pedidos
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+<div class="col-sm-12">
+    
+    @if (!Model.listaPedidos.Any()) { 
+        <div class="alert alert-info margin-top-10">
+            Nenhum pedido foi encontrado.
+        </div>
+    }
+    
+    @foreach (var OPedido in Model.listaPedidos){
+
+        int? nroConta = OPedido.idAssociado > 0 ? OPedido.Associado?.nroAssociado : OPedido.NaoAssociado?.nroAssociado;   
+        
+        <div class="box-info-item-dotted bordered-destaque @OPedido.classeBordaPedido()">
+            
+            <div class="row fs-12">
+                
+                <div class="col-md-4 col-sm-6 col-xs-12">
+                    
+                    <div class="row">
+                        
+                        <div class="col-md-12">
+                            <a href="@Url.Action("index", "PedidoDetalhes", new {OPedido.id})" class="text-black">
+                                <strong><i class="fa fa-user"></i> (<span>@OPedido.id</span>) - @OPedido.nomePessoa.abreviar(30, "...").ToUpper() - #(@nroConta)</strong>
+                            </a>
+                        </div>
+                        <div class="clearfix"></div>
+
+                        <div class="col-md-12">
+                            <i class="fa fa-id-card"></i> @UtilString.formatCPFCNPJ(OPedido.cpf)
+                        </div>
+                        <div class="clearfix"></div>
+
+                    </div>
+                </div>
+                
+                <div class="col-md-2 col-sm-5 hidden-sm hidden-xs">
+                    
+                    <div class="row">
+                        
+                        <div class="col-md-12">
+                            <span data-toggle="tooltip" title="Iniciado em @OPedido.dtCadastro.exibirData(true)">
+                                <i class="far fa-calendar-alt"></i> @OPedido.dtCadastro.exibirData(true)
+                            </span>
+                        </div>
+                        <div class="clearfix"></div>
+                        
+                        @if (OPedido.dtFinalizado.HasValue) {
+
+                            <div class="col-md-12">
+                                <span data-toggle="tooltip" title="Finalizado em @OPedido.dtFinalizado.exibirData(true)">
+                                    <i class="fa fa-calendar-check"></i> @OPedido.dtFinalizado.exibirData(true)
+                                </span>
+                            </div>
+                            <div class="clearfix"></div>
+
+                        }
+
+                    </div>
+
+                </div>
+
+                <div class="col-md-3 col-sm-4 hidden-xs">
+
+                    <div class="row">
+
+                        <div class="col-md-12">
+                            <span>
+                                <strong><i class="far fa-usd-circle"></i>Total: </strong> @OPedido.getValorTotal().ToString("C")
+                            </span>
+                        </div>
+                        <div class="clearfix"></div>
+
+                        <div class="col-md-12">
+                            <strong class="@OPedido.exibirCorTextoStatus()">@(OPedido.StatusPedido.descricao)</strong>
+                        </div>
+                        <div class="clearfix"></div>
+
+                    </div>
+
+                </div>
+                
+                <div class="col-md-2 col-sm-2 hidden-sm hidden-xs">
+
+                    <div class="row">
+                        @if (OPedido.listaPedidoEntrega.Any()) {
+
+                            <div class="col-md-12">
+                                <span data-toggle="tooltip" title="Data Limite de Entrega">
+                                    <i class="fa fa-truck"></i> @OPedido.listaPedidoEntrega.FirstOrDefault().dtAgendamentoEntrega.exibirData()
+                                </span>
+                            </div>
+                            <div class="clearfix"></div>
+
+                            <div class="col-md-12">
+                                <span data-toggle="tooltip" title="Período da Entrega">
+                                    <i class="far fa-clock"></i> @OPedido.listaPedidoEntrega.FirstOrDefault().exibirPeriodoEntrega()
+                                </span>
+                            </div>
+                            <div class="clearfix"></div>
+                        }
+                    </div>
+
+                </div>                
+                
+                <div class="col-sm-1 col-xs-12 text-right box-acoes">
+                    
+                    @if (Model.flagPodeCancelar) {
+                        
+                        <input type="checkbox" name="checkRegistro[]" class="pull-right no-margin-top" value="@OPedido.id"/>
+                        
+                    }
+
+                    <a href="@Url.Action("index", "PedidoDetalhes", new { OPedido.id })" target="_blank" title="Visualizar Pedido" data-toggle="tooltip" class="pull-right margin-right-10">
+                        <i class="fa fa-search"></i>
+                    </a>
+
+                </div>
+                <div class="clearfix"></div>
+
+            </div>
+
+        </div>
+
+    }
+    
+    @(Html.paginarRegistros(Model.listaPedidos, Html.PagedListPager(Model.listaPedidos, nroPagina => UtilRequest.linkPaginacao(nroPagina, ViewContext.RouteData.Values["action"].ToString()),
+          PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(new AjaxOptions() { HttpMethod = "GET", UpdateTargetId = Model.idBoxLista }))))
+
+</div>    
+</div>

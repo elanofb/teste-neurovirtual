@@ -1,0 +1,27 @@
+﻿@model WEB.Areas.ConfiguracoesTextos.ViewModels.ConfiguracaoLabelForm
+@{
+    ViewBag.modalTitle = "Visualizar configuração de Label";
+
+    Layout = "~/views/shared/associatec/masterpage-modal.cshtml";
+}
+
+<div class="col-md-6">
+    <label>Key</label>
+    @* @Html.boxInfo(Model.ConfiguracaoLabel.key, "col-md-12 padding-5") *@
+</div><div class="clearfix"></div><br/>
+
+<div class="col-md-6">
+    <label>Label Padrão</label>
+    <div>
+        @* @Model.ConfiguracaoLabel.labelPadrao *@
+    </div>
+</div>
+
+<div class="col-md-6">
+    <label>Label Personalizado</label>
+    <div>
+        @* @Model.ConfiguracaoLabel.label *@
+    </div>
+</div>
+
+<div class="clearfix"></div>

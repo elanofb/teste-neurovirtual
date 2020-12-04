@@ -1,0 +1,509 @@
+﻿@model List<TituloReceitaPagamento>
+
+@using System.Web.Script.Serialization
+@using DAL.Entities
+@using DAL.Financeiro
+@using WEB.Areas.Recibos.Helpers
+
+@{
+    Layout = "";
+
+    var listaMeioPagamento = new JavaScriptSerializer().Serialize(MeioPagamentoHelper.getInstance.selectList(null).Select(y => new {value = y.Value, text = y.Text}).ToList());
+
+    var listaCentroCusto = CentroCustoHelper.getInstance.selectList(null).Select(y => new {value = y.Value, text = y.Text}).ToList();
+    listaCentroCusto.Add(new {value = "", text = ""});
+
+    var sourceCentroCusto = new JavaScriptSerializer().Serialize(listaCentroCusto);
+
+    var urlEdicaoPagamento = Url.Action("alterar-dados-pagamentos", "ReceitaDetalhePagamentosOperacao");
+}
+
+<div class="box-header with-border">
+
+    <h3 class="box-title">
+        <i class="far fa-money-bill"></i> Informações de Pagamentos
+    </h3>
+
+    <div class="box-tools pull-right" data-status-show="ALL">
+
+        <span class="btn btn-box-tool" onclick="ReceitaDetalhePagamento.showPagamentos(this, 'PG')">
+            <span class="badge bg-green">@Model.Count(x => x.dtPagamento != null)</span> Pagos
+        </span>
+
+        <span class="btn btn-box-tool" onclick="ReceitaDetalhePagamento.showPagamentos(this, 'EA')">
+            <span class="badge bg-yellow">@Model.Count(x => x.dtPagamento == null)</span> Em Aberto
+        </span> &nbsp;&nbsp;&nbsp;&nbsp;
+
+        <div class="dropdown inline">
+            <a href="javascript:;" class="dropdown-toggle text-black" type="button" data-toggle="dropdown">
+                <i class="fa fa-cog"></i>
+            </a>
+            <ul class="dropdown-menu" role="menu">
+                <li>
+                    <a href="javascript:;" class="text-green" data-url="@Url.Action("modal-registrar-pagamento", "ReceitaDetalhePagamentosOperacao", new {area = "Financeiro"})" onclick="ReceitaRegistrarPagamento.modalRegistrarPagamento(this, 'editar');">
+                        <i class="far fa-money-bill"></i> Registrar Pagamentos
+                    </a>
+                </li>
+            </ul>
+        </div> &nbsp;&nbsp;&nbsp;&nbsp;
+
+        <label class="btn btn-default btn-xs" data-toggle="tooltip" title="Selecionar Todos">
+            <input type="checkbox" name="marcarTodos" data-childs="checkRegistro[]" id="checkMarcarTodos" style="margin-left: 2px;"/>
+        </label> &nbsp;&nbsp;&nbsp;&nbsp;
+
+    </div>
+
+</div>
+
+<div class="box-body">
+
+<div id="boxListaPagamentos">
+@if (!Model.Any()) {
+    <div class="alert alert-warning">
+        <span><i class="far fa-exclamation-triangle"></i> Nenhuma tentativa de pagamento ou parcela foi registrada.</span>
+    </div>
+}
+
+@if (Model.Any()) {
+
+    foreach (var Item in Model) {
+
+        var listaMacroConta = MacroContaHelper.getInstance.selectListPorTipo(null, "R")
+                                              .Select(y => new {value = y.Value, text = y.Text})
+                                              .ToList();
+        listaMacroConta.Add(new {value = "", text = ""});
+
+        var listaSubConta = CategoriaTituloHelper.getInstance.selectList(null, Item.idMacroConta, false)
+                                                 .Select(y => new {value = y.Value, text = y.Text})
+                                                 .ToList();
+        listaSubConta.Add(new {value = "", text = ""});
+
+        var sourceMacroConta = new JavaScriptSerializer().Serialize(listaMacroConta);
+        var sourceSubConta = new JavaScriptSerializer().Serialize(listaSubConta);
+
+        var estaPago = (Item.dtPagamento.HasValue);
+
+        var classStatus = (estaPago) ? "green" : "yellow";
+        var iconStatus = (estaPago) ? "fa-check" : "fa-exclamation-triangle";
+
+        <div class="box-info-item fs-12 border-@classStatus" data-status="@(estaPago ? "PG" : "EA")">
+
+        <div class="row">
+        
+        <div class="margin-bottom-30">
+            <div class="col-sm-6">
+                <strong>
+                    <i class="fa fa-hashtag"></i>@Item.id -
+                    <a href="#" class="info-editavel-pagamento editable editable-click text-black" data-tipo-edit="E" data-type="text" data-pk="@Item.id" data-name="descricaoParcela" data-value="@Item.descricaoParcela" data-title="Descrição Parcela" data-emptytext="Descrição não informada">
+                        @Item.descricaoParcela
+                    </a>
+                </strong>
+            </div>
+
+            <div class="col-sm-4 pull-right text-center">
+                <div class="btn btn-xs btn-block bg-@classStatus">
+                    <i class="fa @iconStatus"></i> @(Item.idStatusPagamento > 0 ? Item.StatusPagamento?.descricao : "EM ABERTO")
+                </div>
+            </div>
+
+            <div class="col-sm-2 pull-right text-right">
+                <div class="dropdown inline">
+                    <a href="javascript:;" class="dropdown-toggle text-black fs-16" type="button" data-toggle="dropdown">
+                        <i class="fa fa-cog"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-right">
+                        @exibirAcoes(estaPago, Item)
+                    </ul>
+                </div>
+
+                &nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" name="checkRegistro[]" value="@Item.id"/>
+            </div>
+        </div>
+
+        <div class="col-sm-4 col-md-3">
+            <p class="campo-info">
+                <label><i class="far fa-calendar-alt"></i> Vencimento: </label>
+                <a href="#" class="info-editavel-pagamento editable editable-click" data-type="text" data-alt="date" data-refresh-box="true" data-editar-outros="false"
+                   data-pk="@Item.id" data-name="dtVencimento" data-value="@Item.dtVencimento.exibirData()" data-title="Dt. Vencimento">
+
+                    @Item.dtVencimento.exibirData()
+                </a>
+            </p>
+
+            <p class="campo-info">
+                <label><i class="far fa-calendar-alt"></i> Pagamento: </label>
+                @Item.dtPagamento.exibirData()
+            </p>
+
+            <p class="campo-info">
+                <label><i class="far fa-calendar-alt"></i> Baixa: </label>
+                @Item.dtBaixa.exibirData()
+            </p>
+
+            @if (Item.dtPagamento.HasValue) {
+                <p class="campo-info">
+                    <label><i class="far fa-calendar-alt"></i> Previsão de Crédito: </label>
+                    <a href="#" class="info-editavel-pagamento editable editable-click" data-type="text" data-alt="date" data-refresh-box="true" data-editar-outros="false"
+                       data-pk="@Item.id" data-name="dtPrevisaoCredito" data-value="@Item.dtPrevisaoCredito.exibirData()" data-title="Dt. Previsão de Crédito">
+
+                        @Item.dtPrevisaoCredito.exibirData()
+                    </a>
+                </p>
+
+                <p class="campo-info">
+                    <label><i class="far fa-calendar-alt"></i> Crédito: </label>
+                    @(Item.dtCredito.HasValue ? Item.dtCredito.exibirData() : "-")
+                </p>
+            }
+
+            <p class="campo-info">
+                <label><i class="far fa-calendar-alt"></i> Competência: </label>
+                <a href="#" class="info-editavel-pagamento editable editable-click" data-type="text" data-alt="date" data-refresh-box="true" data-editar-outros="false"
+                   data-pk="@Item.id" data-name="dtCompetencia" data-value="@Item.dtCompetencia.exibirData()" data-title="Dt. Competência">
+
+                    @(Item.dtCompetencia.HasValue ? Item.dtCompetencia.exibirData() : Item.dtVencimento.exibirData())
+                </a>
+            </p>
+            <p class="campo-info">
+                <label><i class="far fa-calendar-alt"></i> Checkout: </label>
+                @Item.dtFinalizacaoCheckout.exibirData(true)
+            </p>
+            <p class="campo-info">
+                <i class="far fa-info-circle" data-toggle="tooltip" title="ID Transação"></i>
+                <span>@Item.tokenTransacao</span>
+            </p>
+
+        </div>
+
+        <div class="col-sm-4 col-md-5 no-padding-right">
+
+            <div class="col-xs-12 no-padding">
+                <p class="campo-info">
+                    <label><i class="fa fa-chevron-right"></i> Conta Bancária:</label>
+                    @Html.linkEditable(Item.id, "idContaBancaria", Item.idContaBancaria.stringOrEmpty(), "Conta Bancária", urlEdicaoPagamento, "select", Url.Action("listar-ajax", "ContaBancaria", new {area = "ContasBancarias"}), Item.ContaBancaria.exibirDescricaoConta(), 0, 0, "", "", "", "", true)
+                </p>
+            </div>
+
+            <div class="col-xs-12 abreviar no-padding">
+                <p class="campo-info">
+                    <label><i class="fa fa-chevron-right"></i> Centro de Custo: </label>
+                    <a href="#" class="info-editavel-pagamento editable editable-click icon-before" data-type="select" data-source="@sourceCentroCusto"
+                       data-pk="@Item.id" data-name="idCentroCusto" data-value="@Item.idCentroCusto" data-title="Centro de Custo">
+
+                        @(Item.CentroCusto?.descricaoCentroCusto())
+                    </a>
+                </p>
+            </div>
+
+            <div class="col-xs-12 abreviar no-padding">
+                <p class="campo-info">
+                    <label><i class="fa fa-chevron-right"></i> Macro Conta: </label>
+                    <a href="#" class="info-editavel-pagamento editable editable-click icon-before" data-refresh-box="true" data-type="select" data-source="@sourceMacroConta"
+                       data-pk="@Item.id" data-name="idMacroConta" data-value="@Item.idMacroConta" data-title="Macro Conta">
+
+                        @(Item.MacroConta?.descricaoMacroConta())
+                    </a>
+                </p>
+            </div>
+
+            <div class="col-xs-12 abreviar no-padding">
+                <p class="campo-info">
+                    <label><i class="fa fa-chevron-right"></i> Sub-Conta: </label>
+                    <a href="#" class="info-editavel-pagamento editable editable-click icon-before" data-type="select" data-source="@sourceSubConta"
+                       data-pk="@Item.id" data-name="idCategoria" data-value="@Item.idCategoria" data-title="Categoria">
+
+                        @(Item.Categoria?.descricaoSubConta())
+                    </a>
+                </p>
+            </div>
+
+            <div class="col-xs-12 no-padding">
+                <p class="campo-info">
+                    <label><i class="fa fa-chevron-right"></i> N° Nota Fiscal:</label>
+                    <a href="#" class="info-editavel-pagamento editable editable-click" data-tipo-edit="E" data-type="text" data-pk="@Item.id" data-name="nroDocumento"
+                       data-value="@Item.nroDocumento" data-title="Nº Nota Fiscal">
+                        @Item.nroDocumento
+                    </a>
+                </p>
+            </div>
+
+            <div class="col-xs-12 no-padding">
+                @if (Item.dtBaixa.HasValue) {
+                    <p class="campo-info" data-toggle="tooltip" title="Dt. Baixa: @Item.dtBaixa.exibirData()">
+                        <label><i class="fa fa-chevron-right"></i> Usuário Baixa:</label>
+                        @(Item.UsuarioBaixa?.nome ?? "Automático")
+                    </p>
+                }
+            </div><br/>
+
+            <p class="campo-info">@exibirFormaPagamento(Item, estaPago)</p>
+        </div>
+
+        <div class="col-sm-4">
+            <div class="row">
+                <div class="col-xs-8">
+                    <p class="campo-info margin-left-10">
+                        <label><i class="fa fa-usd"></i> Total:</label>
+                    </p>
+                </div>
+                <div class="col-xs-4 text-right">
+                    <p class="campo-info">
+                        R$
+                        <a href="#" class="info-editavel-pagamento editable editable-click text-green" data-refresh-box="true" data-type="text" data-alt="decimal" data-pk="@Item.id" data-name="valorOriginal" data-value="@($"{Item.valorOriginal:N2}")" data-title="Valor Original">
+                            @($"{Item.valorOriginal:N2}")
+                        </a>
+                    </p>
+                </div>
+                <div class="clearfix"></div>
+
+                <div class="col-xs-8">
+                    <p class="campo-info margin-left-10">
+                        <label><i class="fa fa-usd"></i> Desconto Cupom:</label>
+                    </p>
+                </div>
+                <div class="col-xs-4">
+                    <p class="campo-info text-right text-red">
+                        - @Item.valorDescontoCupom.exibirValor()
+                    </p>
+                </div>
+                <div class="clearfix"></div>
+                <div class="col-xs-8">
+                    <p class="campo-info margin-left-10">
+                        <label><i class="fa fa-usd"></i> Desconto Antecipa.:</label>
+                    </p>
+                </div>
+                <div class="col-xs-4">
+                    <p class="campo-info text-right text-red">
+                        - @Item.valorDescontoAntecipacao.exibirValor()
+                    </p>
+                </div>
+                <div class="clearfix"></div>
+
+                <div class="col-xs-8">
+                    <p class="campo-info margin-left-10">
+                        <label>
+                            <i class="fa fa-usd"></i> Juros:
+                        </label>
+                    </p>
+                </div>
+                <div class="col-xs-4 text-right text-yellow">
+                    <p class="campo-info text-right text-green">
+                        + @Item.valorJuros.exibirValor()
+                    </p>
+                </div>
+                <div class="clearfix"></div>
+
+                <div class="col-xs-8">
+                    <p class="campo-info margin-left-10">
+                        <label>
+                            <i class="fa fa-usd"></i> Tarifas Bancárias:
+                        </label>
+                    </p>
+                </div>
+                <div class="col-xs-4 text-right text-yellow">
+                    <p class="campo-info text-right text-red">
+                        - @Item.valorTarifasBancarias.ToString("C")
+                    </p>
+                </div>
+                <div class="clearfix"></div>
+
+                <div class="col-xs-8">
+                    <p class="campo-info margin-left-10">
+                        <label>
+                            <i class="fa fa-usd"></i> Tarifas Transação:
+                        </label>
+                    </p>
+                </div>
+                <div class="col-xs-4">
+                    <p class="campo-info text-right text-red">
+                        - @Item.valorTarifasTransacao.ToString("C")
+                    </p>
+                </div>
+                <div class="clearfix"></div>
+
+                <div class="col-xs-8">
+                    <p class="campo-info margin-left-10">
+                        <label>
+                            <i class="fa fa-usd"></i> Outras Tarifas:
+                        </label>
+                    </p>
+                </div>
+                <div class="col-xs-4">
+                    <p class="campo-info text-right text-yellow">
+                        R$
+                        <a href="#" class="info-editavel-pagamento editable editable-click text-red" data-type="text" data-emptytext="0,00" data-alt="decimal" data-pk="@Item.id" data-name="valorOutrasTarifas" data-value="@($"{Item.valorOutrasTarifas:N2}")" data-title="Valor Outras Tarifas">
+                            @($"{Item.valorOutrasTarifas:N2}")
+                        </a>
+                    </p>
+                </div>
+                <div class="clearfix"></div>
+
+                <div class="col-sm-12">
+                    <hr class="margin-top-5 margin-bottom-5"/>
+                </div>
+                <div class="clearfix"></div>
+
+                <div class="col-xs-8">
+                    <p class="campo-info margin-left-10">
+                        <label>
+                            <i class="fa fa-usd"></i> Bruto:
+                        </label>
+                    </p>
+                </div>
+                <div class="col-xs-4">
+                    <p class="campo-info text-right text-green">
+                        @Item.valorComJurosEDescontos().ToString("C")
+                    </p>
+                </div>
+                <div class="col-xs-8">
+                    <p class="campo-info margin-left-10">
+                        <label>
+                            <i class="fa fa-usd"></i> Recebido:
+                        </label>
+                    </p>
+                </div>
+                <div class="col-xs-4">
+                    <p class="campo-info text-right text-green">
+                        R$
+                        <a href="#" class="info-editavel-pagamento editable editable-click text-green" data-type="text" data-emptytext="0,00" data-alt="decimal" data-pk="@Item.id" data-name="valorRecebido" data-value="@($"{Item.valorRecebido:N2}")" data-title="Valor Recebido">
+                            @($"{Item.valorRecebido:N2}")
+                        </a>
+                    </p>
+                </div>
+
+                <div class="col-xs-8">
+                    <p class="campo-info margin-left-10">
+                        <label>
+                            <i class="fa fa-usd"></i> Líquido:
+                        </label>
+                    </p>
+                </div>
+                <div class="col-xs-4">
+                    <p class="campo-info text-right text-green">
+                        @Item.valorLiquido().ToString("C")
+                    </p>
+                </div>
+
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        </div>
+        </div>
+    }
+}
+<div class="clearfix"></div>
+</div>
+<div class="clearfix"></div><br/>
+</div>
+
+@helper exibirFormaPagamento(TituloReceitaPagamento Item, bool estaPago)
+{
+    if (!estaPago)
+    {
+        return;
+    }
+
+    <span>
+        <i class="far fa-money-bill" data-toggle="tooltip" title="Forma de Pagamento"></i>
+        @(Item.FormaPagamento?.descricao ?? "-")
+    </span>
+
+    if (Item.idFormaPagamento == FormaPagamentoConst.DEPOSITO_BANCARIO || Item.idFormaPagamento == FormaPagamentoConst.DINHEIRO)
+    {
+        return;
+    }
+
+    string info = "";
+
+    if (Item.idFormaPagamento == FormaPagamentoConst.CHEQUE)
+    {
+        info += "Nº Banco: " + Item.nroBanco + "<br>";
+        info += "Nº Agência: " + Item.nroAgencia + "-" + Item.nroDigitoAgencia + "<br>";
+        info += "Nº Conta: " + Item.nroConta + "-" + Item.nroDigitoConta + "<br>";
+        info += "Nº Cheque: " + Item.nroDocumento + "<br>";
+    }
+
+    if (Item.idFormaPagamento == FormaPagamentoConst.BOLETO_BANCARIO)
+    {
+        info += "Nº Boleto: " + Item.nroDocumento + "<br>";
+        info += "Valor Tarifa: " + decimal.Add(Item.valorTarifasBancarias, Item.valorTarifasTransacao).ToString("C") + "<br>";
+    }
+
+    if (Item.idFormaPagamento > 0 && String.IsNullOrEmpty(info))
+    {
+        info += "Código de autorização: " + Item.codigoAutorizacao + "<br>";
+    }
+
+    <a href="javascript:void(0)">
+        <i class="fa fa-comment-o" data-toggle="tooltip" data-html="true" data-original-title="@Html.Raw("<div class='text-left'>" + info + "</div>")"></i>
+    </a>
+}
+
+@helper exibirAcoes(bool estaPago, TituloReceitaPagamento Item){
+    
+    <li><a href="javascript:;" class="box-acoes" onclick="DefaultSistema.showModal('@Url.Action("modal-detalhe-pagamento", "TituloReceitaPagamentoDetalhe", new {id = Item.id})');"><i class="fa fa-search fs-14"></i> Detalhes</a></li>
+                                                                                                                                                                                                                                    
+    <li><a href="javascript:;" class="box-acoes" onclick="DefaultSistema.showModal('@Url.Action("modal-edicao-pagamento", "TituloReceitaPagamentoEdicao", new {id = Item.id})', EditableCustom.listenerEditables);"><i class="fa fa-edit fs-14"></i> Editar</a></li>
+    
+    <li>
+        <a href="javascript:;" class="box-acoes" onclick="DefaultSistema.showModal('@Url.Action("modal-log-receita-pagamento", "ReceitaDetalhePagamentos", new {id = Item.id})');"><i class="far fa-file fs-14"></i> Log de Alterações</a>
+    </li>
+
+    <li>
+        <a href="javascript:void(0);" class="box-acoes" onclick="ArquivoDocumento.showModal('@Url.Action("partial-documento", "arquivo", new {area = "arquivos", id = 0, idReferencia = Item.id, entidade = EntityTypes.TITULORECEITAPAGAMENTO})');">
+            <i class="far fa-file-alt fs-14"></i> Documentos
+        </a>
+    </li>
+
+    if (!estaPago && Item.qtdeParcelas.toByte() <= 1){
+        <li>
+            <a href="@UtilConfig.linkPgtoParcela(Item.id)" target="_blank"><i class="far fa-credit-card"></i> Link Pagamento</a>
+        </li>
+
+        <li>
+            <a href="javascript:;" onclick="TituloReceitaPagamentoCobranca.abrirModalGeracaoEmailCobranca('@Item.id')"><i class="far fa-envelope"></i> Enviar e-mail cobrança</a>
+        </li>
+
+        <li>
+            <a href="javascript:void(0);" class="box-acoes" data-id="@Item.id" onclick="ReceitaRegistrarPagamento.modalRegistrarPagamento(this);" data-url="@Url.Action("modal-registrar-pagamento", "ReceitaDetalhePagamentosOperacao", new {area = "Financeiro", Item.id})" data-toggle="tooltip">
+                <i class="far fa-check-circle fs-14"></i> Registrar Pagamento
+            </a>
+        </li>
+    } else{
+        
+        <li>
+            @Html.linkReciboTituloPagamento(Item.id, "<i class=\"far fa-file-alt\"></i> Visualizar Recibo", "box-acoes")
+        </li>
+        
+        if (!FinanceiroHelper.receitasBloqueadas(Item.TituloReceita.idTipoReceita)){
+            <li>
+                <a href="javascript:void(0);" class="box-acoes" data-id="@Item.id" data-url="@Url.Action("cancelar-pagamento", "ReceitaDetalhePagamentosOperacao", new {Item.id})" onclick="ReceitaDetalhePagamento.modalCancelarPagamento(this, 'editar');">
+                    <i class="far fa-ban fs-14"></i> Cancelar Pagamento
+                </a>
+            </li>
+        }
+    }
+
+    if (Item.qtdeParcelas.toByte() <= 1){
+        <li>
+            <a href="javascript:void(0);" class="box-acoes" data-id="@Item.id" data-url="@Url.Action("modal-clonar-receita-pagamento", "ReceitaPagamentoClone", new {Item.id})" onclick="ReceitaPagamentoClone.modalClonarPagamento(this);">
+                <i class="far fa-clone fs-14"></i> Clonar
+            </a>
+        </li>
+    }
+
+
+    if (Item.dtExclusao == null){
+        <li role="presentation" class="divider"></li>
+
+        <li>
+            <a href="javascript:;" class="box-acoes" onclick="DefaultSistema.showModal('@Url.Action("modal-excluir-receita-pagamento", "ReceitaDetalhePagamentosOperacao", new {area = "Financeiro", Item.id})')"><i class="far fa-trash-alt"></i> Excluir Pagamento</a>
+        </li>
+    }
+
+    @*<li>
+        <a href="javascript:void(0);" class="box-acoes" data-url="@Url.Action("conciliar-pagamento", "ReceitaDetalheOperacao", new {Item.id, flagConciliado = (!Item.flagConciliado)})" onclick="ReceitaDetalhe.modelConciliar(this);" data-toggle="tooltip" title="" data-original-title="Pagamento Conciliado?">
+            Registrar como @(Item.flagConciliado == true ? "não" : "") Conciliado
+        </a>
+    </li>*@
+}

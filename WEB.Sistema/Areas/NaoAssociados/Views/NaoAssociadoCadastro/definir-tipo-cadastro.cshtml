@@ -1,0 +1,28 @@
+﻿@{
+    ViewBag.titlePage = "Cadastro de Comerciantes";
+}
+
+<div class="box">
+    <div class="col-sm-12">
+        <div class="row margin-top-20">
+            <div class="col-sm-6">
+                <div class="callout callout-info">
+                    <h4><i class="fa fa-user"></i> Pessoa Física</h4>
+                    <p>
+                        <a href="@Url.Action("cadastrar", "NaoAssociadoCadastroPF")">Prosseguir para cadastro com dados de pessoa física.</a>
+                    </p>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="callout callout-info">
+                    <h4><i class="fa fa-building"></i> Pessoa Jurídica</h4>
+                    <p>
+                        <a href="@Url.Action("cadastrar", "NaoAssociadoCadastroPJ")">Prosseguir para cadastro com dados de empresa.</a>
+                    </p>
+                </div>
+            </div>            
+        </div>
+    </div>
+
+    <div class="clearfix"></div><br/>
+</div>

@@ -1,0 +1,101 @@
+﻿@model WEB.Areas.Pedidos.ViewModels.PedidoCadastroForm
+
+@using System.Web.Mvc.Html
+@using DAL.PedidosTemp.Extensions
+@using WEB.Areas.Produtos.Helpers
+
+<div class="box box-primary">
+
+    <div class="box-header with-border">
+
+        <h3 class="box-title">
+            <i class="fa fa-shopping-cart"></i> Itens do Pedido
+        </h3>
+        
+        <div class="box-tools pull-right">
+            
+            <small class="btn btn-box-tool">
+                @Model.Pedido.listaProdutos.getQtdeItens() Itens (@Model.Pedido.listaProdutos.getPesoTotal() kg)
+            </small>
+
+        </div>
+
+    </div>
+
+    <div class="box-body">
+
+        <div class="row">
+
+            <div class="col-md-9">
+                @Html.labelRequired("Produto")
+                @Html.DropDownList("idProduto", ProdutoHelper.getInstance.selectList(0, 0), "Digite o nome do produto", new { @class = "form-control input-sm select2", id = "idProduto", onchange = "PedidoCadastroProduto.carregarProduto(this.value)" })
+                @Html.ValidationMessageFor(m => m.Pedido.listaProdutos)
+            </div>
+
+            <div class="col-md-3 col-sm-6">
+                @Html.labelRequired("Cód.Item")
+                @Html.TextBox("idItem", null, new { @class = "form-control input-sm", id = "idItem", disabled = "disabled" })
+            </div>
+            <div class="clearfix visible-lg visible-md"></div>
+
+            <div class="col-md-12 col-sm-12">
+                <label> Observações </label>
+                @Html.TextBox("observacoes", null, new {@class = "form-control input-sm", maxlength = "255"})
+            </div>
+
+            <div class="clearfix visible-lg visible-md"></div>
+        
+            <div class="col-md-3 col-sm-6">
+                <label> Ganho Diário </label>
+                @Html.TextBox("ganhoDario", null, new { @class = "form-control input-sm", disabled = "disabled", alt = "ganhoDario" })
+            </div>
+                       
+            <div class="clearfix visible-sm"></div>
+            
+            <div class="col-md-3 col-sm-6">
+                <label> Duração em Dias</label>
+                @Html.TextBox("qtdeDiasDuracao", null, new { @class = "form-control input-sm", disabled = "disabled", alt = "qtdeDiasDuracao" })
+            </div>
+                       
+            <div class="clearfix visible-sm"></div>
+
+            <div class="col-md-3 col-sm-6">
+                <label> Valor (R$)</label>
+                @Html.TextBox("valorProduto", null, new { @class = "form-control input-sm", disabled = "disabled", alt = "decimal" })
+            </div>
+            
+            <div class="col-md-3 col-sm-6">
+	            <label> Qtde. </label>
+	            <div class="input-group">
+		            @Html.TextBox("qtde", "1", new { @class = "form-control input-sm", type = "number", min = 1 })
+		            <div class="input-group-btn">
+			            <a href="javascript:void(0);" class="btn btn-sm btn-block btn-primary link-loading-min" onclick='PedidoCadastroProduto.adicionarProduto()' data-toggle="tooltip" title="Adicionar item ao pedido">
+				            <i class="far fa-plus"></i>
+			            </a>
+		            </div>
+	            </div>
+                
+            </div>
+            <div class="clearfix"></div><br />
+
+        </div>
+        
+        <div id="boxListaProdutos">
+            
+            @if(Model.Pedido.listaProdutos?.Any() == false) {
+                <div class="alert alert-info">
+                    Nenhum produto adicionado.
+                </div>
+            }
+
+            @foreach(var OProduto in Model.Pedido.listaProdutos) {
+
+                { Html.RenderPartial("~/Areas/Pedidos/Views/PedidoCadastroProduto/partial-item-produto.cshtml", OProduto); }
+
+            }
+
+        </div>
+        
+    </div>
+    
+</div>

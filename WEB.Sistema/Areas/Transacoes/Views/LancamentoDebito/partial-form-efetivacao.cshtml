@@ -1,0 +1,59 @@
+﻿@using DAL.Transacoes
+@model WEB.Areas.Transacoes.ViewModels.DebitoVM
+
+@if (Model.OMovimentoVW != null){
+    
+    using (Html.BeginForm("index", "LancamentoDebito", FormMethod.Post, new {role = "form", @class = "default"})){
+        
+        @Html.Hidden("tipoOperacao", MovimentoConst.EFETIVAR)
+        @Html.Hidden("valorOperacao", Model.OMovimentoOperacaoDTO.valorOperacao)
+        @Html.Hidden("nroContaDestino", Model.OMovimentoOperacaoDTO.nroContaDestino)
+        @Html.Hidden("nomeMembroDestino", Model.OMovimentoVW.nomeMembroDestino)
+            
+        <div class="clearfix"></div><br/>
+        
+        <div class="col-md-12 text-center">
+            <p class="alert alert-info">Verifique com atenção os dados do Membro/Comerciante antes de confirmar o lançamento de débito.</p>
+        </div>
+        
+        <div class="clearfix"></div><br/>
+        
+        <div class="col-md-12">
+            <div class="panel panel-green">
+                
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-xs-12 text-left">
+                            <div class="col-md-6">
+                                <p>
+                                    <strong>Código: </strong>@Model.OMovimentoVW.nroMembroDestino - @Model.OMovimentoVW.nomeMembroDestino
+                                </p>
+                            </div>
+
+                            <div class="col-md-4 text-left">
+                                <p>
+                                    <strong>CNPJ / CPF: </strong>@UtilString.formatCPFCNPJ(Model.OMovimentoVW.nroDocumentoMembroDestino)
+                                </p>
+                            </div>
+                            <div class="col-md-2 text-right">
+                                <p>
+                                    <i class="fab fa-btc"></i> @Model.OMovimentoVW.valorOperacaoFormatado
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel-footer">
+                    <div class="col-xs-12 text-right">
+                        <button type="submit" name="btIniciarTransferencia" class="btn btn-success">Confirmar</button>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+
+            </div>
+        </div>
+        
+    }
+    
+}

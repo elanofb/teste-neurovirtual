@@ -1,0 +1,49 @@
+﻿@model WEB.Areas.CorreioInterno.ViewModels.EmailNovoVM
+
+@{
+	ViewBag.modalTitle = "Nova Mensagem";
+	ViewBag.modalWidthClass = "lg";
+	if (IsPost) {
+		Layout = null;
+	} else {
+		Layout = "~/views/shared/associatec/masterpage-modal.cshtml";
+	}	
+}
+
+
+<div id="boxNovoEmail">
+	@Html.showFlashMessage()
+	@using (Ajax.BeginForm("enviar-email", null, new AjaxOptions { HttpMethod = "POST", InsertionMode = InsertionMode.Replace, UpdateTargetId = "boxNovoEmail",  OnSuccess = "CorreioInterno.onSuccessNovoEmail" }, new { id="form-novo-email" })) {
+		@Html.ValidationSummary(false)
+		@Html.HiddenFor(x => x.flagEnviado, new { id = "flagEnviado" })
+		@Html.HiddenFor(x => x.emailRemetente)
+		<div class="col-md-12">
+			De: sga@cbcdadm.org.br
+		</div>
+		<div class="col-md-12">
+			@Html.ListBoxFor(m => m.listaDestinos, Model.comboDestinos(), new Dictionary<string, object>() { { "data-url", Url.Action("carregar-emails") }, { "placeholder", "Digite para quem você deseja enviar..." }, { "multiple", "multiple" }, { "class", "col-md-11 buscar-emails" } })
+		</div><div class="clearfix"></div><br />
+
+		<div class="col-md-12">
+			@Html.ListBoxFor(m => m.listaCopias, Model.comboCopias(), new Dictionary<string, object>() { { "data-url", Url.Action("carregar-emails") }, { "placeholder", "E-mails copiados..." }, { "multiple", "multiple" }, { "class", "col-md-11 buscar-emails" } })
+		</div><div class="clearfix"></div><br />
+
+		<div class="col-md-12">
+			@Html.TextBoxFor(m => m.assunto, new { placeholder = "Assunto", @class = "form-control input-sm" })
+			@Html.ValidationMessageFor(m => m.assunto)
+		</div><div class="clearfix"></div><br />
+
+		<div class="col-md-12">
+			@Html.TextAreaFor(m => m.corpoMensagem, new { placeholder = "Digite a mensagem", rows="10", @class = "form-control input-sm", id="editor-email" })
+			@Html.ValidationMessageFor(m => m.corpoMensagem)
+		</div>	
+		<div class="clearfix"></div><br />
+		
+		<div class="col-md-12">
+			<p class="text-right">
+				<input type="submit" name="enviar-email" value="Enviar Mensagem" class="btn btn-primary" data-loading-text="Enviando..." onclick="CorreioInterno.exibirLoad(this)" />
+			</p>
+		</div>
+		<div class="clearfix"></div>
+	}
+</div>

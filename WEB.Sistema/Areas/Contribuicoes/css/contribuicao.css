@@ -1,0 +1,8 @@
+﻿table#tabela_precos tbody tr td {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+table#tabela_precos tbody tr:hover td {
+    background-color: #ffffff;
+}

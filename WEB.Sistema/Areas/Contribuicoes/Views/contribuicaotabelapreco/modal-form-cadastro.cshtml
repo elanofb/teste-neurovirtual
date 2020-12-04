@@ -1,0 +1,47 @@
+﻿@using MvcFlashMessages
+@model WEB.Areas.Contribuicoes.ViewModels.ContribuicaoTabelaPrecoForm
+
+@{
+    Layout = "~/views/shared/associatec/masterpage-modal.cshtml";
+    ViewBag.modalTitle = "Nova Tabela de Preços";
+
+    string idBox = "boxTabelaPreco";
+
+    if (IsPost) {
+        Layout = null;
+        idBox = "";
+    }
+}
+
+<div id="@idBox">
+    @using (Ajax.BeginForm("salvar-tabela-preco", "ContribuicaoTabelaPreco", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = idBox, OnSuccess = "ContribuicaoTabelaPreco.onSuccessForm", InsertionMode = InsertionMode.Replace }, new { })) {
+        
+        @Html.ValidationSummary()
+
+        @Html.RenderFlash()
+        
+        @Html.HiddenFor(m => m.ContribuicaoTabelaPreco.id)
+
+        @Html.HiddenFor(m => m.ContribuicaoTabelaPreco.idContribuicao)
+        <div class="row">
+            <div class="col-sm-8">
+                <label>Título da tabela</label>
+                @Html.TextBoxFor(x => x.ContribuicaoTabelaPreco.descricao, new { @class = "form-control input-sm" })
+                @Html.ValidationMessageFor(x => x.ContribuicaoTabelaPreco.descricao)
+            </div>
+            <div class="col-sm-4">
+                <label>Data de Início da Vigência</label>
+                @Html.TextBoxFor(x => x.ContribuicaoTabelaPreco.dtInicioVigencia, new { @class = "form-control input-sm", alt="date" })
+                @Html.ValidationMessageFor(x => x.ContribuicaoTabelaPreco.dtInicioVigencia)
+            </div>
+        </div><br/>
+
+        <div class="text-right">
+            <input type="submit" class="btn btn-primary btn-submit link-loading" title="Adicionar" value="Salvar" data-toggle="tooltip"/>
+        </div>
+
+        <div class="clearfix"></div>
+        <br />
+    }
+
+</div>

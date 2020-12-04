@@ -1,0 +1,76 @@
+﻿@model WEB.Areas.Contribuicoes.ViewModels.ContribuicaoPadraoForm
+
+@using WEB.Areas.Contribuicoes.Helpers
+
+<div class="panel panel-info">
+    <div class="panel-heading">
+        <h3 class="panel-title fs-14">Definições de geração cobrança</h3>
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-lg-12 col-sm-12">
+                @Html.labelRequired("Gerar cobranças automáticas?")
+                @Html.DropDownListFor(x => x.Contribuicao.flagGerarCobrancaAutomatica, ComboHelper.selectListTrueFalse(Model.Contribuicao.flagGerarCobrancaAutomatica), "", new {@class = "form-control input-sm", id = "flagGerarCobrancaAutomatica"})
+                @Html.ValidationMessageFor(x => x.Contribuicao.flagGerarCobrancaAutomatica)
+            </div>
+            <div class="col-xs-12 box-geracao-automatica">
+                <div class="row">
+                    <div class="col-md-8 col-lg-7">
+                        @Html.labelRequired("Gerar cobrança quantos dias antes do vencimento?", "", false)
+                        @Html.TextBoxFor(x => x.Contribuicao.qtdeDiasEnvioCobranca, new {@class = "form-control input-sm", type = "number", alt = "number_3"})
+                        @Html.ValidationMessageFor(x => x.Contribuicao.qtdeDiasEnvioCobranca)
+                    </div>
+
+                    <div class="col-md-4 col-lg-5">
+                        @Html.labelRequired("Enviar e-mail após geração?", "", false)
+                        @Html.DropDownListFor(x => x.Contribuicao.flagEnviarEmail, ComboHelper.selectListTrueFalse(Model.Contribuicao.flagEnviarEmail), "...", new { @class = "form-control input-sm" })
+                        @Html.ValidationMessageFor(x => x.Contribuicao.flagEnviarEmail)
+                    </div>
+                </div>
+                
+            </div>
+
+            <div class="col-lg-12 col-sm-12">
+                <label data-toggle="tooltip" title="Ao marcar 'SIM' o sistema tentará criar um boleto para a cobrança.">Gerar um boleto automaticamente</label>
+                @Html.DropDownListFor(x => x.Contribuicao.flagGerarBoleto, ComboHelper.selectListTrueFalse(Model.Contribuicao.flagGerarBoleto), new {@class = "form-control input-sm", id = "flagGerarBoleto"})
+                @Html.ValidationMessageFor(x => x.Contribuicao.flagGerarBoleto)
+            </div>
+            <div class="col-lg-12 col-sm-12">
+                @Html.labelRequired("Quais membros devem ser cobrados?") <a href="javascript:;" class="popover-item" data-url="#boxQuemCobrar" title="Entendendo a função do campo"><i class="fa fa-question-circle"></i></a>
+                @Html.DropDownListFor(x => x.Contribuicao.flagGerarParaTodos, ContribuicaoHelper.getInstance.selectListQuemCobrar(Model.Contribuicao.flagGerarParaTodos), new {@class = "form-control input-sm" })
+                @Html.ValidationMessageFor(x => x.Contribuicao.flagGerarParaTodos)
+            </div>
+            <div class="col-lg-6 col-sm-12">
+                @Html.labelRequired("Limite Parcelamento")
+                @Html.DropDownListFor(x => x.Contribuicao.qtdeLimiteParcelas, ComboHelper.selectListParcelamento(UtilNumber.toInt32(Model.Contribuicao.qtdeLimiteParcelas), 12), "", new {@class = "form-control input-sm"})
+                @Html.ValidationMessageFor(x => x.Contribuicao.qtdeLimiteParcelas)
+            </div>
+
+            <div class="col-lg-6 col-sm-12">
+                @Html.labelRequired("Permitir pagamento via cartão de crédito?")
+                @Html.DropDownListFor(x => x.Contribuicao.flagCartaoCreditoPermitido, ComboHelper.selectListTrueFalse(Model.Contribuicao.flagCartaoCreditoPermitido), "", new {@class = "form-control input-sm"})
+                @Html.ValidationMessageFor(x => x.Contribuicao.flagCartaoCreditoPermitido)
+            </div>
+            <div class="col-lg-6 col-sm-12">
+                @Html.labelRequired("Permitir pagamento via boleto")
+                @Html.DropDownListFor(x => x.Contribuicao.flagBoletoBancarioPermitido, ComboHelper.selectListTrueFalse(Model.Contribuicao.flagBoletoBancarioPermitido), "", new {@class = "form-control input-sm"})
+                @Html.ValidationMessageFor(x => x.Contribuicao.flagBoletoBancarioPermitido)
+            </div>
+            <div class="col-lg-6 col-sm-12">
+                @Html.labelRequired("Permitir pagamento via depósito")
+                @Html.DropDownListFor(x => x.Contribuicao.flagDepositoPermitido, ComboHelper.selectListTrueFalse(Model.Contribuicao.flagDepositoPermitido), "", new { @class = "form-control input-sm" })
+                @Html.ValidationMessageFor(x => x.Contribuicao.flagDepositoPermitido)
+            </div>
+
+        </div>
+        <div class="clearfix"></div>
+    </div>
+</div>
+
+<div id="boxQuemCobrar" class="hidden">
+    <strong>Cobrar TODOS os membros com preço cadastrado mesmo que tenham outra cobrança padrão:</strong><br/>
+     O sistema irá enviar para todos os associado cujo tipo possui preço cadastrado na tabela de preço atual. Incluindo até mesmo associado que possuem outro tipo de cobrança como padrão.
+    <br/><br />
+    <strong>Cobrar somente aqueles que NÃO optaram por outros planos de cobrança:</strong><br/> 
+    Fará com que o sistema não gere cobranças para membros que escolheram pagar com outro plano de cobrança por padrão. Esses somente poderão ser cobrados manualmente.
+</div>

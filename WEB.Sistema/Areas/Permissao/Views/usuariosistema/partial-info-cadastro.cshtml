@@ -1,0 +1,25 @@
+﻿@using WEB.Helpers
+@model WEB.Areas.Permissao.ViewModels.UsuarioSistemaForm
+
+<div class="col-sm-6">
+    @Html.legendaRequired()
+</div>
+<div class="col-sm-6 no-padding-left">
+    @if (Model.UsuarioSistema.id > 0) {
+
+        <div class="col-sm-4">
+            <label>ID</label>
+            <input type="text" class="form-control input-sm" readonly="readonly" value="@Model.UsuarioSistema.id" />
+        </div>
+
+        <div class="col-sm-4">
+            <label>Cadastro</label>
+            <input type="text" class="form-control input-sm text-center" readonly="readonly" value="@Model.UsuarioSistema.dtCadastro.exibirData(true)" />
+        </div>
+
+        <div class="col-sm-4">
+            <label>Alteração</label>
+            <input type="text" class="form-control input-sm text-center" readonly="readonly" value="@Model.UsuarioSistema.dtAlteracao.exibirData(true)" />
+        </div>
+    }
+</div>

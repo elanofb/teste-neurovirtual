@@ -1,0 +1,239 @@
+﻿@model List<TituloReceitaPagamento>
+
+@using DAL.Entities
+@using DAL.Financeiro
+@using DAL.Permissao
+@using DAL.Permissao.Security.Extensions
+
+@{
+    Layout = "";
+}
+@if (Model.Any()) {
+    <div class="box box-primary ">
+        <div class="box-header">
+            <h3 class="box-title"> <i class="fa fa-trash"></i> Pagamentos Removidos </h3>
+            
+            <div class="box-tools pull-right" data-status-show="ALL">
+
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="far fa-minus"></i></button>
+
+            </div>
+        </div>
+
+        <div class="box-body">
+    
+            <div id="boxListaPagamentos">
+
+                @if (Model.Any()) {
+
+                    foreach (var Item in Model) {
+
+                        var estaPago = (Item.dtPagamento != null);
+                
+                        <div class="box-info-item fs-12 border-grey">
+
+                            <div class="row">
+
+                                <div class="col-sm-4 col-md-3 abreviar">
+                                    <span data-toggle="tooltip" title="@Item.descricaoParcela">
+                                        <strong><i class="fa fa-hashtag"></i>@Item.id - @Item.descricaoParcela</strong>
+                                    </span>
+                                </div>
+
+                                <div class="col-sm-4 col-md-5 abreviar">
+                                    <span data-toggle="tooltip" title="@(Item.UsuarioExclusao?.nome)">
+                                        <i class="fa fa-user"></i> <strong>Exclusão</strong>: @(Item.UsuarioExclusao?.nome)
+                                    </span>
+                                </div>
+
+                                <div class="col-sm-3">
+                                    <span data-toggle="tooltip" title="@Item.dtExclusao.exibirData(true)">
+                                        <i class="fa fa-calendar"></i> <strong>Exclusão</strong>: @Item.dtExclusao.exibirData()
+                                    </span>
+
+                                </div>
+
+                                <div class="col-sm-1 pull-right text-right">
+                                    <div class="dropdown inline">
+                                        <a href="javascript:;" class="dropdown-toggle text-black fs-16" type="button" data-toggle="dropdown">
+                                            <i class="fa fa-cog"></i>
+                                        </a>
+                                        <ul class="dropdown-menu dropdown-menu-right">
+                                            @exibirAcoes(Item)
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12 margin-bottom-10">
+                                    <span><i class="fa fa-comment-o"></i> @Item.motivoExclusao</span>
+                                </div>
+
+                                <div class="clearfix"></div>
+
+                        
+                                <div class="col-sm-4 col-md-3">
+                                    <strong><i class="fa fa-calendar"></i> Vencimento: </strong>
+                                    @Item.dtVencimento.exibirData()<br />
+
+                                    <strong><i class="fa fa-calendar"></i> Pagamento: </strong>
+                                    @Item.dtPagamento.exibirData()<br />
+
+                                    <strong><i class="fa fa-calendar"></i> Baixa: </strong>
+                                    @Item.dtBaixa.exibirData()<br />
+
+                                    <strong><i class="fa fa-calendar"></i> Crédito: </strong>
+                                    @Item.dtCredito.exibirData()<br />
+
+                                    <strong><i class="fa fa-calendar"></i> Competência: </strong>
+                                    @(Item.dtCompetencia.HasValue ? Item.dtCompetencia.exibirData() : Item.dtVencimento.exibirData())<br />
+                            
+                                    <strong><i class="fa fa-calendar"></i> Checkout: </strong>
+                                    @Item.dtFinalizacaoCheckout.exibirData(true)<br />
+                                </div>
+                        
+                                <div class="col-sm-4 col-md-5">
+                                    <div class="col-xs-12 abreviar no-padding">
+                                        <span data-toggle="tooltip" title="@(Item.UsuarioExclusao?.nome)">
+                                            <strong><i class="fa fa-chevron-right"></i> Centro de Custo: </strong>
+                                            @(Item.CentroCusto?.descricao)
+                                        </span>
+                                    </div><br />
+
+                                    <div class="col-xs-12 abreviar no-padding">
+                                        <span data-toggle="tooltip" title="@(Item.MacroConta?.descricao ?? "-")">
+                                            <strong><i class="fa fa-chevron-right"></i> Macro Conta: </strong>
+                                            @(Item.MacroConta?.descricao)
+                                        </span>
+                                    </div><br />
+
+                                    <div class="col-xs-12 abreviar no-padding">
+                                        <span data-toggle="tooltip" title="@(Item.Categoria?.descricao ?? "-")">
+                                            <strong><i class="fa fa-chevron-right"></i> Sub-Conta: </strong>
+                                            @(Item.Categoria?.descricao)
+                                        </span>
+                                    </div><br />
+
+                                    <div class="col-xs-12 no-padding">
+                                        <strong><i class="fa fa-chevron-right"></i> N° Nota Fiscal:</strong>
+                                        @Item.nroDocumento
+                                    </div><br />
+
+                                    <div class="col-xs-12 no-padding">
+                                        @if (Item.dtBaixa.HasValue){
+                                            <span data-toggle="tooltip" title="Dt. Baixa: @Item.dtBaixa.exibirData()">
+                                                <strong><i class="fa fa-chevron-right"></i> Usuário Baixa:</strong>
+                                                @(Item.UsuarioBaixa?.nome ?? "Automático")
+                                            </span>
+                                        }
+                                    </div><br />
+                            
+                                    <span>@exibirFormaPagamento(Item, estaPago)</span><br />
+                                </div>
+                        
+                                <div class="col-sm-4">
+                                    <div class="row">
+                                        <div class="col-xs-6"><i class="fa fa-usd"></i> Total:</div>
+                                        <div class="col-xs-6 text-right">@Item.valorOriginal.ToString("C")</div>
+                                        <div class="clearfix"></div>
+
+                                        <div class="col-xs-6"><i class="fa fa-usd"></i> Desconto:</div>
+                                        <div class="col-xs-6 text-right">- @Item.valorDesconto.exibirValor()</div>
+                                        <div class="clearfix"></div>
+
+                                        <div class="col-xs-6"><i class="fa fa-usd"></i> Juros:</div>
+                                        <div class="col-xs-6 text-right">- @Item.valorJuros.exibirValor()</div>
+                                        <div class="clearfix"></div>
+
+                                        <div class="col-xs-6"><i class="fa fa-usd"></i> Tarifas Bancárias:</div>
+                                        <div class="col-xs-6 text-right">- @Item.valorTarifasBancarias.ToString("C")</div>
+                                        <div class="clearfix"></div>
+
+                                        <div class="col-xs-6"><i class="fa fa-usd"></i> Tarifas Transação:</div>
+                                        <div class="col-xs-6 text-right">- @Item.valorTarifasTransacao.ToString("C")</div>
+                                        <div class="clearfix"></div>
+
+                                        <div class="col-xs-6"><i class="fa fa-usd"></i> Outras Tarifas:</div>
+                                        <div class="col-xs-6 text-right">- @Item.valorOutrasTarifas.ToString("C")</div>
+                                        <div class="clearfix"></div>
+
+                                        <div class="col-sm-12"><hr class="margin-top-5 margin-bottom-5" /></div><div class="clearfix"></div>
+
+                                        <div class="col-xs-6"><i class="fa fa-usd"></i> Líquido:</div>
+                                        <div class="col-xs-6 text-right">@Item.valorLiquido().ToString("C")</div>
+
+                                        <div class="col-xs-6"><i class="fa fa-usd"></i> Recebido:</div>
+                                        <div class="col-xs-6 text-right">@Item.valorRecebido.exibirValor()</div>
+                                    </div>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+
+                    }
+
+                }
+
+                <div class="clearfix"></div>
+
+            </div>
+            <div class="clearfix"></div><br/>
+        </div>
+    </div>
+
+}
+
+@helper exibirFormaPagamento(TituloReceitaPagamento Item, bool estaPago) {
+
+    if (!estaPago) {
+        return;
+    }
+
+    <span>
+        <i class="far fa-money-bill" data-toggle="tooltip" title="Forma de Pagamento"></i> 
+        @(Item.FormaPagamento?.descricao ?? "-") 
+    </span>
+
+    if (Item.idFormaPagamento == FormaPagamentoConst.DEPOSITO_BANCARIO || Item.idFormaPagamento == FormaPagamentoConst.DINHEIRO) {
+        return;
+    }
+
+    string info = "";
+
+    if (Item.idFormaPagamento == FormaPagamentoConst.CHEQUE) {
+        info += "Nº Banco: " + Item.nroBanco + "<br>";
+        info += "Nº Agência: " + Item.nroAgencia + "-" + Item.nroDigitoAgencia + "<br>";
+        info += "Nº Conta: " + Item.nroConta + "-" + Item.nroDigitoConta + "<br>";
+        info += "Nº Cheque: " + Item.nroDocumento + "<br>";
+    }
+
+    if (Item.idFormaPagamento == FormaPagamentoConst.BOLETO_BANCARIO) {
+        info += "Nº Boleto: " + Item.nroDocumento + "<br>";
+        info += "Valor Tarifa: " + Item.valorTarifasBancarias.ToString("C") + "<br>";
+    }
+
+    if (Item.idFormaPagamento > 0 && String.IsNullOrEmpty(info)) {
+        info += "Código de autorização: " + Item.codigoAutorizacao + "<br>";
+    }
+
+    <a href="javascript:void(0)"><i class="fa fa-comment-o" data-toggle="tooltip" data-html="true" data-original-title="@Html.Raw("<div class='text-left'>" + info + "</div>")"></i></a>
+}
+
+@helper exibirAcoes(TituloReceitaPagamento Item)
+{
+
+if (User.idPerfil() == PerfilAcessoConst.ADMINISTRADOR || User.idPerfil() == PerfilAcessoConst.DESENVOLVEDOR){
+    <li><a href="javascript:;" class="box-acoes" onclick="DefaultSistema.showModal('@Url.Action("modal-log-receita-pagamento", "ReceitaDetalhePagamentos", new {id = Item.id})');"><i class="far fa-file fs-14"></i> Log de Alterações</a></li>
+}
+
+    <li>
+        <a href="javascript:void(0);" class="box-acoes" onclick="ArquivoDocumento.showModal('@Url.Action("partial-documento", "arquivo", new {area = "arquivos", id = 0, idReferencia = Item.id, entidade = EntityTypes.TITULODESPESAPAGAMENTO, flagView = true})');">
+            <i class="far fa-file-archive fs-14"></i> Documentos
+        </a>
+    </li>
+
+    <li>
+        <a href="javascript:void(0);" class="box-acoes" data-id="@Item.id" data-url="@Url.Action("modal-clonar-receita-pagamento", "ReceitaPagamentoClone", new {Item.id})" onclick="ReceitaPagamentoClone.modalClonarPagamento(this);">
+            <i class="fa fa-clone fs-14"></i> Clonar
+        </a>
+    </li>
+}

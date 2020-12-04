@@ -1,0 +1,108 @@
+﻿@model WEB.Areas.FinanceiroLancamentos.ViewModels.ConciliacaoVM
+
+@using DAL.Financeiro
+
+@{
+    Layout = null;
+}
+
+
+<div class="box-header with-border">
+    <div class="box-title">
+        <i class="far fa-chart-bar"></i> Resultados <small class="fs-12"> @Model.listaLancamentos.Count lançamento(s) encontrado(s)</small>
+    </div>
+    <div class="box-tools pull-right">
+        <div class="col-sm-6 no-padding margin-top-5">
+            <label class="" data-toggle="tooltip" title="Selecionar Todos">
+                <input type="checkbox" name="marcarTodos" data-childs="checkRegistro[]" class="checkMarcarTodos" style="margin-left: 2px;"/>
+            </label>
+        </div>
+        <div class="col-sm-6 no-padding">
+            <div class="btn-group margin-right-10">
+                <button type="button" class="btn btn-box-tool dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+                    <i class="fa fa-cog"></i>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                    <li>
+                        <a href="javascript:;" class="text-black" onclick="ConciliacaoAcao.realizarConciliacao()">
+                            <i class="far fa-check"></i> Conciliar
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="box-body">
+
+    @if (!Model.listaLancamentos.Any()){
+        <div class="alert alert-info">
+            Nenhum lançamento foi encontrado para o período informado.
+        </div>
+    }
+
+    @if (Model.listaLancamentos.Any()){
+        <div class="padding-right-10" style="max-height: 600px; overflow-y: scroll; overflow-x: hidden;">
+            @foreach (var OLancamento in Model.listaLancamentos){
+                @boxItem(OLancamento)
+            }
+        </div>
+
+        <div class="clearfix"></div><br/>
+        { Html.RenderPartial("partial-resultados-lancamentos", Model); }   
+    }
+</div>
+
+
+@helper boxItem(ReceitaDespesaVW OLancamento){
+
+    string urlDetalhe = Url.Action("editar", "ReceitaDetalhe", new {area = "Financeiro", id = OLancamento.idTitulo, urlRetorno = Request.Url.AbsoluteUri});
+
+    if (OLancamento.flagTipoTitulo == "D"){
+        urlDetalhe = Url.Action("editar", "DespesaDetalhe", new {area = "Financeiro", id = OLancamento.idTitulo, urlRetorno = Request.Url.AbsoluteUri});
+    }
+
+    <div class="box-info-item-dotted padding-5 margin-top-5 fs-12">
+
+        <div class="row">
+
+            <div class="col-sm-11">
+                <div class="col-sm-12 abreviar">
+                    <a href="@urlDetalhe" class="text-bold text-black" data-toggle="tooltip" title="Título Principal">#@OLancamento.idTitulo</a> - 
+                    <span data-toggle="tooltip" title="@OLancamento.descricaoTitulo" class="">@OLancamento.descricaoTitulo</span>
+                </div>
+                <div class="col-sm-6 abreviar">
+                    <span data-toggle="tooltip" title="@($"Vencimento em {OLancamento.dtMovimento.exibirData()}")" class="">@OLancamento.dtVencimento.exibirData()</span>
+                </div>
+                <div class="col-sm-3">
+                </div>
+                <div class="col-sm-3 abreviar">
+                    <div class="row">
+                        <div class="col-sm-6 text-right">
+
+                            @if (OLancamento.flagTipoTitulo == "R"){
+                                <strong class="text-green" data-toggle="tooltip" title="Valor de Receita">
+                                    <i class="fa fa-caret-up"></i> @UtilNumber.toDecimal(OLancamento.valorRealizado).ToString("C")
+                                </strong>
+                            }
+
+                            @if (OLancamento.flagTipoTitulo == "D"){
+                                <strong class="text-red" data-toggle="tooltip" title="Valor de Despesa">
+                                    <i class="fa fa-caret-down"></i> @UtilNumber.toDecimal(OLancamento.valorRealizado.Value).ToString("C")
+                                </strong>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-1 no-padding">
+                <label class="" data-toggle="tooltip" title="Selecionar">
+                    <input type="checkbox" name="checkRegistro[]" data-tipo="@OLancamento.flagTipoTitulo" value="@OLancamento.idPagamento" />
+                </label>
+            </div>
+        </div>
+    </div>
+}
+

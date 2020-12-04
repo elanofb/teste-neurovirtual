@@ -1,0 +1,66 @@
+﻿@model WEB.Areas.Financeiro.ViewModels.DespesaForm
+
+@using BLL.FinanceiroLancamentos
+
+@if (Model.TituloDespesa.dtQuitacao.HasValue) {
+    <div class="btn btn-block bg-green"><i class="fa fa-check"></i> Quitado em @Model.TituloDespesa.dtQuitacao.exibirData()</div>
+} else {
+    <div class="btn btn-block bg-yellow"><i class="fa fa-exclamation-triangle"></i> Pendente</div>
+}
+
+<div class="row">
+
+    <div class="col-sm-7">
+        <p class="campo-info margin-left-10 margin-top-10">
+            <label><i class="fa fa-usd"></i> Valor Total:</label>
+        </p>
+        <p class="campo-info margin-left-10">
+            <label><i class="fa fa-usd"></i> Total Juros:</label>
+        </p>
+        <p class="campo-info margin-left-10">
+            <label><i class="fa fa-usd"></i> Total Multa:</label>
+        </p>
+        <p class="campo-info margin-left-10">
+            <label><i class="fa fa-usd"></i> Total Descontos:</label>
+        </p>
+        <p class="campo-info margin-left-10">
+            <label><i class="fa fa-usd"></i> Total Pago:</label>
+        </p>
+        <p class="campo-info margin-left-10">
+            <label><i class="fa fa-usd"></i> Saldo Total:</label>
+        </p>
+    </div>
+
+    <div class="col-sm-5 text-right">
+
+        @{
+            var totalPagos = Model.TituloDespesa.listaTituloDespesaPagamento.Where(x => x.dtPagamento != null).Sum(x => x.valorPago);
+            
+            var totalMulta = Model.TituloDespesa.listaTituloDespesaPagamento.Sum(x => x.valorMulta);
+            
+            var totalJuros = Model.TituloDespesa.listaTituloDespesaPagamento.Sum(x => x.valorJuros);
+            
+            var totalDesconto = Model.TituloDespesa.listaTituloDespesaPagamento.Sum(x => x.valorDesconto);
+
+            var totalSaldo = Model.TituloDespesa.listaTituloDespesaPagamento.Sum(x => x.saldo());
+        }
+
+        @if (Model.TituloDespesa.listaTituloDespesaPagamento.Any()) {
+            <p class="campo-info margin-right-10 margin-top-10 text-red">@(Model.TituloDespesa.valorTotal?.ToString("C"))</p>
+        } else {
+            <p class="campo-info margin-right-10 margin-top-10 text-red">
+                R$<a href="#" class="info-editavel editable editable-click text-black text-red" data-type="text" data-alt="decimal" data-pk="@Model.TituloDespesa.id" data-name="valorTotal" data-value="@($"{Model.TituloDespesa.valorTotal:N2}")" data-title="Valor Total" data-refresh-box="true">
+                    @($"{Model.TituloDespesa.valorTotal:N2}")
+                </a>
+            </p>
+        }
+
+        <p class="campo-info margin-right-10 text-red">@totalJuros.toDecimal().ToString("C")</p>
+        <p class="campo-info margin-right-10 text-red">@totalMulta.toDecimal().ToString("C")</p>
+        <p class="campo-info margin-right-10 text-green">@totalDesconto.toDecimal().ToString("C")</p>
+        <p class="campo-info margin-right-10 text-green">@totalPagos.toDecimal().ToString("C")</p>
+        <p class="campo-info margin-right-10">@totalSaldo.toDecimal().ToString("C")</p>
+    </div>
+
+    <div class="clearfix"></div>
+</div>

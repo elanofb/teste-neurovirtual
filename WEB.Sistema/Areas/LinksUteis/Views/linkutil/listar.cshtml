@@ -1,0 +1,135 @@
+﻿@model IPagedList<DAL.LinksUteis.LinkUtil>
+@using PagedList
+@using PagedList.Mvc
+@using WEB.Areas.LinksUteis.Extensions
+
+@section styles {
+    <link href="@UtilConfig.linkResourses()css/associatec/list-custom.css" rel="stylesheet" />
+
+    <link href="@UtilConfig.linkResourses()js/associatec/plugins/bootstrap-fileinput/css/fileinput.css" rel="stylesheet" />
+    <link href="@UtilConfig.linkResourses()js/associatec/plugins/fancybox/source/jquery.fancybox.css" rel="stylesheet" />
+
+    @* CSS para autocomplete select2 *@
+    <link href="@UtilConfig.linkResourses()Areas/Pedidos/js/plugins/autocomplete/select2-4.0/css/select2.min.css" rel="stylesheet" />
+}
+
+@section scripts {
+    
+    @Html.includeDatePicker()
+    @Html.includeJqueryLoading()
+
+    @* Autocomplete para busca de cidades *@
+    <script type="text/javascript" src="@UtilConfig.linkResourses()Areas/Pedidos/js/plugins/autocomplete/select2-4.0/js/select2.min.js"></script>
+
+    <script type="text/javascript" src="@UtilConfig.linkResourses()js/associatec/plugins/bootstrap-fileinput/js/fileinput.min.js"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses()js/associatec/plugins/fancybox/source/jquery.fancybox.pack.js"></script>
+}
+
+@{
+    ViewBag.titlePage = "Links Úteis";
+    ViewBag.subTitlePage = " Veja abaixo a relação de links úteis já cadastrados no sistema";
+}
+
+<div class="box box-primary">
+
+    @Html.headerBox("Filtros de Busca", "fa fa-filter")
+
+    <div class="box-body">
+
+        @using (Html.BeginForm(null, null, FormMethod.Get, new { @class = "filtros" })) {
+            <div class="form-group col-xs-4">
+            </div>
+            <div class="form-group col-xs-2">
+                <label>Portal</label>
+                @Html.DropDownList("idPortal", WEB.Areas.Portais.Helpers.PortalHelper.getInstance.selectList(UtilRequest.getInt32("idPortal")), "Todos", new { @class = "form-control input-sm" })
+            </div>
+            <div class="form-group col-xs-2">
+                <label>Status</label>
+                @Html.DropDownList("flagAtivo", ComboHelper.selectListStatus(UtilRequest.getString("flagAtivo")), "Todos", new { @class = "form-control input-sm" })
+            </div>
+            <div class="form-group col-xs-4">
+                <label>Buscar</label>
+                @Html.buttonSearch(UtilRequest.getString("valorBusca"))
+            </div>
+        }
+    </div>
+</div>
+<div class="box box-primary">
+
+    <div class="box-header with-border">
+        <div class="box-title">
+            <i class="far fa-chart-bar"></i> Resultados
+        </div>
+        <div class="box-tools pull-right">
+
+            <a href="@Url.Action("editar", "LinkUtil", new { area = "LinksUteis" })" class="btn btn-box-tool"><i class="far fa-plus-circle"></i> Novo Link Útil</a>
+
+            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="far fa-minus"></i></button>
+        </div>
+    </div>
+
+    <div class="box-body">
+
+        @if (!Model.Any()) {
+            <div class="col-sm-12">
+                <div class="alert alert-info">
+                    Nenhum link útil foi encontrado.
+                </div>
+            </div>
+        }
+
+        @foreach (var OItem in Model) {
+
+            <div class="box-info-item">
+
+                <div class="row">
+
+                    <div class="col-sm-11 col-xs-10 no-padding">
+                        <div class="col-md-4 col-sm-4 col-xs-6">
+                            <a href="@Url.Action("editar", "LinkUtil", new { id = OItem.id, area = "LinksUteis"})" class="text-black" target="_blank">
+                                <i class="fa fa-align-justify"></i> <span data-toggle="tooltip" title="Descrição">@OItem.descricao</span>
+                            </a><br />
+
+                        </div>
+
+                        <div class="col-md-4 col-sm-4 col-xs-6">
+
+                            <span data-toggle="tooltip" title="Link"><i class="fa fa-link"></i> @OItem.link</span><br />
+
+                            <span data-toggle="tooltip" title="Target"><i class="fa fa-external-link"></i> @(OItem.flagBlank == "S" ? "Abrir outra aba" : "Abrir na mesma aba")</span>
+
+                        </div>
+
+                        <div class="col-md-3 col-sm-3 col-xs-6">
+
+                            <span class="@OItem.exibirClasseStatus()" data-toggle="tooltip" title="Status"><i class="fa @OItem.exibirIconeStatus()"></i> @OItem.exibirStatus()</span><br />
+
+                            <span data-toggle="tooltip" title="Data de Cadastro"><i class="fa fa-calendar"></i> @OItem.dtCadastro.exibirData()</span>
+
+                        </div>
+
+                        <div class="col-md-1 col-sm-1 col-xs-6 text-right">
+
+                            <div class="dropdown">
+                                <a href="javascript:;" class="dropdown-toggle" type="button" data-toggle="dropdown">
+                                    Ações
+                                    <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-right">
+
+                                    <li><a href="@Url.Action("editar", "LinkUtil", new { id = OItem.id, area = "LinksUteis"})"><i class="fa fa-edit"></i> Editar</a></li>
+                                    <li><a href="javascript:void(0);" class="delete-default" data-id="@OItem.id" data-url="@Url.Action("excluir")"><i class="fa fa-trash"></i> Excluir Registro</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        }
+
+        @(Html.paginarRegistros(Model, Html.PagedListPager(Model, nroPagina => UtilRequest.linkPaginacao(nroPagina, "listar"), PagedListRenderOptions.OnlyShowFivePagesAtATime)))
+
+    </div>
+
+</div>

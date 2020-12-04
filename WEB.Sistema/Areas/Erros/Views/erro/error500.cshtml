@@ -1,0 +1,36 @@
+﻿@model DAL.Erros.LogErro
+@{
+    ViewBag.Title = "Ops, ocorreu um problema.";
+
+    if (Request.IsAjaxRequest()) {
+
+        Layout = "~/views/shared/associatec/masterpage-modal.cshtml";
+
+    }
+}
+
+<div class="box" id="list">
+    <div class="alert">
+        <h4>Erro 500</h4>
+        O servidor se comportou de forma inesperada, por favor, comunique o administrador do sistema ou tente novamente mais tarde.
+    </div><br />
+    @if (Model != null && UtilConfig.flagProducao == "N") {
+        <h4>Last Error:</h4>
+        <div>
+            <p>
+                <b>Exception:</b> @Model.exceptionMessage<br />
+                <b>Inner Exception:</b> @Model.exceptionInnerMessage<br />
+                <b>Controller:</b> @Model.controllerName<br />
+                <b>Action:</b> @Model.actionName
+            </p>
+            <div style="overflow:scroll">
+                <pre>
+                @Model.exceptionInnerTrace
+            </pre>
+                <pre>
+                @Model.exceptionTrace
+            </pre>
+            </div>
+        </div>
+    }
+</div>

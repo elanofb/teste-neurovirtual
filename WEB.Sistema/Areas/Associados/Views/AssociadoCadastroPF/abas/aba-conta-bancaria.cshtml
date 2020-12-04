@@ -1,0 +1,19 @@
+﻿@model DAL.Associados.Associado
+
+<div class="tab-pane" id="tab-contas-bancarias">
+    
+    <h4 class="separator-form-icon no-margin-bottom">
+        
+        <i class="far fa-edit"></i> Contas Bancárias 
+        
+        <a href="javascript:;" class="pull-right fs-12 link-loading-min" onclick="DefaultSistema.showModal('@Url.Action("modal-cadastro-conta", "PessoaContaBancariaCadastro", new{Area = "Pessoas", Model.idPessoa })')">
+            <i class="far fa-plus-circle"></i> Nova Conta Bancária 
+        </a>      
+        
+    </h4>
+    
+    <div id="boxLoadListaContas" class="content-load carregando" data-url="@Url.Action("index", "PessoaContaBancariaConsulta", new { Area = "Pessoas", Model.idPessoa })"></div>
+    
+    <div class="clearfix"></div><br/>
+    
+</div>

@@ -1,0 +1,40 @@
+﻿@model WEB.Areas.Associados.ViewModels.AssociadoForm
+
+@{
+    bool flagExibirPF = (Model.Associado.Pessoa.flagTipoPessoa == "F" );
+    bool flagExibirPJ = (Model.Associado.Pessoa.flagTipoPessoa == "J" );
+}
+
+@if (flagExibirPF || flagExibirPJ) {
+    <h4 class="separator-form">Outras Informações</h4>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="row">
+                @*@if (!String.IsNullOrEmpty(Model.ConfiguracaoGeral.tituloDadoCustomizado01)) {
+                    <div class="col-md-3">
+                        <label>@Model.ConfiguracaoGeral.tituloDadoCustomizado01</label>
+                        @Html.TextBoxFor(m => m.Associado.dadoCustomizado01, new { @class = "form-control input-sm", maxlength = "100" })
+                        @Html.ValidationMessageFor(m => m.Associado.dadoCustomizado01)
+                    </div>
+                }
+
+                @if (!String.IsNullOrEmpty(Model.ConfiguracaoGeral.tituloDadoCustomizado02)) {
+                    <div class="col-md-3">
+                        <label>@Model.ConfiguracaoGeral.tituloDadoCustomizado02</label>
+                        @Html.TextBoxFor(m => m.Associado.dadoCustomizado02, new { @class = "form-control input-sm", maxlength = "100" })
+                        @Html.ValidationMessageFor(m => m.Associado.dadoCustomizado02)
+                    </div>
+                }
+
+                @if (!String.IsNullOrEmpty(Model.ConfiguracaoGeral.tituloDadoCustomizado03)) {
+                    <div class="col-md-3">
+                        <label>@Model.ConfiguracaoGeral.tituloDadoCustomizado03</label>
+                        @Html.TextBoxFor(m => m.Associado.dadoCustomizado03, new { @class = "form-control input-sm", maxlength = "100" })
+                        @Html.ValidationMessageFor(m => m.Associado.dadoCustomizado03)
+                    </div>
+                }*@
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+}

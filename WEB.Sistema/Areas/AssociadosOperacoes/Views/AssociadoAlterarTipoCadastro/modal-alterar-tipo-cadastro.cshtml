@@ -1,0 +1,109 @@
+﻿@using DAL.Associados
+@model WEB.Areas.AssociadosOperacoes.ViewModels.AssociadoAlterarTipoCadastroForm
+
+@{
+    ViewBag.modalTitle = "Ateração do Tipo de Cadastro";
+    ViewBag.modalWidthClass = "lg";
+
+    if (UtilRequest.getBool("IsPost") == true) {
+        Layout = null;
+    } else {
+        Layout = "~/views/shared/associatec/masterpage-modal.cshtml";
+    }
+
+}
+
+<div id="boxFormAlterarTipoCadastro">
+    
+	@using (Ajax.BeginForm("alterar-tipo-cadastro", null, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "boxFormAlterarTipoCadastro", InsertionMode = InsertionMode.Replace, OnSuccess = "AlterarTipoCadastro.onSuccessForm" }, new { id = "formAlterarTipoCadastro", @class = "default" })) {
+        
+		{ Html.EnableClientValidation(false); }
+
+		@Html.Hidden("IsPost", true)
+
+        <div class="field" style="display:none">
+            @Html.EditorFor(m => m.idsAssociados)
+        </div>
+
+	    <div class="row">
+
+	        <div class="col-md-7">
+
+	            <div class="row">
+
+		            <div class="col-md-6">
+			
+			            @Html.labelRequired("Tipo de Cadastro")
+			            @Html.DropDownListFor(m => m.idTipoCadastro, AssociadoTipoCadastroHelper.getInstance.selectList(Model.idTipoCadastro), "...", new {@class = "form-control input-sm" })
+			            @Html.ValidationMessageFor(m => m.idTipoCadastro)
+						
+		            </div>
+		            
+	                <div class="clearfix"></div>
+
+	            </div>
+
+	        </div>
+
+	        <div class="col-md-5">
+
+	            <label>@Model.listaAssociados.Count() membros selecionados</label>
+
+	            <div id="boxAssociadosSelecionados" class="hide">
+                    
+	                @if (Model.listaAssociados.Count() > 1000) {
+
+	                    <div class="alert alert-info">
+	                        
+	                        Você selecionou mais de 1000 membros para enviar uma nova senha, por motivo de desempenho,
+	                        a lista com o detalhe dos membros não será exibida, porém todos os membros selecionados
+	                        receberão a nova senha informada.
+
+	                    </div>
+
+	                }
+                    
+	                @if (Model.listaAssociados.Count() <= 1000) {
+
+	                    foreach (var OAssociado in Model.listaAssociados) {
+
+	                        <div class="box-info-item">
+
+	                            <div class="row">
+
+	                                <div class="col-md-12">
+
+	                                    <span class="titulo">
+	                                        <i class="fa fa-user"></i> @OAssociado.nome
+	                                    </span><br>
+
+		                                <span># @(OAssociado.nroAssociado ?? OAssociado.id)</span> <em>(@OAssociado.descricaoTipoAssociado)</em> - <em>(@TipoCadastroExtensions.descricaoTipoCadastro(OAssociado.idTipoCadastro.toInt()))</em> 		                                	                                    
+
+	                                </div>
+
+	                            </div>
+
+	                        </div>
+
+	                    }
+
+	                }
+
+	            </div>
+
+	        </div>
+
+            <div class="clearfix"></div>
+
+	    </div>
+        
+
+	}
+</div>
+
+@section modalFooter{
+	<div class="text-right">
+		<input type="button" value="Cancelar" class="btn btn-default" data-dismiss="modal" aria-hidden="true" />
+		<input type="button" value="Alterar" class="btn btn-primary link-loading" onclick="$('#formAlterarTipoCadastro').submit();" />
+	</div>
+}

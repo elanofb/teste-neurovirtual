@@ -1,0 +1,91 @@
+﻿@model WEB.Areas.Financeiro.ViewModels.ResultadoFinanceiroTotalizadoresVM
+
+@{ 
+    var iconeBoxResultado = "ion-information-circled";
+    var iconeResultado = "";
+    var corResultado = "blue";
+
+    if (Model.flagResultadoPositivo == true) {
+        iconeBoxResultado = "ion-happy-outline";
+        iconeResultado = "fa-caret-up";
+        corResultado = "green";
+    }
+
+    if (Model.flagResultadoPositivo == false) {
+        iconeBoxResultado = "ion-sad-outline";
+        iconeResultado = "fa-caret-down";
+        corResultado = "red";
+    }
+
+}
+
+<div class="col-lg-3 col-md-6">
+
+    <div class="info-box">
+
+        <span class="info-box-icon bg-@corResultado"><i class="ion @iconeBoxResultado"></i></span>
+
+        <div class="info-box-content">
+            <span class="info-box-text">Resultado</span>
+            <span class="info-box-number">
+                
+                <small><i class="fa @iconeResultado text-@corResultado"></i> R$ </small> @Model.valorResultado.ToString("N")
+            </span>
+        </div>
+
+    </div>
+
+</div>
+
+<div class="col-lg-3 col-md-6">
+
+    <div class="info-box">
+
+        <span class="info-box-icon bg-yellow"><i class="fa fa-percent"></i></span>
+
+        <div class="info-box-content">
+            <span class="info-box-text">Resultado</span>
+            <span class="info-box-number">
+                
+                <small>
+                    <i class="fa @iconeResultado text-@corResultado"></i>
+                </small> @Model.percentualResultado.ToString("N") <small>%</small>
+
+            </span>
+        </div>
+
+    </div>
+
+</div>
+
+<div class="col-lg-3 col-md-6">
+
+    <div class="info-box">
+
+        <span class="info-box-icon bg-green"><i class="glyphicon glyphicon-stats"></i></span>
+
+        <div class="info-box-content">
+            <span class="info-box-text">Receitas</span>
+            <span class="info-box-number"><small>R$ </small> @Model.valorTotalReceitas.ToString("N")</span>
+        </div>
+
+    </div>
+
+</div>
+
+<div class="col-lg-3 col-md-6">
+
+    <div class="info-box">
+
+        <span class="info-box-icon bg-red"><i class="glyphicon glyphicon-shopping-cart"></i></span>
+
+        <div class="info-box-content">
+            <span class="info-box-text">Despesas</span>
+            <span class="info-box-number"><small>R$ </small> @Model.valorTotalDespesas.ToString("N")</span>
+        </div>
+
+    </div>
+
+</div>
+
+<div class="clearfix"></div>

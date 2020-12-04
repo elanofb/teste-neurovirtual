@@ -1,0 +1,30 @@
+﻿@model WEB.Areas.Pedidos.ViewModels.DadosCompradorDTO
+@using WEB.Areas.Pedidos.Extensions
+
+@section breadcrump{
+    <ol class="breadcrumb">
+        <li><a href="@Url.Action("index", "PedidoConsulta")" class="active fs-14"><i class="fa fa-arrow-left"></i> Voltar</a></li>
+    </ol>
+}
+
+<div class="box box-primary">
+    @Html.headerBox("Dados do Comprador", "fa fa-user", false, Url.Action("index", new { flagNovo = true }), "Novo Pedido")
+    <div class="box-body">
+                        
+        <div class="col-md-5">
+            <p class="no-margin"><i class="fa fa-user"></i> @Model.nome <small>(@Model.tipo)</small></p>
+            <p><i class="fa fa fa-id-card"></i> @UtilString.formatCPFCNPJ(Model.nroDocumento)</p>
+        </div>
+        <div class="col-md-5">
+            <p class="no-margin"><i class="fa fa-envelope"></i> @(Model.emailPrincipal ?? "") | @(Model.emailSecundario ?? "")</p>
+            <p><i class="fa fa-phone"></i> @UtilString.formatPhone(Model.telPrincipal) | @UtilString.formatPhone(Model.telPrincipal)</p>
+        </div>
+        <div class="col-md-2">
+            <p class="@Model.exibirClasseStatus() no-margin"><i class="fa @Model.exibirIconeStatus()"></i> @Model.exibirStatus()</p>
+        </div>
+        <div class="clearfix"></div>
+
+    </div>
+
+</div>
+         

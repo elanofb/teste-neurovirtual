@@ -1,0 +1,37 @@
+﻿@model  WEB.Areas.Arquivos.ViewModels.ArquivoUploadVM
+@{
+    Layout = null;
+}
+<div class="row">
+    <div class="col-md-12">
+        @Html.showFlashMessage()
+        @using (Html.BeginForm("editar-foto", "arquivo", FormMethod.Post, new { enctype = "multipart/form-data", @class = "" })) {
+            @Html.ValidationSummary(true, "Erro. Não foi possível concluir a operação, verifique os campos.")
+            @Html.HiddenFor(m => m.id)
+            @Html.HiddenFor(m => m.entidade)
+            @Html.HiddenFor(m => m.categoria)
+            @Html.HiddenFor(m => m.idReferenciaEntidade)
+            @*@Html.HiddenFor(m => m.urlRedirect)*@
+
+            <div class="col-md-6 no-padding-left">
+                @Html.inputFileSimples("FileUpload")
+                @Html.ValidationMessageFor(m => m.FileUpload)
+            </div>
+
+            @*<div class="col-md-4">
+                    <label>Legenda</label>
+                    @Html.TextBoxFor(m => m.legenda, new{ @class="form-control input-sm"})
+                    @Html.ValidationMessageFor(m => m.legenda)
+                </div>*@
+
+            <div class="col-md-1 padtop22 text-right">
+                <input type="submit" value="Salvar" class="btn btn-primary" />
+            </div>
+            <div class="clearfix"></div>
+        }
+    </div>
+    <div class="clearfix"></div><br />
+
+    <div class="content-load carregando col-md-12 margin-left-15" id="boxArquivosListar" data-url="@Url.Action("listar-galeria-fotos", "arquivo",new {  entidade = Model.entidade, idReferencia = Model.idReferenciaEntidade } )"></div>
+    <div class="clearfix"></div>
+</div>

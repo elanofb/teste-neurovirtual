@@ -1,0 +1,172 @@
+﻿@model PagedList.IPagedList<TipoConvenio>
+@using DAL.Institucionais
+@using PagedList.Mvc
+
+@{
+    ViewBag.titlePage = "Tipos de Convênios";
+    ViewBag.subTitlePage = "Veja abaixo a relação dos tipos de convênio existentes atualmente.";
+}
+<div class="box box-primary">
+
+    @Html.headerBox("Filtros de Busca", "fa fa-filter")
+
+    <div class="box-body">
+
+        @using (Html.BeginForm(null, null, FormMethod.Get, new { @class = "filtros" })) {
+            <div class="form-group col-xs-7">
+
+            </div>
+            <div class="form-group col-xs-2">
+                <label>Status</label>
+                @Html.DropDownList("flagAtivo", ComboHelper.selectListStatus(UtilRequest.getBool("flagAtivo")), "Todos", new { @class = "form-control input-sm" })
+            </div>
+            <div class="form-group col-xs-3">
+                <label>Buscar</label>
+                @Html.buttonSearch(UtilRequest.getString("valorBusca"))
+            </div>
+        }
+        <div class="clearfix"></div>
+    </div>
+
+</div>
+
+<div class="box box-primary">
+
+    @Html.headerBox("Resultados", "fa fa-list")
+
+    <div class="box-body">
+        <div class="btn-group">
+            <a href="javascript:void(0);" data-url="@Url.Action("excluir")" class="btn btn-default btn-flat" title="Remover itens selecionados" onclick="return DefaultAction.removeAll(this);">
+                <i class="fa fa-trash"></i>
+            </a>
+            <a href="@Url.Action("editar")" class="btn btn-default btn-flat" title="Adicionar novo registro">
+                <i class="far fa-plus-circle"></i>
+            </a>
+        </div>
+
+        <table class="table table-bordered table-striped dataTable">
+            <thead>
+                <tr role="row">
+                    <th class="width-50 text-center"><input type="checkbox" name="marcarTodos" data-childs="checkRegistro[]" id="checkMarcarTodos" /></th>
+                    <th>ID</th>
+                    <th>Descrição</th>
+                    <th class="width-100">Status</th>
+                    <th class="width-75">Cadastro</th>
+                    <th class="width-75">&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.PageCount > 0) {
+                    foreach (var Item in Model) {
+                        <tr>
+                            <td class="text-center"><input type="checkbox" name="checkRegistro[]" value="@Item.id" /></td>
+                            <td class="text-center width-50">@Item.id</td>
+                            <td>@Item.descricao</td>
+                            <td class="text-center">@Html.linkStatusDefault(Item.id, Item.ativo)</td>
+                            <td class="text-center">@Item.dtCadastro.ToShortDateString()</td>
+                            <td class="text-center box-acoes">
+                                @Html.linkEditar(Item.id)
+                                @Html.linkAjaxExcluir(Item.id, "N")
+                            </td>
+                        </tr>
+                    }
+                } else {
+                    <tr>
+                        <td class="text-center" colspan="7">Nenhum registro cadastrado</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        @(Html.paginarRegistros(Model, Html.PagedListPager(Model, nroPagina => Url.Action("listar", new { nroPagina }), PagedListRenderOptions.OnlyShowFivePagesAtATime)))
+    </div>
+</div>
+
+
+
+@*@model PagedList.IPagedList<DAL.Entities.EventoLocal>
+    @using PagedList.Mvc
+    @using DAL.Entities
+    @{
+        ViewBag.titlePage = "Locais para Eventos";
+        ViewBag.idGrupoMenu = Convert.ToInt32(AcessoRecursoGrupoEnum.EVENTOS);
+    }
+    <div class="col-xs-12 box box-solid internal-default">
+        <div>
+            @using (Html.BeginForm(null, null, FormMethod.Get, new { @class = "filtros" })) {
+                <div class="form-group col-xs-7">
+
+                </div>
+                <div class="form-group col-xs-2">
+                    <label>Status</label>
+                    @Html.DropDownList("flagAtivo", ComboHelper.selectListStatus(UtilRequest.getString("flagAtivo")), "Todos", new { @class = "form-control input-sm" })
+                </div>
+                <div class="form-group col-xs-3">
+                    <label>Buscar</label>
+                    @Html.buttonSearch(UtilRequest.getString("valorBusca"))
+                </div>
+            }
+            <div class="clearfix"></div>
+        </div>
+
+
+        <div class="table-responsive">
+            <div class="dataTables_wrapper form-inline" role="grid">
+
+                <div class="links-table">
+                    <div class="btn-group">
+                        <a href="javascript:void(0);" data-url="@Url.Action("excluir")" class="btn btn-default btn-flat" title="Remover itens selecionados" onclick="return DefaultAction.removeAll(this);">
+                            <i class="fa fa-trash"></i>
+                        </a>
+                        <a href="@Url.Action("editar")" class="btn btn-default btn-flat" title="Adicionar novo registro">
+                            <i class="far fa-plus-circle"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <table class="table table-bordered table-striped dataTable">
+                    <thead>
+                        <tr role="row">
+                            <th class="width-50 text-center"><input type="checkbox" name="marcarTodos" data-childs="checkRegistro[]" id="checkMarcarTodos" /></th>
+                            <th>ID</th>
+                            <th>Nome</th>
+                            <th>Endereco</th>
+                            <th>Cidade / Estado</th>
+                            <th class="width-100">Status</th>
+                            <th class="width-75">Cadastro</th>
+                            <th class="width-50">&nbsp;</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Count > 0) {
+                            foreach (EventoLocal Item in Model) {
+                                <tr>
+                                    <td class="text-center"><input type="checkbox" name="checkRegistro[]" value="@Item.id" /></td>
+                                    <td class="text-center width-50">@Item.id</td>
+                                    <td>@Item.nome</td>
+                                    <td>@Item.logradouro, @Item.numero @Item.complemento - @Item.bairro</td>
+                                    <td class="text-center">@(Item.idCidade > 0 ? Item.Cidade.nome + " / " + Item.Cidade.Estado.nome : Item.nomeCidade + " / "  + Item.uf )</td>
+                                    <td class="text-center">@(Item.ativo == "S" ? "Sim" : "Não")</td>
+                                    <td class="text-center">@Item.dtCadastro.ToShortDateString()</td>
+                                    <td class="text-center">
+                                        <a href="@Url.Action("editar", new{id=Item.id})" title="Editar Registro"><i class="fa fa-edit"></i></a>&nbsp;&nbsp;
+
+                                        <a href="javascript:void(0);" class="delete-default" data-id="@Item.id" data-url="@Url.Action("excluir")" title="Excluir Registro"><i class="fa fa-trash"></i></a>
+                                    </td>
+                                </tr>
+                            }
+                        } else {
+                            <tr>
+                                <td class="text-center" colspan="6">Nenhum registro cadastrado</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+                @(Html.paginarRegistros<EventoLocal>(Model, Html.PagedListPager(Model, nroPagina => Url.Action("listar", new { nroPagina }))))
+
+            </div>
+        </div>
+
+
+
+    </div>*@

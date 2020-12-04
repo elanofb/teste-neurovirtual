@@ -1,0 +1,105 @@
+﻿@using WEB.Areas.Pessoas.Helpers
+@using WEB.Areas.Planos.Helpers
+@model WEB.Areas.Planos.ViewModels.PlanoContratacaoForm
+
+@{
+    Layout = "~/views/shared/associatec/masterpage-edit.cshtml";
+    ViewBag.titlePage = "Vitrine Contratação";
+    ViewBag.subTitlePage = (Model.PlanoContratacao.id > 0 ? Model.PlanoContratacao.Plano.nome : "Novo Cadastro");
+}
+
+@section styles{
+    <link href="@UtilConfig.linkResourses()Areas/Planos/js/plugins/autocomplete/select2-4.0/css/select2.min.css" rel="stylesheet" />
+}
+
+@section scripts{
+
+    @*  autocomplete *@
+    <script type="text/javascript" src="@UtilConfig.linkResourses()Areas/Planos/js/plugins/autocomplete/select2-4.0/js/select2.min.js"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses()Areas/Planos/js/plugins/autocomplete/autocomplete.js"></script>
+
+    @Html.includeDatePicker()
+    <script type="text/javascript" src="@UtilConfig.linkResourses()js/plugins/ckeditor/ckeditor.js"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses()js/plugins/ckeditor/config.js"></script>
+    <script src="@UtilConfig.linkResourses()Areas/Planos/js/plano.js"></script>
+}
+
+@section navTabs{
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#tab-1" data-toggle="tab">Dados da Contratação</a></li>
+        @if (Model.PlanoContratacao.id > 0){
+            <li><a href="@Url.Action("editar", "planoanuncio", new { area = "Planos", idPlanoContratacao = Model.PlanoContratacao.id })">Anúncio</a></li>
+        }
+    </ul>
+}
+
+@section tabContent{
+    <div id="tab-1" class="tab-pane active">
+        @using (Html.BeginForm("editar", null, FormMethod.Post, new { role = "form", @class = "default" }))
+        {
+            @Html.HiddenFor(m => m.PlanoContratacao.id)
+            @Html.HiddenFor(m => m.PlanoContratacao.dtCadastro)
+            @Html.HiddenFor(m => m.PlanoContratacao.ativo)
+            @Html.HiddenFor(m => m.PlanoContratacao.dtAprovacao)
+            
+            @Html.ValidationSummary(false)
+            { Html.RenderPartial("partialInfoCadastro"); }
+
+            <div class="form-horizontal">
+                <div class="col-md-12 no-padding">
+                    <h4 class="separator-form">Informações da Contratação</h4>
+
+                    <div class="col-md-3">
+                        @Html.labelRequired("Plano")
+	                    @Html.DropDownListFor(m => m.PlanoContratacao.idPlano, PlanoHelper.selectList(Model.PlanoContratacao.idPlano), "...", new { @class = "form-control input-sm" })
+	                    @Html.ValidationMessageFor(m => m.PlanoContratacao.idPlano)
+                    </div>
+
+                    <div class="col-md-3">
+                        @Html.labelRequired("Status")
+                        @Html.DropDownListFor(m => m.PlanoContratacao.idStatus, StatusPlanoContratacaoHelper.selectList(Model.PlanoContratacao.idStatus), new { @class = "form-control input-sm" })
+                        @Html.ValidationMessageFor(m => m.PlanoContratacao.idStatus)
+                    </div>
+                    <div class="clearfix"></div><br />
+
+                    <div class="col-md-6">
+                        @Html.labelRequired("Contratante")
+                        @Html.Hidden("idContratanteSelecionado", Model.idContratante, new { id = "idContratante" })
+                        @Html.DropDownListFor(m => m.idContratante, PessoaHelper.getInstance.selectListFinanceiro(Model.PlanoContratacao.idPessoa), "Digite o nome...", new { @class = "form-control input-sm", id = "idPessoa", data_toggle = "select2" })
+                        @Html.ValidationMessageFor(m => m.idContratante)
+                    </div>
+
+                    <div class="clearfix"></div><br />
+
+                    <div class="col-md-2">
+                        <label>Data de Pagamento:</label>
+                        @Html.TextBoxFor(m => m.PlanoContratacao.dtPagamento, new { @class = "form-control input-sm input-datepicker", @alt = "date" })
+                    </div>
+                    <div class="col-md-2">
+                        <label>Data de Término:</label>
+                        @Html.TextBoxFor(m => m.PlanoContratacao.dtTermino, new {@class = "form-control input-sm input-datepicker", @alt = "date"})
+                    </div>
+
+                    <div class="col-md-2">
+                        <label>Valor:</label>
+                        @Html.TextBoxFor(m => m.PlanoContratacao.valor, new { @class = "form-control input-sm", @alt = "decimal" })
+                        @Html.ValidationMessageFor(m => m.PlanoContratacao.valor)
+                    </div>
+
+                    <div class="clearfix"></div>
+
+                </div>
+            </div>
+
+            <div class="clearfix"></div><br /><br />
+
+            <div class="text-right col-md-6">
+                <a href="@Url.Action("listar")" class=" btn btn-default">Voltar</a>&nbsp;
+                <input type="button" name="voltar" value="Limpar" class="btn btn-default bg-gray" onclick="document.forms[0].reset();" />&nbsp;
+                <input type="submit" name="enviar" value="Salvar" class="btn btn-primary" />
+            </div>
+        }
+    </div>
+    <div class="clearfix"></div><br /><br />
+}
+

@@ -1,0 +1,22 @@
+﻿@using BLL.ConfiguracoesTextos.Extensions
+@using DAL.Permissao.Security.Extensions
+<footer class="main-footer no-print">
+    <div class="col-sm-6">
+        @*
+        <a class="text-black text-bold" href="https://associatec.tomticket.com/?account=1294144P19012018062431" target="_blank"><i class="fal fa-ticket"></i> Clique aqui para abrir ou acompanhar um chamado</a><br/>
+        <strong><i class="fas fa-phone-square"></i> Suporte técnico: (11) 2092-2464</strong> <i>(Seg à Sex das 09:00 às 18:00)</i><br/>
+        *@
+        <strong>Copyright &copy; 2018-@DateTime.Today.Year <a href="http://www.sinctec.com.br">@Html.labelTexto(User.idOrganizacao(), "lblFooterNomeSistema", "SINCTEC DIGITAL")</a> </strong>
+    </div>
+    <div class="col-sm-4 text-left">
+    <span class="">
+            @Html.texto(User.idOrganizacao(), "htmFooterAreaAssociado", $"<b><a href='{string.Concat(UtilConfig.linkAbsSistema, "AreaAssociados/", Html.sistema().rotaCustomizadaLogin)}'>Área restrita dos { Html.labelTexto(User.idOrganizacao(), "lblAssociado", "Membros") }</a></b>")
+        </span> <br />
+        @*
+        <span class=""><b>@Html.labelTexto(User.idOrganizacao(), "lblFooterCodigoAssociado", "Código da Associação") : </b> @Html.Raw(Html.sistema().codigoOrganizacao)</span><br/>
+        *@
+        <b>Version</b> 1.0.0
+    </div>
+    <div class="clearfix"></div>
+</footer>
+<input type="hidden" id="baseUrlGeral" value="@Url.Content("~/")" />

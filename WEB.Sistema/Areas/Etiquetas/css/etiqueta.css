@@ -1,0 +1,60 @@
+*{
+    font-family: Arial, Verdana;
+    margin:0;
+    padding:0;
+}
+
+.box-etiqueta {
+    float: left;
+    border: 1px solid black;
+    border-radius: 5px;
+}
+
+.print-all {
+    float: right;
+    text-align: center;
+}
+
+
+.print-all a {
+    text-decoration: none;
+    border: 1px solid black;
+    color: black;
+    padding: 10px 15px;
+    border-radius: 5px;
+}
+
+.print-all a:hover {
+    background: #efefef;
+}
+
+.selectConfiguracoesEtiqueta {
+    float: left;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.selectConfiguracoesEtiqueta select{
+    padding: 5px 10px;
+    width: 350px;
+}
+
+.header {
+    margin: 0 auto;
+    padding: 20px;
+    padding-bottom: 100px;
+    border-bottom: 1px solid black;
+}
+
+
+@media print {
+    .box-etiqueta {
+        float: left;
+        border: 1px solid transparent;
+        border-radius: 5px;
+    }
+
+    .header {
+        display: none;
+    }
+}

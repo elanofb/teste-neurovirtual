@@ -1,0 +1,69 @@
+﻿@using DAL.Permissao
+@using DAL.Permissao.Security.Extensions
+@using WEB.Areas.Associacoes.Helpers
+
+<header class="main-header">
+    <a href="@Url.Action("index", "Home", new { area="" })" class="logo hidden-xs">
+        <span class="logo-mini">SINCTEC</span>
+        <span class="logo-lg">SINCTEC</span>
+    </a>
+    <nav class="navbar navbar-static-top">
+        <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+            <span class="sr-only">Navegação</span>
+        </a>
+        <div id="boxMenuTopo" class="pull-left"></div>
+
+        @*
+        <div class="navbar-custom-menu">
+            <ul class="nav navbar-nav">
+                <li class="dropdown notifications-menu" id="widgetNotificacoes" data-url="@Url.Action("partial-avisos", "NotificacaoWidget", new { area = "Notificacoes" })">
+                </li>
+
+                <li class="dropdown tasks-menu" id="widgetTarefas" data-url="@Url.Action("partial-tarefas", "PainelControle", new { area = "Tarefas" })">
+                </li>
+
+                <li class="dropdown user user-menu">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <i class="fa fa-user hidden-lg"></i>
+                        <span class="visible-lg"><i class="fa fa-user margin-right-5"></i> @User.name() </span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li class="user-header">
+                            <img src="@UtilConfig.linkResourses("img/sem-imagem.gif")" class="img-circle" alt="Foto do usuário" />
+                            <p class="text-left">
+                                @User.name() - @User.descricaoPerfil()<br />
+                               
+
+                                <small>Cadastro desde @User.dtCadastro()</small>
+                            </p>
+                        </li>
+                        <li class="user-body">
+                            <p class="text-center">
+                                @if (User.idPerfil() == PerfilAcessoConst.DESENVOLVEDOR) {
+                                    <div class="col-sm-12">
+                                        <label>ALTERAR VISÃO</label><br />
+                                        @Html.DropDownList("idOrganizacao", AssociacaoHelper.getInstance.selectList(User.idOrganizacao(), false, true), "TODAS", new { @class = "form-control input-sm select2", onchange = "DefaultSistema.alterarVisaoAssociacao(this);" })
+                                    </div>
+                                    <div class="clearfix"></div>
+                                }
+
+                            </p>
+
+                           
+                        </li>
+                        <!-- Menu Footer-->
+                        <li class="user-footer">
+                            <div class="pull-left">
+                                <a href="@Url.Action("alterar-senha", "UsuarioSistemaAcesso", new {area="Permissao"})" class="btn btn-default btn-flat">Alterar Senha</a>
+                            </div>
+                            <div class="pull-right">
+                                <a href="@Url.Action("sair", "login", new {area="Permissao"})" class="btn btn-default btn-flat">Sair</a>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+            *@
+    </nav>
+</header>

@@ -1,0 +1,45 @@
+﻿@model  List<DAL.Arquivos.ArquivoUpload>
+@using DAL.Arquivos
+
+@Html.showFlashMessage()
+
+<table border="0" cellpadding="0" cellspacing="0" class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th class="width-25"></th>
+            <th class="width-125">Arquivo</th>
+            <th>Descrição do Arquivo</th>
+            <th class="width-75">&nbsp;</th>
+        </tr>
+    </thead>
+    <tbody class="lista-sortable">
+        @if (Model.Count > 0) {
+            int cont = 1;
+            foreach (ArquivoUpload Item in Model) {
+                <tr>
+                    <td class="text-center">@cont</td>
+
+                    <td class="text-center">
+                        <a href="@Url.Action("exibir-arquivo", "exibicao", new { area="arquivos", idArquivo = Item.id })" target="_blank">
+                            @Url.exibirIcone(Item.extensao)
+                        </a>
+                    </td>
+                    <td>
+                        <a href="#" data-type="text" data-pk="@Item.id" data-name="legenda" data-url="@Url.Action("alterar-dados", "arquivo", new{area="arquivos"})" data-value="@Item.legenda" data-title="Editar Legenda" class="txtEditable">@(!String.IsNullOrEmpty(Item.legenda) ? Item.legenda : "-")</a>
+                    </td>
+                    <td class="text-center box-acoes">
+						@Html.linkAjaxExcluir(Item.id, "N", Url.Action("excluir", "arquivo", new{ area="arquivos"}))
+                    </td>
+                </tr>
+            
+                cont++;
+            }
+
+        } else {
+            <tr>
+                <td class="text-center" colspan="4">Nenhum arquivo cadastrado no momento.</td>
+            </tr>
+        }
+    </tbody>
+</table>
+<div class="clearfix"></div>

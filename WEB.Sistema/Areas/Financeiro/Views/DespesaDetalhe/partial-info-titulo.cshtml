@@ -1,0 +1,181 @@
+﻿@using System.Web.Script.Serialization
+@using DAL.Pessoas
+@using WEB.Areas.DadosBancarios.Helpers
+@model WEB.Areas.Financeiro.ViewModels.DespesaForm
+
+@{
+    Layout = null;
+    Model.TituloDespesa.Pessoa = Model.TituloDespesa.Pessoa ?? new Pessoa();
+    var urlEdicaoTitulo = Url.Action("alterar-dados", "DespesaDetalheOperacao", new { area = "Financeiro" });
+    var listaTipoDespesa = new JavaScriptSerializer().Serialize(TipoDespesaHelper.getInstance.selectList(null).Select(y => new { value = y.Value, text = y.Text }).ToList());
+    var listaModoPagamento = new JavaScriptSerializer().Serialize(ModoPagamentoDespesaHelper.getInstance.selectList(null).Select(y => new { value = y.Value, text = y.Text }).ToList());
+    var listaContaBancariaFavorecida = new JavaScriptSerializer().Serialize(DadoBancarioHelper.getInstance.selectList(null, Model.TituloDespesa.idPessoa).Select(y => new { value = y.Value, text = y.Text }).ToList());
+}
+
+<div class="row">
+    
+    <div class="col-md-6 padding-bottom-10 fs-12">
+        
+        @if (Model.TituloDespesa.idTituloDespesaOrigem > 0) {
+            
+            <div class="alert alert-info no-margin fs-14">
+                Esse título foi replicado do título: <a href="@Url.Action("editar", "DespesaDetalhe", new { id = Model.TituloDespesa.idTituloDespesaOrigem })">@Model.TituloDespesa.TituloDespesaOrigem.descricao</a>
+            </div>
+        }
+        
+        <div class="row">
+            <div class="col-sm-4">
+                <p class="campo-info"><label><i class="fa fa-hashtag"></i> Ref.:</label> @Model.TituloDespesa.idDespesa.ToString()</p>
+            </div>
+        </div>
+        <div class="row">
+
+            <div class="col-sm-5 abreviar">
+                <p class="campo-info"><label>Tipo Despesa: </label>
+                    @Html.linkEditable(Model.TituloDespesa.id, "idTipoDespesa", Model.TituloDespesa.idTipoDespesa, "Tipo Despesa", urlEdicaoTitulo, "select", listaTipoDespesa, Model.TituloDespesa.TipoDespesa.descricao)
+                </p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-4 no-padding-right">
+                <p class="campo-info"><label>Nota Fiscal: </label>
+                    @Html.linkEditable(Model.TituloDespesa.id, "nroNotaFiscal", Model.TituloDespesa.nroNotaFiscal, "Nota Fiscal", urlEdicaoTitulo)
+                </p>
+            </div>
+            <div class="col-sm-3 no-padding-right">
+                <p class="campo-info"><label>Nº Contrato: </label>
+                    @Html.linkEditable(Model.TituloDespesa.id, "nroContrato", Model.TituloDespesa.nroContrato, "Nº Contrato", urlEdicaoTitulo, "text", "", "", 20)
+                </p>
+            </div>
+
+            <div class="col-sm-5 no-padding-right">
+                <p class="campo-info"><label>Nº Documento: </label>
+                    @Html.linkEditable(Model.TituloDespesa.id, "nroDocumento", Model.TituloDespesa.nroDocumento, "Nº Documento", urlEdicaoTitulo, "text", "", "", 50)
+                </p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-7 abreviar">
+                <p class="campo-info"><label>Modo Pagamento: </label>
+                    @Html.linkEditable(Model.TituloDespesa.id, "idModoPagamento", Model.TituloDespesa.idModoPagamento, "Modo de Pagamento", urlEdicaoTitulo, "select", listaModoPagamento, Model.TituloDespesa.ModoPagamentoDespesa.descricao, 0, 0, "", "", "", "DespesaDetalhe.iniciarBoxInformacoes()" )
+                </p>
+            </div>
+            <div class="col-sm-5 abreviar">
+                <p class="campo-info"><label>Código Boleto/Fatura: </label>
+                    @Html.linkEditable(Model.TituloDespesa.id, "codigoBoleto", Model.TituloDespesa.codigoBoleto, "Código Boleto/Fatura", urlEdicaoTitulo, "text", "", Model.TituloDespesa.codigoBoleto, 0, 0, "", "", "", "DespesaDetalhe.iniciarBoxInformacoes()" )
+                </p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 abreviar" data-toggle="tooltip" title="Dados de cadastro">
+                <span class="text-italic">
+                    <i class="fa fa-user"></i> Cadastrado em @Model.TituloDespesa.dtCadastro.exibirData() por @Model.TituloDespesa.UsuarioCadastro.nome
+                </span>
+            </div>            
+        </div>
+
+        
+        @if (Model.TituloDespesa.dtExclusao.HasValue) {
+            <div class="row">
+                <div class="col-sm-4">
+                    <span data-toggle="tooltip" title="Dt. Exclusão"><strong><i class="fa fa-calendar-times-o"></i> </strong>@(Model.TituloDespesa.dtExclusao.exibirData(true))</span>
+                </div>
+    
+                <div class="col-sm-4">
+                    <span data-toggle="tooltip" title="Usuário Exclusão"><strong><i class="fa fa-user-times"></i> </strong>@(Model.TituloDespesa.UsuarioExclusao.nome)</span>
+                </div>
+    
+                <div class="clearfix"></div>
+    
+                <div class="col-sm-12 abreviar">
+                    <span><strong><i class="fa fa-comment-o"></i> Motivo Exclusão: </strong>@(Model.TituloDespesa.motivoExclusao)</span>
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="col-md-6 padding-bottom-10 fs-12">
+
+        <div class="row">
+
+            <div class="col-sm-7 padding-bottom-10 bordered-gray-left-1 bordered-gray-right-1">
+                @{ Html.RenderPartial("partial-classificacao-bancaria"); }
+            </div>
+
+            <div class="col-sm-5 padding-bottom-10">
+                @{ Html.RenderPartial("partial-valores"); }
+            </div>
+            <div class="clearfix"></div>
+
+        </div>
+
+    </div>
+
+</div>
+@*
+<div class="row">
+    @if (!Model.TituloReceita.nomeRecibo.isEmpty()) {
+        <div class="col-sm-12 margin-bottom-10">
+            <h4 class="separator-form-icon"><i class="far fa-file"></i> Dados do Recibo: </h4>
+            <div class="row">
+                <div class="col-sm-2">
+                    Nome: @Model.TituloReceita.nomeRecibo
+                </div>
+                <div class="col-sm-2">
+                    Documento: @Model.TituloReceita.documentoRecibo.defaultIfEmpty("-")
+                </div>
+            </div>
+        </div>
+    }
+</div>
+*@
+
+<div class="row">
+    <div class="col-sm-12">
+        <h4 class="separator-form-icon"><i class="far fa-user"></i> Dados do Favorecido</h4>
+    </div>
+    <div class="col-sm-4 abreviar">
+        <span data-toggle="tooltip" title="Nome do favorecido">
+            <i class="fa fa-user"></i> 
+            @Html.linkEditable(Model.TituloDespesa.id, "nomePessoaCredor", Model.TituloDespesa.nomePessoaCredor.defaultIfEmpty(), "Nome Credor", urlEdicaoTitulo, "", "", "", 0, 0, "text-black")
+        </span>
+    </div>
+
+    <div class="col-sm-4 abreviar">
+        <span data-toggle="tooltip" title="Documento do favorecido">
+            <i class="fa fa-id-card"></i>
+            @Html.linkEditable(Model.TituloDespesa.id, "documentoPessoaCredor", Model.TituloDespesa.documentoPessoaCredor.defaultIfEmpty(), "Documento Credor", urlEdicaoTitulo, "text", "", UtilString.formatCPFCNPJ(Model.TituloDespesa.documentoPessoaCredor))
+        </span>
+    </div>
+
+    <div class="col-sm-4 abreviar">
+        <span data-toggle="tooltip" title="Telefone do favorecido">
+            <i class="fa fa-phone"></i>
+            @Html.linkEditable(Model.TituloDespesa.id, "nroTelPrincipalCredor", Model.TituloDespesa.nroTelPrincipalCredor.defaultIfEmpty(), "Tel. Principal Credor", urlEdicaoTitulo)
+        </span>
+    </div>
+
+    <div class="clearfix"></div>
+
+    <div class="col-sm-6 abreviar">
+        <span>
+            <i class="fa fa-university"></i> @Html.linkEditable(Model.TituloDespesa.id, "idContaBancariaFavorecida", Model.TituloDespesa.idContaBancariaFavorecida, "Conta Bancária Favorecida", urlEdicaoTitulo, "select", listaContaBancariaFavorecida, "", 0, 0, "text-black")
+        </span>
+    </div>
+
+</div>
+
+<div class="row margin-top-15">
+    <div class="col-sm-12">
+        <h4 class="separator-form-icon">
+            <i class="far fa-exclamation"></i> Observações:
+            <a href="javascript:;" class="editable-texteditor fs-11 text-italic " data-target="#observacaoTituloDespesa">
+                <i class="fa fa-edit"></i>
+                Editar
+            </a>
+        </h4>
+        <div class="text-justify padding-5" id="observacaoTituloDespesa" data-pk="@Model.TituloDespesa.id.toInt()" data-name="observacao" data-value="@Model.TituloDespesa.observacao" data-url="@Url.Action("modal-alterar-texteditor","TituloDespesaAlteracaoDados", new { area = "Financeiro"})" data-title="Observações">
+            @Html.Raw(Model.TituloDespesa.observacao)
+        </div>
+    </div>
+</div>

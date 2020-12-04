@@ -1,0 +1,25 @@
+﻿@using DAL.Transacoes
+@model WEB.Areas.Transacoes.ViewModels.DebitoVM
+
+@using (Html.BeginForm("index", "LancamentoDebito", FormMethod.Post, new {role = "form", @class = "default"})){
+    
+    @Html.Hidden("tipoOperacao", MovimentoConst.VALIDAR)
+    
+    <div class="col-sm-2">
+        @Html.labelRequired("Quantidade:")
+        @Html.TextBox("valorOperacao", Model.OMovimentoOperacaoDTO.valorOperacao, new {@class = "form-control input-sm", alt = "decimal"})
+    </div>
+    
+    <div class="col-sm-4">
+        @Html.labelRequired("Código do Membro/Comerciante:")
+        @Html.TextBox("nroContaDestino", Model.OMovimentoOperacaoDTO.nroContaDestino, new {@class = "form-control input-sm"})
+    </div>
+    
+    <div class="col-sm-4 margin-top-20">
+        <button type="submit" name="btIniciarTransferencia" class="margin-bts-filtro btn btn-sm btn-primary">Iniciar Lançamento de Débito</button>
+    </div>
+    <div class="clearfix"></div>
+                         
+}
+
+

@@ -1,0 +1,43 @@
+﻿@model WEB.Areas.Associados.ViewModels.WidgetResumoAssociadosPorPeriodo
+
+<div class="col-lg-3 col-xs-6 text-center borderred-silver-right borderred-silver-left margin-bottom-20">
+    <input type="hidden" id="totalAssociadosValue" value="@Model.qtdeTotalAssociados">
+    <input type="text" data-max="@Model.qtdeTotalAssociados" id="totalAssociados" class="dial" data-fgColor="#0073b7">
+    <div class="knob-label">
+        <a href="javascript:;" target="_blank" style="color: #0073b7; font-weight: bold;">
+            NOVOS
+        </a>
+    </div>
+</div>
+
+<div class="col-lg-3 col-xs-6 text-center borderred-silver-right margin-bottom-20">
+    <input type="hidden" id="totalAtivosValue" value="@Model.qtdeAssociadosAtivos">
+    <input type="text" data-max="@Model.qtdeTotalAssociados" id="totalAtivos" class="dial" data-fgColor="#00a65a">
+    <div class="knob-label">
+        <a href="javascript:;" target="_blank" style="color: #00a65a; font-weight: bold;">
+            ADMITIDOS
+        </a>
+    </div>
+</div>
+
+<div class="col-lg-3 col-xs-6 text-center borderred-silver-right borderred-silver-left margin-bottom-20">
+    <input type="hidden" id="totalEmAdmissaoValue" value="@Model.qtdeAssociadosAdmissao">
+    <input type="text" data-max="@Model.qtdeTotalAssociados" id="totalEmAdmissao" class="dial" data-fgColor="#f39c12">
+    <div class="knob-label">
+        <a href="javascript:;" target="_blank" style="color: #f39c12; font-weight: bold;">
+            EM ADMISSÃO
+        </a>
+    </div>
+</div>
+
+<div class="col-lg-3 col-xs-6 text-center borderred-silver-right margin-bottom-20">
+    <input type="hidden" id="totalInativosValue" value="@Model.qtdeAssociadosInativos">
+    <input type="text" data-max="@Model.qtdeTotalAssociados" id="totalInativos" class="dial" data-fgColor="#f56954">
+    <div class="knob-label">
+        <a href="javascript:;" target="_blank" style="color: #f56954; font-weight: bold;">
+            DESATIVADOS
+        </a>
+    </div>
+</div>
+
+<div class="clearfix"></div>

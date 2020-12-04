@@ -1,0 +1,110 @@
+﻿@model WEB.Areas.AssociadosOperacoes.ViewModels.AssociadoExclusaoForm
+
+@{
+    ViewBag.modalTitle = "Desligamento de Membro(s)";
+    ViewBag.modalWidthClass = "lg";
+
+    if (UtilRequest.getBool("IsPost") == true) {
+        Layout = null;
+    } else {
+        Layout = "~/views/shared/associatec/masterpage-modal.cshtml";
+    }
+
+}
+
+<div id="boxFormExclusao">
+    
+	@using (Ajax.BeginForm("excluir-associados", null, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "boxFormExclusao", InsertionMode = InsertionMode.Replace, OnSuccess = "AssociadoExclusao.onSuccessFormExclusao" }, new { id = "formExclusao", @class = "default" })) {
+        
+		{ Html.EnableClientValidation(false); }
+
+		@Html.Hidden("IsPost", true)
+
+        <div class="field" style="display:none">
+            @Html.EditorFor(m => m.idsAssociados)
+        </div>
+
+	    <div class="row">
+
+	        <div class="col-sm-6">
+
+	            <div class="row">
+                    <div class="col-md-12">
+                        @Html.labelRequired("Motivo do desligamento")
+                        @Html.DropDownListFor(m => m.idMotivoDesligamento, MotivoDesligamentoHelper.getInstance.selectList(Model.idMotivoDesligamento), "...", new { @class = "form-control input-sm" })
+                        @Html.ValidationMessageFor(m => m.idMotivoDesligamento)
+                    </div>
+
+	                <div class="col-md-12">
+                        @Html.labelRequired("Descreva o motivo do desligamento")
+	                    @Html.TextAreaFor(m => m.motivoExclusao, new { @class = "form-control input-sm", rows = "9" })
+	                    @Html.ValidationMessageFor(m => m.motivoExclusao)
+	                </div>
+	                <div class="clearfix"></div>
+
+	            </div>
+
+	        </div>
+
+	        <div class="col-sm-6">
+
+	            <label>@Model.listaAssociados.Count() membros selecionados</label>
+
+	            <div id="boxAssociadosSelecionados" class="hide">
+                    
+	                @if (Model.listaAssociados.Count() > 1000) {
+
+	                    <div class="alert alert-info">
+	                        
+	                        Você selecionou mais de 1000 membros para realizar o desligamento e, por motivo de desempenho,
+	                        a lista com o detalhe dos membros não será exibida, porém todos os membros selecionados
+	                        serão desligados.
+
+	                    </div>
+
+	                }
+                    
+	                @if (Model.listaAssociados.Count() <= 1000) {
+
+	                    foreach (var OAssociado in Model.listaAssociados) {
+
+	                        <div class="box-info-item">
+
+	                            <div class="row">
+
+	                                <div class="col-md-12">
+
+	                                    <span class="titulo">
+	                                        <i class="fa fa-user"></i> @OAssociado.nome
+	                                    </span><br>
+
+	                                    <span># @(OAssociado.nroAssociado ?? OAssociado.id)</span> <em>(@OAssociado.descricaoTipoAssociado)</em>
+
+	                                </div>
+
+	                            </div>
+
+	                        </div>
+
+	                    }
+
+	                }
+
+	            </div>
+
+	        </div>
+
+            <div class="clearfix"></div>
+
+	    </div>
+        
+
+	}
+</div>
+
+@section modalFooter{
+	<div class="text-right">
+		<input type="button" value="Cancelar" class="btn btn-default" data-dismiss="modal" aria-hidden="true" />
+		<input type="button" value="Confirmar Desligamento" class="btn btn-primary link-loading" onclick="$('#formExclusao').submit();" />
+	</div>
+}

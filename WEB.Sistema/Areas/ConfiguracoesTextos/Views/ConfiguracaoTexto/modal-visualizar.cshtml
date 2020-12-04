@@ -1,0 +1,28 @@
+﻿@model WEB.Areas.ConfiguracoesTextos.ViewModels.ConfiguracaoTextoForm
+@{
+    ViewBag.modalTitle = "Visualizar configuração de texto";
+
+    Layout = "~/views/shared/associatec/masterpage-modal.cshtml";
+}
+
+<div class="col-md-6">
+    <label>Key</label>
+    @* @Html.boxInfo(Model.ConfiguracaoTexto.id, "col-md-12 padding-5") *@
+</div>
+<div class="clearfix"></div><br/>
+
+<div class="col-md-6">
+    <label>Texto Padrão</label>
+    <div>
+        @* @Html.Raw(Model.ConfiguracaoTexto.textoPadrao?.Replace(Environment.NewLine, "<br />")) *@
+    </div>
+</div>
+
+<div class="col-md-6">
+    <label>Texto Personalizado</label>
+    <div>
+        @* @Html.Raw(Model.ConfiguracaoTexto.texto?.Replace(Environment.NewLine, "<br />")) *@
+    </div>
+</div>
+
+<div class="clearfix"></div>

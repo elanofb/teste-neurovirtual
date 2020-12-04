@@ -1,0 +1,38 @@
+﻿@model  WEB.Areas.Arquivos.ViewModels.ArquivoUploadVM
+
+@{ Layout = null; }
+
+<script type="text/javascript" src="@UtilConfig.linkResourses()Areas/Arquivos/js/arquivo-documento.js?v1.6"></script>
+
+<div class="row">
+    <div class="col-md-12">
+        @using (Html.BeginForm("editar-documento", "arquivo", new {area = "arquivos"}, FormMethod.Post, new {enctype = "multipart/form-data", @class = ""})) {
+            @Html.ValidationSummary(true, "Erro. Não foi possível concluir a operação, verifique os campos.")
+            @Html.HiddenFor(m => m.idReferenciaEntidade)
+            @Html.HiddenFor(m => m.entidade, new {id = "entidadeArquivo"})
+            @Html.HiddenFor(m => m.categoria, new {id = "categoriaArquivo"})
+            @Html.HiddenFor(m => m.idReferenciaEntidade, new {id = "idReferenciaEntidade"})
+
+            <div class="col-md-12">
+                <label>Arquivo</label>
+                @Html.inputFileSimples("FileUpload")
+                @Html.ValidationMessageFor(m => m.FileUpload)
+            </div>
+            <div class="clearfix"></div>
+
+            <div class="col-md-12">
+                <label>Descrição do Arquivo</label>
+                @Html.TextBoxFor(m => m.legenda, new {@class = "form-control", maxlength = "100"})
+                @Html.ValidationMessageFor(m => m.legenda)
+            </div>
+            <div class="clearfix"></div>
+            <br />
+
+            <div class="padding-right-15 text-right">
+                <input class="btn btn-primary link-loading" onclick="ArquivoDocumento.uploadArquivo(this.form);" type="button" value="Salvar Arquivo" />
+            </div>
+            <div class="clearfix"></div>
+        }
+    </div>
+    <div class="clearfix"></div>
+</div>

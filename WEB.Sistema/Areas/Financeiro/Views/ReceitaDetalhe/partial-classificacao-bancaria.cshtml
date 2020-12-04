@@ -1,0 +1,78 @@
+﻿@model WEB.Areas.Financeiro.ViewModels.ReceitaForm
+@using System.Web.Script.Serialization
+@using DAL.Financeiro
+@using WEB.Areas.ContasBancarias.Helpers
+
+
+@{
+    var listaCentroCusto = CentroCustoHelper.getInstance.selectList(null, false).Select(y => new {value = y.Value, text = y.Text}).ToList();
+    listaCentroCusto.Add(new { value = "", text = "" });
+
+    var listaMacroConta = MacroContaHelper.getInstance.selectListPorTipo(null, "R", false).Select(y => new {value = y.Value, text = y.Text}).ToList();
+    listaMacroConta.Add(new { value = "", text = "" });
+
+    var listaSubConta = CategoriaTituloHelper.getInstance.selectList(null, Model.TituloReceita.idMacroConta, false).Select(y => new {value = y.Value, text = y.Text}).ToList();
+    listaSubConta.Add(new { value = "", text = "" });
+
+    var listaContaBancaria = ContaBancariaHelper.getInstance.selectList(null).Select(y => new {value = y.Value, text = y.Text}).ToList();
+    listaContaBancaria.Add(new { value = "", text = "" });
+
+
+    var sourceCentroCusto = new JavaScriptSerializer().Serialize(listaCentroCusto);
+    var sourceMacroConta = new JavaScriptSerializer().Serialize(listaMacroConta);
+    var sourceSubConta = new JavaScriptSerializer().Serialize(listaSubConta);
+    var sourceContaBancaria = new JavaScriptSerializer().Serialize(listaContaBancaria);
+}
+
+<div class="btn btn-block btn-primary abreviar" data-toggle="tooltip" title="Classificação Bancária"><i class="fa fa-bank"></i> Classificação de Contas</div>
+
+<div class="row">
+
+    <div class="col-sm-12 margin-top-10 margin-left-10 abreviar">
+        <p class="campo-info">
+            <label><i class="fa fa-chevron-right"></i> Conta Bancária: </label>
+            <a href="#" class="info-editavel editable editable-click icon-before" data-type="select" data-source="@sourceContaBancaria"
+               data-pk="@Model.TituloReceita.id" data-name="idContaBancaria" data-value="@Model.TituloReceita.idContaBancaria" data-title="Conta Bancária">
+
+                @(Model.TituloReceita.ContaBancaria?.descricao)
+            </a>
+        </p>
+    </div>
+    <div class="clearfix"></div>
+
+    <div class="col-sm-12 margin-left-10 abreviar">
+        <p class="campo-info">
+            <label><i class="fa fa-chevron-right"></i> Centro de Custo: </label>
+            <a href="#" class="info-editavel editable editable-click icon-before" data-type="select" data-source="@sourceCentroCusto"
+               data-pk="@Model.TituloReceita.id" data-name="idCentroCusto" data-value="@Model.TituloReceita.idCentroCusto" data-title="Centro de Custo">
+
+                @(Model.TituloReceita.CentroCusto?.descricaoCentroCusto())
+            </a>
+        </p>
+    </div>
+    <div class="clearfix"></div>
+
+    <div class="col-sm-12 margin-left-10 abreviar">
+        <p class="campo-info">
+            <label><i class="fa fa-chevron-right"></i> Macro Conta: </label>
+            <a href="#" class="info-editavel editable editable-click icon-before" data-refresh-box="true" data-type="select" data-source="@sourceMacroConta"
+               data-pk="@Model.TituloReceita.id" data-name="idMacroConta" data-value="@Model.TituloReceita.idMacroConta" data-title="Macro Conta">
+
+                @(Model.TituloReceita.MacroConta?.descricaoMacroConta())
+            </a>
+        </p>
+    </div>
+    <div class="clearfix"></div>
+
+    <div class="col-sm-12 margin-left-10 abreviar">
+        <p class="campo-info">
+            <label><i class="fa fa-chevron-right"></i> Sub-Conta: </label>
+            <a href="#" class="info-editavel editable editable-click icon-before" data-type="select" data-source="@sourceSubConta"
+               data-pk="@Model.TituloReceita.id" data-name="idCategoria" data-value="@Model.TituloReceita.idCategoria" data-title="Categoria">
+
+                @(Model.TituloReceita.Categoria?.descricaoSubConta())
+            </a>
+        </p>
+    </div>
+    <div class="clearfix"></div>
+</div>

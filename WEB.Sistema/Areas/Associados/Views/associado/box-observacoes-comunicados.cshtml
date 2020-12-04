@@ -1,0 +1,26 @@
+﻿@model WEB.Areas.Associados.ViewModels.AssociadoForm
+@using WEB.Areas.Enderecos.Helpers
+
+<div class="col-md-6">
+    <h4 class="separator-form">Observações Importantes</h4>
+    <div class="row">
+        <div class="col-sm-12">
+            @Html.TextAreaFor(m => m.Associado.observacoes, new { @class = "form-control", rows = "5", placeholder = "Insira aqui informações importantes sobre o associado." })
+        </div>
+    </div>
+</div>
+<div class="col-md-6">
+    <h4 class="separator-form">Comunicados e Informativos</h4>
+    <div class="row">
+        <div class="col-sm-12">
+            <label>Enviar correspondências para o endereço:</label>
+            @Html.DropDownListFor(m => m.Associado.Pessoa.idTipoEnderecoCorrespondencia, TipoEnderecoHelper.selectList(Model.Associado.Pessoa.idTipoEnderecoCorrespondencia), new { @class = "form-control input-sm" })
+            @Html.ValidationMessageFor(m => m.Associado.Pessoa.idTipoEnderecoCorrespondencia)
+        </div>
+        <div class="col-sm-12 col-md-6">
+            <label>Enviar informativos online?</label>
+            @Html.DropDownListFor(m => m.Associado.flagInformativosOnline, ComboHelper.selectListYesNo(Model.Associado.flagInformativosOnline), new { @class = "form-control input-sm col-md-3" })
+            @Html.ValidationMessageFor(m => m.Associado.flagInformativosOnline)
+        </div>
+    </div>
+</div>

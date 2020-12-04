@@ -1,0 +1,144 @@
+﻿@model PagedList.IPagedList<WEB.Areas.NaoAssociados.ViewModels.ItemListaNaoAssociado>
+@using PagedList.Mvc
+
+@{
+    ViewBag.titlePage = "Comerciantes";
+    ViewBag.subTitlePage = "Veja abaixo a lista de comerciantes cadastrados atualmente.";
+}
+
+
+@section styles {
+    <link href="@UtilConfig.linkResourses()css/associatec/list-custom.css" rel="stylesheet" />
+}
+
+<div class="box box-primary">
+    @Html.headerBox("Filtros de Busca", "fa fa-filter")
+    <div class="box-body">
+        @using (Html.BeginForm(null, null, FormMethod.Get, new { id = "fmFiltro" })) {
+            
+            @*<div class="form-group col-md-3 col-sm-6">
+                
+                <label>Tipo de Comerciante</label>
+                @Html.DropDownList("idTipoAssociado", TipoAssociadoHelper.getInstance.selectList(UtilRequest.getInt32("idTipoAssociado"), "", true), "Todos", new{@class = "form-control input-sm"})
+            </div>*@
+            
+            <div class="form-group col-md-3">
+                <label>Status</label>
+                @Html.DropDownList("flagAtivo", AssociadoHelper.selectListAtivo(UtilRequest.getString("flagAtivo")), "Todos", new { @class = "form-control input-sm" })
+            </div>
+            <div class="form-group col-md-3">
+                <label>Tipo de Saída</label>
+                @Html.DropDownList("tipoSaida", TipoSaidaHelper.selectListTipoSaida(UtilRequest.getString("tipoSaida")), new { @class = "form-control input-sm" })
+            </div>
+            <div class="form-group col-md-3">
+                <label>Buscar</label>
+                @Html.buttonSearch(UtilRequest.getString("valorBusca"))
+            </div>
+        }
+    </div>
+</div>
+
+
+<div class="box box-primary">
+
+    <div class="box-header with-border">
+        <div class="box-title">
+            <i class="far fa-chart-bar"></i> Resultados
+        </div>
+        <div class="box-tools pull-right">
+            <a href="@Url.Action("cadastrar", "NaoAssociadoCadastro")" class="btn btn-box-tool"><i class="far fa-plus-circle"></i> Cadastrar Comerciante</a>
+        </div>
+    </div>
+
+    <div class="box-body">
+
+        @if (!Model.Any()) {
+            <div class="col-sm-12">
+                <div class="alert alert-info">
+                    Nenhum cadastro foi encontrado.
+                </div>
+            </div>
+        }
+
+        @foreach (var OAssociado in Model) {
+
+            <div class="box-info-item-dotted">
+
+                <div class="row">
+
+                    <div class="col-md-4 col-sm-4 col-xs-4">
+                        
+                        <a href="@Url.Action("editar", "AssociadoCadastro", new {OAssociado.id})" class="titulo text-black">
+                            
+                            <i class="fa @(OAssociado.flagTipoPessoa == "J"? "fa-building": "fa-user")"></i> @OAssociado.nome.abreviar(30, "").ToUpper()
+                        </a><br />
+
+                        <span data-toggle="tooltip" title="Número do membro"># @(OAssociado.nroAssociado)</span> <em>(@(OAssociado.descricaoTipoAssociado))</em>
+                        
+                    </div>
+
+                    <div class="col-md-2 col-sm-3 col-xs-3">
+                        <span>
+                            <i class="fa fa-id-card"></i> @UtilString.formatCPFCNPJ(OAssociado.nroDocumento)
+                        </span><br/>
+
+                        @if (!UtilString.formatPhone(OAssociado.nroTelefone).isEmpty()) {
+                            <span>
+                                <i class="fa fa-phone"></i> @UtilString.formatPhone(OAssociado.nroTelefone)
+                            </span>
+                        }
+                    </div>
+
+                    <div class="col-lg-3 col-md-2 hidden-sm hidden-xs">
+                        <span data-toggle="tooltip" title="Data em que o estabelecimento ingressou">
+                            <i class="far fa-calendar"></i> @OAssociado.dtCadastro.exibirData(false)
+                        </span><br />
+
+                        @if (!OAssociado.email.isEmpty()) {
+                            <span>
+                                <i class="far fa-envelope"></i> @OAssociado.email
+                            </span>
+                        }
+                        
+                    </div>
+
+                    <div class="col-md-2 col-sm-3 col-xs-3">
+
+                        <div class="row">
+                            
+                            <div class="col-md-12 margin-bottom-5">
+                                <span class="@OAssociado.exibirClasseStatus()"><i class="fa @OAssociado.exibirIconeStatus()"></i> @OAssociado.exibirStatus()</span> 
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+
+                    </div>
+
+                    <div class="col-lg-1 col-md-2 col-sm-2 text-right">
+
+                        <div class="dropdown">
+                            <a href="javascript:;" class="dropdown-toggle" type="button" data-toggle="dropdown">
+                                Ações
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-right">
+                                <li>@Html.linkTexto("<i class=\"far fa-edit\"></i> Editar Cadastro", Url.Action("editar", "NaoAssociadoCadastro", new { OAssociado.id }))</li>
+                            </ul>
+                        </div>
+
+
+                    </div>
+
+                    <div class="clearfix"></div>
+
+
+                </div>
+
+            </div>
+
+        }
+
+        @(Html.paginarRegistros(Model, Html.PagedListPager(Model, nroPagina => UtilRequest.linkPaginacao(nroPagina, "listar"), PagedListRenderOptions.OnlyShowFivePagesAtATime)))
+
+    </div>
+</div>

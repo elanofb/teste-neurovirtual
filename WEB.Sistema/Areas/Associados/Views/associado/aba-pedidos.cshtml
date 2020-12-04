@@ -1,0 +1,9 @@
+﻿@model WEB.Areas.Associados.ViewModels.AssociadoForm
+
+<div class="tab-pane" id="tab-pedidos">
+
+    <h4 class="separator-form">Pedidos realizados pelo associado</h4>
+
+    <div id="boxLoadListaPedidos" class="content-load carregando" data-url="@Url.Action("partial-listar-pedidos", "PedidoPessoa", new {area = "pedidos", Model.Associado.idPessoa})"></div>
+
+</div>

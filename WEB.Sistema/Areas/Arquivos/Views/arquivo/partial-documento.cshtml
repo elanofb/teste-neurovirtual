@@ -1,0 +1,25 @@
+﻿@model  WEB.Areas.Arquivos.ViewModels.ArquivoUploadVM
+
+@{
+    ViewBag.modalTitle = "Documentos";
+    ViewBag.modalWidthClass = "lg";
+    if(IsPost) {
+        Layout = null;
+    } else {
+        Layout = "~/views/shared/associatec/masterpage-modal.cshtml";
+    }
+}
+
+@if (Model.flagView != true) {
+    <div class="col-md-5">
+        <h4 class="separator-form">Cadastrar Documentos/Arquivos</h4>
+        <div id="boxLoadFormModalDocumentos" class="" data-url="@Url.Action("editar-documento", "arquivo", new {area = "arquivos", idReferencia = Model.idReferenciaEntidade, Model.entidade })"></div>
+    </div>
+}
+
+<div class="@(Model.flagView == true ? "col-md-12" : "col-md-offset-1 col-md-6")">
+    <h4 class="separator-form">Documentos e Arquivos</h4>
+    <div id="boxLoadListaModalDocumentos" class="" data-url="@Url.Action("listar-galeria-documentos", "arquivo", new {area = "arquivos", idReferencia = Model.idReferenciaEntidade, Model.entidade })"></div>
+</div>
+
+<div class="clearfix"></div><br />

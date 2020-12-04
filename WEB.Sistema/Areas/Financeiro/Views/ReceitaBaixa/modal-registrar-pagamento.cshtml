@@ -1,0 +1,41 @@
+﻿@model WEB.Areas.Financeiro.ViewModels.BaixaTituloReceitaForm
+@using WEB.Helpers
+@using MvcFlashMessages
+@{
+    ViewBag.modalTitle = $"Registrar Pagamento(s) {Model.TituloReceita.descricao.abreviar(50)}";
+
+    ViewBag.modalWidthClass = "lg";
+
+    string idBox = "boxRegistrarPagamentoForm";
+
+    bool flagSubmit = this.ViewContext.RouteData.Values["action"].ToString() == "registrar-pagamento";
+
+    Layout = flagSubmit ? null : "~/views/shared/associatec/masterpage-modal.cshtml";
+}
+
+<script type="text/javascript" src="@UtilConfig.linkResourses("Areas/Financeiro/js/receita-registrar-pagamento.js?v=1.0")"></script>
+
+<div id="@(flagSubmit? "": idBox)">
+    @Html.RenderFlash()
+
+    <p class="alert alert-warning"><strong>Atenção!</strong> Essa operação não poderá ser desfeita. Preencha as informações atentamente.
+    </p>
+
+        @using (Ajax.BeginForm("registrar-pagamento", "ReceitaBaixa", new { area = "financeiro" }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = idBox,  InsertionMode = InsertionMode.Replace, OnSuccess = "ReceitaBaixa.onSuccessPagamentoForm" }, new { @class="form-min-label"})) {
+            @Html.legendaRequired()<br />
+
+            { Html.EnableClientValidation(false); }
+            @Html.ValidationSummary(false)
+            @Html.HiddenFor(x => x.TituloReceita.id)
+            
+	        { Html.RenderPartial("~/Areas/Financeiro/Views/ReceitaBaixa/partial-form-baixa.cshtml", Model); }
+
+	        <div class="row margin-top-10 margin-bottom-30">
+		        <div class="col-md-12 text-right">
+			        <input type="submit" class="btn btn-primary link-loading" title="Adicionar" value="Salvar Pagamento"  />
+		        </div>
+	        </div>
+
+	}
+
+</div>

@@ -1,0 +1,85 @@
+﻿@using MvcFlashMessages
+@model  WEB.Areas.Pessoas.ViewModels.PessoaContatoForm
+@{
+    Layout = null;
+}
+
+
+<div id="boxFormContatos">
+
+    <script type="text/javascript" src="@UtilConfig.linkResourses("Areas/Pessoas/js/pessoacontato.js?v1.4")"></script>
+
+    @Html.RenderFlash()
+
+    @using (Ajax.BeginForm("editar", "pessoacontato", new AjaxOptions { HttpMethod = "POST", InsertionMode = InsertionMode.Replace, UpdateTargetId = "boxFormContatos", OnSuccess = "PessoaContato.onSuccessForm" }, new { @class = "" })) {
+
+        {
+            Html.EnableClientValidation(false);
+        }
+        @Html.legendaRequired()<br />
+        @Html.HiddenFor(m => m.PessoaContato.id)
+        @Html.HiddenFor(m => m.PessoaContato.idPessoa, new { @class = "nao-limpar" })
+        if (Model.PessoaContato.id > 0) {
+            @Html.HiddenFor(m => m.PessoaContato.ativo, new { @class = "nao-limpar" })
+        }
+
+        <div class="row">
+            @Html.ValidationSummary(true, "Algumas informações precisam ser corrigidas abaixo.")
+
+            <div class="col-sm-6 col-lg-4">
+                @Html.labelRequired("Nome")
+                @Html.TextBoxFor(m => m.PessoaContato.nome, new { @class = "form-control input-sm" })
+                @Html.ValidationMessageFor(m => m.PessoaContato.nome)
+            </div>
+
+            <div class="col-sm-6 col-lg-4">
+                <label>Área do Contato</label>
+                <div class="input-group">
+                    
+                    @Html.DropDownListFor(m => m.PessoaContato.idTipoContato, TipoContatoHelper.selectList(Model.PessoaContato.idTipoContato), "...", new { @class = "form-control input-sm combo-tipo-contato", id = "idTipoContato" })
+                   
+                    <span class="input-group-addon">
+                        <a href="javascript:;" onclick="DefaultSistema.showModal('@Url.Action("modal-form-cadastro", "TipoContatoCadastro", new { Area = "Contatos", flagRecarregar = false, idComboSelecionar = "idTipoContato" })')" class="fs-14 link-loading-min" title="Cadastrar Nova Área" data-toggle="tooltip">
+                            <i class="fa fa-plus-circle"></i>
+                        </a>
+                    </span>
+                    
+                </div>
+                @Html.ValidationMessageFor(m => m.PessoaContato.idTipoContato)
+            </div>
+            <div class="clearfix"></div>
+
+            <div class="col-sm-6 col-lg-4">
+                <label>E-mail</label>
+                @Html.TextBoxFor(m => m.PessoaContato.email, new { @class = "form-control input-sm" })
+                @Html.ValidationMessageFor(m => m.PessoaContato.email)
+            </div>
+
+            <div class="col-sm-3 col-lg-2">
+                <label>Telefone Comercial</label>
+                @Html.TextBoxFor(m => m.PessoaContato.telComercial, new { @class = "form-control input-sm", alt = "phone" })
+                @Html.ValidationMessageFor(m => m.PessoaContato.telComercial)
+            </div>
+
+            <div class="col-sm-3 col-lg-2">
+                <label>Telefone Celular</label>
+                @Html.TextBoxFor(m => m.PessoaContato.telCelular, new { @class = "form-control input-sm", alt = "phone" })
+                @Html.ValidationMessageFor(m => m.PessoaContato.telCelular)
+            </div>
+            <div class="clearfix"></div>
+
+            <div class="col-sm-12 col-lg-8">
+                <label>Observações</label>
+                @Html.TextAreaFor(m => m.PessoaContato.observacao, new { @class = "form-control input-sm", rows = 4 })
+                @Html.ValidationMessageFor(m => m.PessoaContato.observacao)
+            </div>
+            <div class="clearfix"></div><br />
+            <div class="col-sm-12 col-lg-8">
+                <div class="text-right">
+                    <input type="submit" name="salvar" value="Salvar Contato" class="btn btn-primary link-loading" />
+                </div>
+            </div>
+        </div>
+    }
+</div>
+<div class="clearfix"></div>

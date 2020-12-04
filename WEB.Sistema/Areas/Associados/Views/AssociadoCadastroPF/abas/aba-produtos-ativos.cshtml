@@ -1,0 +1,15 @@
+﻿@model DAL.Associados.Associado
+
+<div class="tab-pane" id="tab-produtos-ativos">
+    
+    <h4 class="separator-form-icon no-margin-bottom">
+        
+        <i class="far fa-list"></i> Produtos Ativos                       
+        
+    </h4>
+        
+    <div id="boxLoadListaProdutosAtivos" class="carregando content-load" data-url="@Url.Action("partial-listar-produtos-ativos", "PedidoPessoa", new {area = "Pedidos", Model.idPessoa})"></div>
+    
+    <div class="clearfix"></div><br/>
+    
+</div>

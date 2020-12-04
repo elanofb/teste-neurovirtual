@@ -1,0 +1,91 @@
+﻿@model WEB.Areas.Financeiro.ViewModels.ModalDetalhePagamento
+@using WEB.Helpers
+@using MvcFlashMessages
+
+@{
+    Layout = "~/views/shared/associatec/masterpage-modal.cshtml";
+
+    ViewBag.modalTitle = "Detalhe de pagamentos";
+
+    ViewBag.modalWidthClass = "lg";
+
+    if (IsPost) {
+        Layout = null;
+    }
+}
+
+<script type="text/javascript" src="@UtilConfig.linkResourses()Areas/Financeiro/js/tituloreceitapagamento.js"></script>
+<div>
+    @Html.RenderFlash()
+
+    <div class="col-md-12">
+        <div class="row">
+            <div class="col-md-3">
+                <label class="data-title">ID</label>
+                <label class="data-info">@Model.TituloReceita.id</label>
+            </div>
+            <div class="col-md-6">
+                <label class="data-title">Pessoa</label>
+                <label class="data-info">@Model.TituloReceita.nomePessoa</label>
+            </div>
+            <div class="col-md-3">
+                <label class="data-title">Vencimento</label>
+                <label class="data-info">@Model.TituloReceita.dtVencimento.exibirData()</label>
+            </div>
+        </div>
+        <div class="row margin-top-10">
+            <div class="col-md-3">
+                <label class="data-title">Valor</label>
+                <label class="data-info">@Model.TituloReceita.valorTotal.exibirValor()</label>
+            </div>
+            <div class="col-md-3">
+                <label class="data-title">Quitação</label>
+                <label class="data-info">@(Model.TituloReceita.dtQuitacao.HasValue ? Model.TituloReceita.dtQuitacao.exibirData().ToString() : "Pendente")</label>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <hr/>
+
+    @if (Model.TituloReceita.valorTotal > Model.listaPagamentos.Sum(x => x.valorOriginal)) {
+        <div class="alert alert-danger">
+            <i class="fa fa-exclamation-triangle"></i>
+            <strong>Atenção!</strong> O valor total das parcelas não é suficiente para quitar o valor total de @Model.TituloReceita.valorTotal.exibirValor()<br/>
+        </div>
+
+        <h4 class="separator-form">Inclua uma nova parcela para ajustar os valores</h4>
+        <div class="col-xs-6">
+            <div id="box-form-adicionar-parcela">
+                @{Html.RenderPartial("partial-form-ajustar-parcelas", Model);}
+            </div>
+        </div>
+        <div class="clearfix"></div><br/>
+    }
+
+
+    <div class="col-md-12">
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active"><a href="#pagamentos" aria-controls="pagamentos" role="tab" data-toggle="tab">Parcelas</a></li>
+            <li role="presentation"><a href="#logs" aria-controls="logs" role="tab" data-toggle="tab">Log de Operações</a></li>
+        </ul>
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="pagamentos">
+                @{Html.RenderPartial("partial-table-parcelas", Model);}
+                <div class="clearfix"></div><br>
+            </div>
+
+            <div role="tabpanel" class="tab-pane" id="logs">
+                <br/>
+                @{Html.RenderPartial("partial-table-parcelas-excluidas", Model);}
+
+                <div class="clearfix"></div><br>
+
+            </div>
+        </div>
+
+
+    </div>
+    <div class="clearfix"></div>
+
+
+</div>

@@ -1,0 +1,71 @@
+﻿@model IList<DAL.Associados.SpAssociadosPesquisaRapida>
+@using DAL.Associados
+@using DAL.Permissao.Security.Extensions
+
+<div id="boxResultadoPesquisa" class="margin-top-10">
+
+    <table class="table no-margin">
+        <thead>
+        <tr>
+            <th class="text-left">Cadastro</th>
+            <th class="text-left" width="150">Documento</th>
+            <th class="text-left" width="100">Tipo</th>
+            <th class="text-left" width="60">Status</th>
+        </tr> 
+        </thead>
+        <tbody>
+
+            @if(!Model.Any()) {
+                <tr>
+                    <td colspan="4" class="text-center">Nenhum registro foi localizado.</td>
+                </tr>
+            }
+
+            @foreach(var Item in Model){
+                
+                string area = Item.idTipoCadastro == AssociadoTipoCadastroConst.COMERCIANTE ? "NaoAssociados" : "Associados"; 
+                string controller = Item.idTipoCadastro == AssociadoTipoCadastroConst.COMERCIANTE ? "NaoAssociadoCadastro" : "AssociadoCadastro"; 
+                
+                var urlDetalhes = Url.Action("editar", controller, new { area = area, Item.id });
+                
+                <tr class="cursor-pointer">
+                    <td class="text-left fs-12">
+                        <a href="@urlDetalhes" target="_blank">
+                            <i class="far fa-hashtag"></i> @(Item.nroAssociado ?? Item.id) 
+                            @Item.nome
+                        </a>
+
+                    </td>
+                    <td class="text-left fs-12">
+                        <a href="@urlDetalhes" target="_blank">
+                            <i class="far fa-id-card"></i> @UtilString.formatCPFCNPJ(Item.nroDocumento)<br/>
+                        </a>
+                    </td>
+                    <td class="text-left fs-12">
+                        <a href="@urlDetalhes" target="_blank">
+                            @if (Item.idTipoCadastro == AssociadoTipoCadastroConst.COMERCIANTE) {
+                                <span><i class="far fa-tag"></i> Comerciante</span>
+                            } else {
+                                <span><i class="far fa-tag"></i> @Item.descricaoTipoAssociado.defaultIfEmpty("Consumidor")</span>
+                            }                            
+                        </a>
+                    </td>
+                    <td class="text-center fs-12">@(Item.ativo == "S" ? "Ativo" : (Item.ativo == "E" ? "Em admissão" : "Inativo") )</td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+</div>
+<div class="clearfix"></div><br />
+
+<div class="col-md-12 text-right">
+
+    <button class="btn btn-primary bg-blue">
+        Total de Registros: <span class="badge">@Model.Count</span>
+    </button>
+
+    <a href="javascript:;" class="btn btn-error bg-red" onclick="$('#boxPesquisaRapida').hide();">Fechar</a>
+
+</div>
+<div class="clearfix"></div><br/>

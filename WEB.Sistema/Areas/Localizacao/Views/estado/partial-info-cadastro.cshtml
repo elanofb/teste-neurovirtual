@@ -1,0 +1,19 @@
+﻿@model WEB.Areas.Localizacao.ViewModels.EstadoVM
+
+@if(Model.Estado.id > 0) {
+    <div class="form-horizontal">
+        <div class="col-md-1">
+            <label>ID</label>
+            <input type="text" class="form-control input-sm" readonly="readonly" value="@Model.Estado.id" />
+        </div>
+        <div class="col-md-2">
+            <label>Cadastrado em:</label>
+            <input type="text" class="form-control input-sm" readonly="readonly" value="@Model.Estado.dtCadastro.exibirData(true)" />
+        </div>
+        <div class="col-md-2">
+            <label>Alterado em:</label>
+            <input type="text" class="form-control input-sm" readonly="readonly" value="@Model.Estado.dtAlteracao.exibirData(true)" />
+        </div>
+        <div class="clearfix"></div>
+    </div>
+}

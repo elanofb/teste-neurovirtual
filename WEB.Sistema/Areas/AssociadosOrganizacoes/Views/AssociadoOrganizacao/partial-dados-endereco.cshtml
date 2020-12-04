@@ -1,0 +1,35 @@
+﻿@model List<DAL.Pessoas.PessoaEndereco>
+
+@if (!Model.Any()) {
+    <div class="alert alert-info">
+        Nenhum endereço cadastrado
+    </div>
+
+    return;
+} 
+
+<h4 class="separator-form-icon no-margin-top"> Endereços</h4>
+
+@foreach (var OEndereco in Model) {
+    
+    <div class="padding-5 bordered-gray margin-bottom-5">
+
+        <div>
+            <strong><i class="fa fa-map-marker"></i> @UtilString.formatCEP(OEndereco.cep)</strong>
+        </div>
+
+        <div>
+            @OEndereco.logradouro @OEndereco.numero @OEndereco.complemento
+        </div>
+
+        <div>
+            <span>@OEndereco.bairro</span>
+        </div>
+
+        <div>
+            <span>@(OEndereco.Cidade.nome ?? OEndereco.nomeCidade)/@(OEndereco.Estado.sigla ?? OEndereco.uf)</span>
+        </div>
+
+    </div>
+    
+}

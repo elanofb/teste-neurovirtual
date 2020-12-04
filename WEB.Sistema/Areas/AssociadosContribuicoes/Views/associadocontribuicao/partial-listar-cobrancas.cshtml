@@ -1,0 +1,150 @@
+﻿@model AssociadoContribuicaoPartialLista
+
+@using DAL.Financeiro
+@using WEB.Areas.AssociadosContribuicoes.Extensions
+@using WEB.Areas.AssociadosContribuicoes.Helpers
+@using WEB.Areas.AssociadosContribuicoes.ViewModels
+@using WEB.Areas.Financeiro.Helpers
+
+<br />
+
+<link href="@UtilConfig.linkResourses("js/associatec/plugins/webui-popover/src/jquery.webui-popover.css")" rel="stylesheet" />
+<script src="@UtilConfig.linkResourses("js/associatec/plugins/webui-popover/src/jquery.webui-popover.js")" type="text/javascript"></script>
+
+<script src="@UtilConfig.linkResourses("Areas/AssociadosContribuicoes/js/associado-contribuicao-exclusao.js?v=1.0")"></script>
+<script src="@UtilConfig.linkResourses("Areas/AssociadosContribuicoes/js/associado-contribuicao-isencao.js?v=1.0")"></script>
+<script src="@UtilConfig.linkResourses("Areas/Financeiro/js/receita-baixa.js?v=1.1")"></script>
+<script src="@UtilConfig.linkResourses("Areas/FinanceiroParcelamentos/js/titulo-receita-parcelamento.js?v=1.5")"></script>
+<script src="@UtilConfig.linkResourses("Areas/FinanceiroNotificacoes/js/titulo-receita-cobranca.js?v=1.0")"></script>
+<script src="@UtilConfig.linkResourses("Areas/Financeiro/js/desconto-antecipacao.js?v=1.2")"></script>
+
+
+<div class="text-right">
+    <button class="btn btn-info">
+        <i class="far fa-chart-bar"></i> <strong>@Model.qtdeCobrancas</strong> cobranças(s) cadastrada(s) para o associado
+    </button>
+</div>
+<div class="row">
+    <div class="col-sm-12">
+        @if (Model.listaContribuicoes.Any()) {
+            foreach (AssociadoContribuicaoItemLista OItem in Model.listaContribuicoes) {
+
+                string nomeDependentes = string.Join("<br />", OItem.listaCobrancasDependentes.Select(x => x.nomeAssociado).ToList());
+
+                string descricaoAssociado = $"Associado {OItem.AssociadoContribuicao.idAssociado} <br /> Cobrança { (OItem.AssociadoContribuicao.id > 0 ? OItem.AssociadoContribuicao.id.ToString() : "-")  }";
+
+                <div class="col-sm-12 box-info-item bordered-destaque @OItem.AssociadoContribuicao.cssBorderSituacao()">
+                    <div class="row fs-11">
+                        <div class="col-lg-3 col-sm-4 col-xs-4">
+                            <span data-toggle="tooltip" title="@descricaoAssociado" data-html="true">
+                                <i class="fa fa-user"></i> @OItem.AssociadoContribuicao.nomeAssociado
+                            </span><br />
+                            <span>
+                                <i class="fa fa-user"></i> @OItem.AssociadoContribuicao.descricaoTipoAssociado
+                                @if (OItem.qtdeDependentes > 0){
+                                    <em class="fs-11" data-toggle="tooltip" title="@nomeDependentes" data-html="true">(<i class="fa fa-plus"></i>@OItem.qtdeDependentes dependentes)</em>
+                                }
+                            </span>
+                            <span class="visible-sm">
+                                <i class="fa fa-hashtag"></i>@OItem.AssociadoContribuicao.descricaoContribuicao
+                            </span>
+                        </div>
+                        <div class="col-lg-2 col-sm-2 col-xs-3">
+                            <span data-toggle="tooltip" title="Data de vencimento atual"><i class="far fa-calendar-alt"></i> @OItem.AssociadoContribuicao.dtVencimentoAtual.exibirData()</span> <br />
+                            <span data-toggle="tooltip" title="Data de vencimento original"><i class="far fa-calendar-alt"></i> @OItem.AssociadoContribuicao.dtVencimentoOriginal.exibirData() </span>
+                        </div>
+                        <div class="col-lg-3 col-sm-3 col-xs-3">
+                            <div class="row">
+                                <span data-toggle="tooltip" title="@OItem.detalheValores" data-html="true">
+                                    @Html.exibirDetalhes(OItem)
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 visible-lg">
+                            <i class="fa fa-hashtag"></i>@OItem.AssociadoContribuicao.descricaoContribuicao<br/>
+                            @if (OItem.AssociadoContribuicao.id > 0) {
+                                <span data-toggle="tooltip" title="Gerador por:" data-html="true" class="fs-10 text-italic">@(OItem.AssociadoContribuicao.idUsuarioCadastro.toInt() == 0 ? "Cobrança automática" : OItem.AssociadoContribuicao.nomeUsuarioCadastro)</span>
+                            }
+                        </div>
+                        <div class="col-lg-1 col-sm-2 col-xs-2">
+                            <div class="text-right dropdown">
+                                @if (OItem.AssociadoContribuicao.id > 0) {
+                                    @Html.menuAcoes(OItem)
+                                }
+                            </div>
+                        </div>
+                        <div class="col-lg-1 col-sm-1 col-xs-2 no-padding-left">
+                            <div class="text-right">
+
+                                @if (!OItem.urlBoleto.isEmpty() && !OItem.AssociadoContribuicao.flagQuitado()) {
+
+                                    <a href="@Url.Action("visualizar", "BoletoBancario", new {area = "BoletosBancarios", p = UtilCrypt.toBase64Encode(OItem.idTituloReceitaPagamento.toInt())})" target="_blank" data-toggle="tooltip" title="Boleto Bancário"><i class="fa fa-file-pdf-o text-black fs-14"></i>&nbsp;&nbsp;&nbsp;</a>
+
+                                }
+
+                                @if (OItem.AssociadoContribuicao.id > 0) {
+                                    <a href="@Url.Action("index", "AssociadoContribuicaoDetalhe", new {area = "AssociadosContribuicoes", OItem.AssociadoContribuicao.id})" target="_blank" data-toggle="tooltip" title="Detalhes da cobrança"><i class="fa fa-search text-black fs-14"></i>&nbsp;&nbsp;&nbsp;</a>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            }
+        }
+
+        @if (Model.TaxaInscricao.id > 0) {
+            <div class="col-sm-12 box-info-item @(Model.TaxaInscricao.dtQuitacao.HasValue? "bg-green": "")">
+                <div class="row fs-11">
+                    <div class="col-lg-3 col-sm-4 col-xs-4">
+                        <span>
+                            <i class="fa fa-user"></i> @(Model.TaxaInscricao.nomePessoa)
+                        </span><br/>
+                        <span>
+                            <i class="far fa-money-bill"></i> Taxa de Inscrição
+                        </span>
+                    </div>
+                    <div class="col-lg-2 col-sm-2 col-xs-3">
+                        <span data-toggle="tooltip" title="Data de vencimento atual"><i class="far fa-calendar-alt"></i> @Model.TaxaInscricao.dtVencimento.exibirData()</span> <br />
+                        <span data-toggle="tooltip" title="Data de vencimento original"><i class="far fa-calendar-alt"></i> @Model.TaxaInscricao.dtVencimentoOriginal.exibirData() </span>
+                    </div>
+                    <div class="col-lg-3 col-sm-3 col-xs-3">
+                        <div class="row">
+                            <span data-html="true">@exibirDetalhes(Model.TaxaInscricao)</span><br />
+                        </div>
+                    </div>
+                    <div class="col-lg-2 visible-lg">
+
+                    </div>
+                    <div class="col-lg-1 col-sm-2 col-xs-2">
+                        <div class="text-right dropdown">
+                            @Html.menuAcoes(Model.TaxaInscricao, false)
+                        </div>
+                    </div>
+                    <div class="col-lg-1 col-sm-1 col-xs-2 no-padding-left">
+                        <div class="text-right">
+                            <a href="@Url.Action("editar", "ReceitaDetalhe", new {area = "Financeiro",  Model.TaxaInscricao})" target="_blank" data-toggle="tooltip" title="Detalhes da cobrança"><i class="fa fa-search text-black fs-14"></i>&nbsp;&nbsp;&nbsp;</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+</div>
+
+
+@helper exibirDetalhes(TituloReceitaResumoVW OItem) {
+
+
+if (OItem.dtQuitacao.HasValue) {
+        <strong>@OItem.valorTotal.exibirValor()</strong>
+        <small class="text-italic fs-10">Pago(@OItem.dtQuitacao.exibirData())</small>
+    return;
+}
+
+    <strong>@OItem.valorTotal.exibirValor()</strong>
+    <small class="text-italic fs-10">(Em aberto)</small>
+
+}

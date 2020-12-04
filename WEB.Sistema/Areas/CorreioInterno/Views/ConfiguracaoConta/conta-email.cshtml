@@ -1,0 +1,153 @@
+﻿@model WEB.Areas.CorreioInterno.ViewModels.ConfiguracaoContaForm
+
+@{
+	Layout = null;
+}
+
+<div class="box box-primary">
+	<div class="box-header with-border">
+		<div class="row">
+			<div class="col-md-3">
+				<h3 class="box-title"><i class="fa fa-envelope"></i> Conta de E-mail</h3>
+			</div>
+		</div>
+	</div>
+    <div class="box-body">
+        
+        @using (Ajax.BeginForm("salvar-configuracao", null, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "boxAreaTrabalho", InsertionMode = InsertionMode.Replace, OnSuccess = "CorreioInterno.onSuccessForm" }, new { id = "formContaEmail", @class = "default col-md-12" })) {
+            
+            <div class="row margin-top-10">
+                <div class="col-sm-6">
+                    <div class="row">
+                        <div class="col-sm-6 no-padding-right">
+                            @Html.spanFieldForm("Conta do E-mail", "fs-12")
+                        </div>
+                        <div class="col-sm-6">
+                            @Html.TextBoxFor(x => x.ConfiguracaoEmailUsuario.contaEmailSistema, new {@class = "form-control input-sm"})
+                            @Html.ValidationMessageFor(x => x.ConfiguracaoEmailUsuario.contaEmailSistema)
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-sm-6">
+                    <div class="row">
+                        <div class="col-sm-6 no-padding-right">
+                            @Html.spanFieldForm("Senha do E-mail", "fs-12")
+                        </div>
+                        <div class="col-sm-6">
+                            @Html.TextBoxFor(x => x.ConfiguracaoEmailUsuario.senhaEmailSistema, new {@class = "form-control input-sm"})
+                            @Html.ValidationMessageFor(x => x.ConfiguracaoEmailUsuario.senhaEmailSistema)
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="clearfix"></div><hr class="no-margin-bottom margin-top-5"/>
+            </div>
+
+            <div class="row margin-top-10">
+                <div class="col-sm-6">
+                    <div class="row">
+                        <div class="col-sm-6 no-padding-right">
+                            @Html.spanFieldForm("Servidor POP", "fs-12")
+                        </div>
+                        <div class="col-sm-6">
+                            @Html.TextBoxFor(x => x.ConfiguracaoEmailUsuario.servidorPOPEmailSistema, new {@class = "form-control input-sm"})
+                            @Html.ValidationMessageFor(x => x.ConfiguracaoEmailUsuario.servidorPOPEmailSistema)
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-sm-3">
+                    <div class="row">
+                        <div class="col-sm-6 no-padding-right">
+                            @Html.spanFieldForm("POP SSL", "fs-12")
+                        </div>
+                        <div class="col-sm-6">
+                            @Html.DropDownListFor(x => x.ConfiguracaoEmailUsuario.flagSSLPOPEmailSistema, ComboHelper.selectListYesNo(Model.ConfiguracaoEmailUsuario.flagSSLPOPEmailSistema), new {@class = "form-control input-sm"})
+                            @Html.ValidationMessageFor(x => x.ConfiguracaoEmailUsuario.flagSSLPOPEmailSistema)
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-sm-3">
+                    <div class="row">
+                        <div class="col-sm-6 no-padding-right">
+                            @Html.spanFieldForm("Porta POP", "fs-12")
+                        </div>
+                        <div class="col-sm-6">
+                            @Html.TextBoxFor(x => x.ConfiguracaoEmailUsuario.portaPOPEmailSistema, new {@class = "form-control input-sm"})
+                            @Html.ValidationMessageFor(x => x.ConfiguracaoEmailUsuario.portaPOPEmailSistema)
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="clearfix"></div><hr class="no-margin-bottom margin-top-5"/>
+            </div>
+
+            <div class="row margin-top-10">
+                <div class="col-sm-6">
+                    <div class="row">
+                        <div class="col-sm-6 no-padding-right">
+                            @Html.spanFieldForm("Servidor SMTP", "fs-12")
+                        </div>
+                        <div class="col-sm-6">
+                            @Html.TextBoxFor(x => x.ConfiguracaoEmailUsuario.servidorSMTPEmailSistema, new {@class = "form-control input-sm"})
+                            @Html.ValidationMessageFor(x => x.ConfiguracaoEmailUsuario.servidorSMTPEmailSistema)
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-sm-3">
+                    <div class="row">
+                        <div class="col-sm-6 no-padding-right">
+                            @Html.spanFieldForm("SMTP SSL", "fs-12")
+                        </div>
+                        <div class="col-sm-6">
+                            @Html.DropDownListFor(x => x.ConfiguracaoEmailUsuario.flagSSLSMTPEmailSistema, ComboHelper.selectListYesNo(Model.ConfiguracaoEmailUsuario.flagSSLSMTPEmailSistema), new {@class = "form-control input-sm"})
+                            @Html.ValidationMessageFor(x => x.ConfiguracaoEmailUsuario.flagSSLSMTPEmailSistema)
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-sm-3">
+                    <div class="row">
+                        <div class="col-sm-6 no-padding-right">
+                            @Html.spanFieldForm("Porta SMTP", "fs-12")
+                        </div>
+                        <div class="col-sm-6">
+                            @Html.TextBoxFor(x => x.ConfiguracaoEmailUsuario.portaSMTPEmailSistema, new {@class = "form-control input-sm"})
+                            @Html.ValidationMessageFor(x => x.ConfiguracaoEmailUsuario.portaSMTPEmailSistema)
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="clearfix"></div><hr class="no-margin-bottom margin-top-5"/>
+            </div>
+            
+            <div class="row margin-top-10">
+                <div class="col-sm-12">
+                    <div class="row">
+                        <div class="col-sm-3 no-padding-right">
+                            @Html.spanFieldForm("Assinatura do E-mail", "fs-12")
+                        </div>
+                        <div class="col-sm-9">
+                            @Html.TextAreaFor(x => x.ConfiguracaoEmailUsuario.assinaturaEmail, new { @class="form-control input-sm froala-editor", rows="7", maxlength="500" })
+                            @Html.ValidationMessageFor(x => x.ConfiguracaoEmailUsuario.assinaturaEmail)
+                        </div>
+                    </div>
+                    <hr class="no-margin-bottom margin-top-5"/>
+                </div>
+            </div>
+
+            <div class="row margin-top-10">
+                <div class="col-sm-12">
+                    <p class="text-right">
+                        @Html.botaoSalvar()
+                    </p>
+                </div>
+            </div>
+            
+        }
+        
+    </div>
+</div>

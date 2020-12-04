@@ -1,0 +1,53 @@
+﻿#container {
+	width:800px !important;
+	background:none;
+	margin:0 auto;
+	border:solid 1px #cccccc;
+	font-family:arial !important;
+}
+
+.header-recibo {
+	border-bottom:solid 1px #000000;
+	padding: 10px !important;
+}
+
+.header-recibo p {
+	margin:0px;
+}
+
+.header-recibo .nome-associacao{
+	margin-top:40px;
+	text-transform:uppercase;
+	font-size:16px;
+	font-weight:bold;
+}
+
+.corpo-recibo {
+	padding:30px;
+}
+
+.recibo-label-nro {
+	font-size:20px;
+	font-weight:bold;
+}
+
+.recibo-nro {
+	font-size:24px;
+	font-weight:bold;
+	font-family:monospace;
+}
+
+.bg-destaque {
+	background-color:#DDDDDD;
+	border-radius:3px;
+}
+table.dados-recibo tr td p {
+	margin:0px;
+	padding:2px;
+}
+
+table.dados-recibo tr td{
+	vertical-align:middle;
+	padding-left:5px;
+	padding-top:10px;
+}

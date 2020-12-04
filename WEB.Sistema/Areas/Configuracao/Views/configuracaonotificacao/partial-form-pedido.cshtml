@@ -1,0 +1,66 @@
+﻿@model WEB.Areas.Configuracao.ViewModels.ConfiguracaoNotificacaoForm
+
+<div class="row">
+    <div class="col-sm-6">
+        <h4 class="separator-form">E-mails para novo pedido:</h4>
+        <div class="col-sm-12 no-padding">
+            <label>Título e-mail novo pedido</label>
+            @Html.TextBoxFor(m => m.ConfiguracaoNotificacao.tituloEmailNovoPedido, new { @class = "form-control input-sm", maxlength = "255", data_toggle = "tooltip" })
+            <br/>
+            <label>Mensagem novo pedido</label>
+            @Html.TextAreaFor(m => m.ConfiguracaoNotificacao.corpoEmailNovoPedido, new {@class = "form-control input-sm froala-editor", rows = "10"})
+            @Html.instrucao("Limite de 3.000 caracteres.")<br/>
+            <a href="javascript:void(0)" class="fs-11 for-popover" data-placement="top" data-trigger="focus" data-url="#hashtags-email-novo-pedido" data-title="Hash Tags"><i class="fa fa-question-circle"></i> Hash tags do sistema</a>
+
+            @Html.ValidationMessageFor(m => m.ConfiguracaoNotificacao.corpoEmailNovoPedido)
+        </div>
+    </div>
+
+    <div class="col-sm-6">
+        <h4 class="separator-form">E-mails para a cobrança do pedido:</h4>
+        <div class="col-sm-12 no-padding">
+            <label>Título e-mail cobrança pedido</label>
+            @Html.TextBoxFor(m => m.ConfiguracaoNotificacao.tituloEmailCobrancaPedido, new { @class = "form-control input-sm", maxlength = "255", data_toggle = "tooltip" })
+            <br />
+            
+            <label>Mensagem cobrança pedido</label>
+            @Html.TextAreaFor(m => m.ConfiguracaoNotificacao.corpoEmailCobrancaPedido, new {@class = "form-control input-sm froala-editor", rows = "10"})
+            @Html.instrucao("Limite de 3.000 caracteres.")<br/>
+
+            @Html.ValidationMessageFor(m => m.ConfiguracaoNotificacao.corpoEmailCobrancaPedido)
+        </div>
+    </div>
+    
+    <div class="clearfix"></div><br/>
+
+    <div class="col-sm-6">
+        <h4 class="separator-form">E-mails para a confirmação de pagamento:</h4>
+        <div class="col-sm-12 no-padding">
+            <label>Título e-mail pagamento pedido</label>
+            @Html.TextBoxFor(m => m.ConfiguracaoNotificacao.tituloEmailPagamentoPedido, new {@class = "form-control input-sm", maxlength = "255", data_toggle = "tooltip"})
+            <br/>
+
+            <label>Confirmação pagamento pedido</label>
+            @Html.TextAreaFor(m => m.ConfiguracaoNotificacao.corpoEmailPagamentoPedido, new {@class = "form-control input-sm froala-editor", rows = "10"})
+            @Html.instrucao("Limite de 3.000 caracteres.")<br/>
+
+            @Html.ValidationMessageFor(m => m.ConfiguracaoNotificacao.corpoEmailPagamentoPedido)
+        </div>
+    </div>
+
+    <div class="col-sm-6">
+        <h4 class="separator-form">E-mails para faturamento do pedido:</h4>
+        <div class="col-sm-12 no-padding">
+            <label>Título e-mail faturamento pedido</label>
+            @Html.TextBoxFor(m => m.ConfiguracaoNotificacao.tituloEmailFaturamentoPedido, new { @class = "form-control input-sm", maxlength = "255", data_toggle = "tooltip" })
+            <br />
+
+            <label>Mensagem faturamento pedido</label>
+            @Html.TextAreaFor(m => m.ConfiguracaoNotificacao.corpoEmailFaturamentoPedido, new { @class = "form-control input-sm froala-editor", rows = "10" })
+            @Html.instrucao("Limite de 3.000 caracteres.")<br />
+
+            @Html.ValidationMessageFor(m => m.ConfiguracaoNotificacao.corpoEmailFaturamentoPedido)
+        </div>
+    </div>
+</div>
+<div class="clearfix"></div><br/>

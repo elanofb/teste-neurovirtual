@@ -1,0 +1,113 @@
+﻿@using DAL.Pedidos
+@model WEB.Areas.Pedidos.ViewModels.WidgetPedidosPorPeriodoVM
+
+<table class="table table-bordered">
+    <tr>
+        <td class="no-padding">
+            <table class="table no-margin-bottom">
+                <tr>
+                    <th class="bg-white">&nbsp;</th>
+                </tr>
+                <tr>
+                    <th class="bg-primary text-white">Novos Pedidos</th>
+                </tr>
+                <tr>
+                    <th class="bg-yellow text-white">Em Aberto</th>
+                </tr>
+                <tr>
+                    <th class="bg-lime text-white">Pagos</th>
+                </tr>
+                <tr>
+                    <th class="bg-green text-white">Em Produção</th>
+                </tr>
+                <tr>
+                    <th class="bg-green text-white">Expedidos</th>
+                </tr>
+                <tr>
+                    <th class="bg-primary text-white">Todos</th>
+                </tr>
+            </table>
+        </td>
+        
+        @if (Model.flagSemanal) {
+            foreach (var dateIni in Model.listaSemanas) {
+                
+                <td class="no-padding">
+                    <table class="table no-margin-bottom">
+                        <tr>
+                            <th class="text-center" colspan="2">
+                                @(dateIni.ToString("dd"))/@(dateIni.ToString("MMM")) - @(dateIni.AddDays(-6).ToString("dd"))/@(dateIni.AddDays(-6).ToString("MMM"))
+                            </th>
+                        </tr>
+                        <tr>
+                            <td class="text-right bg-primary">@Model.listaPedidos.Count(x => x.dtCancelamento == null && x.dtCadastro.Date <= dateIni.Date && x.dtCadastro.Date >= dateIni.AddDays(-6))</td>
+                            <td class="text-right bg-primary">@Model.listaPedidos.Where(x => x.dtCancelamento == null && x.dtCadastro.Date <= dateIni.Date && x.dtCadastro.Date >= dateIni.AddDays(-6)).Sum(x => x.getValorTotal()).ToString("C")</td>
+                        </tr>
+                        <tr>
+                            <td class="text-right bg-yellow">@Model.listaPedidos.Count(x => x.dtCancelamento == null && x.dtQuitacao == null && x.dtCadastro.Date <= dateIni.Date && x.dtCadastro.Date >= dateIni.AddDays(-6))</td>
+                            <td class="text-right bg-yellow">@Model.listaPedidos.Where(x => x.dtCancelamento == null && x.dtQuitacao == null && x.dtCadastro.Date <= dateIni.Date && x.dtCadastro.Date >= dateIni.AddDays(-6)).Sum(x => x.getValorTotal()).ToString("C")</td>
+                        </tr>
+                        <tr>
+                            <td class="text-right bg-lime">@Model.listaPedidos.Count(x => x.dtCancelamento != null && x.dtQuitacao != null && x.dtCadastro.Date <= dateIni.Date && x.dtCadastro.Date >= dateIni.AddDays(-6))</td>
+                            <td class="text-right bg-lime">@Model.listaPedidos.Where(x => x.dtCancelamento != null && x.dtQuitacao != null && x.dtCadastro.Date <= dateIni.Date && x.dtCadastro.Date >= dateIni.AddDays(-6)).Sum(x => x.getValorTotal()).ToString("C")</td>
+                        </tr>
+                        <tr>
+                            <td class="text-right bg-green">@Model.listaPedidos.Count(x => Model.listStatusProducao.Contains(x.idStatusPedido) && x.dtCadastro.Date <= dateIni.Date && x.dtCadastro.Date >= dateIni.AddDays(-6))</td>
+                            <td class="text-right bg-green">@Model.listaPedidos.Where(x => Model.listStatusProducao.Contains(x.idStatusPedido) && x.dtCadastro.Date <= dateIni.Date && x.dtCadastro.Date >= dateIni.AddDays(-6)).Sum(x => x.getValorTotal()).ToString("C")</td>
+                        </tr>
+                        <tr>
+                            <td class="text-right bg-green">@Model.listaPedidos.Count(x => x.idStatusPedido == StatusPedidoConst.EXPEDIDO && x.dtCadastro.Date <= dateIni.Date && x.dtCadastro.Date >= dateIni.AddDays(-6))</td>
+                            <td class="text-right bg-green">@Model.listaPedidos.Where(x => x.idStatusPedido == StatusPedidoConst.EXPEDIDO && x.dtCadastro.Date <= dateIni.Date && x.dtCadastro.Date >= dateIni.AddDays(-6)).Sum(x => x.getValorTotal()).ToString("C")</td>
+                        </tr>
+                        <tr>
+                            <td class="text-right bg-blue">@Model.listaPedidos.Count(x => x.dtCadastro.Date <= dateIni.Date && x.dtCadastro.Date >= dateIni.AddDays(-6))</td>
+                            <td class="text-right bg-blue">@Model.listaPedidos.Where(x => x.dtCadastro.Date <= dateIni.Date && x.dtCadastro.Date >= dateIni.AddDays(-6)).Sum(x => x.getValorTotal()).ToString("C")</td>
+                        </tr>
+                    </table>
+                </td>
+
+            }
+        }
+        else {
+            foreach (var dateAtual in Model.listaDatas) {
+                
+                <td class="no-padding">
+                    <table class="table no-margin-bottom">
+                        <tr>
+                            <th class="text-center" colspan="2">
+                                @(dateAtual.ToString("dd"))/@(dateAtual.ToString("MMM"))
+                            </th>
+                        </tr>
+                        <tr>
+                            <td class="text-right bg-blue">@Model.listaPedidos.Count(x => x.dtCancelamento == null && x.dtCadastro.Date == dateAtual.Date)</td>
+                            <td class="text-right bg-blue">@Model.listaPedidos.Where(x => x.dtCancelamento == null && x.dtCadastro.Date == dateAtual.Date).Sum(x => x.getValorTotal()).ToString("C")</td>
+                        </tr>
+                        <tr>
+                            <td class="text-right bg-yellow">@Model.listaPedidos.Count(x => x.dtCancelamento == null && x.dtQuitacao == null && x.dtCadastro.Date == dateAtual.Date)</td>
+                            <td class="text-right bg-yellow">@Model.listaPedidos.Where(x => x.dtCancelamento == null && x.dtQuitacao == null && x.dtCadastro.Date == dateAtual.Date).Sum(x => x.getValorTotal()).ToString("C")</td>
+                        </tr>
+                        <tr>
+                            <td class="text-right bg-lime">@Model.listaPedidos.Count(x => x.dtCancelamento != null && x.dtQuitacao != null && x.dtCadastro.Date == dateAtual.Date)</td>
+                            <td class="text-right bg-lime">@Model.listaPedidos.Where(x => x.dtCancelamento != null && x.dtQuitacao != null && x.dtCadastro.Date == dateAtual.Date).Sum(x => x.getValorTotal()).ToString("C")</td>
+                        </tr>
+                        <tr>
+                            <td class="text-right bg-green">@Model.listaPedidos.Count(x => Model.listStatusProducao.Contains(x.idStatusPedido) && x.dtCadastro.Date == dateAtual.Date)</td>
+                            <td class="text-right bg-green">@Model.listaPedidos.Where(x => Model.listStatusProducao.Contains(x.idStatusPedido) && x.dtCadastro.Date == dateAtual.Date).Sum(x => x.getValorTotal()).ToString("C")</td>
+                        </tr>
+                        <tr>
+                            <td class="text-right bg-green">@Model.listaPedidos.Count(x => x.idStatusPedido == StatusPedidoConst.EXPEDIDO && x.dtCadastro.Date == dateAtual.Date)</td>
+                            <td class="text-right bg-green">@Model.listaPedidos.Where(x => x.idStatusPedido == StatusPedidoConst.EXPEDIDO && x.dtCadastro.Date == dateAtual.Date).Sum(x => x.getValorTotal()).ToString("C")</td>
+                        </tr>
+                        <tr>
+                            <td class="text-right bg-blue">@Model.listaPedidos.Count(x => x.dtCadastro.Date == dateAtual.Date)</td>
+                            <td class="text-right bg-blue">@Model.listaPedidos.Where(x => x.dtCadastro.Date == dateAtual.Date).Sum(x => x.getValorTotal()).ToString("C")</td>
+                        </tr>
+                    </table>
+                </td>
+            }
+        }
+    </tr>
+    
+</table>
+
+<div class="clearfix"></div>

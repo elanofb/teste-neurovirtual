@@ -1,0 +1,98 @@
+﻿@model WEB.Areas.DadosBancarios.ViewModels.DadosBancariosConsultaVM
+
+
+<h4 class="separator-form-icon margin-top-20">
+    <i class="fa fa-university"></i> <strong>@Model.listaDadosBancarios.Count</strong> Conta(s) bancária(s) cadastrada(s)
+
+    <div class="dropdown pull-right">
+        <a href="javascript:;" class="dropdown-toggle fs-14 text-black" type="button" data-toggle="dropdown">
+            <i class="far fa-cog"></i>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-right">
+            <li>
+                <a href="javascript:;" onclick="DefaultSistema.showModal('@Url.Action("modal-cadastro", "DadosBancariosCadastro", new { Area = "DadosBancarios", idPessoa = Model.idPessoa })')" class="text-black">
+                    <i class="fa fa-plus"></i> Adicionar Conta Bancária
+                </a>
+            </li>        
+        </ul>    
+    </div>
+
+</h4>
+
+<div class="clearfix"></div>
+
+@if (!Model.listaDadosBancarios.Any()) {
+    <div class="alert alert-warning">
+        <p>Não há conta bancária cadastrada</p>
+    </div>
+}
+
+@foreach (var ODadoBancario in Model.listaDadosBancarios){
+    
+    <div class="box-info-item-dotted bordered-destaque">
+        
+        <div class="row">
+            
+            <div class="col-sm-4 col-md-4">
+                <span data-toggle="tooltip" title="" data-original-title="Banco"><i class="fa fa-hashtag"></i> @ODadoBancario.id) @(ODadoBancario.Banco?.descricao) </span><br>
+                <span data-toggle="tooltip" title="" data-original-title="Titular"><i class="fa fa-user"></i> @(ODadoBancario.nomeTitular) </span>
+            </div>
+            
+            <div class="col-sm-2 col-md-3 col-lg-2">
+                <span data-toggle="tooltip" title="" data-original-title="Tipo da Conta"><i class="fa fa-tag"></i> @descricaoTipoConta(ODadoBancario.flagTipoConta) </span><br>
+                <span data-toggle="tooltip" title="" data-original-title="Documendo do Titular"><i class="fa fa-address-card"></i> @UtilString.formatCPFCNPJ(ODadoBancario.documentoTitular) </span>
+            </div>
+            
+            <div class="col-sm-2 col-md-2 col-lg-2">
+                <span data-toggle="tooltip" title="" data-original-title="Nro da Agência"><i class="fas fa-university"></i> @(ODadoBancario.nroAgencia) </span><br>
+                <span data-toggle="tooltip" title="" data-original-title="Nro da Conta"><i class="fas fa-sort-numeric-up"></i> @(ODadoBancario.nroConta)@(!ODadoBancario.digitoConta.isEmpty() ? "-"+ODadoBancario.digitoConta : "") </span>
+            </div>
+            
+            <div class="col-sm-2 col-md-2 col-lg-2">
+                @Html.linkStatusDefault(ODadoBancario.id, ODadoBancario.ativo, "DadosBancariosCadastro")
+            </div>
+            
+            <div class="col-sm-1 col-md-2 pull-right text-right">
+                
+                <div class="dropdown">
+                    
+                    <a href="javascript:;" class="dropdown-toggle text-black" type="button" data-toggle="dropdown">
+                        <i class="fa fa-cog"></i>
+                    </a>
+                    
+                    <ul class="dropdown-menu dropdown-menu-right">
+                        <li>                            
+                            <a href="javascript:;" onclick="DefaultSistema.showModal('@Url.Action("modal-editar", "DadosBancariosCadastro", new { Area = "DadosBancarios", id = ODadoBancario.id })')" class="text-black">
+                                <i class="fa fa-edit"></i> Editar
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>                            
+                            <a class="text-red" href="javascript:;" data-id="@ODadoBancario.id" data-url="@Url.Action("excluir", "DadosBancariosExclusao")" onclick="DadosBancariosExclusao.excluir(this)"><i class="fa fa-trash"></i> Excluir</a>
+                        </li>
+                    </ul>
+                </div>
+                
+            </div>
+            
+        </div>
+        
+    </div>
+    
+}
+
+@{
+    
+    string descricaoTipoConta(string flagTipoConta) {
+
+        if (flagTipoConta == "C") {
+            return "Conta Corrente";
+        }
+        
+        if (flagTipoConta == "P") {
+            return "Conta Poupança";
+        }
+    
+        return string.Empty;
+    }
+}

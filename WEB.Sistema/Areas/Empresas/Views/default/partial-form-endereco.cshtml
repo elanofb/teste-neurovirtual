@@ -1,0 +1,49 @@
+﻿@using WEB.Areas.Localizacao.Helpers
+@model  WEB.Areas.Empresas.ViewModels.EmpresaForm
+
+@Html.HiddenFor(m => m.Empresa.Pessoa.listaEnderecos[0].id)
+<div class="col-md-2">
+	<label>CEP</label>
+    <div class="input-group">
+        @Html.TextBoxFor(m => m.Empresa.Pessoa.listaEnderecos[0].cep, new { alt = "cep", rel = "cepEndereco", onblur = "Localizacao.carregarEndereco('Endereco');", @class = "form-control input-sm" })
+        <span class="input-group-addon">
+            <a href="javascript:void(Localizacao.carregarEndereco('Endereco'));"><i id="buscarEndereco" class="fa fa-search"></i></a>
+        </span>
+    </div>
+    @Html.ValidationMessageFor(m => m.Empresa.Pessoa.listaEnderecos[0].cep)
+</div>
+<div class="col-md-4">
+    <label>Endereço</label>
+    @Html.TextBoxFor(m => m.Empresa.Pessoa.listaEnderecos[0].logradouro, new { @class = "form-control input-sm", id = "endereco", rel = "logradouroEndereco", maxlength = "100" })
+    @Html.ValidationMessageFor(m => m.Empresa.Pessoa.listaEnderecos[0].logradouro)
+</div>
+<div class="col-md-1">
+	<label>Número</label>
+    @Html.TextBoxFor(m => m.Empresa.Pessoa.listaEnderecos[0].numero, new { @class = "form-control input-sm", id = "numeroEndereco", rel = "numeroEndereco", maxlength = "30" })
+    @Html.ValidationMessageFor(m => m.Empresa.Pessoa.listaEnderecos[0].numero)
+</div>
+<div class="col-md-2">
+    <label>Complemento</label>
+    @Html.TextBoxFor(m => m.Empresa.Pessoa.listaEnderecos[0].complemento, new { @class = "form-control input-sm", rel = "complementoEndereco", maxlength = "30" })
+    @Html.ValidationMessageFor(m => m.Empresa.Pessoa.listaEnderecos[0].complemento)
+</div>
+<div class="clearfix"></div>
+
+<div class="col-md-3">
+	<label>Bairro</label>
+    @Html.TextBoxFor(m => m.Empresa.Pessoa.listaEnderecos[0].bairro, new { @class = "form-control input-sm", rel = "bairroEndereco", maxlength = "80" })
+    @Html.ValidationMessageFor(m => m.Empresa.Pessoa.listaEnderecos[0].bairro)
+</div>
+
+<div class="col-md-1">
+	<label>UF</label>
+    @Html.DropDownListFor(m => m.Empresa.Pessoa.listaEnderecos[0].idEstado, EstadoHelper.selectList(Model.Empresa.Pessoa.listaEnderecos[0].idEstado), "...", new { @class = "form-control input-sm", onchange = "Localizacao.carregarCidades('Endereco', '');", rel = "idEstadoEndereco" })
+    @Html.ValidationMessageFor(m => m.Empresa.Pessoa.listaEnderecos[0].idEstado)
+</div>
+<div class="col-md-3">
+	<label for="idCidade" class="optional">Cidade</label>
+    @Html.DropDownListFor(m => m.Empresa.Pessoa.listaEnderecos[0].idCidade, CidadeHelper.selectList(Model.Empresa.Pessoa.listaEnderecos[0].idEstado, Model.Empresa.Pessoa.listaEnderecos[0].idCidade), "Selecione...", new Dictionary<string, Object> { { "class", "form-control input-sm no-padding w275" }, { "rel", "idCidadeEndereco" }, { "data-toogle", "select2" } })
+    @Html.ValidationMessageFor(m => m.Empresa.Pessoa.listaEnderecos[0].idCidade)
+</div>
+
+<div class="clearfix"></div>

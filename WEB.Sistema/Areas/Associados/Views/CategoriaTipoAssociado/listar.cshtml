@@ -1,0 +1,160 @@
+﻿@model PagedList.IPagedList<CategoriaTipoAssociado>
+@using DAL.Associados
+@using PagedList.Mvc
+
+@{
+    ViewBag.titlePage = "Categoria Tipo Associado";
+	ViewBag.subTitlePage = "Veja a lista das categorias dos tipos de membros existentes.";
+}
+@section breadcrump{
+	<ol class="breadcrumb">
+		<li>
+			<a href="javascript:;" onclick="$('.box-filtros').toggle('slow')" class="fs-16">
+				<i class="fa fa-filter"></i>
+			</a>
+		</li>
+	</ol>
+}
+@section styles {
+    <link href="@UtilConfig.linkResourses("css/associatec/list-custom.css")" rel="stylesheet"/>
+    <link href="@UtilConfig.linkResourses("css/associatec/modulos/widgets.css")" rel="stylesheet"/>
+}
+<div class="row">
+	<div class="col-sm-12 nao-exibir box-filtros">
+		<div class="card-gray margin-bottom-15">
+			<div>
+				<h4 class="separator-form-icon no-margin"><i class="far fa-filter"></i> Filtros de Busca</h4>
+				@using (Html.BeginForm(null, null, FormMethod.Get, new {@class = ""})) {
+					<div class="form-group col-xs-7"></div>
+
+					@Html.Hidden("idOrganizacao", UtilRequest.getInt32("idOrganizacao"))
+
+					<div class="form-group col-xs-2">
+						<label>Status</label>
+						@Html.DropDownList("flagAtivo", ComboHelper.selectListStatus(UtilRequest.getString("flagAtivo")), "Todos", new {@class = "form-control input-sm"})
+					</div>
+					<div class="form-group col-xs-3">
+						<label>Buscar</label>
+						@Html.buttonSearch(UtilRequest.getString("valorBusca"))
+					</div>
+				}
+				<div class="clearfix"></div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="box box-primary">
+    <div class="box-header with-border">
+        <h3 class="box-title"><i class="far fa-chart-bar"></i> Resultados <small class="fs-10">@Model.TotalItemCount registros encontrados.</small></h3>
+        <div class="box-tools pull-right">
+            <label class="pull-right margin-top-5 " style="margin-right: 10px" data-toggle="tooltip" title="Selecionar Todos">
+                <input type="checkbox" name="marcarTodos" data-childs="checkRegistro[]" id="checkMarcarTodos" class=""/>
+            </label>
+            <div class="dropdown pull-right  margin-top-5 margin-right-15">
+                <a href="javascript:;" class="dropdown-toggle fs-16 text-black" type="button" data-toggle="dropdown"><i class="fa fa-cog"></i></a>
+                <ul class="dropdown-menu dropdown-menu-right">
+                    <li><a href="@Url.Action("editar")" class=""><i class="fa fa-plus-square"></i> Novo Registro</a></li>
+                    <li class="divider"></li>
+                    <li>
+                        <a href="javascript:void(0);" data-url="@Url.Action("excluir")" title="Remover itens selecionados" onclick="return DefaultAction.removeAll(this);" data-toggle="tooltip">
+                            <i class="fa fa-trash"></i> Excluir Selecionados
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="box-body">
+        @if (Model.PageCount > 0) {
+            foreach (var Item in Model) {
+                string urlEdicao = (UtilRequest.getInt32("idOrganizacao") > 0 ? Url.Action("editar", new {idOrganizacao = UtilRequest.getInt32("idOrganizacao"), Item.id}) : Url.Action("editar", new {Item.id}));
+
+                <div class="box-info-item-dotted bordered-destaque">
+                    <div class="row">
+                        <div class="col-md-5 col-sm-12">
+                            <span data-toggle="tooltip" title="" data-original-title="Descrição">
+                                <b><i class="fas fa-bars"></i></b> @Item.descricao
+                            </span>
+                        </div>
+                        <div class="col-md-4 col-sm-12">
+                            <span data-toggle="tooltip" title="" data-original-title="Data de Cadastro">
+                                <i class="far fa-calendar-alt"></i> @Item.dtCadastro.exibirData(true)
+                            </span>
+                        </div>
+                        <div class="col-md-1 col-sm-12">
+                            <span data-toggle="tooltip" title="" data-original-title="Ativo">
+                                @Html.badgeStatus(Item.ativo)
+                            </span>
+                        </div>
+                        <div class="col-md-2 col-sm-12 text-right">
+                            <div class="pull-right margin-left-15">
+                                <input type="checkbox" name="checkRegistro[]" value="id"/>
+                            </div>
+                            <div class="dropdown pull-right ">
+                                <a href="javascript:;" class="dropdown-toggle text-black fs-16" type="button" data-toggle="dropdown" aria-expanded="false">
+                                    <i class="fa fa-cog"></i>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-right">
+                                    <li>@Html.linkEditar(Item.id, urlEdicao, "", "Editar")</li>
+                                    <li class="divider"></li>
+                                    <li>@Html.linkAjaxExcluir(Item.id, Item.flagSistema, "", "", "", "Excluir")</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        } else {
+            <div class="alert alert-info" colspan="9">Nenhum registro cadastrado</div>
+        }@*
+
+
+
+        <div class="table-responsive">
+            <div class="dataTables_wrapper form-inline" role="grid">
+                <div class="links-table">
+                </div>
+
+                <table class="table table-bordered table-striped dataTable">
+                    <thead>
+                    <tr role="row">
+                        <th class="width-50 text-center"><input type="checkbox" name="marcarTodos" data-childs="checkRegistro[]" id="checkMarcarTodos"/></th>
+                        <th>Descrição</th>
+                        <th class="width-100">Status</th>
+                        <th class="width-125">Cadastro</th>
+                        <th class="width-75">&nbsp;</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @if (Model.PageCount > 0) {
+                        foreach (var Item in Model) {
+                            string urlEdicao = (UtilRequest.getInt32("idOrganizacao") > 0 ? Url.Action("editar", new {idOrganizacao = UtilRequest.getInt32("idOrganizacao"), Item.id}) : Url.Action("editar", new {Item.id}));
+
+                            <tr class="link" data-action="@urlEdicao">
+                                <td class="text-center"><input type="checkbox" name="checkRegistro[]" value="@Item.id"/></td>
+                                <td>@Item.descricao</td>
+                                <td class="text-center @(Item.ativo == "S" ? "bg-green" : "bg-red")">@(Item.ativo == "S" ? "Sim" : "Não")</td>
+                                <td class="text-center">@Item.dtCadastro.exibirData(true)</td>
+                                <td class="text-left box-acoes">
+                                    @Html.linkEditar(Item.id, urlEdicao)
+                                    @Html.linkAjaxExcluir(Item.id, Item.flagSistema)
+                                </td>
+                            </tr>
+                        }
+                    } else {
+                        <tr>
+                            <td class="text-center" colspan="9">Nenhum registro cadastrado</td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+
+
+            </div>
+        </div>*@
+        @(Html.paginarRegistros(Model, Html.PagedListPager(Model, nroPagina => UtilRequest.linkPaginacao(nroPagina, "listar"), PagedListRenderOptions.OnlyShowFivePagesAtATime)))
+    </div>
+</div>

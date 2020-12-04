@@ -1,0 +1,28 @@
+﻿@model WEB.Areas.Associados.ViewModels.AssociadoForm
+
+<div class="tab-pane" id="tab-cobrancas">
+    <div>
+        <button class="btn btn-md bg-green" onclick="DefaultSistema.showModal('@Url.Action("modal-contribuicao-padrao", "AssociadoContribuicaoPadrao", new {area="AssociadosContribuicoes", idAssociado = Model.Associado.id})')">
+            <i class="fa fa-edit fs-16"></i>
+            @exibirCobrancaPadrao()
+        </button>
+    </div>
+
+    <h4 class="separator-form">Gerar cobrança para o associado</h4>
+    <div id="boxLoadFormCobranca" class="carregando" data-url="@Url.Action("partial-form-editar", "associadocontribuicao", new {area = "associadoscontribuicoes", idAssociado = Model.Associado.id})"></div>
+    <br />
+
+    <h4 class="separator-form">Cobranças registradas para o Associado</h4>
+    <div id="boxLoadListaCobranca" class="carregando" data-url="@Url.Action("partial-listar-cobrancas", "associadocontribuicao", new {area = "associadoscontribuicoes", idAssociado = Model.Associado.id})"></div>
+
+</div>
+
+@helper exibirCobrancaPadrao() {
+
+if (Model.Associado.TipoAssociado == null) {
+        <span><em><i class="fa fa-exclamation"></i> Associado sem tipo cadastrado</em></span>
+    return;
+}
+
+
+}

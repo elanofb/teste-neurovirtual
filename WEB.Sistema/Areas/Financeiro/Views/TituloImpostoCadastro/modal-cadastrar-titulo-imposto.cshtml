@@ -1,0 +1,56 @@
+﻿@using MvcFlashMessages
+@model WEB.Areas.Financeiro.ViewModels.TituloImpostoForm
+
+@{
+    Layout = IsPost ? null : "~/views/shared/associatec/masterpage-modal.cshtml";
+
+    ViewBag.modalTitle = "Cálculo de imposto";
+    ViewBag.modalWidthClass = "sm";
+}
+
+<div id="@(IsPost ? "" : "boxFormTituloImposto")">
+
+    @Html.RenderFlash()
+
+    <div class="col-xs-12">
+        <div class="row">
+            @using (Ajax.BeginForm("salvar-titulo-imposto", null, new AjaxOptions { UpdateTargetId = "boxFormTituloImposto", HttpMethod = "POST", OnSuccess = "TituloImpostoCadastro.onSuccess" }, new { id="formTituloImposto", role = "form", @class = "default" })) {
+                
+                @Html.legendaRequired()
+
+                @Html.ValidationSummary(false)
+
+                @Html.HiddenFor(x => x.TituloImposto.idTituloDespesa)
+                @Html.HiddenFor(x => x.TituloImposto.idTituloReceita)
+
+                <h4 class="separator-form-icon"><i class="far fa-percent"></i> Tabela de Impostos</h4>
+
+                <div class="form-horizontal">
+                    
+                    <div class="row">
+                        
+                        <div class="col-sm-12">
+                            @Html.labelRequired("Selecione a tabela de impostos")
+                            @Html.DropDownListFor(m => m.idTabelaImposto, TabelaImpostoHelper.getInstance.selectList(Model.idTabelaImposto), "...", new {@class = "form-control input-sm"})
+                            @Html.ValidationMessageFor(m => m.idTabelaImposto)
+                        </div>
+
+                        <div class="clearfix"></div>
+                        
+                    </div>
+
+                </div>
+
+                <div class="clearfix"></div><br/>
+            }
+        </div>
+    </div>
+</div>
+<div class="clearfix"></div><br />
+
+@section modalFooter{
+    <div class="text-right">
+        <input type="button" class="btn btn-primary link-loading" onclick="$('#formTituloImposto').submit()" value="Salvar Dados" />
+    </div>    
+}
+

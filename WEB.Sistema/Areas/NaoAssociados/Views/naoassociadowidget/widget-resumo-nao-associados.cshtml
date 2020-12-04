@@ -1,0 +1,25 @@
+﻿@model WEB.Areas.NaoAssociados.ViewModels.WidgetResumoNaoAssociado
+
+<div class="box box-primary">
+	<div class="box-header with-border">
+		<h3 class="box-title"><i class="fa fa-users"></i> Resumo de não associados</h3>
+	</div>
+	<div class="box-body">
+		<div class="col-md-6 col-sm-6">
+			<div class="widget-small bg-green cursor-pointer" onclick="location.href='@Url.Action("listar", "naoassociado", new {area = "NaoAssociados", flagAtivo = "S"})'">
+				<i class="fa fa-smile-o pull-left fs-30"></i>
+				<p>Ativos<br /> <label class="destaque fs-16">@Model.qtdeAssociadosAtivos.ToString()</label> </p>
+			</div>			
+		</div>
+	    <div class="col-md-6 col-sm-6">
+	        <div class="widget-small bg-red  cursor-pointer" onclick="location.href='@Url.Action("listar", "naoassociado", new {area = "NaoAssociados", flagAtivo = "N"})'">
+	            <i class="fa fa-frown-o pull-left fs-30"></i>
+	            <p>Desativados<br/> <label class="destaque fs-16">@Model.qtdeAssociadosInativos.ToString()</label>
+	            </p>
+	        </div>
+	    </div>
+		<div class="clearfix"></div>
+	</div>
+</div>
+
+<div class="clearfix"></div>

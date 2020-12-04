@@ -1,0 +1,40 @@
+﻿@using DAL.Financeiro
+@model PagedList.IPagedList<TituloReceitaPagamentoVW>
+
+
+<div class="table-responsive">
+	<table class="table">
+		<thead>
+		    <tr>
+			    <th class="text-center">Tipo</th>
+			    <th class="text-center">Nome</th>
+			    <th class="text-center">Valor</th>
+			    <th class="text-center">Status</th>
+			    <th class="text-center">Data</th>
+		    </tr>
+		</thead>
+	    <tbody>
+	    
+	        @if (!Model.Any()) {
+	            <tr>
+	                <td colspan="7" class="text-center">Nenhum pagamento encontrado.</td>
+	            </tr>
+	        }
+
+	        @foreach (var Item in Model) {
+	            <tr class="link" data-action="@Url.Action("detalhe", "PagamentosRecebidos", new { Area = "Financeiro", id = Item.idTituloReceita })">
+	                <td class="fs-12 text-center">@Item.descricaoTipoReceita</td>
+	                <td class="fs-12 text-center">@Item.nomePessoa.abreviar(20).ToUpper()</td>
+	                <td class="fs-12 text-right">@Item.valorOriginal.ToString("C")</td>
+	                <td class="fs-11 text-center">
+	                    <span class="label @Item.classeLabelStatus()">@Item.descricaoStatusPagamento</span>
+	                </td>
+	                <td class="fs-12 text-center">@Item.dtCadastro.exibirData(false)</td>
+	            </tr>
+	        }
+
+	    </tbody>
+	</table>
+</div>
+<div class="clearfix"></div>
+	

@@ -1,0 +1,316 @@
+﻿@model WEB.Areas.Configuracao.ViewModels.ConfiguracaoSaqueForm
+@using DAL.Permissao.Security.Extensions
+@using WEB.Areas.Associacoes.Helpers
+@using MvcFlashMessages
+@using WEB.Areas.Associados.Helpers
+
+@{
+    ViewBag.titlePage = "Configurações de Saque";
+}
+
+@section scripts{
+    @Html.includeDatePicker()
+    
+    <script src="@UtilConfig.linkResourses("js/associatec/plugins/bootstrap-clockpicker/js/bootstrap-clockpicker.min.js")"></script>
+}
+
+@section styles{
+    <link href="@UtilConfig.linkResourses("js/associatec/plugins/bootstrap-clockpicker/css/bootstrap-clockpicker.min.css")" rel="stylesheet" />
+}
+
+@section breadcrump{
+    <ol class="breadcrumb">
+        <li>
+            <a href="@Url.Action("listar")" class="active fs-14"><i class="fa fa-arrow-left"></i> Voltar</a>
+        </li>
+    </ol>
+}
+
+<div class="row">
+    <div class="col-sm-12 box-primary">
+        <div class="nav-tabs-custom">
+            
+            <ul class="nav nav-tabs" role="tablist">
+                <li class="active">
+                    <a href="#tab-notificacoes" data-toggle="tab">Principal</a>
+                </li>
+            </ul>
+            @using (Html.BeginForm("editar", null, FormMethod.Post, new{role = "form", @class = "tab-content", enctype = "multipart/form-data"})){
+                
+                @Html.RenderFlash()
+                @Html.ValidationSummary(false)
+                
+                <div id="tab-notificacoes" role="tabpanel" class="tab-pane active">
+                    
+                    <div class="col-sm-12">
+                        
+                        <div class="row">
+                                
+                            @{ Html.RenderPartial("partial-dados-cadastro", Model); }
+                                
+                            @if (User.idOrganizacao() == 0){
+                                <div class="col-sm-4 col-md-3">
+                                    <label>Organização</label>
+                                    @Html.DropDownListFor(m => m.ConfiguracaoSaque.idOrganizacao, AssociacaoHelper.getInstance.selectList(Model.ConfiguracaoSaque.idOrganizacao, false), "Padrão", new{@class = "form-control input-sm", type = "number"})
+                                </div>
+                                
+                            }
+                            
+                            <div class="col-sm-4 col-md-3">
+                                <label>Perfil</label>
+                                @Html.DropDownListFor(m => m.ConfiguracaoSaque.idTipoCadastro, AssociadoTipoCadastroHelper.getInstance.selectList(Model.ConfiguracaoSaque.idTipoCadastro), new{@class = "form-control input-sm", type = "number"})
+                            </div>
+                            
+                            <div class="clearfix"></div>
+                            
+                            <div class="col-sm-6">
+                                
+                                <h4 class="separator-form">Dias Disponíveis</h4>
+                                
+                                <div class="row">
+
+                                    <div class="col-sm-4">
+                                        <label>Segunda-feira</label>
+                                        @Html.DropDownListFor(m => m.ConfiguracaoSaque.flagSegunda, ComboHelper.selectListTrueFalse(Model.ConfiguracaoSaque.flagSegunda), "...", new{@class = "form-control input-sm"})
+                                        @Html.ValidationMessageFor(m => m.ConfiguracaoSaque.flagSegunda)
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <label>Horário de Início</label>
+                                        
+                                        <div class="input-group input-clockpicker">
+                                            @Html.TextBoxFor(m => m.ConfiguracaoSaque.horarioInicioSegunda, new {@class = "form-control input-sm input-clockpicker", alt = "time"})
+                                            <span class="input-group-addon">
+                                                <span class="glyphicon glyphicon-time"></span>
+                                            </span>
+                                        </div>                                                                                
+                                        @Html.ValidationMessageFor(m => m.ConfiguracaoSaque.horarioInicioSegunda)
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <label>Horário Final</label>
+                                        <div class="input-group input-clockpicker">
+                                            @Html.TextBoxFor(m => m.ConfiguracaoSaque.horarioFimSegunda, new {@class = "form-control input-sm input-clockpicker", alt = "time"})
+                                            <span class="input-group-addon">
+                                                <span class="glyphicon glyphicon-time"></span>
+                                            </span>
+                                        </div>                                        
+                                        @Html.ValidationMessageFor(m => m.ConfiguracaoSaque.horarioFimSegunda)
+                                    </div>
+
+                                    <div class="clearfix"></div>
+                                    
+                                    <div class="col-sm-4">
+                                        <label>Terça-feira</label>
+                                        @Html.DropDownListFor(m => m.ConfiguracaoSaque.flagTerca, ComboHelper.selectListTrueFalse(Model.ConfiguracaoSaque.flagTerca), "...", new{@class = "form-control input-sm"})
+                                        @Html.ValidationMessageFor(m => m.ConfiguracaoSaque.flagTerca)
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <label>Horário de Início</label>
+                                        <div class="input-group input-clockpicker">
+                                            @Html.TextBoxFor(m => m.ConfiguracaoSaque.horarioInicioTerca, new {@class = "form-control input-sm input-clockpicker", alt = "time"})
+                                            <span class="input-group-addon">
+                                                <span class="glyphicon glyphicon-time"></span>
+                                            </span>
+                                        </div>                                        
+                                        @Html.ValidationMessageFor(m => m.ConfiguracaoSaque.horarioInicioTerca)
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <label>Horário Final</label>
+                                        <div class="input-group input-clockpicker">
+                                            @Html.TextBoxFor(m => m.ConfiguracaoSaque.horarioFimTerca, new {@class = "form-control input-sm input-clockpicker", alt = "time"})
+                                            <span class="input-group-addon">
+                                                <span class="glyphicon glyphicon-time"></span>
+                                            </span>
+                                        </div>                                                                                
+                                        @Html.ValidationMessageFor(m => m.ConfiguracaoSaque.horarioFimTerca)
+                                    </div>
+
+                                    <div class="clearfix"></div>
+
+                                    <div class="col-sm-4">
+                                        <label>Quarta-feira</label>
+                                        @Html.DropDownListFor(m => m.ConfiguracaoSaque.flagQuarta, ComboHelper.selectListTrueFalse(Model.ConfiguracaoSaque.flagQuarta), "...", new{@class = "form-control input-sm"})
+                                        @Html.ValidationMessageFor(m => m.ConfiguracaoSaque.flagQuarta)
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <label>Horário de Início</label>                                        
+                                        <div class="input-group input-clockpicker">
+                                            @Html.TextBoxFor(m => m.ConfiguracaoSaque.horarioInicioQuarta, new {@class = "form-control input-sm input-clockpicker", alt = "time"})
+                                            <span class="input-group-addon">
+                                                <span class="glyphicon glyphicon-time"></span>
+                                            </span>
+                                        </div>
+                                        @Html.ValidationMessageFor(m => m.ConfiguracaoSaque.horarioInicioQuarta)
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <label>Horário Final</label>                                        
+                                        <div class="input-group input-clockpicker">
+                                            @Html.TextBoxFor(m => m.ConfiguracaoSaque.horarioFimQuarta, new {@class = "form-control input-sm input-clockpicker", alt = "time"})
+                                            <span class="input-group-addon">
+                                                <span class="glyphicon glyphicon-time"></span>
+                                            </span>
+                                        </div>
+                                        @Html.ValidationMessageFor(m => m.ConfiguracaoSaque.horarioFimQuarta)
+                                    </div>
+
+                                    <div class="clearfix"></div>
+
+                                    <div class="col-sm-4">
+                                        <label>Quinta-feira</label>
+                                        @Html.DropDownListFor(m => m.ConfiguracaoSaque.flagQuinta, ComboHelper.selectListTrueFalse(Model.ConfiguracaoSaque.flagQuinta), "...", new{@class = "form-control input-sm"})
+                                        @Html.ValidationMessageFor(m => m.ConfiguracaoSaque.flagQuinta)
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <label>Horário de Início</label>
+                                        <div class="input-group input-clockpicker">
+                                            @Html.TextBoxFor(m => m.ConfiguracaoSaque.horarioInicioQuinta, new {@class = "form-control input-sm input-clockpicker", alt = "time"})
+                                            <span class="input-group-addon">
+                                                <span class="glyphicon glyphicon-time"></span>
+                                            </span>
+                                        </div>
+                                        @Html.ValidationMessageFor(m => m.ConfiguracaoSaque.horarioInicioQuinta)
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <label>Horário Final</label>                                        
+                                        <div class="input-group input-clockpicker">
+                                            @Html.TextBoxFor(m => m.ConfiguracaoSaque.horarioFimQuinta, new {@class = "form-control input-sm input-clockpicker", alt = "time"})
+                                            <span class="input-group-addon">
+                                                <span class="glyphicon glyphicon-time"></span>
+                                            </span>
+                                        </div>
+                                        @Html.ValidationMessageFor(m => m.ConfiguracaoSaque.horarioFimQuinta)
+                                    </div>
+
+                                    <div class="clearfix"></div>
+
+                                    <div class="col-sm-4">
+                                        <label>Sexta-feira</label>
+                                        @Html.DropDownListFor(m => m.ConfiguracaoSaque.flagSexta, ComboHelper.selectListTrueFalse(Model.ConfiguracaoSaque.flagSexta), "...", new{@class = "form-control input-sm"})
+                                        @Html.ValidationMessageFor(m => m.ConfiguracaoSaque.flagSexta)
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <label>Horário de Início</label>                                        
+                                        <div class="input-group input-clockpicker">
+                                            @Html.TextBoxFor(m => m.ConfiguracaoSaque.horarioInicioSexta, new {@class = "form-control input-sm input-clockpicker", alt = "time"})
+                                            <span class="input-group-addon">
+                                                <span class="glyphicon glyphicon-time"></span>
+                                            </span>
+                                        </div>
+                                        @Html.ValidationMessageFor(m => m.ConfiguracaoSaque.horarioInicioSexta)
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <label>Horário Final</label>                                        
+                                        <div class="input-group input-clockpicker">
+                                            @Html.TextBoxFor(m => m.ConfiguracaoSaque.horarioFimSexta, new {@class = "form-control input-sm input-clockpicker", alt = "time"})
+                                            <span class="input-group-addon">
+                                                <span class="glyphicon glyphicon-time"></span>
+                                            </span>
+                                        </div>
+                                        @Html.ValidationMessageFor(m => m.ConfiguracaoSaque.horarioFimSexta)
+                                    </div>
+
+                                    <div class="clearfix"></div>
+
+                                    <div class="col-sm-4">
+                                        <label>Sabádo</label>
+                                        @Html.DropDownListFor(m => m.ConfiguracaoSaque.flagSabado, ComboHelper.selectListTrueFalse(Model.ConfiguracaoSaque.flagSabado), "...", new{@class = "form-control input-sm"})
+                                        @Html.ValidationMessageFor(m => m.ConfiguracaoSaque.flagSabado)
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <label>Horário de Início</label>
+                                        <div class="input-group input-clockpicker">
+                                            @Html.TextBoxFor(m => m.ConfiguracaoSaque.horarioInicioSabado, new {@class = "form-control input-sm input-clockpicker", alt = "time"})
+                                            <span class="input-group-addon">
+                                                <span class="glyphicon glyphicon-time"></span>
+                                            </span>
+                                        </div>                                        
+                                        @Html.ValidationMessageFor(m => m.ConfiguracaoSaque.horarioInicioSabado)
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <label>Horário Final</label>                                        
+                                        <div class="input-group input-clockpicker">
+                                            @Html.TextBoxFor(m => m.ConfiguracaoSaque.horarioFimSabado, new {@class = "form-control input-sm input-clockpicker", alt = "time"})
+                                            <span class="input-group-addon">
+                                                <span class="glyphicon glyphicon-time"></span>
+                                            </span>
+                                        </div>
+                                        @Html.ValidationMessageFor(m => m.ConfiguracaoSaque.horarioFimSabado)
+                                    </div>
+
+                                    <div class="clearfix"></div>
+
+                                    <div class="col-sm-4">
+                                        <label>Domingo</label>
+                                        @Html.DropDownListFor(m => m.ConfiguracaoSaque.flagDomingo, ComboHelper.selectListTrueFalse(Model.ConfiguracaoSaque.flagDomingo), "...", new{@class = "form-control input-sm"})
+                                        @Html.ValidationMessageFor(m => m.ConfiguracaoSaque.flagDomingo)
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <label>Horário de Início</label>                                        
+                                        <div class="input-group input-clockpicker">
+                                            @Html.TextBoxFor(m => m.ConfiguracaoSaque.horarioInicioDomingo, new {@class = "form-control input-sm input-clockpicker", alt = "time"})
+                                            <span class="input-group-addon">
+                                                <span class="glyphicon glyphicon-time"></span>
+                                            </span>
+                                        </div>
+                                        @Html.ValidationMessageFor(m => m.ConfiguracaoSaque.horarioInicioDomingo)
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <label>Horário Final</label>                                        
+                                        <div class="input-group input-clockpicker">
+                                            @Html.TextBoxFor(m => m.ConfiguracaoSaque.horarioFimDomingo, new {@class = "form-control input-sm input-clockpicker", alt = "time"})
+                                            <span class="input-group-addon">
+                                                <span class="glyphicon glyphicon-time"></span>
+                                            </span>
+                                        </div>
+                                        @Html.ValidationMessageFor(m => m.ConfiguracaoSaque.horarioFimDomingo)
+                                    </div>
+
+                                </div>
+                            </div>
+                                
+                            <div class="col-sm-6">
+                                
+                                <h4 class="separator-form">Valores</h4>
+
+                                <div class="row">
+
+                                    <div class="col-sm-4">
+                                        <label>Valor Mínimo de Saque</label>
+                                        @Html.TextBoxFor(m => m.ConfiguracaoSaque.valorMinimoSaque, new{@class = "form-control input-sm", @alt = "decimal"})
+                                        @Html.ValidationMessageFor(m => m.ConfiguracaoSaque.valorMinimoSaque)
+                                    </div>
+
+                                </div>
+
+                            </div>
+                                                                    
+                        </div>
+                        
+                    </div>
+
+                    <div class="clearfix"></div><br/>
+
+                </div>
+                
+                <div class="col-sm-12 text-right">
+                    @Html.botaoSalvar()
+                </div>
+                <div class="clearfix"></div>
+                <br/>
+            }
+        </div>
+    </div>
+</div>

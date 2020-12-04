@@ -1,0 +1,12 @@
+﻿@model DAL.Contribuicoes.ContribuicaoTabelaPreco
+
+@{
+    Layout = "~/views/shared/associatec/masterpage-modal.cshtml";
+    ViewBag.modalTitle = string.Concat("Tabela de Preço: ", Model.descricao);
+
+}
+
+<div id="boxTabelaPrecoModal"  data-url="@Url.Action("partial-detalhe-tabela", new {idTabelaPreco = Model.id})">
+@{ Html.RenderPartial("partial-detalhe-tabela", Model);}    
+</div>
+

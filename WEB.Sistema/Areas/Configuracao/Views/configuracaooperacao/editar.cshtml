@@ -1,0 +1,31 @@
+﻿@model WEB.Areas.Configuracao.ViewModels.ConfiguracoesVM
+@{
+    ViewBag.titlePage = "Operações de Manutenção";
+}
+
+@section scripts{
+    <script src="@UtilConfig.linkResourses()Areas/Configuracao/js/configuracao-manutencao.js"></script>
+}
+
+@section styles {
+}
+
+<div class="row">
+    <div class="box-body">
+        <div class="nav-tabs-custom">
+
+            <ul class="nav nav-tabs" role="tablist">
+                <li class="active"><a href="#tab-manutencao" data-toggle="tab">Notificações</a></li>
+            </ul>
+            @using (Html.BeginForm("editar", null, FormMethod.Post, new { role = "form", @class = "tab-content", enctype = "multipart/form-data" })) {
+
+                @Html.ValidationSummary(false)
+
+                <div id="tab-manutencao" role="tabpanel" class="tab-pane active">
+                    @{ Html.RenderPartial("partial-form-operacoes", Model); }
+                </div>
+
+             }
+        </div>
+    </div>
+</div>

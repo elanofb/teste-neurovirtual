@@ -1,0 +1,92 @@
+﻿@model WEB.Areas.DocumentosDigitais.ViewModels.DocumentoDigitalForm
+@using DAL.Permissao.Security.Extensions
+@using WEB.Areas.Associacoes.Helpers
+@using WEB.Areas.Pessoas.Helpers
+@{
+    ViewBag.titlePage = "Documento Digital";
+    ViewBag.subTituloPagina = Model.DocumentoDigital.titulo;
+    Layout = "~/views/shared/associatec/masterpage-edit.cshtml";
+
+    var linkVoltar = UtilRequest.getInt32("idOrganizacao") > 0 ? Url.Action("listar", new { idOrganizacao = UtilRequest.getInt32("idOrganizacao") }) : Url.Action("listar");
+}
+@section styles{
+    @Html.includeFroalaEditorCSS()
+    <link href="@UtilConfig.linkResourses()Areas/Arquivos/js/plugins/bootstrap-fileinput/css/fileinput.min.css" rel="stylesheet" />
+    
+}
+@section scripts{
+    @Html.includeFroalaEditorJS()
+    <script type="text/javascript" src="@UtilConfig.linkResourses()Areas/Arquivos/js/plugins/bootstrap-fileinput/js/fileinput.min.js"></script>
+    
+    <script type="text/javascript" src="@UtilConfig.linkResourses()Areas/DocumentosDigitais/js/documento-digital.js"></script>
+}
+@section navTabs{
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#tab-1" data-toggle="tab">Principal</a></li>
+    </ul>
+}
+@section tabContent{
+    @Html.infoCadastro(Model.DocumentoDigital.id, Model.DocumentoDigital.dtCadastro, Model.DocumentoDigital.dtAlteracao)
+    <div id="tab-1" class="tab-pane active">
+        @using (Html.BeginForm("editar", null, FormMethod.Post)) {
+
+
+
+            @Html.HiddenFor(m => m.DocumentoDigital.id, new { id = "id" })
+
+            { Html.EnableClientValidation(false); }
+
+            @Html.ValidationSummary(false);
+
+            <h4 class="separator-form">Informações Cadastrais</h4>
+
+            if (User.idOrganizacao() == 0) {
+
+                <div class="col-sm-4 col-md-3">
+                    <label>Organização</label>
+                    @Html.DropDownListFor(m => m.DocumentoDigital.idOrganizacao, AssociacaoHelper.getInstance.selectList(Model.DocumentoDigital.idOrganizacao), "Padrão", new { @class = "form-control input-sm" })
+                </div>
+                <div class="clearfix"></div>
+
+            }
+
+            <div class="col-md-6">
+                @Html.labelRequired("Titulo")
+                @Html.TextBoxFor(x => x.DocumentoDigital.titulo, new { @class = "form-control input-sm", @maxlength = "255" })
+                @Html.ValidationMessageFor(x => x.DocumentoDigital.titulo)
+            </div>
+
+            <div class="col-md-2">
+                @Html.labelRequired("Tipo de Documento")
+                @Html.DropDownListFor(m => m.DocumentoDigital.idTipoDocumentoDigital, WEB.Areas.DocumentosDigitais.Helpers.TipoDocumentoDigitalHelper.getInstance.selectList(Model.DocumentoDigital.idTipoDocumentoDigital), "...", new { @class = "form-control input-sm" })
+                @Html.ValidationMessageFor(x => x.DocumentoDigital.idTipoDocumentoDigital)
+            </div>
+
+            <div class="col-md-2">
+                @Html.labelRequired("Tipo de Pessoa")
+                @Html.DropDownListFor(m => m.DocumentoDigital.flagTipoPessoa, TipoPessoaHelper.getInstance.selectListTodos(Model.DocumentoDigital.flagTipoPessoa), new { @class = "form-control input-sm" })
+                @Html.ValidationMessageFor(m => m.DocumentoDigital.flagTipoPessoa)
+            </div>
+
+            <div class="col-md-2">
+                @Html.labelRequired("Status")
+                @Html.DropDownListFor(m => m.DocumentoDigital.ativo, ComboHelper.selectListStatus(Model.DocumentoDigital.ativo), "...", new { @class = "form-control input-sm" })
+                @Html.ValidationMessageFor(x => x.DocumentoDigital.ativo)
+            </div>
+            <div class="clearfix"></div>
+
+            <h4 class="separator-form">Corpo Html</h4>
+
+            <div class="col-md-12">
+                @Html.TextAreaFor(x => x.DocumentoDigital.htmlCorpo, new { @id = "editor", @class = "form-control input-sm", rows = "7" })
+            </div>
+            <div class="clearfix"></div><br />
+
+            <div class="text-right">
+                @Html.exibirBotoesFormulario(linkVoltar, "N")
+            </div>
+
+        }
+    </div>
+    <div class="clearfix"></div>
+}

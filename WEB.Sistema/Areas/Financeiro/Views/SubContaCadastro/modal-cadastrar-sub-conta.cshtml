@@ -1,0 +1,82 @@
+﻿@using MvcFlashMessages
+@model WEB.Areas.Financeiro.ViewModels.CategoriaTituloForm
+
+@{
+    Layout = IsPost ? null : "~/views/shared/associatec/masterpage-modal.cshtml";
+
+    ViewBag.modalTitle = "Cadastrar Sub-Conta";
+    ViewBag.modalWidthClass = "md";
+}
+
+<div id="@(IsPost ? "" : "boxFormSubConta")" style="min-height: 350px;">
+
+    @Html.RenderFlash()
+
+    <div class="col-xs-12">
+        <div class="row">
+            @using (Ajax.BeginForm("salvar-sub-conta", null, new AjaxOptions { UpdateTargetId = "boxFormSubConta", HttpMethod = "POST", OnSuccess = "ComboSubConta.onSuccessSubConta" }, new { id="formSubConta", role = "form", @class = "default" })) {
+                
+                @Html.legendaRequired()
+
+                @Html.ValidationSummary(false)
+
+                @Html.HiddenFor(x => x.group)
+                @Html.HiddenFor(x => x.CategoriaTitulo.id)
+
+                <h4 class="separator-form-icon"><i class="far fa-edit"></i> Dados Principais da Sub-Conta</h4>
+
+                <div class="form-horizontal">
+                    
+                    <div class="col-sm-4">
+                        @Html.labelRequired("Macro Conta")
+                        @Html.DropDownListFor(m => m.CategoriaTitulo.idMacroConta, MacroContaHelper.getInstance.selectList(Model.CategoriaTitulo.idMacroConta, false), "", new {id = "idMacroContaForm", @class = "form-control input-sm", onchange = "PlanoContas.carregarSubContaPai('"+Model.CategoriaTitulo.idCategoriaPai+"', '"+Model.CategoriaTitulo.id+"')"})
+                        @Html.ValidationMessageFor(m => m.CategoriaTitulo.idMacroConta)
+                    </div>
+                    
+                    <div class="col-sm-4">
+                        @Html.Label("Sub Conta Pai")
+                        @Html.DropDownListFor(m => m.CategoriaTitulo.idCategoriaPai, CategoriaTituloHelper.getInstance.selectListPais(Model.CategoriaTitulo.idCategoriaPai, 0, new List<int> {Model.CategoriaTitulo.id}), "...", new { id = "idCategoriaPai", @class = "form-control input-sm" })
+                        @Html.ValidationMessageFor(m => m.CategoriaTitulo.idCategoriaPai)
+                    </div>
+
+                    <div class="col-sm-8">
+                        @Html.labelRequired("Descrição da sub-conta")
+                        @Html.TextBoxFor(m => m.CategoriaTitulo.descricao, new {@class = "form-control input-sm", maxlength = "100"})
+                        @Html.ValidationMessageFor(m => m.CategoriaTitulo.descricao)
+                    </div>
+
+                    <div class="clearfix"></div>
+                    
+                    <div class="col-sm-4">
+                        <label>Código Fiscal</label>
+                        @Html.TextBoxFor(m => m.CategoriaTitulo.codigoFiscal, new {@class = "form-control input-sm", maxlength = "10"})
+                    </div>
+
+                    <div class="col-sm-4">
+                        <label>Exibir DRE?</label>
+                        @Html.DropDownListFor(m => m.CategoriaTitulo.flagExibirDRE, ComboHelper.selectListTrueFalse(Model.CategoriaTitulo.flagExibirDRE), "...", new { @class = "form-control input-sm" })
+                        @Html.ValidationMessageFor(m => m.CategoriaTitulo.flagExibirDRE)
+                    </div>
+
+                    <div class="col-sm-4">
+                        <label>Status</label>
+                        @Html.DropDownListFor(m => m.CategoriaTitulo.ativo, ComboHelper.selectListStatus(Model.CategoriaTitulo.ativo), new {@class = "form-control input-sm"})
+                        @Html.ValidationMessageFor(m => m.CategoriaTitulo.ativo)
+                    </div>
+                    <div class="clearfix"></div>
+
+                </div>
+
+                <div class="clearfix"></div><br/>
+            }
+        </div>
+    </div>
+</div>
+<div class="clearfix"></div><br />
+
+@section modalFooter{
+    <div class="text-right">
+        <input type="button" class="btn btn-primary link-loading" onclick="$('#formSubConta').submit()" value="Salvar Dados" />
+    </div>    
+}
+

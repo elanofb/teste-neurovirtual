@@ -1,0 +1,23 @@
+﻿@using DAL.TarefasPessoais
+@model DAL.Associados.Associado
+
+
+<div class="tab-pane" id="tab-historico">
+
+    <h4 class="separator-form-icon no-margin-bottom">
+        <i class="far fa-edit"></i> Históricos Registrados
+        
+        <a href="javascript:;" class="pull-right text-black fs-12 link-loading-min" onclick="DefaultSistema.showModal('@Url.Action("modal-form-cadastro", "PessoaRelacionamentoCadastro", new { Area = "Pessoas", Model.idPessoa, flagRecarregar = true })')">
+            <i class="far fa-plus-circle"></i> Nova Ocorrência
+        </a>
+        
+        <a href="javascript:;" class="pull-right text-black margin-right-15 fs-12 link-loading-min" onclick="DefaultSistema.showModal('@Url.Action("modal-tarefa-pessoal-cadastrar", "TarefaPessoalCadastrar", new { Area = "TarefasPessoais", idAssociado = Model.id, idTipoTarefa = TipoTarefaPessoalConst.AGENDAR_RETORNO })')">
+            <i class="far fa-hourglass-start"></i> Agendar Retorno
+        </a>
+    </h4>
+    
+    <div id="boxLoadListaHistorico" class="content-load carregando" data-url="@Url.Action("partial-listar-relacionamentos", "pessoarelacionamento", new { Area = "Pessoas", Model.idPessoa })"></div>
+    
+    <div class="clearfix"></div><br/>
+    
+</div>

@@ -1,0 +1,162 @@
+﻿@model PagedList.IPagedList<Representante>
+@using PagedList.Mvc
+@using DAL.Representantes
+@using WEB.Areas.Arquivos.Helpers
+
+@{
+    ViewBag.titlePage = "Representantes Cadastrados";
+}
+
+@section styles {
+	
+	@Html.includeFroalaEditorCSS()
+	@Html.includeCSSModuloArquivos()
+	
+	<link href="@UtilConfig.linkResourses("css/associatec/list-custom.css")" rel="stylesheet" />
+}
+
+@section scripts{
+    
+	@Html.includeFroalaEditorJS()
+	@Html.includeJSModuloArquivosFotos()
+    
+	<script src="@UtilConfig.linkResourses("Areas/Representantes/js/representante.js")"></script>
+}
+
+
+<div class="box box-primary">
+
+	@Html.headerBox("Filtros de Busca", "fa fa-filter")
+
+	<div class="box-body">
+
+		@using (Html.BeginForm(null, null, FormMethod.Get, new { @class = "" })) {
+
+		    <div class="row">
+
+                <div class="form-group col-xs-7">
+                </div>
+
+			    <div class="form-group col-xs-2">
+				    <label>Status</label>
+				    @Html.DropDownList("ativo", ComboHelper.selectListStatus(UtilRequest.getBool("ativo")), "Todos", new { @class = "form-control input-sm" })
+			    </div>
+
+			    <div class="form-group col-xs-3">
+		            <label>Buscar</label>
+		            @Html.buttonSearch(UtilRequest.getString("valorBusca"))
+		        </div>
+		        <div class="clearfix"></div>
+
+            </div>
+        }
+
+	</div>
+
+</div>
+
+<div class="box box-primary">
+
+	<div class="box-header with-border">
+		
+		<div class="box-title">
+			<i class="far fa-chart-bar"></i> Resultados <small class="fs-10">@Model.TotalItemCount encontrado(s). </small>
+		</div>
+
+		<div class="box-tools pull-right">
+			<div class="dropdown">
+				<a href="javascript:;" class="dropdown-toggle text-black fs-16" type="button" data-toggle="dropdown">
+					<i class="fa fa-cog"></i>
+				</a>
+				<ul class="dropdown-menu dropdown-menu-right">
+					<li>
+						<a href="javascript:;" class="" onclick="Representante.abrirModal('@Url.Action("modal-cadastro", "RepresentanteCadastro")')"><i class="far fa-plus-circle"></i> Novo Registro</a>
+					</li>
+				</ul>
+			</div>			
+			
+		</div>
+
+	</div>
+	
+	<div class="box-body">
+
+		@if (!Model.Any()) {
+			
+			<div class="col-md-12 alert alert-info">
+				<p>Nenhum representante encontrado</p>
+			</div>
+			<div class="clearfix"></div>
+			
+		}
+		
+		@foreach (var ORepresentante in Model) {
+			
+			<div class="box-info-item-dotted bordered-destaque">
+			
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="row">
+							<div class="col-sm-10">
+								<span>
+									<strong># @ORepresentante.id - @ORepresentante.Pessoa.nome </strong>
+								</span>
+							</div>
+							<div class="col-sm-2 text-right">
+								<div class="dropdown">
+									<a href="javascript:;" class="dropdown-toggle text-black" type="button" data-toggle="dropdown">
+										<i class="fa fa-cog"></i>
+									</a>
+									<ul class="dropdown-menu dropdown-menu-right">
+										<li>
+											<a href="javascript:;" onclick="Representante.abrirModal('@Url.Action("modal-cadastro", "RepresentanteCadastro", new { id = ORepresentante.id })')">
+												<i class="fa fa-edit"></i> Editar
+											</a>
+										</li>
+										<li class="divider"></li>
+										<li>
+											@Html.linkAjaxExcluir(ORepresentante.id, "N", Url.Action("excluir", "RepresentanteExclusao"), "", "", "Excluir")
+										</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-sm-3">
+                                <div>
+                                    <span data-toggle="tooltip" title="CPF/CNPJ">
+                                        <i class="far fa-id-card"></i> @UtilString.formatCPFCNPJ(ORepresentante.Pessoa.nroDocumento).htmlIfEmpty(new[] {"Documento"})
+                                    </span>
+                                </div>
+							</div>
+							<div class="col-sm-3">
+								<span data-toggle="tooltip" title="Telefone Principal">
+									<i class="far fa-phone"></i> @ORepresentante.Pessoa.nroTelPrincipal.htmlIfEmpty(new[] {"Telefone"})
+								</span>
+							</div>
+							<div class="col-sm-3">
+								<span data-toggle="tooltip" title="Telefone Secundário">
+									<i class="far fa-phone"></i> @ORepresentante.Pessoa.nroTelSecundario.htmlIfEmpty(new[] {"Telefone"})
+								</span>
+							</div>
+							<div class="col-sm-3">
+								<span data-toggle="tooltip" title="E-mail">
+									<i class="far fa-envelope"></i> @ORepresentante.Pessoa.emailPrincipal.htmlIfEmpty(new[] {"E-mail"})
+								</span>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-sm-4">
+								<div>@Html.linkStatusDefault(ORepresentante.id, ORepresentante.ativo, "RepresentanteCadastro")</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		}
+		
+		@(Html.paginarRegistros(Model, Html.PagedListPager(Model, nroPagina => UtilRequest.linkPaginacao(nroPagina, "index"), PagedListRenderOptions.OnlyShowFivePagesAtATime)))
+
+	</div>
+
+</div>

@@ -1,0 +1,30 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>@ViewBag.Title  @Html.sistema().tituloSistema</title>
+    <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
+        
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link href="@UtilConfig.linkResourses()css/associatec/modulos/print-form.css" rel="stylesheet" />
+    <link href="@UtilConfig.linkResourses()css/associatec/modulos/custom-print.css" rel="stylesheet" />
+    
+    @RenderSection("styles", required: false)
+
+</head>
+    <body class="print">
+        <div class="container">
+
+            <div class="clearfix"></div><br />
+
+            <div class="col-md-12 text-right no-display-print">
+                <button class="btn btn-default" onclick="window.print();"><i class="fa fa-print"></i> Imprimir</button>
+            </div>
+
+            <div class="clearfix"></div><br />
+
+            @RenderBody()
+
+        </div>
+    </body>
+</html>

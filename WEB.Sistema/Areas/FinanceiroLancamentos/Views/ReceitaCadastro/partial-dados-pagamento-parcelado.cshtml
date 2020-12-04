@@ -1,0 +1,111 @@
+﻿@model WEB.Areas.FinanceiroLancamentos.ViewModels.ReceitaCadastroForm
+
+@{
+    Layout = null;
+}
+
+<div class="row margin-top-20">
+
+    <div class="col-sm-6">
+        
+        <div class="row margin-top-10 no-display boxValor">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-sm-8 no-padding-right">
+                        @Html.spanFieldForm("<label><i class=\"fa fa-dollar-sign fs-12\" data-toggle=\"tooltip\" title=\"Clique para informar o valor total da receita para o sistema calcular cada parcela\" onclick=\"ReceitaCadastro.changeInputAmountFull()\"></i></label>", "fs-12", true)<br />
+                        @Html.instrucao("Informe o valor total da receita")
+                    </div>
+                    <div class="col-sm-4">
+                        @Html.TextBoxFor(m => m.TituloReceita.valorTotal, new {@class = "form-control input-sm", alt = "decimal", id = "valorTotal"})
+                        @Html.ValidationMessageFor(m => m.TituloReceita.valorTotal)
+                    </div>
+                </div>
+                <hr class="no-margin-bottom margin-top-5"/>
+            </div>
+        </div>
+
+        <div class="row margin-top-10 boxValorParcela">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-sm-8 no-padding-right">
+                        @Html.spanFieldForm("Valor da Parcela <label><i class=\"fa fa-dollar-sign fs-12\" data-toggle=\"tooltip\" title=\"Clique para informar o valor total da receita para o sistema calcular cada parcela\" onclick=\"ReceitaCadastro.changeInputAmountFull()\"></i></label>", "fs-12", true)<br />
+                        @Html.instrucao("Informe o valor da parcela")
+                    </div>
+                    <div class="col-sm-4">
+                        @Html.TextBoxFor(m => m.valorParcelas, new {@class = "form-control input-sm", alt = "decimal", id = "valorParcelas"})
+                        @Html.ValidationMessageFor(m => m.valorParcelas)
+                    </div>
+                </div>
+                <hr class="no-margin-bottom margin-top-5"/>
+            </div>
+        </div>
+        
+        <div class="row margin-top-10">
+            <div class="col-md-12 boxCompleteDtCompetencia">
+                <div class="row">
+                    <div class="col-sm-8 no-padding-right">
+                        @Html.spanFieldForm("Especificar competências", "fs-12", true)<br />
+                        @Html.instrucao("Informe a competência das parcelas")
+                    </div>
+                    <div class="col-sm-4">
+                        @Html.DropDownListFor(m => m.flagCompleteDtCompetencia, Model.selectListEspecCompetencia(Model.flagCompleteDtCompetencia), "...", new {@class = "form-control input-sm"})
+                        @Html.ValidationMessageFor(m => m.flagCompleteDtCompetencia)
+                    </div>
+                </div>
+                <hr class="no-margin-bottom margin-top-5"/>
+            </div>
+        </div>
+        
+    </div>
+    
+    <div class="col-sm-6">
+        
+        <div class="row margin-top-10">
+            <div class="col-md-12 boxDtVencimento">
+                <div class="row">
+                    <div class="col-sm-8 no-padding-right">
+                        @Html.spanFieldForm("Dt. Primeiro Vencimento", "fs-12", true)<br />
+                        @Html.instrucao("Informe a data do vencimento da primeira parcela")
+                    </div>
+                    <div class="col-sm-4">
+                        @Html.TextBoxFor(m => m.TituloReceita.dtVencimento, new {@class = "form-control input-sm input-datepicker", autocomplete = "off", alt = "date", id = "dtVencimento"})
+                        @Html.ValidationMessageFor(m => m.TituloReceita.dtVencimento)
+                    </div>
+                </div>
+                <hr class="no-margin-bottom margin-top-5"/>
+            </div>
+        </div>
+        
+        <div class="row margin-top-10">
+            <div class="col-md-12 boxQntdParcelas">
+                <div class="row">
+                    <div class="col-sm-8 no-padding-right">
+                        @Html.spanFieldForm("Qntd. Pagamentos", "fs-12", true)<br />
+                        @Html.instrucao("Informe a quantidade de parcelas")
+                    </div>
+                    <div class="col-sm-4">
+                        @Html.TextBoxFor(m => m.TituloReceita.qtdeRepeticao, new {@class = "form-control input-sm", type = "number", id = "qtdeRepeticao", onfocusout = "ReceitaCadastro.gerarParcelas()"})
+                        @Html.ValidationMessageFor(m => m.TituloReceita.qtdeRepeticao)
+                    </div>
+                </div>
+                <hr class="no-margin-bottom margin-top-5"/>
+            </div>
+        </div>
+        
+        <div class="row margin-top-10">
+            <div class="col-sm-12 padding-left-10 text-right">
+                <a data-toggle="tooltip" title="Gerar as parcelas" role="button" onclick="ReceitaCadastro.gerarParcelas()" href="javascript:;" class="btn btn-primary btn-sm"><i class="fa fa-clone"></i> Gerar Parcelas</a>
+            </div>
+        </div>
+        
+    </div>
+
+</div>
+
+<div class="row margin-top-20">
+    <div id="boxLoadParcelas">
+        @if (Model.TituloReceita.listaTituloReceitaPagamento.Count() > 1) {
+            Html.RenderPartial("partial-gerar-receitas-pagamento-form", Model);
+        }
+    </div>
+</div>

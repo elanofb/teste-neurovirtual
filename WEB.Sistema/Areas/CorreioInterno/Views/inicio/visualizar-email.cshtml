@@ -1,0 +1,79 @@
+﻿@model LogEmail
+@using DAL.Entities
+@{
+	ViewBag.modalTitle = Model.assunto;
+	ViewBag.modalWidthClass = "lg";
+	if (IsPost) {
+		Layout = null;
+	} else {
+		Layout = "~/views/shared/associatec/masterpage-modal.cshtml";
+	}	
+}
+
+<div>
+	<div class="col-md-12">
+		<div class="input-group">
+			<div class="input-group-addon"><strong class="btn-block width-75">De:</strong> </div>
+			<input type="text" class="form-control" id="exampleInputAmount" value="@Model.exibirRemetente()" readonly="readonly" />
+		</div>
+	</div>
+	<div class="col-md-12">
+		<div class="input-group">
+			<div class="input-group-addon"><strong class="btn-block width-75">Para:</strong> </div>
+			<input type="text" class="form-control" id="exampleInputAmount" value="@Model.exibirDestinos()" readonly="readonly" />
+		</div>
+	</div>
+	@if (Model.listaEmailDestino.Where(x => x.flagCopia == "S").Any()) {
+		<div class="col-md-12">
+			<div class="input-group">
+				<div class="input-group-addon"><strong class="btn-block width-75">Para:</strong> </div>
+				<input type="text" class="form-control" id="exampleInputAmount" value="@Model.exibirCopiasOcultas()" readonly="readonly" />
+			</div>
+		</div>
+	}
+	<div class="col-md-12">
+		<div class="input-group">
+			<div class="input-group-addon"><strong class="btn-block width-75">@(Model.flagFluxo.Equals("R")? "Recebido": "Enviado"):</strong> </div>
+			<input type="text" class="form-control" id="exampleInputAmount" value="@Model.dtEnvio.exibirData(true)" readonly="readonly" />
+		</div>
+	</div>	
+	<div class="clearfix"></div><br />
+	
+	<div class="col-md-12 text-left">
+		@if(Model.corpoMensagem.Contains("http") && !((bool)ViewBag.flagConfiavel) ){
+			<a href="javascript:void(0);" onclick="CorreioInterno.visualizarNovoEmail(this);" data-url="@Url.Action("visualizar-email", new { id = Model.id, flagConfiavel=true })" data-id="@Model.id"><i class="fa fa-warning"></i> <span>Essa mensagem possui conteúdo remoto, clique aqui para baixar se for confiável</span></a>
+		}
+	</div>
+	<div class="clearfix"></div><br />
+
+	<div class="col-md-12">
+		<strong>Mensagem:</strong><br />
+		<div class="painel-leitura">
+			@Html.Raw(Model.exibirMensagem((bool)ViewBag.flagConfiavel))
+		</div>
+	</div>	
+	<div class="clearfix"></div><br />
+
+</div>
+
+@section modalFooter{
+	<div class="text-right">
+
+		<button class="btn btn-primary" onclick="CorreioInterno.criarNovoEmail(this);" data-url="@Url.Action("criar-novo-email")" data-id="@Model.id" data-id-resposta="@Model.id">
+			<i class="fa fa-reply"></i> <span>Responder</span>
+		</button>
+
+		<button class="btn btn-primary" onclick="CorreioInterno.criarNovoEmail(this);" data-url="@Url.Action("criar-novo-email")" data-id-encaminhamento="@Model.id">
+			<i class="fa fa-reply"></i> <span>Encaminhar</span>
+		</button>
+
+		<button class="btn btn-danger" onclick="CorreioInterno.enviarParaLixeira('@Model.id', true);">
+			<i class="fa fa-trash"></i> <span>Lixeira</span>
+		</button>
+
+		<button class="btn btn-default" onclick="CorreioInterno.fecharModal();">
+			<i class="fa fa-remove"></i> <span>Fechar</span>
+		</button>
+
+	</div>	
+}

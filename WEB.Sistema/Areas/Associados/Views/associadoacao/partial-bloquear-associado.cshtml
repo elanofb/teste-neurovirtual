@@ -1,0 +1,41 @@
+﻿@model DAL.Associados.Associado
+
+@{
+	ViewBag.modalTitle = String.Format("Bloquear o associado {0}", Model.Pessoa.nome);
+	ViewBag.modalWidthClass = "md";
+	if (IsPost) {
+		Layout = null;
+	} else {
+		Layout = "~/views/shared/associatec/masterpage-modal.cshtml";
+	}
+}
+
+<div id="boxFormBloquear">
+	<div class="alert alert-warning"><strong>Atenção! </strong> Ao bloquear um associado, o mesmo, não será mais considerado nas rotinas do sistema, incluindo cobranças de @*@Html.descricaoTipoContribuicao()*@.</div>
+	@Html.showFlashMessage()
+	@using (Ajax.BeginForm("bloquear-associado", null, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "boxFormBloquear", InsertionMode = InsertionMode.Replace, OnSuccess = "AssociadoAcao.onSuccessFormBloquear" }, new { id = "formBloquear", @class = "default col-md-12" })) {
+		@Html.legendaRequired()<br />
+		{ Html.EnableClientValidation(false); }
+		@Html.ValidationSummary(false)
+		@Html.HiddenFor(m => m.id)
+		@Html.HiddenFor(m => m.Pessoa.nome)
+		
+		<div class="col-md-8 no-padding-bottom">
+			@Html.labelRequired("Informe o motivo para bloqueio do associado")
+		</div>
+		<div class="clearfix"></div>
+		<div class="col-md-12 no-padding-top">
+			@Html.TextArea("observacoes", "", new { @class = "form-control input-sm", rows="4" })
+			@Html.ValidationMessage("observacoes")
+		</div>
+		<div class="clearfix"></div><br />
+
+	}
+</div>
+
+@section modalFooter{
+	<div class="text-right">
+		<input type="button" value="Cancelar" class="btn btn-default" data-dismiss="modal"  aria-hidden="true" />
+		<input type="button" value="Confirmar Bloqueio" class="btn btn-danger link-loading" onclick="$('#formBloquear').submit();" />
+	</div>
+}

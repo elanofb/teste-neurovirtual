@@ -1,0 +1,24 @@
+﻿@model WEB.Areas.RamosAtividade.ViewModels.SetorAtuacaoForm
+
+@{
+    Layout = "~/views/shared/associatec/masterpage-edit.cshtml";
+    ViewBag.titlePage = "Setor de Atuação";
+    ViewBag.subTituloPagina = Model.SetorAtuacao.descricao;
+}
+
+@section navTabs{
+	<ul class="nav nav-tabs">
+		<li class="active"><a href="#tab-1" data-toggle="tab">Principal</a></li>
+	</ul>
+}
+
+@section tabContent{
+    <div id="tab-1" class="tab-pane active">
+        
+        @Html.infoCadastro(Model.SetorAtuacao.id, Model.SetorAtuacao.dtCadastro, Model.SetorAtuacao.dtAlteracao)
+
+        @{Html.RenderPartial("partial-dados-principais");}
+
+    </div>
+}
+

@@ -1,0 +1,88 @@
+﻿@model Atendimento
+
+@using DAL.Atendimentos
+@using DAL.Permissao.Security.Extensions
+
+<div class="text-center">
+                    
+    @exibirBotoesAcao(Model)
+                    
+</div>
+
+    
+@helper exibirBotoesAcao(Atendimento OAtendimento) { 
+
+    if (OAtendimento.idStatusAtendimento == AtendimentoStatusConst.EM_ABERTO) {
+
+        <a href="javascript:;" class="btn btn-sm btn-app" onclick="Atendimento.iniciarAtendimento('@OAtendimento.id')">
+            <i class="fa fa-play"></i> Iniciar Atendimento
+        </a>
+
+        <a href="@Url.Action("index", "SaquesPendentes")" class="btn btn-sm btn-app">
+            <i class="fa fa-reply"></i> Voltar
+        </a>
+
+        return;
+
+    }
+    
+    if(OAtendimento.idStatusAtendimento == AtendimentoStatusConst.FINALIZADO) {
+        
+        <a href="@Url.Action("index", "SaquesPendentes")" class="btn btn-sm btn-app">
+            <i class="fa fa-reply"></i> Voltar
+        </a>
+        
+        return;
+
+    }
+    
+    if(OAtendimento.idStatusAtendimento == AtendimentoStatusConst.EM_ATENDIMENTO &&
+       OAtendimento.idUltimoUsuarioAtendimento != User.id()) {
+        
+        <a href="@Url.Action("index", "SaquesPendentes")" class="btn btn-sm btn-app">
+            <i class="fa fa-reply"></i> Voltar
+        </a>
+
+        return;
+
+    }
+
+    <a href="javascript:;" class="btn btn-sm btn-app"
+       onclick="DefaultSistema.showModal('@Url.Action("modal-enviar-mensagem", "AtendimentoAcaoMensagem", new { Area = "Atendimentos", Model.id, idStatus = Model.idStatusAtendimento})')">
+                        
+        <i class="fa fa-comment"></i> Enviar Mensagem
+
+    </a>
+                    
+    if (Model.idStatusAtendimento != AtendimentoStatusConst.AGUARDANDO_RETORNO) {
+
+         <a href="javascript:;" class="btn btn-sm btn-app"
+            onclick="DefaultSistema.showModal('@Url.Action("modal-aguardar-retorno", "AtendimentoAcaoAguardarRetorno", new { Area = "Atendimentos", Model.id })')">
+                            
+             <i class="fa fa-clock"></i> Aguardar Retorno
+
+         </a>
+
+     }
+                    
+    @*if (Model.Atendimento.idStatusAtendimento == AtendimentoStatusConst.AGUARDANDO_RETORNO) {
+
+         <a href="javascript:;" class=" btn btn-sm btn-app" onclick=""><i class="fa fa-mail-reply"></i> Registrar Retorno</a>
+
+     }*@
+    
+    <a href="javascript:;" class="btn btn-sm btn-app"
+       onclick="DefaultSistema.showModal('@Url.Action("modal-finalizar", "AtendimentoAcaoFinalizar", new { Area = "Atendimentos", Model.id })')">
+        
+        <i class="fa fa-check-circle"></i> Finalizar
+
+    </a>
+                    
+    <a href="javascript:;" class="btn btn-sm btn-app" 
+       onclick="DefaultSistema.showModal('@Url.Action("modal-sair", "AtendimentoAcaoSair", new { Area = "Atendimentos", Model.id })')">
+        
+        <i class="fa fa-sign-out"></i> Sair
+
+    </a>
+
+}

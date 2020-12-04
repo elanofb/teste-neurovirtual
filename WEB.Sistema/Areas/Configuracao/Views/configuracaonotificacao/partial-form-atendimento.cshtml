@@ -1,0 +1,27 @@
+﻿@model WEB.Areas.Configuracao.ViewModels.ConfiguracaoNotificacaoForm
+
+<div class="row">
+
+    <div class="col-sm-6">
+        
+        <h4 class="separator-form">E-mails para mensagens de atendimento:</h4>
+
+        <div class="col-sm-12 no-padding">
+            <label>Título do e-mail padrão</label>
+            @Html.TextBoxFor(m => m.ConfiguracaoNotificacao.assuntoEmailMensagemAtendimento, new {@class = "form-control input-sm"})
+            @Html.ValidationMessageFor(m => m.ConfiguracaoNotificacao.assuntoEmailMensagemAtendimento)
+        </div>
+        <div class="clearfix"></div>
+
+        <div class="col-sm-12 no-padding">
+            <label>Mensgaem padrão</label>
+            @Html.TextAreaFor(m => m.ConfiguracaoNotificacao.corpoEmailMensagemAtendimento, new {@class = "form-control input-sm froala-editor", rows = "7"})
+            @Html.instrucao("Limite de 3.000 caracteres.")<br/>
+            @Html.ValidationMessageFor(m => m.ConfiguracaoNotificacao.corpoEmailMensagemAtendimento)
+        </div>
+        <div class="clearfix"></div>
+
+    </div>
+    <div class="clearfix"></div><br/>
+
+</div>

@@ -1,0 +1,57 @@
+﻿@model WEB.Areas.ContasBancarias.ViewModels.ListaMovimentacaoContaVM
+@using WEB.Helpers
+    
+<h4 class="separator-form-icon">
+    <i class="far fa-history"></i> Histórico de transferências da conta
+</h4>
+
+@if (!Model.listaMovimentacoes.Any()) {
+    
+    <div class="alert alert-info">
+        Esse conta ainda não possui nenhuma movimentação.
+    </div>
+
+}
+
+@foreach(var OMovimentacao in Model.listaMovimentacoes) {
+
+    <div class="box-info-item-dotted @(Model.idContaBancaria == OMovimentacao.idContaBancariaOrigem? "border-red": "border-green")">
+
+        <div class="row">
+
+            <div class="col-lg-7 col-md-6 margin-bottom-10">
+
+                <span class="@(Model.idContaBancaria == OMovimentacao.idContaBancariaOrigem? "text-bold": "")">
+                    <i class="fa fa-bank"></i> @OMovimentacao.ContaBancariaOrigem.descricao (@OMovimentacao.ContaBancariaOrigem.nroConta/@OMovimentacao.ContaBancariaOrigem.nroAgencia)
+                </span>
+                
+                <span class="margin-left-15 margin-right-15">
+                    <i class="fa fa-arrow-right"></i>
+                </span>
+
+                <span class="@(Model.idContaBancaria == OMovimentacao.idContaBancariaDestino? "text-bold": "")">
+                    @OMovimentacao.ContaBancariaDestino.descricao (@OMovimentacao.ContaBancariaDestino.nroConta/@OMovimentacao.ContaBancariaDestino.nroAgencia)
+                </span>
+
+            </div>
+            
+            <div class="col-lg-2 col-md-3 text-right">
+                
+                <span>
+                    <strong><i class="far fa-money-bill"></i> Valor: </strong> @OMovimentacao.valor.ToString("C")
+                </span>
+
+            </div>
+
+            <div class="col-lg-3 col-md-3 text-right">
+
+                <span>
+                    <i class="fa fa-calendar"></i> @OMovimentacao.dtOperacao.exibirData()
+                </span>
+
+            </div>
+        </div>
+
+    </div>
+
+}

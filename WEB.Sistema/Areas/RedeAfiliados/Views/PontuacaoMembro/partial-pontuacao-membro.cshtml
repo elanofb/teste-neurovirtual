@@ -1,0 +1,72 @@
+@model WEB.Areas.RedeAfiliados.Models.ViewModels.PontuacaoMembroVM
+
+<div class="row">
+    <div class="col-sm-12">
+        <h4 class="separator-form-icon"><i class="far fa-check"></i> Pontos de carreira já contabilizados</h4>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4 margin-bottom-10">
+        @box(Model.Pontuacao.qtdeCarreiraLE.ToString("N0"), "Lado Esquerdo", "btn-primary")
+    </div>
+
+    <div class="col-md-4 margin-bottom-10">
+        @box(Model.Pontuacao.qtdeCarreiraLD.ToString("N0"), "Lado Direito", "btn-primary")
+    </div>
+
+    <div class="col-md-4 margin-bottom-10">
+        @box(Model.Pontuacao.qtdeCarreiraTotal.ToString("N0"), "Pontos de Carreira", Model.Pontuacao.qtdePendenteTotal > 0? "btn-success": "btn-default")
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <h4 class="separator-form-icon"><i class="far fa-spinner"></i> Pontos ainda não contabilizados</h4>
+    </div>
+    <div class="col-sm-12">
+        @Html.instrucao("Atenção: Somente o lado com menor pontuação será pago.")
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4 margin-bottom-10">
+        @box(Model.Pontuacao.qtdePendenteLE.ToString("N0"), "Lado Esquerdo", "btn-default")
+    </div>
+
+    <div class="col-md-4 margin-bottom-10">
+        @box(Model.Pontuacao.qtdePendenteLD.ToString("N0"), "Lado Direito", "btn-default")
+    </div>
+
+    <div class="col-md-4 margin-bottom-10">
+        @box(Model.Pontuacao.qtdePendenteTotal.ToString("N0"), "Total", (Model.Pontuacao.qtdePendenteTotal > 0? "btn-success": "btn-default"))
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-sm-12">
+        <h4 class="separator-form-icon"><i class="far fa-hourglass"></i> Pontos acumulados no dia</h4>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4 margin-bottom-10">
+        @box(Model.Pontuacao.qtdeDiaLE.ToString("N0"), "Lado Esquerdo", "btn-default")
+    </div>
+
+    <div class="col-md-4 margin-bottom-10">
+        @box(Model.Pontuacao.qtdeDiaLD.ToString("N0"), "Lado Direito", "btn-default")
+    </div>
+
+    <div class="col-md-4 margin-bottom-10">
+        @box(Model.Pontuacao.qtdeDiaTotal.ToString("N0"), "Total do Dia", (Model.Pontuacao.qtdeDiaTotal > 0? "btn-success": "btn-default"))
+    </div>
+</div>
+
+@helper box(string valor, string legenda, string cssClass) {
+    <div class="btn btn-block @cssClass">
+        <strong class="fs-28">@valor</strong>
+        <div class="margin-bottom-5">
+            <span>@Html.Raw(legenda)</span>
+        </div>
+    </div>
+
+}

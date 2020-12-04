@@ -1,0 +1,114 @@
+﻿@model WEB.Areas.Permissao.ViewModels.PermissaoVM
+@using BLL.ConfiguracoesTextos.Extensions
+@using DAL.Permissao
+@using DAL.Permissao.Security.Extensions
+
+<ul class="sidebar-menu">
+    <li id="menu_0">
+        <a href="@Url.Action("index", "home", new { area = "" })" data-id-grupo="0" onclick="Nav.selectMenu(this);">
+            <i class="fa fa-home"></i>
+            <span>Home</span>
+        </a>
+    </li>
+
+    @foreach (var OGrupo in Model.listaGrupos) {
+
+        string urlAction = String.IsNullOrEmpty(OGrupo.controller) ? "#" : Url.Action(OGrupo.action, OGrupo.controller, new { OGrupo.area });
+        @showMenu(OGrupo.id, OGrupo.descricao, urlAction, OGrupo.iconeClasse)
+    }
+
+    <li>
+        <a href="@Url.Action("sair", "login", new {area="Permissao"})">
+            <i class="fa fa-sign-in"></i> <span>Sair</span>
+        </a>
+    </li>
+</ul>
+
+
+@helper showMenu(int idMenuGrupo, string textoMenu, string urlAction, string iconeMenu) {
+
+bool flagDesenvolvedor = (Model.idPerfilAcesso == PerfilAcessoConst.DESENVOLVEDOR);
+
+bool flagExibir = Model.listaPermissoes.Any(x => x.idGrupo == idMenuGrupo);
+
+if (!flagExibir && !flagDesenvolvedor) { return; }
+
+bool flagTemSubmenus = Model.listaPermissoes.Any(x => x.idGrupo == idMenuGrupo && x.idRecurso > 0);
+
+if (!flagTemSubmenus && urlAction == "#") { return; }
+
+string className = (flagTemSubmenus && urlAction == "#" ? "treeview" : "");
+
+    <li class="@className" id="menu_@idMenuGrupo">
+        <a href="@urlAction" data-id-grupo="@idMenuGrupo" onclick="Nav.selectMenu(this);">
+            <i class="@iconeMenu"></i> <span>@Html.labelTexto(User.idOrganizacao(), $"menu{textoMenu}", textoMenu)</span>
+            @if (flagTemSubmenus) {
+                <i class="fa fa-angle-left pull-right"></i>
+            }
+        </a>
+
+        @if (flagTemSubmenus) {
+            @showSubMenu(idMenuGrupo)
+        }
+    </li>
+}
+
+@helper showSubMenu(int idMenuGrupo) {
+
+    var listaSubMenus = Model.listaPermissoes
+        .Where(x => x.idGrupo == idMenuGrupo && x.idRecurso > 0 && x.AcessoRecurso.flagExcluido == "N" && (x.AcessoRecurso.idRecursoPai == null || x.AcessoRecurso.idRecursoPai == 0) && !x.AcessoRecurso.nomeDisplay.Contains("---") )
+        .OrderBy(x => x.AcessoRecurso.ordemExibicao)
+        .ToList();
+
+    <ul class="treeview-menu">
+        @foreach (var SubMenu in listaSubMenus) {
+            if (SubMenu.AcessoRecurso == null) {
+                continue;
+            }
+
+            var areaName = SubMenu.AcessoRecurso.area;
+            var actionPadrao = string.IsNullOrEmpty(SubMenu.AcessoRecurso.actionPadrao) ? "index" : SubMenu.AcessoRecurso.actionPadrao;
+            var controller = SubMenu.AcessoRecurso.controller;
+
+            <li>
+                @{
+                    var listaTerceiroNivelMenu = Model.listaPermissoes.Where(x => x.idGrupo == idMenuGrupo && x.AcessoRecurso.idRecursoPai == SubMenu.idRecurso).OrderBy(x => x.AcessoRecurso.ordemExibicao).ToList();
+                    if (listaTerceiroNivelMenu.Count > 0) {
+                        <a href="#">
+                            &bull; 
+                            @Html.labelTexto(User.idOrganizacao(), $"menu{SubMenu.AcessoRecurso.nomeDisplay}", SubMenu.AcessoRecurso.nomeDisplay)
+                            
+                            <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
+                        </a>
+
+                        <ul class="treeview-menu">
+                            @foreach (var terceiroNivelMenu in listaTerceiroNivelMenu) {
+                                if (terceiroNivelMenu.AcessoRecurso == null) {
+                                    continue;
+                                }
+                                {
+                                    areaName = terceiroNivelMenu.AcessoRecurso.area;
+                                    actionPadrao = String.IsNullOrEmpty(terceiroNivelMenu.AcessoRecurso.actionPadrao) ? "index" : terceiroNivelMenu.AcessoRecurso.actionPadrao;
+                                    controller = terceiroNivelMenu.AcessoRecurso.controller;
+                                }
+                                <li>
+
+                                    <a class="menuFinal" href="@Url.Action(actionPadrao, controller, new {area = areaName})">
+                                        &bull; 
+                                        @Html.labelTexto(User.idOrganizacao(), $"menu{terceiroNivelMenu.AcessoRecurso.nomeDisplay}", terceiroNivelMenu.AcessoRecurso.nomeDisplay)
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    } else {
+                        <a href="@Url.Action(actionPadrao, controller, new {area = areaName})">
+                            <span class="fs-16">&bull;</span> 
+                            @Html.labelTexto(User.idOrganizacao(), $"menu{SubMenu.AcessoRecurso.nomeDisplay}", SubMenu.AcessoRecurso.nomeDisplay)                            
+                        </a>
+
+                    }
+                }
+            </li>
+        }
+    </ul>
+}

@@ -1,0 +1,25 @@
+﻿@model PagedList.IPagedList<LogEmail>
+@using DAL.Entities
+<table class="table table-hover table-striped" id="tbCaixaEntrada" data-url-visualizacao="@Url.Action("registrar-visualizacao")">
+	<tbody>
+		@if (Model.Count > 0) {
+			foreach (var Email in Model) {
+				<tr class="email-@Email.id">
+					<td class="width-50" style="padding-left:11px;"><input type="checkbox" name="checkbox-email" id="email-@Email.id" value="@Email.id" class="no-icheck" /></td>
+					<td class="width-300 mailbox-name" style="overflow:hidden;">
+						<a href="javascript:void(0);" onclick="CorreioInterno.visualizarNovoEmail(this);" data-url="@Url.Action("visualizar-email", new{ id = Email.id} )" data-id="@Email.id"> @Email.exibirDestinosEnviados() </a>
+					</td>
+					<td class="mailbox-subject">
+						<a href="javascript:void(0);" onclick="CorreioInterno.visualizarNovoEmail(this);" data-url="@Url.Action("visualizar-email", new { id = Email.id })" data-id="@Email.id">@Email.assunto</a>
+					</td>
+					<td class="mailbox-attachment"></td>
+					<td class="mailbox-date width-125">@Email.dtEnvio.exibirData(true)</td>
+				</tr>
+			}
+		} else {
+			<tr>
+				<td colspan="5" class="text-center">Não existem mensagens enviadas.</td>
+			</tr>
+		}
+	</tbody>
+</table>

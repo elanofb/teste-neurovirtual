@@ -1,0 +1,72 @@
+﻿@model WEB.Areas.Financeiro.ViewModels.TituloReceitaExclusaoPagamentoForm
+@using WEB.Helpers
+@using MvcFlashMessages
+@{
+	Layout = "~/views/shared/associatec/masterpage-modal.cshtml";
+	ViewBag.modalTitle = "Remover parcela de pagamento";
+	
+	if (IsPost) {
+		Layout = null;
+	}
+}
+
+<div id="@(IsPost ? "" : "boxExcluirPagamento")">
+	<div class="alert alert-warning">
+		<i class="fa fa-exclamation-triangle"></i> <strong>Atenção!</strong> Essa operação não poderá ser desfeita. Caso o pagamento seja realizado por boleto, o sistema não poderá reconhecer.
+	</div>
+	@Html.RenderFlash()
+    <div class="col-md-12">
+        <div class="row">
+            <div class="col-md-3">
+                <label class="data-title">ID</label>
+                <label class="data-info">@Model.TituloReceitaPagamento.TituloReceita.id</label>
+            </div>
+            <div class="col-md-6">
+                <label class="data-title">Pessoa</label>
+                <label class="data-info">@Model.TituloReceitaPagamento.TituloReceita.nomePessoa</label>
+            </div>
+            <div class="col-md-3">
+                <label class="data-title">Vencimento</label>
+                <label class="data-info">@Model.TituloReceitaPagamento.dtVencimento.exibirData()</label>
+            </div>
+        </div>
+        <div class="row margtop10">
+            <div class="col-md-3">
+                <label class="data-title">Valor</label>
+                <label class="data-info">@Model.TituloReceitaPagamento.valorOriginal.ToString("C")</label>
+            </div>
+            <div class="col-md-3">
+                <label class="data-title">Vencimento</label>
+                <label class="data-info">@(Model.TituloReceitaPagamento.dtPagamento.HasValue ? Model.TituloReceitaPagamento.dtPagamento.exibirData().ToString() : "Pendente")</label>
+            </div>
+        </div>
+    </div>
+	<div class="clearfix"></div>
+	<hr />
+	@if (Model.TituloReceitaPagamento.dtPagamento.HasValue) {
+		<div class="alert alert-success">
+			<strong>Atenção!</strong> Esse pagamento já foi registrado, não é possível removê-lo.
+		</div>
+	} else {
+
+        using (Ajax.BeginForm("salvar-exclusao-pagamento", "TituloReceitaPagamentoExclusao", new { area = "financeiro" }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "boxExcluirPagamento", OnSuccess = "TituloReceitaPagamentoExclusao.onSuccessExclusaoForm", InsertionMode = InsertionMode.Replace }, new { })) {
+
+			@Html.HiddenFor(m => m.TituloReceitaPagamento.id)
+
+			<div class="col-md-12">
+				@Html.labelRequired("Motivo exclusão")
+                @Html.TextAreaFor(m => m.TituloReceitaPagamento.motivoExclusao, new { @class = "form-control input-sm", rows = "5" })
+                @Html.ValidationMessageFor(m => m.TituloReceitaPagamento.motivoExclusao)
+			</div>
+			<div class="clearfix"></div>
+
+			<div class="col-md-12 padtop22 text-right">
+				<input type="submit" class="btn btn-primary link-loading" title="Adicionar" value="Confirmar Exclusão" />
+			</div>
+
+			<div class="clearfix"></div>
+			<br />
+		}
+	}
+
+</div>

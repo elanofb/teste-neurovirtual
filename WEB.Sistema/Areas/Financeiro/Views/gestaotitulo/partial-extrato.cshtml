@@ -1,0 +1,129 @@
+﻿@model WEB.Areas.Financeiro.ViewModels.GestaoTituloVM
+@using DAL.Financeiro
+
+@{
+    Layout = null;
+}
+
+<div class="col-md-4 col-lg-4 margin-top-10 pull-right no-padding">
+    <ul class="list-group pull-right no-margin">
+        <li class="list-group-item pull-left no-border"><i class="padding-left-10 bg-green">&nbsp;</i> Receitas</li>
+        <li class="list-group-item pull-left no-border"><i class="padding-left-10 bg-red">&nbsp;</i> Despesas</li>
+    </ul>
+</div>
+
+<div class="clearfix"></div>
+
+<div class="box-body no-padding">
+    <div class="links-table">
+        <div class="btn-group">
+            <a href="@Url.Action("editar", "ReceitaDetalhe", new {urlRetorno = Request.Url.AbsoluteUri})" class="btn btn-default btn-flat" title="Adicionar nova receita">
+                <i class="far fa-plus-circle"></i>&nbsp;Nova Receita
+            </a>
+            <a href="@Url.Action("editar", "DespesaDetalhe", new {urlRetorno = Request.Url.AbsoluteUri})" class="btn btn-default btn-flat" title="Adicionar nova despesa">
+                <i class="far fa-plus-circle"></i>&nbsp;Nova Despesa
+            </a>
+        </div>
+    </div>
+    <div class="table-responsive">
+        <div class="dataTables_wrapper form-inline" role="grid">
+
+            <table class="table table-bordered table-striped dataTable">
+                <thead>
+                <tr role="row">
+                    <th class="width-25"></th>
+                    <th class="width-25"></th>
+                    <th class="width-50">ID</th>
+                    <th class="width-100 text-center">Vencimento</th>
+                    <th class="width-100 text-center">Pagamento</th>
+                    <th class="width-400 text-center">Descrição</th>
+                    <th class="width-200 text-center">Recebido de / Pago a</th>
+                    <th class="width-100 text-center">CPF/CNPJ</th>
+                    <th class="text-center">NF</th>
+                    <th class="width-100 text-center">Valor</th>
+                    <th class="width-75 text-center"></th>
+                </tr>
+                </thead>
+                <tbody>
+
+                @if (Model.listaExtrato.Any()) {
+                    foreach (GestaoTituloVW Item in Model.listaExtrato) {
+                        <tr>
+                            <td class="bg-@(Item.tipo == 1 ? "red" : "green")">&nbsp;</td>
+                            <td class="text-center">@Html.Raw((Item.flagPago == "N" ? "" : "<i class='fa fa-check'></i>"))</td>
+                            <td class="text-center">@Item.idPagamento</td>
+                            <td class="text-center">@Item.dtVencimento.Value.ToShortDateString()</td>
+                            <td class="text-center">@(Item.dtPagamento != null ? Item.dtPagamento.Value.ToShortDateString() : "")</td>
+                            <td class="text-center">@Item.descricao</td>
+                            <td class="text-center">@Item.nomeDestinatario</td>
+                            <td class="text-center">@UtilString.formatCPFCNPJ(Item.docDestinatario)</td>
+                            <td class="text-center">@Item.nroNotaFiscal</td>
+                            <td class="text-right">
+                                @if (Item.tipo == TipoTituloConst.DESPESA) {
+                                    <span style="color: #FF0000;"><b> - @(Item.flagPago == "S" ? Item.valorPago.ToString("C") : Item.valor.ToString("C"))</b></span>
+                                }
+                                else {
+                                    <span>@(Item.flagPago == "S" ? Item.valorPago.ToString("C") : Item.valor.ToString("C"))</span>
+                                }
+                            </td>
+                            <td class="text-center box-acoes">
+                                @exibirAcoes(Item)
+                            </td>
+                        </tr>
+                    }
+                } else {
+                    <tr>
+                        <td class="text-center" colspan="12">Nenhum registro cadastrado</td>
+                    </tr>
+                }
+
+                <tr>
+                    <td colspan="9"></td>
+                </tr>
+                <tr>
+                    <td colspan="8"></td>
+                    <td colspan="1" class="text-right"><b>Receitas</b></td>
+                    <td class="text-right">@Model.valorTotalReceitas.ToString("C")</td>
+                    <td colspan="2"></td>
+                </tr>
+                <tr>
+                    <td colspan="8"></td>
+                    <td colspan="1" class="text-right"><b>Despesas</b></td>
+                    <td class="text-right">- @Model.valorTotalDespesas.ToString("C")</td>
+                    <td colspan="2"></td>
+                </tr>
+                <tr>
+                    <td colspan="8"></td>
+                    <td colspan="1" class="text-right"><b>Resultado</b></td>
+                    <td class="text-right">@Model.valorTotal.ToString("C")</td>
+                    <td colspan="2"></td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</div>
+
+@helper exibirAcoes(GestaoTituloVW Item) {
+
+    if (Item.tipoMovimentacao == TipoMovimentacaoConst.DESPESA) {
+        <a href="@Url.Action("editar", "DespesaDetalhe", new {area = "Financeiro", id = Item.idTitulo, urlRetorno = Request.Url.AbsoluteUri})" data-toggle="tooltip" title="Editar">
+            <i class="fa fa-edit"></i>
+        </a>
+    }
+
+    if(Item.tipoMovimentacao == TipoMovimentacaoConst.RECEITA) {
+        <a href="@Url.Action("editar", "ReceitaDetalhe", new {area = "Financeiro", id = Item.idTitulo, idContaBancaria = Item.id, urlRetorno = Request.Url.AbsoluteUri})" data-toggle="tooltip" title="Editar">
+            <i class="fa fa-edit"></i>
+        </a>
+    }
+
+    if(!Item.flagArquivo) {
+        return;
+    }
+
+    <a href="javascript:;" onclick="DefaultSistema.showModal('@Url.Action("listar", "extratodocumento", new {Item.idTitulo, Item.idPagamento, Item.tipoMovimentacao})')" data-toggle="tooltip" title="Ver Documentos">
+        <i class="fa fa-file-o"></i>
+    </a>
+}

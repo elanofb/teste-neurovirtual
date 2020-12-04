@@ -1,0 +1,98 @@
+﻿@model WEB.Areas.Permissao.ViewModels.AcessoRecursoForm
+@using MvcFlashMessages
+@using WEB.Areas.Permissao.Helpers
+
+@{
+
+    ViewBag.modalTitle = "Módulos do Sistema  " + Model.nomeDisplay;
+    ViewBag.modalWidthClass = "lg";
+    if (IsPost) {
+        Layout = null;
+    } else {
+        Layout = "~/views/shared/associatec/masterpage-modal.cshtml";
+    }
+
+}
+
+<div id="formModuloSistema">
+
+    @using (Ajax.BeginForm("salvar-recurso", null, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "formModuloSistema", InsertionMode = InsertionMode.Replace, OnSuccess = "Recurso.loadMenus('" + Model.idRecursoGrupo + "', '" + Model.idPerfilAcesso + "')" }, new { @class = "default col-md-12" })) {
+        
+        @Html.ValidationSummary(false)
+        
+        @Html.HiddenFor(m => m.id)
+        
+        @Html.HiddenFor(m => m.idPerfilAcesso)
+
+        @Html.RenderFlash()
+
+        <div class="row">
+            <div class="col-md-5 col-xs-5">
+                <label>Menu</label>
+                @Html.DropDownListFor(m => m.idRecursoGrupo, RecursoGrupoHelper.selectList(Model.idRecursoGrupo), "...", new { rel = "idRecursoGrupo", onchange = "Recurso.loadCombo('', '" + Model.idRecursoPai + "')", @class = "form-control input-sm" })
+                @Html.ValidationMessageFor(m => m.idRecursoGrupo)
+            </div>
+            <div class="col-md-5 col-xs-5">
+                <label>Sub Menu</label>
+                @Html.DropDownListFor(m => m.idRecursoPai, RecursoHelper.selectList(Model.idRecursoPai, UtilNumber.toInt32(Model.idRecursoGrupo)), "...", new { rel = "idRecurso", @class = "form-control input-sm" })
+                @Html.ValidationMessageFor(m => m.idRecursoPai)
+            </div>
+            <div class="col-md-2 col-xs-2">
+                <label>Item Menu?</label>
+                @Html.DropDownListFor(m => m.flagMenu, ComboHelper.selectListTrueFalse(Model.flagMenu), "...", new { @class = "form-control input-sm" })
+                @Html.ValidationMessageFor(m => m.flagMenu)
+            </div>
+            <div class="clearfix"></div>
+
+            <div class="col-md-6">
+                <label>Nome Exibição</label>
+                @Html.TextBoxFor(m => m.nomeDisplay, new { @class = "form-control input-sm", maxlength = "50" })
+                @Html.ValidationMessageFor(m => m.nomeDisplay)
+            </div>
+            <div class="col-md-6">
+                <label>Descrição</label>
+                @Html.TextBoxFor(m => m.descricao, new { @class = "form-control input-sm", maxlength = "255" })
+                @Html.ValidationMessageFor(m => m.descricao)
+            </div>
+            <div class="clearfix"></div>
+
+            <div class="col-md-3">
+                <label>Área</label>
+                @Html.TextBoxFor(m => m.area, new { @class = "form-control input-sm" })
+                @Html.ValidationMessageFor(m => m.area)
+            </div>
+
+            <div class="col-md-3">
+                <label>Controller</label>
+                @Html.TextBoxFor(m => m.controller, new { @class = "form-control input-sm" })
+                @Html.ValidationMessageFor(m => m.controller)
+            </div>
+            <div class="col-md-3">
+                <label>Action Padrão</label>
+                @Html.TextBoxFor(m => m.actionPadrao, new { @class = "form-control input-sm" })
+                @Html.ValidationMessageFor(m => m.actionPadrao)
+            </div>
+            <div class="col-md-3">
+                <label>Acesso Liberado?</label>
+                @Html.DropDownListFor(m => m.flagAcessoLiberado, ComboHelper.selectListYesNo(Model.flagAcessoLiberado), new { @class = "flagAcessoLiberado form-control input-sm" })
+                @Html.ValidationMessageFor(m => m.flagAcessoLiberado)
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <br />
+
+        <p class="text-right">
+            <input type="button" value="NOVO" class="btn btn-default" onclick="Recurso.limparFormModal(this.form)" />
+            <input type="submit" value="ENVIAR" class="btn btn-primary link-loading" />
+        </p>
+        <div class="clearfix"></div>
+        <br/>
+    }
+
+    @if (Model.idRecursoGrupo > 0) {
+        <div id="boxActions">
+            @{ Html.RenderPartial("exibir-actions", Model); }
+        </div>
+    }
+    <div class="clearfix"></div>
+</div>

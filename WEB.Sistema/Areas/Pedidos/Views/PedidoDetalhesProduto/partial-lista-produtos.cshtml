@@ -1,0 +1,100 @@
+﻿@model WEB.Areas.Pedidos.ViewModels.PedidoDetalhesProdutoVM
+@using DAL.Pedidos.Extensions
+
+<div class="box-header with-border">
+        
+    <h3 class="box-title">
+        <i class="fa fa-list"></i> Itens do Pedido
+    </h3> 
+        
+    <div class="box-tools pull-right">
+        <span class="label label-primary">
+            @Model.listaProdutos.Count produto(s) adicionado(s)
+        </span>
+        <a href="javascript:;" class="btn btn-box-tool link-loading-min" onclick="DefaultSistema.showModal('@Url.Action("modal-adicionar-produto", "PedidoDetalhesProduto", new { idPedido = Model.idPedido })')">
+            <i class="far fa-plus-circle"></i> 
+            Adicionar
+        </a>
+    </div>
+</div>
+            
+<div class="box-body">
+        
+    <div id="boxListaProdutosPedido">
+            
+        <div class="row">
+            <div class="col-xs-12">
+                @foreach (var OPedidoProduto in Model.listaProdutos) {
+                    <div class="box-info-item-dotted fs-16">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <span class="titulo">
+                                    <i class="far fa-hashtag"></i> @OPedidoProduto.idProduto -
+                                </span>
+                                <span class="text-bold">
+                                    @OPedidoProduto.nomeProduto (@(OPedidoProduto.qtde)x)
+                                </span>
+                                        
+                                @if (!OPedidoProduto.Pedido.dtQuitacao.HasValue) {
+                                    <a href="javascript:;" class="pull-right" data-toggle="tooltip" title="Remover" onclick="PedidoDetalhesProduto.removerProduto('@OPedidoProduto.id')">
+                                        <i class="far fa-trash-alt"></i>
+                                    </a>
+                                }
+                            </div>
+                            <div class="clearfix"></div>
+                                    
+                            <div class="margin-top-5">
+                                
+                                <div class="col-sm-3">
+                                    <p data-toggle="tooltip" title="Ganho Diário">
+                                        <span><i class="fab fa-bitcoin"></i> Ganho Diário: </span> @OPedidoProduto.Produto.valorGanhoDiario
+                                    </p>
+                                </div>
+                                
+                                <div class="col-sm-3">
+                                    <p data-toggle="tooltip" title="Duração em Dias">
+                                        <span><i class="far fa-clock"></i> Duração em Dias: </span> @OPedidoProduto.Produto.qtdeDiasDuracao (Até @OPedidoProduto.dtFimGanhoDiario.exibirData())
+                                    </p>
+                                </div>                                                                
+                                        
+                                <div class="col-sm-3">
+                                    <p class="text-right" data-toggle="tooltip" title="Valor Unitário">
+                                        <span><i class="fa fa-usd"></i>Unid.:</span> @OPedidoProduto.valorItem.exibirValor()
+                                    </p>
+                                </div>
+                                        
+                                <div class="col-sm-3">
+                                    <p class="text-right" data-toggle="tooltip" title="Valor Total">
+                                        <span><i class="far fa-usd"></i>Total: </span> @OPedidoProduto.getValorTotalItem().ToString("C")
+                                    </p>
+                                </div>
+                                <div class="clearfix"></div>
+    
+                                @if (!OPedidoProduto.observacoes.isEmpty()) {
+                                    <div class="col-sm-12">
+                                        <p class="no-margin text-left" data-toggle="tooltip" title="Observações">
+                                            <span><i class="far fa-comment-o" aria-hidden="true"></i> Obs.: </span> @(OPedidoProduto.observacoes)
+                                        </p>
+                                    </div>
+                                }
+    
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="clearfix"></div>
+            
+        </div>
+    </div>
+</div>
+
+<div class="box-footer">
+    
+    <div class="text-center fs-16">
+        
+        Qtde Itens : @Model.listaProdutos.getQtdeItens() | Total Pedido: <span id="label-total">@Model.listaProdutos.getValorTotal().ToString("C")</span>
+
+    </div>
+
+</div>

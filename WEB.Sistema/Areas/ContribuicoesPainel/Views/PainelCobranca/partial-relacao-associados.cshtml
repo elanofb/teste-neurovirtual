@@ -1,0 +1,91 @@
+﻿@model WEB.Areas.ContribuicoesPainel.ViewModels.PainelCobrancaVM
+@using PagedList.Mvc
+@using WEB.Areas.AssociadosContribuicoes.Extensions
+@using WEB.Areas.AssociadosContribuicoes.Helpers
+@using WEB.Areas.AssociadosContribuicoes.ViewModels
+@using WEB.Helpers
+
+
+
+@if (!Model.listagemFiltrada.Any()) {
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="alert alert-info">Nenhum resultado foi encontrado.</div>
+        </div>
+    </div>
+}
+<hr/>
+
+@if (Model.listagemFiltrada.Any()) {
+    <div class="col-sm-12">
+        <div class="row">
+            @foreach (AssociadoContribuicaoItemLista OItem in Model.listaAssociadosPager) {
+
+                string nomeDependentes = string.Join("<br />", OItem.listaCobrancasDependentes.Select(x => x.nomeAssociado).ToList());
+
+                string descricaoAssociado = $"Associado {OItem.AssociadoContribuicao.idAssociado} <br /> Cobrança { (OItem.AssociadoContribuicao.id > 0 ? OItem.AssociadoContribuicao.id.ToString() : "-")  }";
+
+                <div class="col-sm-12 box-info-item bordered-destaque @OItem.AssociadoContribuicao.cssBorderSituacao()">
+                    <div class="row fs-11">
+                        <div class="col-lg-3 col-sm-4 col-xs-4">
+                            <a class="text-black" href="@Url.Action("editar", "AssociadoCadastro", new { area = "Associados", id = OItem.AssociadoContribuicao.idAssociado})">
+                                <span data-toggle="tooltip" title="@descricaoAssociado" data-html="true">
+                                    <i class="fa fa-user"></i> @OItem.AssociadoContribuicao.nomeAssociado
+                                </span><br/>
+                                <span>
+                                    <i class="fa fa-user"></i> @OItem.AssociadoContribuicao.descricaoTipoAssociado
+                                    @if (OItem.qtdeDependentes > 0){
+                                        <em class="fs-11" data-toggle="tooltip" title="@nomeDependentes" data-html="true">(<i class="fa fa-plus"></i>@OItem.qtdeDependentes dependentes)</em>
+                                    }
+                                </span>
+                            </a>
+                        </div>
+                        <div class="col-lg-2 col-sm-2 col-xs-3">
+                            <span data-toggle="tooltip" title="Data de vencimento atual"><i class="far fa-calendar-alt"></i> @OItem.AssociadoContribuicao.dtVencimentoAtual.exibirData()</span> <br />
+                            <span data-toggle="tooltip" title="Data de vencimento original"><i class="far fa-calendar-alt"></i> @OItem.AssociadoContribuicao.dtVencimentoOriginal.exibirData() </span>
+                        </div>
+                        <div class="col-lg-3 col-sm-3 col-xs-3">
+                            <div class="row">
+                                <span data-toggle="tooltip" title="@OItem.detalheValores" data-html="true">
+                                    @Html.exibirDetalhes(OItem)
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 visible-lg">
+                            
+                        </div>
+                        <div class="col-lg-1 col-sm-2 col-xs-2">
+                            <div class="text-right">
+                                @if (OItem.AssociadoContribuicao.id > 0) {
+                                    @Html.menuAcoes(OItem)
+                                }
+                            </div>
+                        </div>
+                        <div class="col-lg-1 col-sm-1 col-xs-2 no-padding-left">
+                            <div class="text-right">
+                                
+                                @if (!OItem.urlBoleto.isEmpty() && !OItem.AssociadoContribuicao.flagQuitado()){
+
+                                    <a href="@Url.Action("visualizar", "BoletoBancario", new {area = "BoletosBancarios", p = UtilCrypt.toBase64Encode(OItem.idTituloReceitaPagamento.toInt())})" data-id="@OItem.idTituloReceitaPagamento.toInt()" target="_blank" data-toggle="tooltip" title="Boleto Bancário"><i class="fal fa-file-pdf text-black fs-14"></i>&nbsp;&nbsp;&nbsp;</a>
+
+                                }
+
+                                @if (OItem.AssociadoContribuicao.id > 0){
+                                    <a href="@Url.Action("index", "AssociadoContribuicaoDetalhe", new {area = "AssociadosContribuicoes", id = OItem.AssociadoContribuicao.id})" target="_blank" data-toggle="tooltip" title="Detalhes da cobrança"><i class="fa fa-search text-black fs-14"></i>&nbsp;&nbsp;&nbsp;</a>
+                                }
+
+                                <input type="checkbox" name="checkRegistro[]" value="@OItem.AssociadoContribuicao.idAssociado" data-id="@OItem.AssociadoContribuicao.id" class="" @(OItem.AssociadoContribuicao.flagQuitado()? "disabled=\"disabled\"" : "") />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            }
+        </div>
+
+    </div>
+    <div class="clearfix"></div>
+    @(Html.paginarRegistros(Model.listaAssociadosPager, Html.PagedListPager(Model.listaAssociadosPager, nroPagina => UtilRequest.linkPaginacao(nroPagina, "index"), PagedListRenderOptions.OnlyShowFivePagesAtATime)))
+}
+
+

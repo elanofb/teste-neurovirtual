@@ -1,0 +1,129 @@
+﻿@model PagedList.IPagedList<DAL.Transacoes.MovimentoResumoVW>
+@using System.Web.Mvc.Html
+@using DAL.Transacoes
+@using MvcFlashMessages
+@using PagedList.Mvc
+
+@{
+    Layout = null;
+}
+
+@Html.RenderFlash()
+
+<div class="row">
+
+    <div class="col-md-12">
+        
+        @using (Ajax.BeginForm("partial-lista-movimentacao", null, new AjaxOptions {HttpMethod = "GET", InsertionMode = InsertionMode.Replace, UpdateTargetId = "boxLoadListaMovimentacao", OnSuccess = "DefaultSistema.iniciarPluginsAposAjax"}, new {id = "formMovimentacao"})) {
+            
+            @Html.Hidden("idMembroDestino", UtilRequest.getInt32("idMembroDestino"))
+            
+            @Html.ValidationSummary(false)
+            
+            <div class="row">
+                
+                <div class="col-sm-4 col-lg-4">
+                    <label>Data da Busca</label>
+                    <div class="input-group">
+                        @Html.TextBox("dtInicio", UtilRequest.getString("dtInicio"), new {@class = "form-control input-sm input-datepicker", alt = "date", autocomplete="off"})
+                        <span class="input-group-addon"></span>
+                        @Html.TextBox("dtFim", UtilRequest.getString("dtFim"), new {@class = "form-control input-sm input-datepicker", alt = "date", autocomplete="off"})
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="no-margin-top">Busca</label>
+                    @Html.buttonSearch(UtilRequest.getString("valorBusca"))
+                </div>
+
+            </div>
+        }
+
+    </div>
+
+    <div class="clearfix"></div><br/>
+</div>
+
+<span class="badge bg-aqua"><i class="fa fa-info-circle"></i> Caso o filtro de busca não seja informado, será exibida a movimentação dos últimos 7 dias.</span>
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        <th width="160">Movimento</th>
+        <th>Membro</th>
+        <th width="200">Valor</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    @if (Model.Any()) {
+        
+        foreach (var Item in Model) {
+            
+            string cellCor = Item.flagDebito ? "mdc-bg-red-50" : "mdc-bg-green-50";
+            
+            <tr>
+                <td class="@cellCor">
+                    <span>
+                        <i class="far fa-hashtag"></i> @Item.idMovimento</span><br/>
+                    <span>
+                        <i class="far fa-calendar-alt"></i> @Item.dtCadastro.exibirData(true)</span>
+                </td>
+                <td class="@cellCor">
+                    <span><i class="far fa-tag"></i> @boxDescricaoTransacao(Item)</span><br/>
+                    <span>
+                         <em>@Item.observacao.defaultIfEmpty("-")</em>
+                    </span>
+                </td>
+                <td class="@cellCor">
+                    <span class="@Html.textGreenOrRed(Item.flagCredito)"> <i class="far @(Item.flagCredito ? "fa-plus" : "fa-minus")"></i> @Item.valorOperacao.toDecimal().ToString("F4") BTK</span><br/>
+                    <span>
+                        <i class="far @Html.iconCheckOrBan(Item.dtIntegracaoSaldo.HasValue)"></i> @(Item.dtIntegracaoSaldo.HasValue ? "Saldo atualizado" : "à sincronizar")
+                    </span>
+                </td>
+            </tr>
+        }
+    } else {
+        <tr>
+            <td colspan="3" class="text-center">Nenhuma movimentação foi encontrada</td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+@(Html.paginarRegistros(Model, Html.PagedListPager(Model, nroPagina => UtilRequest.linkPaginacao(nroPagina, "partial-lista-movimentacao"), PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(new AjaxOptions() {HttpMethod = "GET", UpdateTargetId = "boxLoadListaMovimentacao"}))))
+
+@helper boxDescricaoTransacao(MovimentoResumoVW Item) {
+    
+    if (Item.idTipoTransacao == (byte) TipoTransacaoEnum.LANCAMENTO_DEBITO) {
+        <span><strong>@Item.descricaoTipoTransacao</strong> realizado</span>
+        return;
+    }
+    
+    if (Item.idTipoTransacao == (byte) TipoTransacaoEnum.SAQUE) {
+        <span><strong>@Item.descricaoTipoTransacao</strong> solicitado.</span>
+        return;
+    }
+    
+    if (Item.flagDebito) {
+        <span><strong>@Item.descricaoTipoTransacao</strong> realizado para <em>@Item.nomeMembroOrigem (@Item.nroMembroOrigem)</em></span>
+        return;
+    }
+    
+    if (Item.idTipoTransacao == (byte) TipoTransacaoEnum.PAGAMENTO) {
+        <span><strong>@Item.descricaoTipoTransacao</strong> @Item.idMovimentoPrincipal, recebido de: @Item.nomeMembroOrigem.abreviar(10) (@Item.nroMembroOrigem)</span>
+        return;
+    }
+    
+    if (Item.idTipoTransacao == (byte) TipoTransacaoEnum.CASHBACK) {
+        <span><strong>@Item.descricaoTipoTransacao</strong> do pagamento @Item.idMovimentoPrincipal, feito à @Item.nomeMembroOrigem.abreviar(10)</span>
+        return;
+    }
+    
+    if (Item.idTipoTransacao == (byte) TipoTransacaoEnum.GANHO_PLANOS) {
+        <span><strong>@Item.descricaoTipoTransacao</strong> de produtos SINCTEC</span>
+        return;
+    }                
+    
+    <span><strong>@Item.descricaoTipoTransacao</strong> origem de: @Item.nomeMembroOrigem (@Item.nroMembroOrigem)</span>
+}

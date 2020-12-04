@@ -1,0 +1,11 @@
+﻿.wizard-sinctec { margin: 0; }
+.wizard-sinctec .content-wizard { position:absolute;  visibility:hidden; background-color: #f8f8f8; }
+.wizard-sinctec div.current { visibility:visible !important; position:relative; }
+
+.wizard-sinctec ul.tablist { list-style: none !important; padding: 0; margin: 0; }
+
+.wizard-sinctec ul.tablist > li { display: block; padding: 0; float:left; width:25%; }
+
+ul.tablist li { line-height: 1.5em; cursor:pointer !important; }
+ul.tablist li a { display: block; width: auto; margin: 0 .5em .5em; padding: 1em 1em; text-decoration: none; -webkit-border-radius: 5px; -moz-border-radius: 5px; border-radius: 5px; outline: 0; cursor:pointer !important;  background: #F2F2F2; }
+ul.tablist li.current a, ul.tablist li a:active , ul.tablist li a:hover  { background: #2184be; color: #fff; cursor: default; }

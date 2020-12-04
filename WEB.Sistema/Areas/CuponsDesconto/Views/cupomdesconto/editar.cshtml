@@ -1,0 +1,139 @@
+﻿@model WEB.Areas.CuponsDesconto.ViewModels.CupomDescontoForm
+
+@{
+    Layout = "~/views/shared/associatec/masterpage-edit.cshtml";
+    ViewBag.titlePage = "Editar Cupom de Desconto";
+    ViewBag.ativarMenuTabelas = "active";
+}
+
+@section styles{
+    <link href="@UtilConfig.linkResourses()css/associatec/list-custom.css" rel="stylesheet" />
+}
+
+@section scripts{
+    <script type="text/javascript" src="@UtilConfig.linkResourses()Areas/CuponsDesconto/js/cupomdesconto.js?v=1.0"></script>
+}
+
+@section navTabs{
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#tab-1" data-toggle="tab">Principal</a></li>
+        @if (Model.CupomDesconto.id > 0) {
+            <li class=""><a href="#tab-2" data-toggle="tab">Registro de Utilização</a></li>
+        }
+    </ul>
+}
+
+@section tabContent{
+    <div id="tab-1" class="tab-pane active">
+        @{Html.RenderPartial("partialInfoCadastro");}
+
+        @using (Html.BeginForm("editar", "cupomdesconto", FormMethod.Post, new { enctype = "multipart/form-data" })) {
+            @Html.HiddenFor(m => m.CupomDesconto.id)
+            @Html.HiddenFor(m => m.CupomDesconto.codigo)
+            @Html.HiddenFor(m => m.CupomDesconto.dtCadastro)
+
+            <div class="col-md-12">
+                @if (Model.CupomDesconto.id > 0) {
+                    <div class="callout callout-info margin-top-10">
+                        O código gerado de desconto que deve ser informado aos beneficiados é o: <strong>@Model.CupomDesconto.codigo</strong>
+                    </div>
+                }
+                <h4 class="separator-form">Informações Cadastrais do Beneficiado</h4>
+
+                <div class="col-md-4">
+                    @Html.labelRequired("Nome")
+                    @Html.TextBoxFor(x => x.CupomDesconto.nome, new { @class = "form-control input-sm", maxlength = "100" })
+                    @Html.ValidationMessageFor(x => x.CupomDesconto.nome)
+                    @Html.instrucao("Ex: João da silva, Diversos, etc")
+                </div>
+
+                <div class="col-sm-4">
+                    <label>E-mail Principal</label><br />
+                    @Html.TextBoxFor(x => x.CupomDesconto.emailPrincipal, new { @class = "form-control input-sm", maxlength = "150" })
+                    @Html.ValidationMessageFor(x => x.CupomDesconto.emailPrincipal)
+                    @Html.instrucao("Caso seja informado receberá uma mensagem com os dados do cupom")
+                </div>
+
+                <div class="col-sm-4">
+                    <label>E-mail Secundário</label><br />
+                    @Html.TextBoxFor(x => x.CupomDesconto.emailSecundario, new { @class = "form-control input-sm", maxlength = "150" })
+                    @Html.ValidationMessageFor(x => x.CupomDesconto.emailSecundario)
+                    @Html.instrucao("Caso seja informado receberá uma mensagem com os dados do cupom")
+                </div>
+
+                <div class="clearfix"></div>
+
+                <h4 class="separator-form">Informações do Cupom</h4>
+
+                <div class="col-lg-2 col-sm-3">
+                    @Html.labelRequired("Valor do Desconto")
+                    @Html.TextBoxFor(x => x.CupomDesconto.valorDesconto, new { @class = "form-control input-sm", @alt = "decimal" })
+                    @Html.ValidationMessageFor(x => x.CupomDesconto.valorDesconto)
+                </div>
+
+                <div class="col-lg-2 col-sm-3">
+                    <label>Vencimento</label><br />
+                    @Html.TextBoxFor(x => x.CupomDesconto.dtVencimento, new { @class = "form-control input-sm", @alt = "date" })
+                    @Html.ValidationMessageFor(x => x.CupomDesconto.dtVencimento)
+                    @Html.instrucao("Poderá ser usado até a data informada")
+                </div>
+
+                <div class="col-lg-2 col-sm-3">
+                    <label>Status</label>
+                    @Html.DropDownListFor(m => m.CupomDesconto.ativo, WEB.Helpers.ComboHelper.selectListStatus(Model.CupomDesconto.ativo), "...", new { @class = "form-control input-sm" })
+                    @Html.ValidationMessageFor(m => m.CupomDesconto.ativo)
+                </div>
+                <div class="clearfix"></div>
+
+                <h4 class="separator-form">Utilização</h4>
+                @Html.ValidationMessageFor(m => m.CupomDesconto.flagPedido)
+
+                <div class="col-lg-2 col-sm-3">
+                    <label>Pedidos</label>
+                    @Html.DropDownListFor(m => m.CupomDesconto.flagPedido, ComboHelper.selectListTrueFalse(Model.CupomDesconto.flagPedido), null, new { @class = "form-control input-sm" })
+                </div>
+
+                <div class="col-lg-2 col-sm-3">
+                    <label>Eventos</label>
+                    @Html.DropDownListFor(m => m.CupomDesconto.flagEvento, ComboHelper.selectListTrueFalse(Model.CupomDesconto.flagEvento), null, new { @class = "form-control input-sm" })
+                </div>
+
+                <div class="col-lg-2 col-sm-3">
+                    <label>Cobranças</label>
+                    @Html.DropDownListFor(m => m.CupomDesconto.flagContribuicao, ComboHelper.selectListTrueFalse(Model.CupomDesconto.flagContribuicao), null, new { @class = "form-control input-sm" })
+                    @Html.instrucao("Mensalidades, anuidades, etc")
+                </div>
+
+                <div class="col-lg-2 col-sm-3">
+                    <label>Qtde de Usos Permitidos</label><br />
+                    @Html.TextBoxFor(x => x.CupomDesconto.qtdeUsos, new { @class = "form-control input-sm", type = "number" })
+                    @Html.ValidationMessageFor(x => x.CupomDesconto.qtdeUsos)
+                </div>
+
+            </div>
+
+            <div class="clearfix"></div><br />
+
+            if (Model.CupomDesconto.flagUtilizado || Model.CupomDesconto.id > 0) {
+                <div class="text-right">
+                    <a href="">* Esse registro é protegido pelo sistema e não pode ser manipulado.</a>&nbsp;
+                    <a href="@Url.Action("listar")" class="btn btn-md btn-default">Voltar</a>
+                    <a href="@Url.Action("editar", new{ id = 0})" class="btn btn-md btn-default bg-gray margin-left-20">Novo Registro</a>
+                </div>
+            } else {
+                <div class="text-right">
+                    <a href="@Url.Action("listar")" class="btn btn-default">Voltar</a>&nbsp;
+                    <input type="submit" name="enviar" value="Salvar" class="btn btn-primary" />
+                </div>
+            }
+
+            <div class="clearfix"></div>
+        }
+    </div>
+    @if (Model.CupomDesconto.id > 0) {
+        <div id="tab-2" class="tab-pane">
+            <div class="carregando content-load" data-url="@Url.Action("partial-listar-utlizacoes", "CupomDesconto", new {idCupomDesconto = Model.CupomDesconto.id})"></div>
+        </div>
+    }
+
+}

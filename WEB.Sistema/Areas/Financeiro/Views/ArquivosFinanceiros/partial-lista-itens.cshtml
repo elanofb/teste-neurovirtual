@@ -1,0 +1,208 @@
+﻿@model WEB.Areas.Financeiro.ViewModels.ArquivosFinanceirosConsultaVM
+
+@using DAL.Financeiro
+@using PagedList.Mvc
+@using WEB.Areas.Financeiro.Extensions
+@using WEB.Helpers
+
+@{
+    Layout = "";
+}
+
+<div class="box box-primary">
+
+    <div class="box-header with-border">
+        
+        <div class="box-title">
+            <i class="far fa-chart-bar"></i> Resultados <em class="fs-12">@Model.listaArquivos.TotalItemCount registro(s) encontrado(s)</em>
+        </div>
+        
+        <div class="box-tools pull-right">
+            
+            <div class="btn-group">
+                
+                <button type="button" class="btn btn-box-tool dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+                    <i class="fa fa-cog fs-16"></i>
+                </button>
+                
+                <ul class="dropdown-menu" role="menu">
+                    <li>
+                        <a href="javascript:;" onclick="ArquivosFinanceiros.gerarZipSelecionados()">
+                            <i class="far fa-download"></i> Baixar Selecionados
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="javascript:;" onclick="ArquivosFinanceiros.gerarZipTodos()">
+                            <i class="far fa-download"></i> Baixar Todos
+                        </a>
+                    </li>
+                </ul>
+                
+            </div>
+
+            <div class="btn-group pull-right">
+                <label class="btn btn-default btn-xs" data-toggle="tooltip" title="Selecionar Todos">
+                    <input type="checkbox" name="marcarTodos" data-childs="checkRegistro[]" id="checkMarcarTodos" style="margin-left: 2px;" />
+                </label>
+            </div>
+            
+        </div>
+        <div class="clearfix"></div>
+        
+    </div>
+
+    <div class="box-body">
+
+        @if (!Model.listaArquivos.Any()) {
+            <div class="col-sm-12">
+                <div class="alert alert-info">
+                    Nenhum arquivo foi encontrado.
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        }
+
+        @foreach (var OItem in Model.listaArquivos) {
+
+            <div class="box-info-item-dotted @OItem.exibirBordaStatus()">
+
+                <div class="row">
+
+                    <div class="col-sm-12">
+                        
+                        <div class="row fs-12">
+                            
+                            <div class="col-sm-12 no-padding">
+                                
+                                <div class="col-sm-5 abreviar">
+                                    <span data-toggle='tooltip' title='Título do Arquivo'>
+                                        <i class="far fa-file"></i> @((OItem.titulo ?? OItem.legenda) ?? "Sem Título")
+                                    </span>
+                                </div>
+
+                                <div class="col-sm-3">
+                                    <span data-toggle='tooltip' title='Data do Arquivo'>
+                                        <i class="far fa-calendar"></i> @OItem.dtCadastro.exibirData()
+                                    </span>
+                                </div>
+
+                                <div class="col-sm-2">
+                                    <span>
+                                        <i class="far fa-tag"></i> @(OItem.flagTipoTitulo == "D" ? "Despesa" : "Receita" )
+                                    </span>
+                                </div>
+                                
+                                <div class="col-sm-2 text-right">
+                                    
+                                    <input type="checkbox" class="pull-right" name="checkRegistro[]" value="@OItem.id"/>
+                                    
+                                    <div class="dropdown pull-right margin-right-5">
+                
+                                        <a href="javascript:;" class="dropdown-toggle text-black fs-14" data-toggle="dropdown" aria-expanded="true">
+                                            <i class="fa fa-cog"></i>
+                                        </a>
+                
+                                        @{
+                                            var urlTitulo = Url.Action("editar", "ReceitaDetalhe", new { id = OItem.idTitulo });
+
+                                            if (OItem.flagTipoTitulo == "D") {
+                                                urlTitulo = Url.Action("editar", "DespesaDetalhe", new { id = OItem.idTitulo });
+                                            }
+                                        }
+                                        
+                                        <ul class="dropdown-menu" role="menu">
+                                            
+                                            <li>
+                                                <a href="@urlTitulo" target="_blank">
+                                                    <i class="far fa-search"></i> Ver Detalhes
+                                                </a>
+                                            </li>
+                                            
+                                            <li>
+                                                <a href="@OItem.linkArquivo()" target="_blank">
+                                                    <i class="far fa-download"></i> Baixar Arquivo
+                                                </a>
+                                            </li>
+                                            
+                                        </ul>
+                
+                                    </div>
+                                    
+                                </div>
+                                
+                            </div>
+
+                            <div class="clearfix"></div>
+
+                            <div class="col-sm-5 abreviar">
+                                
+                                @if (OItem.descricaoParcela.isEmpty()) {
+                                    
+                                    <span data-toggle='tooltip' title='Descrição do Título'>
+                                        <i class="fa fa-align-justify"></i> @OItem.idTitulo - @OItem.descricaoTitulo
+                                    </span><br />        
+                                    
+                                }
+                                
+                                @if (!OItem.descricaoParcela.isEmpty()) {
+                                    
+                                    <span data-toggle='tooltip' title='Descrição do Título'>
+                                        <i class="fa fa-align-justify"></i> @OItem.idPagamento - @OItem.descricaoParcela (#@OItem.idTitulo - @OItem.descricaoTitulo - parcelado em @(OItem.qtdeParcelas)x)
+                                    </span><br />        
+                                    
+                                }
+                                
+                                <span data-toggle='tooltip' title='Credor/Pagador'><i class="far fa-user"></i> @(OItem.nomePessoa.abreviar(25))</span><br/>
+                                
+                            </div>
+
+                            <div class="col-sm-3">
+                                
+                                <span data-toggle='tooltip' title='Data de Vencimento'>
+                                    <i class="far fa-calendar"></i> @OItem.dtVencimento.exibirData()
+                                </span><br/>
+                                
+                                <span data-toggle='tooltip' title='Data de Pagamento'>
+                                    <i class="far fa-calendar-check"></i> @OItem.dtPagamento.exibirData()
+                                </span>
+                                
+                            </div>
+
+                            <div class="col-sm-2">
+                                
+                                <span data-toggle='tooltip' title='Valor'><i class="far fa-usd-circle"></i> @(OItem.valorTotalComDescontos().ToString("C"))</span><br />
+                                
+                                @if (!OItem.descricaoParcela.isEmpty()) {
+                                     
+                                    <span data-toggle='tooltip' title='Valor total do título'>
+                                        <i class="fa fa-usd-circle"></i> @(OItem.valorTotalTitulo.ToString("C"))
+                                    </span>    
+                                    
+                                }
+
+                            </div>
+                            
+                            <div class="col-sm-2 text-right">
+                                
+                                <span class="@OItem.exibirClasseStatus()"><i class="fa @OItem.exibirIconeStatus()"></i> @(OItem.dtPagamento.HasValue ? "PAGO" : "EM ABERTO")</span>
+                                
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        <div class="clearfix"></div>
+        
+        @(Html.paginarRegistros(Model.listaArquivos, Html.PagedListPager(Model.listaArquivos, nroPagina => UtilRequest.linkPaginacao(nroPagina, "Index"), PagedListRenderOptions.OnlyShowFivePagesAtATime)))
+        
+        <div class="clearfix"></div><br />
+        
+    </div>
+    
+</div>
+
+
+

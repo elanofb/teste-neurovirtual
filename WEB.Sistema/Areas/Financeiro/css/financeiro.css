@@ -1,0 +1,25 @@
+.bt-todos {
+    margin-right: 50px;
+}
+
+.bt-apenas-este {
+    margin-right: 40px;
+}
+
+.bt-proximos {
+    margin-right: 50px;
+}
+
+.campo-info {
+    margin: 2px 0px 2px 0px;
+    padding: 0px 5px 0px 0px;
+}
+
+.campo-info .fa {
+    margin-right: 5px !important;
+}
+
+.campo-info label {
+    font-weight: 600 !important;
+    margin: 0px;
+}

@@ -1,0 +1,130 @@
+﻿@model ContatoConsulta
+@using PagedList.Mvc
+@using WEB.Areas.Contatos.ViewModels
+
+@{
+    ViewBag.titlePage = "Contatos";
+
+    ViewBag.subTitlePage = "Veja abaixo a lista de contatos.";
+}
+
+@section scripts {
+    @Html.includeBootstrapMultiselect()
+    @Html.includeDatePicker()
+    <script type="text/javascript" src="@UtilConfig.linkResourses()Areas/AssociadosConsultas/js/associado-consulta.js"></script>
+}
+
+@section styles {
+    <link href="@UtilConfig.linkResourses()css/associatec/list-custom.css" rel="stylesheet" />
+}
+
+<div class="box box-primary">
+
+    @Html.headerBox("Filtros de Busca", "fa fa-filter")
+
+    <div class="box-body">
+
+        @{ Html.RenderPartial("partial-filtros"); }
+
+    </div>
+
+</div>
+
+
+<div class="box box-primary">
+
+    <div class="box-header with-border">
+        <div class="box-title">
+            <i class="far fa-chart-bar"></i> Resultados <em class="fs-10">@Model.listaPessoaContato.TotalItemCount registros encontrados</em>
+        </div>
+        <div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="far fa-minus"></i></button>
+        </div>
+    </div>
+
+    <div class="box-body">
+
+        @if(!Model.listaPessoaContato.Any()) {
+            <div class="col-sm-12">
+                <div class="alert alert-info">
+                    Nenhum contato foi encontrado.
+                </div>
+            </div>
+        }
+
+        @foreach(var OContato in Model.listaPessoaContato) {
+                <div class="box-info-item">
+                    
+                    <div class="row">
+
+                        <div class="col-md-3 col-sm-3 col-xs-6">
+
+                            <span data-toggle="tooltip" title="Nome do Membro"><i class="fa fa-user"></i> @OContato.nomeAssociado</span><br />
+
+                            <span data-toggle="tooltip" title="Nome do Contato"><i class="fa fa-user"></i> @OContato.nomeContato</span>
+
+                        </div>
+
+                        <div class="col-md-3 col-sm-3 col-xs-6">
+                            <div class="row">
+                                <div class="col-md-12 margin-bottom-5">
+                                    <span data-toggle="tooltip" title="Área do Contato"><i class="fa fa-building"></i> @OContato.descricaoTipoContato</span>
+                                </div>
+
+                                <div class="clearfix"></div>
+
+                                <div class="col-md-12 margin-bottom-5">
+                                    <span data-toggle="tooltip" title="E-mail"><i class="fa fa-envelope"></i> @OContato.emailContato</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="clearfix hidden-md hidden-lg"></div>
+
+                        <div class="col-md-3 col-sm-3 col-xs-6">
+                            <div class="row">
+
+                                <div class="col-md-12">
+                                    <span data-toggle="tooltip" title="Celular"><i class="fa fa-phone"></i> @UtilString.formatPhone(OContato.telCelular)</span>
+                                </div>
+
+                                <div class="clearfix"></div>
+
+                                <div class="col-md-12">
+                                    <span data-toggle="tooltip" title="Telefone Comercial"><i class="fa fa-phone"></i> @UtilString.formatPhone(OContato.telComercial)</span>
+                                </div>
+
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2 col-sm-2 col-xs-6">
+                        </div>
+
+                        <div class="col-md-1 col-sm-2 col-xs-6 text-right">
+
+                            <div class="dropdown">
+                                <a href="javascript:;" class="dropdown-toggle" type="button" data-toggle="dropdown">
+                                    Ações
+                                    <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-right">
+                                    <li>
+                                        <a href="@Url.Action("editar", "AssociadoCadastro", new {area = "Associados", id = OContato.idAssociado})" class="text-black"><i class="fa fa-edit"></i> Editar Cadastro</a>
+                                    </li>
+                                </ul>
+                            </div>
+
+                        </div>
+
+                        <div class="clearfix"></div>
+
+
+                    </div>
+
+                </div>
+        }
+
+        @(Html.paginarRegistros(Model.listaPessoaContato, Html.PagedListPager(Model.listaPessoaContato, nroPagina => UtilRequest.linkPaginacao(nroPagina, "consultar"), PagedListRenderOptions.OnlyShowFivePagesAtATime)))
+    </div>
+</div>

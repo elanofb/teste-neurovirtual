@@ -1,0 +1,76 @@
+﻿@model WEB.Areas.Empresas.ViewModels.EmpresaPorteForm
+@using DAL.Permissao.Security.Extensions
+@using WEB.Areas.Associacoes.Helpers
+
+@{
+    ViewBag.titlePage = "Editar Porte de Empresa";
+    Layout = "~/views/shared/associatec/masterpage-edit.cshtml";
+}
+
+@section styles{
+    <link href="@UtilConfig.linkResourses()Areas/Empresas/js/plugins/autocomplete/select2/css/select2.css" rel="stylesheet" />
+}
+
+@section scripts{
+    <script type="text/javascript" src="@UtilConfig.linkResourses()Areas/Empresas/js/plugins/autocomplete/select2/js/select2.js"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses()Areas/Empresas/js/plugins/autocomplete/autocomplete.js"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses()Areas/Pessoas/js/pessoacontato.js"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses()Areas/Pessoas/js/pessoarelacionamento.js"></script>
+    @Html.includeLocalizacaoJS()
+    @Html.includeDatePicker()
+}
+
+@section navTabs{
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#tab-1" data-toggle="tab">Principal</a></li>
+    </ul>
+}
+
+@section tabContent{
+    <div id="tab-1" class="tab-pane active">
+        @Html.showFlashMessage()
+        @using (Html.BeginForm("editar", null, FormMethod.Post, new { @class = "default" })) {
+            @Html.legendaRequired()<br />
+            @Html.HiddenFor(m => m.EmpresaPorte.id)
+
+            @Html.ValidationSummary(false)
+            <h4 class="separator-form">Dados do Porte da Empresa</h4>
+
+            if (User.idOrganizacao() == 0) {
+
+                <div class="col-sm-4 col-md-3">
+                    <label>Organização</label>
+                    @Html.DropDownListFor(m => m.EmpresaPorte.idOrganizacao, AssociacaoHelper.getInstance.selectList(Model.EmpresaPorte.idOrganizacao), "Padrão", new { @class = "form-control input-sm" })
+                </div>
+
+            }
+
+            <div class="col-md-2">
+                <label>Sigla</label>
+                @Html.TextBoxFor(m => m.EmpresaPorte.sigla, new { @class = "form-control input-sm", alt = "", maxlength = "20" })
+                @Html.ValidationMessageFor(m => m.EmpresaPorte.sigla)
+            </div>
+
+            <div class="col-md-4">
+                <label>Descrição</label>
+                @Html.TextBoxFor(m => m.EmpresaPorte.descricao, new { @class = "form-control input-sm", alt = "", maxlength = "255" })
+                @Html.ValidationMessageFor(m => m.EmpresaPorte.descricao)
+            </div>
+
+            <div class="col-md-2">
+                <label>Registro Status</label>
+                @Html.DropDownListFor(m => m.EmpresaPorte.ativo, ComboHelper.selectListStatus(Model.EmpresaPorte.ativo), new { @class = "form-control input-sm" })
+            </div>
+            <div class="clearfix"></div>
+
+            <div class="text-right margin-top-20">
+                <a href="@Url.Action("listar")" class="btn btn-default">Voltar</a>&nbsp;
+                <a href="@Url.Action("editar")" class="btn btn-default bg-gray">Limpar</a>&nbsp;
+                <input type="submit" name="enviar" value="Salvar" class="btn btn-primary" />
+            </div>
+
+            <div class="clearfix"></div>
+            <br />
+        }
+    </div>
+}

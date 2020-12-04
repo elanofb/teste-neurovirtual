@@ -1,0 +1,106 @@
+﻿@model PagedList.IPagedList<Portal>
+
+@using PagedList.Mvc
+@using DAL.Portais
+@using DAL.Permissao.Security.Extensions
+@using WEB.Areas.Associacoes.Helpers
+@using WEB.Helpers
+
+@{
+	ViewBag.titlePage = "Portais";
+}
+
+@section styles{
+    <link href="@UtilConfig.linkResourses()css/associatec/list-custom.css" rel="stylesheet" />
+}
+
+<div class="box box-primary">
+    <div class="box-header with-border">
+        <h3 class="box-title"><i class="fa fa-search"></i> Filtros de Busca</h3>
+    </div>
+    <div class="box-body">
+        @using (Html.BeginForm(null, null, FormMethod.Get, new { @class = "filtros" })) {
+
+            <div class="row">
+
+                <div class="form-group col-xs-3">
+
+                </div>
+            
+                @if (User.idOrganizacao() == 0){
+                    <div class="form-group col-xs-4">
+                        <label>Associação</label>
+                        @Html.DropDownList("idOrganizacao", AssociacaoHelper.getInstance.selectList(UtilRequest.getInt32("idOrganizacao")), "Todas", new {@class = "form-control input-sm"})
+                    </div>
+                } else {
+                    <div class="form-group col-xs-4">
+                    </div>
+                }
+
+                <div class="form-group col-xs-2">
+                    <label>Status</label>
+                    @Html.DropDownList("flagAtivo", ComboHelper.selectListStatus(UtilRequest.getString("flagAtivo")), "Todos", new { @class = "form-control input-sm" })
+                </div>
+                <div class="form-group col-xs-3">
+                    <label>Buscar</label>
+                    @Html.buttonSearch(UtilRequest.getString("valorBusca"))
+                </div>
+
+                <div class="clearfix"></div>
+            </div>
+        }
+    </div>
+</div>
+
+<div class="box box-primary">
+
+    <div class="box-header with-border">
+        <div class="box-title">
+            <i class="far fa-chart-bar"></i> Resultados
+        </div>
+
+        <div class="box-tools pull-right">
+            <a href="@Url.Action("editar")" class="btn btn-box-tool"><i class="far fa-plus-circle"></i> Cadastrar Portal</a>
+        </div>
+
+    </div>
+
+    <div class="box-body">
+
+        <ul class="products-list product-list-in-box listagem-padrao">
+
+            @if (Model.Any()){
+                foreach (var item in Model){
+                    <li class="item bordered-destaque">
+                        <div class="col-sm-7 abreviar">
+                            <span data-toggle="tooltip" title="@item.descricao"><i class="fa fa-hashtag"></i>@item.id - @item.descricao</span><br />
+                            <span data-toggle="tooltip" title="@(item.url)"><i class="fa fa-link"></i> @(item.url)</span>
+                        </div>
+
+                        <div class="col-sm-3">
+                            <span><i class="fa fa-calendar"></i> Cadastro: @item.dtCadastro.exibirData()</span><br />
+                            <span>Status: @Html.linkStatusDefault(item.id, item.ativo)</span><br />
+                        </div>
+
+                        <div class="col-sm-2 text-right margin-top-20">
+                            @Html.linkEditar(item.id, "", "text-black")&nbsp;&nbsp;
+                            @Html.linkAjaxExcluir(item.id, "", "", "text-black")
+                        </div>
+
+                        <div class="clearfix"></div>
+                    </li>
+                }
+            }
+            else{
+                <li class="item">
+                    <div class="col-sm-12">
+                        <p class="alert-warning text-center">
+                            Nenhum portal encontrado.
+                        </p>
+                    </div>
+                </li>
+            }
+        </ul>
+        @(Html.paginarRegistros(Model, Html.PagedListPager(Model, nroPagina => UtilRequest.linkPaginacao(nroPagina, "listar"), PagedListRenderOptions.OnlyShowFivePagesAtATime)))
+    </div>
+</div>

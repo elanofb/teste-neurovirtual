@@ -1,0 +1,215 @@
+﻿@model WEB.Areas.FinanceiroLancamentos.ViewModels.ExtratoPorPeriodoVM
+
+@using DAL.Financeiro
+
+@{
+    // Resultados Gerais
+    var valorTotalReceitas = Model.listaLancamentos.Where(x => x.flagTipoTitulo == "R").Select(x => x.valorLiquido()).Sum();
+    
+    var valorTotalDespesas = Model.listaLancamentos.Where(x => x.flagTipoTitulo == "D").Select(x => x.valor > 0 ? x.valor : 0).Sum();
+
+    var valorResultado = valorTotalReceitas - valorTotalDespesas;
+
+    var saldoFinal = Model.saldoInicialPeriodo + valorResultado; 
+    
+    // Resultados de lançamento pagos/realizados
+    var valorTotalReceitasRealizadas = Model.listaLancamentos.Where(x => x.flagTipoTitulo == "R" && x.dtPagamento.HasValue).Select(x => x.valorLiquido()).Sum();
+    
+    var valorTotalDespesasRealizadas = Model.listaLancamentos.Where(x => x.flagTipoTitulo == "D" && x.dtPagamento.HasValue).Select(x => x.valor > 0 ? x.valor : 0).Sum();
+    
+    var valorResultadoRealizadas = valorTotalReceitasRealizadas - valorTotalDespesasRealizadas;
+    
+    var saldoFinalRealizadas = Model.saldoInicialPeriodo + valorResultadoRealizadas;
+}
+    
+<div class="row">
+    
+    <div class="col-sm-6">
+        
+        <h4 class="separator-form-icon">Resultados do Período</h4>
+        
+        <div class="row fs-12">
+            
+            <div class="col-sm-6">
+                <div class="row">
+                    <div class="col-sm-7">
+                        <strong>Receitas</strong>
+                    </div>
+                
+                    <div class="col-sm-5 text-right">
+            
+                        <span class="text-green">
+                            @valorTotalReceitas.ToString("C")
+                        </span>
+                    
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-7">
+                        <strong>Despesas</strong>
+                    </div>
+                    <div class="col-sm-5 text-right">
+                        <span class="text-red">
+                            - @valorTotalDespesas.ToString("C")
+                        </span>
+                    </div>                    
+                </div>
+                
+                <div class="row">
+                    <div class="col-sm-12">
+                        <hr class="margin-top-10 margin-bottom-10">
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-7">
+                        <strong>Resultado</strong>
+                    </div>
+                    <div class="col-sm-5 text-right">
+                        <span class="@(valorResultado > 0 ? "text-green" : "text-red")">
+                            @valorResultado.ToString("C")
+                        </span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-sm-6">
+                <div class="row">
+                    <div class="col-sm-7">
+                        <strong>Saldo Inicial</strong>
+                    </div>
+                    <div class="col-sm-5 text-right">
+                        <span class="@(Model.saldoInicialPeriodo > 0 ? "text-green" : "text-red")">
+                            @Model.saldoInicialPeriodo.ToString("C")
+                        </span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-7">
+                        <strong>Resultado Período</strong>
+                    </div>
+                    <div class="col-sm-5 text-right">
+                        <span class="@(valorResultado > 0 ? "text-green" : "text-red")">
+                            @valorResultado.ToString("C")
+                        </span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <hr class="margin-top-10 margin-bottom-10">
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-sm-7">
+                        <strong>Saldo após período</strong>
+                    </div>
+                    <div class="col-sm-5 text-right">
+                        <strong class="@(saldoFinal > 0 ? "text-green" : "text-red")">
+                            @saldoFinal.ToString("C")
+                        </strong>
+                    </div>
+                </div>
+                
+            </div>
+            <div class="clearfix"></div>
+            
+        </div>
+        
+    </div>
+
+    <div class="col-sm-6">
+        
+        <h4 class="separator-form-icon">Lançamentos Realizados/Pagos</h4>
+        
+        <div class="row fs-12">
+            
+            <div class="col-sm-6">
+                
+                <div class="row">
+                    <div class="col-sm-7">
+                        <strong>Receitas</strong>
+                    </div>
+                    <div class="col-sm-5 text-right">
+                        <span class="text-green">
+                            @valorTotalReceitasRealizadas.ToString("C")
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-sm-7">
+                        <strong>Despesas</strong>
+                    </div>
+                    <div class="col-sm-5 text-right">
+                        <span class="text-red">
+                            - @valorTotalDespesasRealizadas.ToString("C")
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-sm-12">
+                        <hr class="margin-top-10 margin-bottom-10">
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-sm-7">
+                        <strong>Resultado</strong>
+                    </div>
+                    <div class="col-sm-5 text-right">
+                        <span class="@(valorResultadoRealizadas > 0 ? "text-green" : "text-red")">
+                            @valorResultadoRealizadas.ToString("C")
+                        </span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-sm-6">
+                <div class="row">
+                    <div class="col-sm-7">
+                        <strong>Saldo Inicial</strong>
+                    </div>
+                    <div class="col-sm-5 text-right">
+                        <span class="@(Model.saldoInicialPeriodo > 0 ? "text-green" : "text-red")">
+                            @Model.saldoInicialPeriodo.ToString("C")
+                        </span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-7">
+                        <strong>Resultado Período</strong>
+                    </div>
+                    <div class="col-sm-5 text-right">
+                        <span class="@(valorResultadoRealizadas > 0 ? "text-green" : "text-red")">
+                            @valorResultadoRealizadas.ToString("C")
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-sm-12">
+                        <hr class="margin-top-10 margin-bottom-10">
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-sm-7">
+                        <strong>Saldo Final</strong>
+                    </div>
+                    <div class="col-sm-5 text-right">
+                        <strong class="@(saldoFinalRealizadas > 0 ? "text-green" : "text-red") fs-16">
+                            @saldoFinalRealizadas.ToString("C")
+                        </strong>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            
+        </div>
+        
+    </div>
+    <div class="clearfix"></div><br />
+    
+</div>

@@ -1,0 +1,19 @@
+﻿@{
+	Layout = "~/views/shared/associatec/masterpage-edit.cshtml";
+	ViewBag.titlePage = "Tipo de lista de e-mail";
+
+}
+
+@section navTabs{
+	<ul class="nav nav-tabs">
+		<li class="active"><a href="#tab-1" data-toggle="tab">Principal</a></li>
+	</ul>
+}
+
+@section tabContent{
+	<div id="tab-1" class="tab-pane active">
+		@{Html.RenderPartial("partial-info-cadastro");}
+		@{Html.RenderPartial("partial-dados-principais");}
+	</div><div class="clearfix"></div>
+}
+

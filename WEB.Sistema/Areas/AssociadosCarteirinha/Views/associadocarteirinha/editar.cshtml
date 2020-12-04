@@ -1,0 +1,45 @@
+﻿@model  WEB.Areas.AssociadosCarteirinha.ViewModels.AssociadosCarteirinhaForm
+@{
+	Layout = null;				
+}
+
+<div id="boxFormHistoricoCarteirinha" >
+	@Html.showFlashMessage()
+    @Html.ValidationSummary(true, "Algumas informações precisam ser corrigidas abaixo.")
+	@using(Ajax.BeginForm("editar", "AssociadoCarteirinha", new { Area = "AssociadosCarteirinha" }, new AjaxOptions { HttpMethod = "POST", InsertionMode = InsertionMode.Replace, UpdateTargetId = "boxFormHistoricoCarteirinha", OnSuccess = "AssociadoCarteirinha.onSuccessForm" }, new { @class = "" })) {
+        { Html.EnableClientValidation(false); }
+        
+		@Html.legendaRequired()
+		@Html.HiddenFor(m => m.AssociadoCarteirinha.id)
+		@Html.HiddenFor(m => m.AssociadoCarteirinha.idAssociado, new { @class = "nao-limpar" })
+        
+        <div class="col-md-3">
+            @Html.labelRequired("Data do Envio")
+            @Html.TextBoxFor(x => x.AssociadoCarteirinha.dtEnvio, new { @class = "form-control input-sm input-datepicker", alt = "date" })
+            @Html.ValidationMessageFor(x => x.AssociadoCarteirinha.dtEnvio)
+        </div>
+        <div class="col-md-3">
+            @Html.labelRequired("Tipo de Envio")
+            @Html.DropDownListFor(x => x.AssociadoCarteirinha.flagTipoEnvio, AssociadoCarteirinhaHelper.selectListTipoEnvio(Model.AssociadoCarteirinha.flagTipoEnvio), "...", new { @class = "form-control input-sm" })
+            @Html.ValidationMessageFor(x => x.AssociadoCarteirinha.flagTipoEnvio)
+        </div>
+        <div class="col-md-3">
+            @Html.labelRequired("Tipo de Emissão")
+            @Html.DropDownListFor(x => x.AssociadoCarteirinha.flagTipoEmissao, AssociadoCarteirinhaHelper.selectListTipoEmissao(Model.AssociadoCarteirinha.flagTipoEmissao), "...", new { @class = "form-control input-sm" })
+            @Html.ValidationMessageFor(x => x.AssociadoCarteirinha.flagTipoEmissao)
+        </div>
+		<div class="clearfix"></div>
+
+        <div class="col-md-12">
+            <label>Observações</label>
+            @Html.TextAreaFor(m => m.AssociadoCarteirinha.observacao, new { @class = "form-control input-sm", rows = 4, maxlength = 1000 })
+            @Html.ValidationMessageFor(m => m.AssociadoCarteirinha.observacao)
+        </div>
+        <div class="clearfix"></div><br />
+
+		<div class="text-right">
+			<input type="submit" name="salvar" value="Salvar" class="btn btn-primary" />
+		</div>
+	}
+</div>
+<div class="clearfix"></div>

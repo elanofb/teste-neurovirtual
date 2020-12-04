@@ -1,0 +1,111 @@
+﻿@model WEB.Areas.Publicacoes.ViewModels.VideoForm
+
+@using DAL.Permissao.Security.Extensions
+@using WEB.Areas.Associacoes.Helpers
+@using WEB.Areas.Portais.Helpers
+
+@{
+        Layout = "~/views/shared/associatec/masterpage-edit.cshtml";
+
+        ViewBag.titlePage = "Vídeo";
+        ViewBag.subTituloPagina = Model.Video.titulo;
+}
+
+@section navTabs{
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#tab-1" data-toggle="tab">Principal</a></li>
+        </ul>
+}
+
+@section tabContent{
+    <div id="tab-1" class="tab-pane active">
+        
+        @Html.infoCadastro(Model.Video.id, Model.Video.dtCadastro, Model.Video.dtAlteracao)
+
+        @using (Html.BeginForm("editar", "video", FormMethod.Post)) {
+
+            { Html.EnableClientValidation(false); }
+
+            @Html.ValidationSummary(true, "Alguns campos não foram validados.")
+
+            @Html.HiddenFor(x => x.Video.id)
+
+            <h4 class="separator-form">Dados Principais do Vídeo</h4>
+
+            <div class="col-md-6">
+
+                @if (User.idOrganizacao() == 0) {
+                    <div class="col-sm-5 col-md-4">
+                        <label>Organização</label>
+                        @Html.DropDownListFor(m => m.Video.idOrganizacao, AssociacaoHelper.getInstance.selectList(Model.Video.idOrganizacao), "Padrão", new {@class = "form-control input-sm"})
+                    </div>
+                }
+
+                <div class="col-md-4">
+                    @Html.Label("Portal")
+                    @Html.DropDownListFor(m => m.Video.idPortal, PortalHelper.getInstance.selectList(Model.Video.idPortal), "...", new { @class = "form-control input-sm" })
+                    @Html.ValidationMessageFor(x => x.Video.idPortal)
+                </div>
+
+                <div class="clearfix"></div>
+
+                <div class="col-md-12">
+                    @Html.labelRequired("Url (youtube ou vimeo)")
+                    @Html.TextBoxFor(x => x.Video.urlVideo, new {@class = "form-control input-sm"})
+                    @Html.ValidationMessageFor(x => x.Video.urlVideo)
+                </div>
+
+                <div class="clearfix"></div>
+
+                <div class="col-md-12">
+                    @Html.labelRequired("Título")
+                    @Html.TextBoxFor(x => x.Video.titulo, new {@class = "form-control input-sm", maxlength = "100"})
+                    @Html.ValidationMessageFor(x => x.Video.titulo)
+                </div>
+
+                <div class="col-md-12">
+                    @Html.labelRequired("Descrição")
+                    @Html.TextBoxFor(x => x.Video.descricao, new {@class = "form-control input-sm"})
+                    @Html.ValidationMessageFor(x => x.Video.descricao)
+                </div>
+                <div class="clearfix"></div>
+
+                <div class="col-md-4">
+                    @Html.labelRequired("Status")
+                    @Html.DropDownListFor(m => m.Video.ativo, ComboHelper.selectListStatus(Model.Video.ativo), "...", new {@class = "form-control input-sm"})
+                    @Html.ValidationMessageFor(m => m.Video.ativo)
+                </div>
+
+                <div class="col-md-4">
+                    <label>Somente para Associados?</label>
+	                @Html.DropDownListFor(m => m.Video.flagSomenteAssociado, ComboHelper.selectListTrueFalse(Model.Video.flagSomenteAssociado), "...", new { @class = "form-control input-sm" })
+	                @Html.ValidationMessageFor(m => m.Video.flagSomenteAssociado)
+                </div>
+                <div class="clearfix"></div>
+
+            </div>
+
+            <div class="col-md-6">
+                <h4 class="separator-form">Preview</h4>
+                <div class="col-md-12 text-center">
+                    @montarIframePreview(Model.Video.urlVideo)
+                </div>
+                <div class="clearfix"></div>
+            </div>
+
+            <div class="clearfix"></div><br />
+
+            <div class="text-right">
+                @Html.exibirBotoesFormulario(Url.Action("listar"), "N")
+            </div>
+        }
+    </div>
+}
+
+@helper montarIframePreview(string url) {
+    if (url != null && url.Contains("youtube")) {
+        url = url.Replace("watch?v=", "embed/");
+    }
+
+    <iframe src="@url" width="300" height="200"></iframe>
+}

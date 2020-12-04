@@ -1,0 +1,53 @@
+﻿@model DAL.Associados.Associado
+
+<div>
+    <i class="far fa-id-card"></i> @UtilString.formatCPFCNPJ(Model.Pessoa.nroDocumento)
+</div>
+
+@if (!Model.Pessoa.razaoSocial.isEmpty()) {
+    <div>
+        <i class="far fa-industry"></i> @Model.Pessoa.razaoSocial
+    </div>
+}
+
+@if (!Model.Pessoa.inscricaoEstadual.isEmpty()) {
+    <div>
+        <span data-toggle="tooltip" title="Inscrição Estadual">
+            <i class="fal fa-id-card"></i> @Model.Pessoa.inscricaoEstadual
+        </span>
+    </div>
+}
+
+@if (!Model.Pessoa.inscricaoMunicipal.isEmpty()) {
+    <div>
+        <span data-toggle="tooltip" title="Inscrição Municipal">
+            <i class="fal fa-id-card"></i> @Model.Pessoa.inscricaoMunicipal
+        </span>
+    </div>
+}
+
+@if (Model.Pessoa.dtNascimento.HasValue) {
+    <div>
+        <span data-toggle="tooltip" title="Fundação">
+            <i class="far fa-calendar"></i> @Model.Pessoa.dtNascimento.exibirData()
+        </span>
+    </div>
+}
+
+@if (Model.Pessoa.flagOptanteSimplesNacional != null) {
+    <div>
+        <strong>Optante Simples Nacional: </strong> @(Model.Pessoa.flagOptanteSimplesNacional == true ? "Sim" : "Não")
+    </div>
+}
+
+@if (Model.Pessoa.SetorAtuacao != null) {
+    <div>
+        <strong>Setor de Atuação: </strong> @(!Model.Pessoa.SetorAtuacao.descricao.isEmpty() ? Model.Pessoa.SetorAtuacao.descricao : "Não informado")
+    </div>
+}
+
+@if (Model.Pessoa.EmpresaPorte != null) {
+    <div>
+        <strong>Porte da Empresa: </strong> @(!Model.Pessoa.EmpresaPorte.descricao.isEmpty() ? Model.Pessoa.EmpresaPorte.descricao : "Não informado")
+    </div>
+}

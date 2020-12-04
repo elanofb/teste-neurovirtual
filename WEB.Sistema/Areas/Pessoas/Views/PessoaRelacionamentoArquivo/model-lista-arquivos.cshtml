@@ -1,0 +1,63 @@
+﻿@model  WEB.Areas.Pessoas.DTO.PessoaRelacionamentoDTO
+@using DAL.Arquivos
+
+@{
+    Layout = "~/views/shared/associatec/masterpage-modal.cshtml";
+    
+    if (IsPost) {
+        Layout = null;
+    }
+    
+    ViewBag.modalTitle = "Documentos da Ocorrência";
+    ViewBag.modalWidthClass = "lg";
+}
+
+<link href="@UtilConfig.linkResourses("Areas/Arquivos/css/arquivo-documento.css")" rel="stylesheet" />
+<link href="@UtilConfig.linkResourses("css/associatec/list-custom.css")" rel="stylesheet" />
+
+@if(!Model.OListaArquivos.Any()){
+    <div class="col-md-12 alert alert-info">Nenhum arquivo carregado!</div>
+}
+
+@foreach (ArquivoUpload OArquivo in Model.OListaArquivos){
+    <div class="col-md-4">
+        @boxArquivo(OArquivo, OArquivo.legenda, "")
+    </div>    
+}
+    
+<div class="clearfix"></div>
+
+@helper boxArquivo(ArquivoUpload OArquivo, string titulo, string nomeCampo) {
+    
+    <div class="ec-box-footer bordered-gray">
+
+        <p class="text-center abreviar" title="@titulo" alt="@titulo">
+            <strong><i class="fa fa-file"></i> @titulo</strong>
+        </p>
+            
+        @if (OArquivo.id > 0) {
+
+            <p class="text-center size11">
+                Enviado em: @OArquivo.dtCadastro.exibirData()
+                <br />
+                Cadastrado por: @(Model.PessoaRelacionamento.UsuarioCadastro?.nome)
+            </p>
+            <p class="text-center">
+                <a href="@Url.Action("exibir-arquivo-crypt", "exibicao", new { area="Arquivos", id = UtilCrypt.toBase64Encode(OArquivo.id) })" target="_blank" class="btn btn-success btn-sm">
+                    Baixar
+                </a>
+            </p>
+
+        }
+        
+        @if (OArquivo.id == 0) {
+
+            <p class="text-center size11 text-red margin-bottom-15">
+                Não Enviado
+            </p>
+
+        }
+
+    </div>
+
+}

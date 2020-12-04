@@ -1,0 +1,74 @@
+﻿@model WEB.Areas.Associados.ViewModels.AssociadoForm
+@{
+    Layout = null;
+}
+
+<div class="tab-pane active" id="@(IsPost? "" : "tab-dados-cadastrais")">
+
+    @using (Ajax.BeginForm("salvar-cadastro", null, new { }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "tab-dados-cadastrais", InsertionMode = InsertionMode.Replace, OnSuccess = "Associado.onSuccess" }, new { @class = "" })) {
+        @Html.ValidationSummary(false)
+        @Html.HiddenFor(m => m.Associado.id)
+
+        <h4 class="separator-form">Informações e Documentos</h4>
+
+        <div class="row">
+            @{ Html.RenderPartial("box-dados-pessoais");}
+        </div>
+
+        <div class="row">
+            @{ Html.RenderPartial("box-documentos");}
+        </div>
+
+        <div class="row">
+            @{ Html.RenderPartial("box-dados-origem");}
+        </div>
+
+        
+        <div class="row">
+            <div class="col-sm-6 col-lg-6">
+                <h4 class="separator-form">Telefones <a href="" class="pull-right"><i class="fa fa-plus"></i></a></h4>
+                <div class="row">
+                    @{ Html.RenderPartial("box-dados-telefone");}
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-6">
+                <h4 class="separator-form">E-mails <a href="" class="pull-right"><i class="fa fa-plus"></i></a></h4>
+                <div class="row">
+                    @{ Html.RenderPartial("box-dados-web");}
+                </div>
+            </div>
+        </div>
+
+        <div class="row margin-top-10">
+            <div class="col-sm-12 col-lg-12">
+                <h4 class="separator-form">Endereços <a href="" class="pull-right"><i class="fa fa-plus"></i></a></h4>
+                <div class="row">
+                    @{ Html.RenderPartial("box-dados-enderecos");}
+                </div>
+            </div>
+        </div>
+
+        <div class="row margin-top-10">
+            <div class="col-md-6">
+                @{ Html.RenderPartial("box-primeiro-endereco");}
+            </div>
+            <div class="col-md-6">
+                @{ Html.RenderPartial("box-segundo-endereco");}
+            </div>
+        </div>
+
+        <div class="row margin-top-10">
+            <div class="col-sm-12">
+                @{ Html.RenderPartial("box-dados-acesso");}
+            </div>
+        </div>
+
+        <div class="row margin-top-10">
+            @{ Html.RenderPartial("box-observacoes-comunicados");}
+        </div><br />
+
+        <p class="text-right">
+            <button type="submit" class="btn btn-primary link-loading">Salvar Dados</button>
+        </p>
+                }
+</div>

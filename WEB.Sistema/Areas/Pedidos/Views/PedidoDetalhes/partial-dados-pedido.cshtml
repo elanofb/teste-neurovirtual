@@ -1,0 +1,87 @@
+﻿@model WEB.Areas.Pedidos.ViewModels.PedidoDetalhesVM
+
+<div class="box-header with-border">
+        
+    <h3 class="box-title">
+        <i class="fa fa-shopping-cart"></i> Dados do Pedido
+    </h3>
+        
+    <div class="box-tools pull-right">
+        
+        @{ Html.RenderPartial("partial-dados-pedido-acoes"); }
+
+    </div>
+
+</div>
+    
+<div class="box-body">
+        
+    <div class="col-lg-6 col-md-8 padding-bottom-10">
+            
+        <div class="row">
+                
+            <div class="col-sm-6">
+                                    
+                <p class="campo-info">
+                    <i class="far fa-user"></i> @Model.Pedido.nomePessoa
+                </p>
+                <p class="campo-info">
+                    <i class="far fa-tag"></i> Conta: @(Model.Pedido.idAssociado > 0 ? Model.Pedido.Associado?.nroAssociado : Model.Pedido.NaoAssociado?.nroAssociado)
+                </p>
+                
+                <p class="campo-info margin-bottom-10">
+                    <i class="fa fa-id-card"></i> @UtilString.formatCPFCNPJ(Model.Pedido.cpf).defaultIfEmpty("-")
+                </p>
+
+                <p class="campo-info">
+                    <i class="fa fa-envelope"></i> @Model.Pedido.email.defaultIfEmpty("-")
+                </p>
+
+                <p class="campo-info margin-bottom-10">
+                    <i class="fa fa-phone"></i> @UtilString.formatPhone(Model.Pedido.telPrincipal).defaultIfEmpty("-") | @UtilString.formatPhone(Model.Pedido.telSecundario).defaultIfEmpty("-")
+                </p>
+                
+            </div>
+                
+            <div class="col-sm-6">
+                    
+                @{ Html.RenderPartial("partial-andamento-pedido"); }
+                
+            </div>
+            <div class="clearfix"></div>
+            
+            <div class="col-xs-12 margin-bottom-10">
+                
+                @{ Html.RenderPartial("partial-dados-entrega"); }
+                
+            </div>
+            <div class="clearfix"></div>
+
+        </div>
+
+    </div>
+        
+    <div class="col-lg-6 col-md-4">
+            
+        <div class="row">
+                
+            @*<div class="col-lg-6 col-md-12 bordered-gray-left-1 padding-bottom-10 fs-12">
+            
+                @{ Html.RenderPartial("partial-dados-financeiros"); }
+                
+            </div>*@
+
+            <div class="col-lg-6 col-md-12 bordered-gray-left-1 padding-bottom-10 fs-12">
+            
+                @{ Html.RenderPartial("partial-valores-pedido"); }
+
+            </div>
+            <div class="clearfix"></div>
+
+        </div>
+
+    </div>
+    <div class="clearfix"></div>
+
+</div>
+

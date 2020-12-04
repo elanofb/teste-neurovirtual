@@ -1,0 +1,154 @@
+﻿@model WEB.Areas.Publicacoes.ViewModels.RevistaForm
+@using DAL.Permissao.Security.Extensions
+@using WEB.Areas.Arquivos.Helpers
+@using WEB.Areas.Associacoes.Helpers
+@{
+    Layout = "~/views/shared/associatec/masterpage-edit.cshtml";
+    ViewBag.titlePage = "Revista";
+    ViewBag.subTituloPagina = Model.Revista.titulo;
+}
+
+@section styles{
+	@Html.includeCSSModuloArquivos()
+}
+
+@section scripts{
+	@Html.includeJSModuloArquivosFotos()
+}
+
+@section breadcrump{
+    <ol class="breadcrumb">
+        <li><a href="@Url.Action("listar")" class="active fs-14"><i class="fa fa-arrow-left"></i> Voltar</a></li>
+    </ol>
+}
+
+@section navTabs{
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#tab-1" data-toggle="tab">Principal</a></li>
+    </ul>
+}
+
+@section tabContent{
+    <div id="tab-1" class="tab-pane active">
+
+        @Html.infoCadastro(Model.Revista.id, Model.Revista.dtCadastro, Model.Revista.dtAlteracao)
+
+        @using (Html.BeginForm("editar", "revista", FormMethod.Post, new { enctype = "multipart/form-data" })) {
+
+			@Html.HiddenFor(x => x.Revista.id)
+			
+			{ Html.EnableClientValidation(false); }
+
+            <div id="tab-1" class="tab-pane active">
+
+                <div class="col-md-12">
+
+                    <div class="row">
+                        
+                        <div class="col-md-6">
+                            <h4 class="separator-form">Informações da Revista</h4>
+
+                            @if (User.idOrganizacao() == 0) {
+                                <div class="col-sm-5 col-md-5">
+                                    <label>Organização</label>
+                                    @Html.DropDownListFor(m => m.Revista.idOrganizacao, AssociacaoHelper.getInstance.selectList(Model.Revista.idOrganizacao), "Padrão", new {@class = "form-control input-sm"})
+                                </div>
+                                <div class="clearfix"></div>
+                            }
+
+                            <div class="col-md-5">
+                                <label>Portal</label>
+                                @Html.DropDownListFor(m => m.Revista.idPortal, WEB.Areas.Portais.Helpers.PortalHelper.getInstance.selectList(Model.Revista.idPortal), "...", new { @class = "form-control input-sm" })
+                                @Html.ValidationMessageFor(m => m.Revista.idPortal)
+                            </div>
+                            
+                            <div class="col-md-4">
+                                <label>Somente para Associados?</label>
+                                @Html.DropDownListFor(m => m.Revista.flagSomenteAssociado, ComboHelper.selectListTrueFalse(Model.Revista.flagSomenteAssociado), "...", new {@class = "form-control input-sm"})
+                                @Html.ValidationMessageFor(m => m.Revista.flagSomenteAssociado)
+                            </div>
+
+
+                            <div class="col-md-3">
+                                <label>Status</label>
+                                @Html.DropDownListFor(m => m.Revista.ativo, WEB.Helpers.ComboHelper.selectListStatus(Model.Revista.ativo), "...", new {@class = "form-control input-sm"})
+                                @Html.ValidationMessageFor(m => m.Revista.ativo)
+                            </div>
+
+                            <div class="clearfix"></div>
+
+                            <div class="col-md-12">
+                                @Html.labelRequired("Título/Edição")<br/>
+                                @Html.TextBoxFor(x => x.Revista.titulo, new {@class = "form-control input-sm", maxlength = "255"})
+                                @Html.ValidationMessageFor(x => x.Revista.titulo)
+                            </div>
+
+                            <div class="clearfix"></div>
+
+                            <div class="col-md-12">
+                                <label>Chamada</label><br/>
+                                @Html.TextAreaFor(x => x.Revista.chamada, new {@class = "form-control input-sm", maxlength = "400"})
+                                @Html.ValidationMessageFor(x => x.Revista.chamada)
+                                @Html.instrucao("Informe uma descrição resumida sobre a edição.")
+                            </div>
+                            <div class="clearfix"></div>
+
+                        </div>
+
+                        <div class="col-md-6">
+                            <h4 class="separator-form">Ilustração</h4>
+                            <div class="col-md-12 no-padding-left">
+                                @Html.inputFileSimples("Foto")
+                                @Html.ValidationMessageFor(m => m.Foto)
+
+                                <div class="clearfix"></div>
+                                @if (Model.Revista.id > 0) {
+                                    <h4 class="separator-form">Ilustrações da Revista</h4>
+                                    <div class="content-load carregando" id="boxArquivosListar" data-target="boxArquivosListar" data-url="@Url.Action("partial-lista-fotos", "ArquivoFoto", new { Area = "Arquivos", entidade = DAL.Entities.EntityTypes.NOTICIA, idReferencia = Model.Revista.id})"></div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <h4 class="separator-form">Conteúdo da Revista</h4>
+                    <div class='box-header'>
+                        <div class="pull-right box-tools">
+                        </div>
+                    </div>
+                    <div class='box-body pad'>
+                        @Html.TextAreaFor(x => x.Revista.descricao, new {@class = "form-control input-sm textarea", rows = "7"})
+                        @Html.ValidationMessageFor(x => x.Revista.descricao)
+                        @Html.instrucao("Insira o código para exibição do conteúdo virtual da revista.")
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <h4 class="separator-form">PDF</h4>
+                    <div class="row">
+                        <div class="col-md-12">
+                            @Html.inputFileSimples("Documento")
+                            @Html.ValidationMessageFor(m => m.Documento)
+
+                            <div class="clearfix"></div>
+                            @if (Model.Revista.id > 0) {
+                                <h4 class="separator-form">PDFs Cadastrados</h4>
+                                <div class="content-load carregando" id="boxArquivosListarBox" data-target="boxArquivosListarBox" data-url="@Url.Action("listar-galeria-documentos", "arquivo", new {area = "arquivos", entidade = DAL.Entities.EntityTypes.NOTICIA, idReferencia = Model.Revista.id})"></div>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <div class="clearfix"></div><br/>
+
+                <div class="text-right">
+                    @Html.exibirBotoesFormulario(Url.Action("listar"), "N")
+                </div>
+
+                <div class="clearfix"></div>
+
+            </div>
+        }
+    </div>
+}

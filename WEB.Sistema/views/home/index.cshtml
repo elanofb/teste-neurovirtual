@@ -1,0 +1,24 @@
+﻿@using DAL.Permissao.Security.Extensions
+@{
+    ViewBag.titlePage = "Painel de Controle";
+    ViewBag.subTitlePage = "Olá, seja bem vindo!";
+
+}
+
+@section styles{
+    <link href="@UtilConfig.linkResourses("css/associatec/daterangepicker/daterangepicker-bs3.css")" rel="stylesheet"/>
+    
+    <link href="@UtilConfig.linkResourses("js/associatec/plugins/C3/css/c3.min.css")" rel="stylesheet" />
+}
+
+@section scripts {
+    @Html.includeDatePicker()
+    <script src="@UtilConfig.linkResourses("js/associatec/plugins/knob/jquery.knob.js")"></script>
+    <script src="@UtilConfig.linkResourses("js/associatec/plugins/daterangepicker/daterangepicker.js")"></script>
+    
+    <script src="@UtilConfig.linkResourses("js/associatec/plugins/C3/js/d3-5.4.0.min-e9c75f0e.js")"></script>
+    <script src="@UtilConfig.linkResourses("js/associatec/plugins/C3/js/c3.min.js")"></script>
+}
+
+<div class="row">
+</div>

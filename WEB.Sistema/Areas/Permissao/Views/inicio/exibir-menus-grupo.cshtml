@@ -1,0 +1,39 @@
+﻿@{
+	int idRecursoGrupo = (int)ViewData["idRecursoGrupo"];
+	int idRecursoPai = (int)ViewData["idRecursoPai"];
+}
+
+@showItensMenu(idRecursoGrupo, idRecursoPai)
+
+@* Definição de helper para execução do bloco *@
+@helper showItensMenu(int idRecursoGrupo, int idRecursoPai) {
+	bool existeSubMenu = false;
+	bool existePermissao = false;
+	var listPermissoes = (List<DAL.Permissao.AcessoPermissao>)ViewData["listPermissoes"];
+
+	//Filtrar os recursos por grupo e por pai.
+	var listRecursosTotais = (List<DAL.Permissao.AcessoRecurso>)ViewData["listRecursos"];
+	var listRecursos = listRecursosTotais.Where(x => (x.idRecursoGrupo == idRecursoGrupo || (x.idRecursoGrupo == null && idRecursoGrupo == 0)) && (x.idRecursoPai == idRecursoPai || (x.idRecursoPai == null && idRecursoPai == 0))).OrderBy(x => x.ordemExibicao).ToList();
+
+	<ul>
+		@if (listRecursos.Count > 0) {
+			foreach (DAL.Permissao.AcessoRecurso Recurso in listRecursos) {
+				existeSubMenu = (listRecursosTotais.Where(x => x.idRecursoPai == Recurso.id).ToList().Count > 0);
+				existePermissao = (listPermissoes.Where(x => x.idRecurso == Recurso.id).ToList().Count > 0 || Recurso.flagAcessoLiberado == "S");
+
+				<li class="context-menu" data-checked="@existePermissao.ToString().ToLower()" data-jstree='{"opened":true, "selected": @existePermissao.ToString().ToLower()}' data-id="@Recurso.id" data-id-pai="@UtilNumber.toInt32(Recurso.idRecursoPai)" data-id-grupo="@UtilNumber.toInt32(idRecursoGrupo)" id="item_@Recurso.id" data-url="#">
+					@Recurso.nomeDisplay
+
+					@if (existeSubMenu) {
+						@showItensMenu(idRecursoGrupo, Recurso.id);
+					}
+				</li>
+			}
+		} else {
+			existePermissao = (listPermissoes.Where(x => x.idGrupo == idRecursoGrupo).ToList().Count > 0);
+			<li class="context-menu" data-jstree='{"opened":false, "selected": @existePermissao.ToString().ToLower()}' data-id="0" data-id-grupo="@idRecursoGrupo" id="item_0" data-url="#">
+				<em>Nenhum submenu!</em>
+			</li>
+		}
+	</ul>
+}

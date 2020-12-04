@@ -1,0 +1,116 @@
+﻿@model WEB.Areas.Empresas.ViewModels.EmpresaForm
+
+@{
+    ViewBag.titlePage = "Editar Empresa";
+    Layout = "~/views/shared/associatec/masterpage-edit.cshtml";
+}
+
+@section styles{
+    <link href="@UtilConfig.linkResourses()Areas/Empresas/js/plugins/autocomplete/select2/css/select2.css" rel="stylesheet" />
+}
+
+@section scripts{
+    <script type="text/javascript" src="@UtilConfig.linkResourses()Areas/Empresas/js/plugins/autocomplete/select2/js/select2.js"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses()Areas/Empresas/js/plugins/autocomplete/autocomplete.js"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses()Areas/Pessoas/js/pessoacontato.js"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses()Areas/Pessoas/js/pessoarelacionamento.js"></script>
+    @Html.includeLocalizacaoJS()
+    @Html.includeDatePicker()
+}
+
+@section navTabs{
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#tab-1" data-toggle="tab">Principal</a></li>
+        @if (Model.Empresa.id > 0) {
+            <li><a href="#tab-2" data-toggle="tab">Contatos</a></li>
+            <li><a href="#tab-3" data-toggle="tab">Histórico</a></li>
+        }
+    </ul>
+}
+
+@section tabContent{
+    <div id="tab-1" class="tab-pane active">
+        @Html.showFlashMessage()
+        @using (Html.BeginForm("editar", null, FormMethod.Post, new { @class = "default" })) {
+            @Html.legendaRequired()<br />
+            @Html.HiddenFor(m => m.Empresa.id)
+
+            @Html.ValidationSummary(false)
+            <h4 class="separator-form">Dados da Empresa</h4>
+
+            <div class="col-md-2">
+                @Html.labelRequired("CNPJ")
+                @Html.TextBoxFor(m => m.Empresa.Pessoa.nroDocumento, new { @class = "form-control input-sm", alt = "cnpj" })
+                @Html.ValidationMessageFor(m => m.Empresa.Pessoa.nroDocumento)
+            </div>
+
+            <div class="col-md-2">
+                <label>Inscrição Estadual</label>
+                @Html.TextBoxFor(m => m.Empresa.Pessoa.inscricaoEstadual, new { @class = "form-control input-sm", alt = "", maxlength = "20" })
+                @Html.ValidationMessageFor(m => m.Empresa.Pessoa.inscricaoEstadual)
+            </div>
+
+            <div class="col-md-2">
+                <label>Inscrição Municipal</label>
+                @Html.TextBoxFor(m => m.Empresa.Pessoa.inscricaoMunicipal, new { @class = "form-control input-sm", alt = "", maxlength = "20" })
+                @Html.ValidationMessageFor(m => m.Empresa.Pessoa.inscricaoMunicipal)
+            </div>
+
+            <div class="col-md-2">
+                <label>Registro Status</label>
+                @Html.DropDownListFor(m => m.Empresa.ativo, ComboHelper.selectListStatus(Model.Empresa.ativo), new { @class = "form-control input-sm" })
+            </div>
+            <div class="clearfix"></div>
+
+            <div class="col-md-4">
+                @Html.labelRequired("Nome Fantasia")
+                @Html.TextBoxFor(m => m.Empresa.Pessoa.nome, new { @class = "form-control input-sm", alt = "", maxlength = "100" })
+                @Html.ValidationMessageFor(m => m.Empresa.Pessoa.nome)
+            </div>
+
+            <div class="col-md-4">
+                <label>Razão Social</label>
+                @Html.TextBoxFor(m => m.Empresa.Pessoa.razaoSocial, new { @class = "form-control input-sm", alt = "" })
+                @Html.ValidationMessageFor(m => m.Empresa.Pessoa.razaoSocial)
+            </div>
+            <div class="clearfix"></div>
+
+            <h4 class="separator-form">Endereço</h4>
+			{ Html.RenderPartial("partial-form-endereco", Model); }
+
+			<h4 class="separator-form">Dados de Contato</h4>
+            <div class="col-md-3">
+                <label>E-mail</label>
+                @Html.TextBoxFor(m => m.Empresa.Pessoa.emailPrincipal, new { maxlength = "100", @class = "form-control input-sm" })
+                @Html.ValidationMessageFor(m => m.Empresa.Pessoa.emailPrincipal)
+            </div>
+            <div class="clearfix"></div>
+
+            <div class="text-right">
+                <a href="@Url.Action("listar")" class="btn btn-default">Voltar</a>&nbsp;
+                <a href="@Url.Action("editar")" class="btn btn-default bg-gray">Limpar</a>&nbsp;
+                <input type="submit" name="enviar" value="Salvar" class="btn btn-primary" />
+            </div>
+
+            <div class="clearfix"></div>
+            <br />
+        }
+    </div>
+
+    @if (Model.Empresa.id > 0) {
+        <div id="tab-2" class="tab-pane">
+            <div id="boxLoadFormContatos" class="content-load carregando" data-url="@Url.Action("editar", "pessoacontato", new{area = "pessoas", idPessoa = Model.Empresa.idPessoa})"></div>
+            <br />
+            <h4 class="separator-form">Contatos Cadastrados para a Empresa</h4>
+            <div id="boxLoadListaContatos" class="content-load carregando" data-url="@Url.Action("partial-listar-contatos", "pessoacontato", new{area = "pessoas", idPessoa = Model.Empresa.idPessoa})"></div>
+        </div>
+
+        <div id="tab-3" class="tab-pane">
+            @*ReSharper disable once Mvc.ActionNotResolved*@
+            <div id="boxLoadFormOcorrencias" class="content-load carregando" data-url="@Url.Action("editar", "pessoarelacionamento", new {area = "pessoas", idPessoa = Model.Empresa.idPessoa})"></div>
+            <br/>
+            <h4 class="separator-form">Ocorrências Cadastradas para a Empresa</h4>
+            <div id="boxLoadListaOcorrencias" class="content-load carregando" data-url="@Url.Action("partial-listar-relacionamentos", "pessoarelacionamento", new {area = "pessoas", idPessoa = Model.Empresa.idPessoa})"></div>
+        </div>
+    }
+}

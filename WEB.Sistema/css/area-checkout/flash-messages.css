@@ -1,0 +1,52 @@
+﻿.flash-messages .flash-message {
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    color: #222;
+    background-color: #bbb;
+    border-color: #999;
+}
+
+.flash-message .close {
+    float: right;
+    font-size: 1.3em;
+}
+
+.flash-message .close:hover {
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.flash-messages .flash-message-success {
+    color: #3c763d;
+    background-color: #dff0d8  !important;
+    border-color: #d6e9c6;
+    content: 'Sucesso'
+}
+
+.flash-messages .flash-message-info {
+    color: #ffffff;
+    background-color: #00c0ef  !important;
+    border-color: #3c763d;
+}
+
+.flash-messages .flash-message-danger {
+    color: #FFFFFF;
+    background-color: #dd4b39   !important;
+    border-color: #a94442;
+}
+
+.flash-messages .flash-message-error {
+    color: #333333;
+    background-color: #eadada !important;
+    border: #eadada 1px solid;
+    border-left: #a94442 10px solid;
+}
+
+
+.flash-messages .flash-message-warning {
+    color: #ffffff;
+    background-color: #f39c12 !important;
+    border-color: #faebcc;
+}

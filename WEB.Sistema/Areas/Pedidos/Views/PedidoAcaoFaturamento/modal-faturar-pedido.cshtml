@@ -1,0 +1,94 @@
+﻿@using MvcFlashMessages
+@using WEB.Areas.Financeiro.Helpers
+@model WEB.Areas.Pedidos.ViewModels.PedidoAcaoFaturamentoForm
+
+@{
+    Layout = "~/views/shared/associatec/masterpage-modal.cshtml";
+
+    if (IsPost) {
+        Layout = null;
+    }
+
+    ViewBag.modalTitle = "Faturar Pedido";
+    ViewBag.modalWidthClass = "lg";
+}
+
+<div id="boxModalFaturamento">
+    
+    @Html.RenderFlash()
+
+    @using(Ajax.BeginForm("faturar", "PedidoAcaoFaturamento", new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = "boxModalFaturamento", OnSuccess = "PedidoAcaoFaturamento.onSuccess" })) {
+        
+        @Html.ValidationSummary(true, "Alguns campos não foram validados")
+
+        { Html.EnableUnobtrusiveJavaScript(false); }
+
+        @Html.HiddenFor(m => m.Pedido.id)
+        
+        <div class="col-md-4">
+            <label>Vencimento</label>
+            @Html.TextBoxFor(x => x.Pedido.dtVencimento, new { @class = "form-control input-sm input-datepicker", alt = "date" })
+            @Html.ValidationMessageFor(x => x.Pedido.codigoContabil)
+        </div>
+
+        <div class="col-md-4">
+            <label>Conta Bancária</label>
+            @Html.DropDownListFor(x => x.Pedido.idContaBancaria, WEB.Areas.ContasBancarias.Helpers.ContaBancariaHelper.getInstance.selectList(Model.Pedido.idContaBancaria), "...", new {@class = "form-control input-sm"})
+            @Html.ValidationMessageFor(x => x.Pedido.idContaBancaria)
+        </div>
+            
+        <div class="col-md-4">
+            <label>Código Contábil</label>
+            @Html.TextBoxFor(x => x.Pedido.codigoContabil, new { @class = "form-control input-sm", maxlength = 10 })
+            @Html.ValidationMessageFor(x => x.Pedido.codigoContabil)
+        </div>
+        <div class="clearfix"></div>
+
+        <div class="col-md-4">
+            <label>Centro de Custo</label>
+            @Html.DropDownListFor(x => x.Pedido.idCentroCusto, CentroCustoHelper.getInstance.selectList(Model.Pedido.idCentroCusto), "", new {@class = "form-control input-sm idCentroCusto" })
+            @Html.ValidationMessageFor(x => x.Pedido.idCentroCusto)
+        </div>
+
+        <div class="col-md-4">
+            <label>Macro Conta</label>
+            @Html.DropDownListFor(x => x.Pedido.idMacroConta, MacroContaHelper.getInstance.selectList(Model.Pedido.idMacroConta), "", new {@class = "form-control input-sm idMacroConta"})
+            @Html.ValidationMessageFor(x => x.Pedido.idMacroConta)
+        </div>
+
+        <div class="col-md-4">
+            <label>Sub-Conta</label>
+            @Html.DropDownListFor(x => x.Pedido.idCategoriaTitulo, CategoriaTituloHelper.getInstance.selectList(Model.Pedido.idCategoriaTitulo, 0), "", new {@class = "form-control input-sm idSubConta" })
+            @Html.ValidationMessageFor(x => x.Pedido.idCategoriaTitulo)
+        </div>
+        <div class="clearfix"></div>
+            
+        <div class="col-md-4">
+            <label>Permitir pgto. via cartão de crédito?</label>
+            @Html.DropDownListFor(x => x.Pedido.flagCartaoCreditoPermitido, ComboHelper.selectListTrueFalse(Model.Pedido.flagCartaoCreditoPermitido), "...", new {@class = "form-control input-sm"})
+            @Html.ValidationMessageFor(x => x.Pedido.flagCartaoCreditoPermitido)
+        </div>
+
+        <div class="col-md-4">
+            <label>Permitir pgto. via boleto</label>
+            @Html.DropDownListFor(x => x.Pedido.flagBoletoBancarioPermitido, ComboHelper.selectListTrueFalse(Model.Pedido.flagBoletoBancarioPermitido), "...", new {@class = "form-control input-sm"})
+            @Html.ValidationMessageFor(x => x.Pedido.flagBoletoBancarioPermitido)
+        </div>
+
+        <div class="col-md-4">
+            <label>Permitir pgto. via depósito</label>
+            @Html.DropDownListFor(x => x.Pedido.flagDepositoPermitido, ComboHelper.selectListTrueFalse(Model.Pedido.flagDepositoPermitido), "...", new {@class = "form-control input-sm"})
+            @Html.ValidationMessageFor(x => x.Pedido.flagDepositoPermitido)
+        </div>
+        <div class="clearfix"></div><br />
+
+        <div class="col-xs-12 text-right">
+            <button class="btn btn-primary link-loading">
+                <i class="far fa-money-bill"></i> Faturar
+            </button>
+        </div>
+        <div class="clearfix"></div>
+
+    }
+
+</div>

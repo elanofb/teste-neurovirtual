@@ -1,0 +1,48 @@
+﻿@model WEB.Areas.Pessoas.ViewModels.PessoaRelacionamentoArquivoForm
+@using WEB.Areas.Pessoas.DTO
+@{
+    Layout = null;
+}
+
+<link href="@UtilConfig.linkResourses("Areas/Arquivos/css/arquivo-documento.css")" rel="stylesheet"/>
+<link href="@UtilConfig.linkResourses("css/associatec/list-custom.css")" rel="stylesheet"/>
+
+@if (!Model.OListaArquivosPessoaRelacionamento.Any()){
+    
+    <div class="col-md-12 alert alert-info">Nenhum arquivo carregado!</div>
+}
+
+@foreach (ArquivosPessoaRelacionamentoDTO OArquivosPessoaRelacionamentoDTO in Model.OListaArquivosPessoaRelacionamento){
+    
+    <div class="col-md-4 col-xs-12">
+        @boxArquivo(OArquivosPessoaRelacionamentoDTO)
+    </div>
+}
+
+<div class="clearfix"></div>
+
+@helper boxArquivo(ArquivosPessoaRelacionamentoDTO OArquivosPessoaRelacionamentoDTO){
+    
+    <div class="ec-box-footer bordered-gray">
+
+        @if (OArquivosPessoaRelacionamentoDTO.OArquivoUpload.id > 0){
+            <p class="text-center abreviar" title="@OArquivosPessoaRelacionamentoDTO.OArquivoUpload.legenda" alt="@OArquivosPessoaRelacionamentoDTO.OArquivoUpload.legenda">
+                <strong>
+                    <i class="fa fa-file"></i> @OArquivosPessoaRelacionamentoDTO.OArquivoUpload.legenda</strong>
+            </p>
+
+            <p class="text-center size11">
+                <b>Ocorrência: </b>@(OArquivosPessoaRelacionamentoDTO.descOcorrencia)
+            </p>
+            <p class="text-center size11">
+                <b>Enviado em:</b> @OArquivosPessoaRelacionamentoDTO.dtOcorrencia.exibirData()<br />            
+                <b>Cadastrado por:</b> @(OArquivosPessoaRelacionamentoDTO.nomeUsuarioCadastro)
+            </p>
+            <p class="text-center">
+                <a href="@Url.Action("exibir-arquivo-crypt", "exibicao", new {area = "Arquivos", id = UtilCrypt.toBase64Encode(OArquivosPessoaRelacionamentoDTO.OArquivoUpload.id)})" target="_blank" class="btn btn-success btn-sm">
+                    Baixar
+                </a>
+            </p>
+        }        
+    </div>
+}

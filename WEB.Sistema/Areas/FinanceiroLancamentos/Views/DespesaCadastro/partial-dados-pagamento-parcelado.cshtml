@@ -1,0 +1,159 @@
+﻿@model WEB.Areas.FinanceiroLancamentos.ViewModels.DespesaCadastroForm
+
+@{
+    Layout = null;
+}
+
+<div class="row margin-top-20">
+
+    <div class="col-sm-6">
+        
+        <div class="row margin-top-10 no-display boxValor">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-sm-8 no-padding-right">
+                        @Html.spanFieldForm("<label><i class=\"fa fa-dollar-sign fs-12\" data-toggle=\"tooltip\" title=\"Clique para informar o valor total da despesa para o sistema calcular cada parcela\" onclick=\"DespesaCadastro.changeInputAmountFull()\"></i></label>", "fs-12", true)<br />
+                        @Html.instrucao("Não informe acréscimos, descontos ou juros")
+                    </div>
+                    <div class="col-sm-4">
+                        @Html.TextBoxFor(m => m.TituloDespesa.valorTotal, new {@class = "form-control input-sm", alt = "decimal", id = "valorTotal"})
+                        @Html.ValidationMessageFor(m => m.TituloDespesa.valorTotal)
+                    </div>
+                </div>
+                <hr class="no-margin-bottom margin-top-5"/>
+            </div>
+        </div>
+
+        <div class="row margin-top-10 boxValorParcela">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-sm-8 no-padding-right">
+                        @Html.spanFieldForm("Valor da Parcela/Pgto <label><i class=\"fa fa-dollar-sign fs-12\" data-toggle=\"tooltip\" title=\"Clique para informar o valor total da despesa para o sistema calcular cada parcela\" onclick=\"DespesaCadastro.changeInputAmountFull()\"></i></label>", "fs-12", true)<br />
+                        @Html.instrucao("Não informe acréscimos, descontos ou juros")
+                    </div>
+                    <div class="col-sm-4">
+                        @Html.TextBoxFor(m => m.valorParcelas, new {@class = "form-control input-sm", alt = "decimal", id = "valorParcelas"})
+                        @Html.ValidationMessageFor(m => m.valorParcelas)
+                    </div>
+                </div>
+                <hr class="no-margin-bottom margin-top-5"/>
+            </div>
+        </div>
+        
+        <div class="row margin-top-10">
+            <div class="col-sm-12">
+                <div class="row">
+                    <div class="col-sm-8 no-padding-right">
+                        @Html.spanFieldForm("Valor Juros", "fs-12", true)<br />
+                        @Html.instrucao("Informe o valor do juros de todas as parcelas")
+                    </div>
+                    <div class="col-sm-4">
+                        @Html.TextBoxFor(m => m.valorJuros, new { @class = "form-control input-sm", alt = "decimal", id = "valorJuros" })
+                        @Html.ValidationMessageFor(m => m.valorJuros)
+                    </div>
+                </div>
+                <hr class="no-margin-bottom margin-top-5"/>
+            </div>
+        </div>
+        <div class="row margin-top-10">
+            <div class="col-sm-12">
+                <div class="row">
+                    <div class="col-sm-8 no-padding-right">
+                        @Html.spanFieldForm("Valor da Multa", "fs-12", true)<br />
+                        @Html.instrucao("Informe a multa a ser aplicada em todas as parcelas")
+                    </div>
+                    <div class="col-sm-4">
+                        @Html.TextBoxFor(m => m.valorMulta, new { @class = "form-control input-sm", alt = "decimal", id = "valorMulta" })
+                        @Html.ValidationMessageFor(m => m.valorMulta)
+                    </div>
+                </div>
+                <hr class="no-margin-bottom margin-top-5"/>
+            </div>
+        </div>
+        <div class="row margin-top-10">
+            <div class="col-sm-12">
+                <div class="row">
+                    <div class="col-sm-8 no-padding-right">
+                        @Html.spanFieldForm("Valor de Desconto", "fs-12", true)<br />
+                        @Html.instrucao("Informe o desconto recebido em todas as parcelas")
+                    </div>
+                    <div class="col-sm-4">
+                        @Html.TextBoxFor(m => m.valorDesconto, new { @class = "form-control input-sm", alt = "decimal", id = "valorDesconto" })
+                        @Html.ValidationMessageFor(m => m.valorDesconto)
+                    </div>
+                </div>
+                <hr class="no-margin-bottom margin-top-5"/>
+            </div>
+        </div>
+        
+    </div>
+    
+    <div class="col-sm-6">
+        
+        <div class="row margin-top-10">
+            <div class="col-md-12 boxCompleteDtCompetencia">
+                <div class="row">
+                    <div class="col-sm-8 no-padding-right">
+                        @Html.spanFieldForm("Especificar competências", "fs-12", true)<br />
+                        @Html.instrucao("Informe a competência das parcelas")
+                    </div>
+                    <div class="col-sm-4">
+                        @Html.DropDownListFor(m => m.flagCompleteDtCompetencia, Model.selectListEspecCompetencia(Model.flagCompleteDtCompetencia), "...", new {@class = "form-control input-sm"})
+                        @Html.ValidationMessageFor(m => m.flagCompleteDtCompetencia)
+                    </div>
+                </div>
+                <hr class="no-margin-bottom margin-top-5"/>
+            </div>
+        </div>
+        
+        <div class="row margin-top-10">
+            <div class="col-md-12 boxDtVencimento">
+                <div class="row">
+                    <div class="col-sm-8 no-padding-right">
+                        @Html.spanFieldForm("Dt. Primeiro Vencimento", "fs-12", true)<br />
+                        @Html.instrucao("Informe a data do vencimento da primeira parcela")
+                    </div>
+                    <div class="col-sm-4">
+                        @Html.TextBoxFor(m => m.TituloDespesa.dtVencimento, new {@class = "form-control input-sm input-datepicker", autocomplete = "off", alt = "date", id = "dtVencimento"})
+                        @Html.ValidationMessageFor(m => m.TituloDespesa.dtVencimento)
+                    </div>
+                </div>
+                <hr class="no-margin-bottom margin-top-5"/>
+            </div>
+        </div>
+        
+        <div class="row margin-top-10">
+            <div class="col-md-12 boxQntdParcelas">
+                <div class="row">
+                    <div class="col-sm-8 no-padding-right">
+                        @Html.spanFieldForm("Qntd. Pagamentos", "fs-12", true)<br />
+                        @Html.instrucao("Informe a quantidade de parcelas")
+                    </div>
+                    <div class="col-sm-4">
+                        @Html.TextBoxFor(m => m.TituloDespesa.qtdeRepeticao, new {@class = "form-control input-sm", type = "number", id = "qtdeRepeticao", onfocusout = "DespesaCadastro.gerarParcelas()"})
+                        @Html.ValidationMessageFor(m => m.TituloDespesa.qtdeRepeticao)
+                    </div>
+                </div>
+                <hr class="no-margin-bottom margin-top-5"/>
+            </div>
+        </div>
+        
+        <div class="row margin-top-10">
+            <div class="col-sm-12 padding-left-10 text-right">
+                <a data-toggle="tooltip" title="Gerar as parcelas" role="button" onclick="DespesaCadastro.gerarParcelas()" href="javascript:;" class="btn btn-primary btn-sm"><i class="fa fa-clone"></i> Gerar Parcelas</a>
+            </div>
+        </div>
+        
+    </div>
+
+</div>
+
+<div class="row margin-top-20">
+    
+    <div id="boxLoadParcelas">
+        @if (Model.TituloDespesa.listaTituloDespesaPagamento.Count() > 1) {
+            Html.RenderPartial("partial-gerar-despesas-pagamento-form", Model);
+        }
+    </div>
+    
+</div>

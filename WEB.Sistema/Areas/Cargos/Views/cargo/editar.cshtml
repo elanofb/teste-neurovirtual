@@ -1,0 +1,31 @@
+﻿@model WEB.Areas.Cargos.ViewModels.CargoForm
+
+@{
+    Layout = "~/views/shared/associatec/masterpage-edit.cshtml";
+    ViewBag.titlePage = "Cargo";
+    ViewBag.subTituloPagina = Model.Cargo.descricao;
+}
+
+@section breadcrump{
+    <ol class="breadcrumb">
+        <li><a href="@Url.Action("listar")" class="active fs-14"><i class="fa fa-arrow-left"></i> Voltar</a></li>
+    </ol>
+}
+
+
+@section navTabs{
+	<ul class="nav nav-tabs">
+		<li class="active"><a href="#tab-1" data-toggle="tab">Principal</a></li>
+	</ul>
+}
+
+@section tabContent{
+    <div id="tab-1" class="tab-pane active">
+
+        @Html.infoCadastro(Model.Cargo.id, Model.Cargo.dtCadastro, Model.Cargo.dtAlteracao)
+
+        @{Html.RenderPartial("partial-dados-principais");}
+
+    </div>
+}
+

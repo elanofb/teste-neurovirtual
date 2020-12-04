@@ -1,0 +1,64 @@
+﻿@model WEB.Areas.NaoAssociados.ViewModels.NaoAssociadoCadastroPFForm
+
+<div>
+    @exibirLabelStatus()
+</div>
+
+<div>
+    <button class="btn btn-default dropdown-toggle margin-top-10" style="width: 100%; background: white; padding: 3px" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Ações <span class="caret"></span>
+    </button>
+
+    <ul class="dropdown-menu">
+
+		<li role="presentation">
+		
+			<a role="menuitem" tabindex="-1" href="javascript:void(0)" onclick="AssociadoEnvioLinkRecuperacaoSenha.enviarParaSelecionados('@Model.Associado.id');">
+				<i class="fa fa-key"></i> Reenviar Senha
+			</a>
+		
+		</li>
+	
+		<li role="presentation">
+		
+			<a role="menuitem" tabindex="-1" href="javascript:void(0)" onclick="AssociadoEnvioLinkRecuperacaoSenhaTransacao.enviarParaSelecionados('@Model.Associado.id');">
+				<i class="fa fa-key"></i> Reenviar Senha de Transação
+			</a>
+		
+		</li>
+            
+
+        @if (Model.Associado.ativo == "N" || Model.Associado.ativo == null) {
+            <li role="presentation">
+                <a role="menuitem" tabindex="-1" href="javascript:void(0)" onclick="DefaultSistema.showModal('@Url.Action("partial-reativacao-nao-associado", "naoassociadoacao", new {idAssociado = Model.Associado.id})');">
+                    <i class="fa fa-check"></i> Reativar Estabelecimento
+                </a>
+            </li>
+        } else {
+            <li role="presentation">
+                <a role="menuitem" tabindex="-1" href="javascript:void(0)" onclick="DefaultSistema.showModal('@Url.Action("partial-desativacao-nao-associado", "naoassociadoacao", new {idAssociado = Model.Associado.id})');">
+                    <i class="fa fa-times"></i> Desativar Estabelecimento
+                </a>
+            </li>
+        }
+
+        <li role="presentation">
+            <a role="menuitem" tabindex="-1" href="javascript:void(0)" onclick="DefaultSistema.showModal('@Url.Action("partial-excluir-nao-associado", "naoassociadoacao", new {idAssociado = Model.Associado.id})');">
+                <i class="fa fa-user-times"></i> Desligar Estabelecimento
+            </a>
+        </li>
+    </ul>
+</div>
+
+@helper exibirLabelStatus() {
+
+if (Model.Associado.ativo == "S") {
+        @Html.boxInfo("ATIVO", "bg-green text-center")
+} else if (Model.Associado.ativo == "E") {
+        @Html.boxInfo("EM ADMISSÃO", "bg-yellow text-center")
+
+} else {
+        @Html.boxInfo("DESATIVADO", "bg-red text-center")
+}
+
+}

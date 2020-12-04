@@ -1,0 +1,65 @@
+﻿@using MvcFlashMessages
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="robots" content="noindex,nofollow"/>
+    <title>@Html.sistema().tituloSistema</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport" />
+    <link href="@UtilConfig.linkResourses("css/base.css")" rel="stylesheet" />
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic" />
+	<link href="@UtilConfig.linkResourses("css/associatec/fontawesome/css/all.min.css")" rel="stylesheet" />
+    <link href="@UtilConfig.linkResourses("css/associatec/glyphicons/css/glyphicons.css")" rel="stylesheet"/>
+    <link href="@UtilConfig.linkResourses("css/associatec/ionicons/css/ionicons.min.css")" rel="stylesheet" />
+    <link rel="stylesheet" href="@UtilConfig.linkResourses($"css/associatec/dist/css/skins/{ @Html.sistema().temaInterface }.css")" />
+    @RenderSection("styles", required: false)
+    <style type="text/css">
+        @Html.sistema().cssCustomizado
+    </style>
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body class="hold-transition sidebar-mini @(Html.sistema().temaInterface)">
+    <div class="wrapper">
+        @{Html.RenderPartial("~/views/shared/associatec/partial/header.cshtml");}
+
+        @{Html.RenderPartial("~/views/shared/associatec/partial/box-esquerda.cshtml");}
+
+        <div class="content-wrapper">
+
+            <section class="content-header @ViewBag.contentHeaderClass">
+                <h1 class="titulo-pagina">
+                    @ViewBag.titlePage &nbsp;
+                    @if (ViewBag.subTitlePage != null){
+                        <i class="far fa-angle-right" aria-hidden="true"></i>
+                        <small>@ViewBag.subTitlePage</small>
+                    }
+                    @if (ViewBag.subTitlePage == null && ViewBag.subTituloPagina != null){
+                        <i class="far fa-angle-right" aria-hidden="true"></i>
+                        <small>@ViewBag.subTituloPagina</small>
+                    }
+                </h1>
+                @RenderSection("breadcrump", false)
+            </section>
+            <section class="content">
+                @Html.RenderFlash()
+                @RenderBody()
+            </section>
+        </div>
+        @{Html.RenderPartial("~/views/shared/associatec/partial/footer.cshtml");}
+    </div>
+    <script src="@UtilConfig.linkResourses("js/base.min.js")"></script>
+    <script src="@UtilConfig.linkResourses("js/modulos.min.js?v=1.0")"></script>
+    
+    @Html.includeSelect2()
+
+    @RenderSection("scripts", required: false)
+    @if (UtilConfig.emProducao()) {
+        @Html.Raw(Html.scripts().googleAnalylics)
+        @Html.Raw(Html.scripts().scriptChat)
+    }
+</body>
+</html>

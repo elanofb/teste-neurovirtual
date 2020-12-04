@@ -1,0 +1,69 @@
+﻿@using MvcFlashMessages
+@model WEB.Areas.Atendimentos.ViewModels.AtendimentoAcaoFinalizarForm
+
+@{
+
+    if (IsPost) {
+
+        Layout = null;
+
+    } else {
+        Layout = "~/views/shared/associatec/masterpage-modal.cshtml";
+
+    }
+
+    ViewBag.modalTitle = "Finalizar Atendimento";
+}
+
+<div id="boxFinalizar">
+    
+    @Html.RenderFlash()
+    
+    @using (Ajax.BeginForm("finalizar", null, new AjaxOptions{HttpMethod = "POST", InsertionMode = InsertionMode.Replace, UpdateTargetId = "boxFinalizar", OnSuccess = "AtendimentoAcao.onSuccessForm"}, new{id = "formFinalizar"})){
+
+        {
+            Html.EnableClientValidation(false);
+        }
+
+        @Html.HiddenFor(m => m.AtendimentoHistorico.idAtendimento)
+
+        <div class="row">
+            
+            <div class="col-xs-12 text-center">
+
+                <p class="fs-20">A solicitação foi atendida?</p>
+                <div class="radio-group" data-toggle="buttons">
+
+                    <label class="radio-label btn btn-default btn-app border-green text-green @(Model.AtendimentoHistorico.flagAtendido == true ? "active" : "")" onclick="$('.box-motivo').addClass('hidden')">
+                        @Html.RadioButtonFor(m => m.AtendimentoHistorico.flagAtendido, true) <i class="fa fa-smile-o"></i> Sim
+                    </label>
+
+                    <label class="radio-label btn btn-default btn-app border-red text-red @(Model.AtendimentoHistorico.flagAtendido == false ? "active" : "")" onclick="$('.box-motivo').removeClass('hidden')">
+                        @Html.RadioButtonFor(m => m.AtendimentoHistorico.flagAtendido, false) <i class="fa fa-frown-o"></i> Não
+                    </label>
+
+                </div>
+
+            </div>
+            <div class="clearfix"></div>
+
+            <div class="col-xs-12 box-motivo @(Model.AtendimentoHistorico.flagAtendido == true ? "hidden" : "")">
+                @Html.labelRequired("Motivo")
+                @Html.TextAreaFor(m => m.AtendimentoHistorico.mensagem, new{@class = "form-control input-sm", rows = 5})
+                @Html.ValidationMessageFor(m => m.AtendimentoHistorico.mensagem)
+            </div>
+            <div class="clearfix"></div>
+
+        </div>
+
+    }
+
+</div>
+
+@section modalFooter {
+
+    <div class="text-right">
+        <button class="btn btn-primary link-loading" onclick="$('#formFinalizar').submit()"><i class="fa fa-check-circle"></i> Finalizar</button>
+    </div>
+
+}

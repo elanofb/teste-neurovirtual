@@ -1,0 +1,47 @@
+﻿@model WEB.Areas.Permissao.ViewModels.LoginVM
+
+@using BLL.Configuracoes
+@using MvcFlashMessages
+
+@{
+    ViewBag.Title = "index";
+    Layout = "~/Areas/Permissao/Views/shared/_masterpage-login.cshtml";
+}
+
+@section styles {
+
+    @if(Model.OConfigSistema.flagBgLoginCustomizado == true) {
+        <style type="text/css">
+            .bg_body { background-image: url(@ConfiguracaoImagemBL.linkImagemOrganizacao(0, ConfiguracaoImagemBL.IMAGEM_BG_LOGIN)) !important; }
+        </style>
+    }
+
+    <style type="text/css">
+        @Model.OConfigSistema.cssCustomizadoLogin
+    </style>
+
+}
+
+@using(Html.BeginForm("recuperar-senha", "login", FormMethod.Post, new { })) {
+
+
+    @Html.RenderFlash()
+
+    <div class="form-group">
+        <label class="control-label">Login</label>
+        @Html.TextBox("login", "", new { @class = "form-control", placeholder = "Infome o login do seu cadastro" })
+    </div><br />
+
+    <button type="submit" class="btn btn-block btn-success link-loading">Recuperar Senha</button>
+    <br />
+
+    <div class="clearfix"></div><br />
+    <div class="row">
+        <div class="col-md-12">
+            <p class="pull-right">
+                <a href="@Url.Action("index", "login")">Voltar a tela de login</a>
+            </p>
+        </div>
+    </div>
+
+}

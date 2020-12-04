@@ -1,0 +1,58 @@
+﻿@using DAL.Permissao
+@using DAL.Permissao.Security.Extensions
+@model WEB.Areas.Permissao.ViewModels.PerfilAcessoForm
+
+
+@using (Html.BeginForm("editar", null, FormMethod.Post, new { role = "form", @class = "default" })) {
+
+    @Html.HiddenFor(m => m.PerfilAcesso.id)
+    @Html.HiddenFor(m => m.PerfilAcesso.idOrganizacao)
+    @Html.HiddenFor(m => m.PerfilAcesso.flagSistema)
+    @Html.ValidationSummary(false)
+    
+    <h4 class="separator-form">Dados Principais</h4>
+
+    <div class="col-sm-5">
+        <label>Descrição</label>
+        @Html.TextBoxFor(m => m.PerfilAcesso.descricao, new {@class = "form-control input-sm", maxlength = "100"})
+        @Html.ValidationMessageFor(m => m.PerfilAcesso.descricao)
+    </div>
+
+    if (User.idPerfil() == PerfilAcessoConst.DESENVOLVEDOR || User.flagMultiOrganizacao()){
+        <div class="clearfix"></div>
+        <div class="col-sm-2">
+            <label>Acesso Multi-Associação?</label>
+            @Html.DropDownListFor(m => m.PerfilAcesso.flagOrganizacao, ComboHelper.selectListTrueFalse(Model.PerfilAcesso.flagOrganizacao), "...", new {@class = "form-control input-sm"})
+            @Html.instrucao("Caso a associação possua mais de uma organização vinculada a ela")
+        </div>
+    }else{
+        @Html.HiddenFor(m => m.PerfilAcesso.flagOrganizacao)   
+    }    
+    
+    <div class="col-sm-2">
+        <label>Acesso todas unidades?</label>
+        @Html.DropDownListFor(m => m.PerfilAcesso.flagTodasUnidades, ComboHelper.selectListTrueFalse(Model.PerfilAcesso.flagTodasUnidades), "...", new {@class = "form-control input-sm"})
+        @Html.ValidationMessageFor(m => m.PerfilAcesso.flagTodasUnidades)
+        @Html.instrucao("Caso a associação possua mais de uma unidade cadastrada")
+    </div>
+
+    <div class="col-sm-3">
+        <label>Visualizar somente conteúdo próprio?</label>
+        @Html.DropDownListFor(m => m.PerfilAcesso.flagSomenteCadastroProprio, ComboHelper.selectListTrueFalse(Model.PerfilAcesso.flagSomenteCadastroProprio), "...", new {@class = "form-control input-sm"})
+        @Html.ValidationMessageFor(m => m.PerfilAcesso.flagSomenteCadastroProprio)
+        @Html.instrucao("Escolha 'SIM' se o usuário poderá ver somente os próprios cadastros.")
+    </div>
+
+    <div class="col-sm-2">
+        <label>Status</label>
+        @Html.DropDownListFor(m => m.PerfilAcesso.ativo, ComboHelper.selectListStatus(Model.PerfilAcesso.ativo), "...", new {@class = "form-control input-sm"})
+        @Html.ValidationMessageFor(m => m.PerfilAcesso.ativo)
+    </div>
+    <div class="clearfix"></div><br />
+
+    <div class="text-right">
+        @Html.exibirBotoesFormulario(Url.Action("listar"), Model.PerfilAcesso.flagSistema, Url.Action("editar"))
+    </div>
+            
+
+}

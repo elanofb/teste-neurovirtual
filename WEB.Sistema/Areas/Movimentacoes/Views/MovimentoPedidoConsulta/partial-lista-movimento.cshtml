@@ -1,0 +1,53 @@
+﻿@model List<DAL.Transacoes.MovimentoResumoPedido>
+@using MvcFlashMessages
+@{
+    Layout = null;
+}
+
+@Html.RenderFlash()
+
+<div class="row">
+    <div class="col-md-12">
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th width="160">Movimento</th>
+                <th>Observação</th>
+                <th width="200">Valor</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            @if (Model.Any()) {
+                int cont = Model.Count;
+                foreach (var Item in Model) {
+            
+                    <tr>
+                        <td class="mdc-bg-green-50">
+                            <span>
+                                <i class="far fa-hashtag"></i> @(cont--)</span><br/>
+                            <span>
+                                <i class="far fa-calendar-alt"></i> @Item.dtCadastro.exibirData(true)</span>
+                        </td>
+                        <td class="mdc-bg-green-50">
+                            <span> <i class="far fa-tag"></i> @Item.nomeProduto</span><br/>
+                            <span><em>@Item.observacao</em></span>
+                        </td>
+                        <td class="mdc-bg-green-50">
+                            <span class="text-green"> <i class="far fa-plus"></i> @Item.valorOperacao.toDecimal().ToString("F4") BTK</span><br/>
+                            <span>
+                                <i class="far @Html.iconCheckOrBan(Item.dtIntegracaoSaldo.HasValue)"></i> @(Item.dtIntegracaoSaldo.HasValue ? "Saldo atualizado" : "à sincronizar")
+                            </span>
+                        </td>
+                    </tr>
+                }
+            } else {
+                <tr>
+                    <td colspan="3" class="text-center">Nenhuma movimentação foi encontrada</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+
+</div>

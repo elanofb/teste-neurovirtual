@@ -1,0 +1,14 @@
+﻿@model DAL.Associados.Associado
+
+<div class="tab-pane" id="tab-pedidos">
+
+    <h4 class="separator-form-icon">
+        <i class="far fa-edit"></i> Relação de Pedidos encontrados
+        <span class="pull-right fs-12"><a href="@Url.Action("index", "PedidoCadastro", new { area="Pedidos", idPessoa = Model.idPessoa })"><i class="far fa-plus-circle"></i> Novo Pedido</a></span>
+        
+
+    </h4>
+    <div id="boxLoadListaPedidos" class="carregando content-load" data-url="@Url.Action("partial-listar-pedidos", "PedidoPessoa", new {area = "Pedidos", Model.idPessoa})"></div>
+
+</div>
+

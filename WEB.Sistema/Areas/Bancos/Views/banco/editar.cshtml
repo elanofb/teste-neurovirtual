@@ -1,0 +1,91 @@
+﻿@using WEB.Helpers
+@model WEB.Areas.Bancos.ViewModels.BancoForm
+
+@{
+    ViewBag.titlePage = (Model.Banco.id > 0 ? String.Format("Editar Banco {0}", Model.Banco.nome) : "Novo Banco");
+}
+
+<div class="row">
+    <div class="col-sm-12 box-primary">
+        <div class="nav-tabs-custom">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#tab-1" data-toggle="tab">Principal</a></li>
+            </ul>
+
+            <div class="tab-content">
+
+                <div id="tab-1" class="tab-pane active">
+
+                    @{ Html.RenderPartial("partial-info-cadastro"); }
+
+                    @using(Html.BeginForm("editar", null, FormMethod.Post, new { role = "form", @class = "default" })) {
+                    
+                        @Html.legendaRequired()<br />
+
+                        { Html.EnableClientValidation(false); }
+
+                        { Html.EnableUnobtrusiveJavaScript(false); }
+
+                        @Html.ValidationSummary(true, "Alguns campos não foram validados.")
+
+                        @Html.HiddenFor(m => m.Banco.id)
+
+                        <div class="form-horizontal">
+
+                            <div class="col-md-6">
+
+                                <div class="box box-default">
+                                    <div class="box-header with-border">
+                                        <h3 class="box-title">Dados do Banco</h3>
+                                    </div>
+                                    <div class="box-body">
+                                        <div class="row">
+
+                                            <div class="col-md-6">
+                                                @Html.labelRequired("Nome Fantasia")
+                                                @Html.TextBoxFor(m => m.Banco.nome, new { @class = "form-control input-sm", maxlength = "100" })
+                                                @Html.ValidationMessageFor(m => m.Banco.nome)
+                                            </div>
+                                            <div class="col-md-6">
+                                                @Html.labelRequired("Razão Social")
+                                                @Html.TextBoxFor(m => m.Banco.descricao, new { @class = "form-control input-sm", maxlength = "100" })
+                                                @Html.ValidationMessageFor(m => m.Banco.descricao)
+                                            </div>
+                                            <div class="clearfix"></div>
+
+                                            <div class="col-md-6">
+                                                <label>Site</label>
+                                                @Html.TextBoxFor(m => m.Banco.site, new { @class = "form-control input-sm", maxlength = "100" })
+                                                @Html.ValidationMessageFor(m => m.Banco.site)
+                                            </div>
+
+                                            <div class="col-md-3">
+                                                @Html.labelRequired("Nro. Banco")
+                                                @Html.TextBoxFor(m => m.Banco.nroBanco, new { @class = "form-control input-sm", maxlength = "3" })
+                                                @Html.ValidationMessageFor(m => m.Banco.nroBanco)
+                                            </div>
+
+                                            <div class="col-md-3">
+                                                <label>Status</label>
+                                                @Html.DropDownListFor(m => m.Banco.ativo, ComboHelper.selectListStatus(Model.Banco.ativo), new { @class = "form-control input-sm" })
+                                                @Html.ValidationMessageFor(m => m.Banco.ativo)
+                                            </div>
+                                            <div class="clearfix"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+
+                        <div class="col-md-12 text-right">
+                            @Html.exibirBotoesFormulario(Url.Action("listar"), Model.Banco.flagSistema, Url.Action("editar", new { id = 0 }))
+                        </div>
+                        <div class="clearfix"></div><br />
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+</div>

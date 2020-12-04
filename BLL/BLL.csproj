@@ -1,0 +1,1458 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{642EEA21-EAAC-4541-91DB-DCB59AF4DF38}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>BLL</RootNamespace>
+    <AssemblyName>BLL</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+    <TargetFrameworkProfile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="BouncyCastle, Version=1.8.1.0, Culture=neutral, PublicKeyToken=0e99375e54769942">
+      <HintPath>..\packages\MimeKit.1.3.0-beta7\lib\net451\BouncyCastle.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="BouncyCastle.Crypto, Version=1.7.4137.9688, Culture=neutral, PublicKeyToken=a4292a325f69b123">
+      <HintPath>..\packages\BouncyCastle.1.7.0\lib\Net40-Client\BouncyCastle.Crypto.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="CsvHelper, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
+      <HintPath>..\packages\CsvHelper.2.16.3.0\lib\net45\CsvHelper.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.BulkInsert, Version=6.0.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.BulkInsert-ef6-ext.6.0.3.1\lib\net45\EntityFramework.BulkInsert.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.Extended, Version=6.0.0.0, Culture=neutral, PublicKeyToken=05b7e29bdd433584, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.Extended.6.1.0.168\lib\net45\EntityFramework.Extended.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.MappingAPI, Version=6.1.0.9, Culture=neutral, PublicKeyToken=7ee2e825d201459e, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.MappingAPI.6.1.0.9\lib\net45\EntityFramework.MappingAPI.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="EPPlus, Version=4.5.2.1, Culture=neutral, PublicKeyToken=ea159fdaa78159a1">
+      <HintPath>..\packages\EPPlus.4.5.2.1\lib\net40\EPPlus.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Google.Protobuf, Version=3.5.1.0, Culture=neutral, PublicKeyToken=a7d26565bac4d604">
+      <HintPath>..\packages\Google.Protobuf.3.5.1\lib\net45\Google.Protobuf.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=0.84.0.0, Culture=neutral, PublicKeyToken=1b03e6acf1164f73">
+      <HintPath>..\packages\NetSword.Common.ICSharpCode.SharpZipLib.0.84.0\lib\ICSharpCode.SharpZipLib.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ImageResizer, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ImageResizer.4.2.0\lib\net45\ImageResizer.dll</HintPath>
+    </Reference>
+    <Reference Include="LinqKit, Version=1.1.13.0, Culture=neutral, PublicKeyToken=bc217f8844052a91, processorArchitecture=MSIL">
+      <HintPath>..\packages\LinqKit.1.1.13\lib\net45\LinqKit.dll</HintPath>
+    </Reference>
+    <Reference Include="MailKit, Version=1.3.0.0, Culture=neutral, PublicKeyToken=4e064fe7c44a8f1b">
+      <HintPath>..\packages\MailKit.1.3.0-beta7\lib\net451\MailKit.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="MimeKit, Version=1.3.0.0, Culture=neutral, PublicKeyToken=bede1c8a46c66814">
+      <HintPath>..\packages\MimeKit.1.3.0-beta7\lib\net451\MimeKit.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MoreLinq, Version=2.10.21623.0, Culture=neutral, PublicKeyToken=384d532d7e88985d, processorArchitecture=MSIL">
+      <HintPath>..\packages\morelinq.2.10.0\lib\net40\MoreLinq.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="PagarMe, Version=2.0.6746.17849, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\Pagar.me.2.6.6\lib\net45\PagarMe.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PushSharp.Amazon, Version=4.0.10.0, Culture=neutral, PublicKeyToken=cf74b75eab2c0170, processorArchitecture=MSIL">
+      <HintPath>..\packages\PushSharp.4.0.10\lib\net45\PushSharp.Amazon.dll</HintPath>
+    </Reference>
+    <Reference Include="PushSharp.Apple, Version=4.0.10.0, Culture=neutral, PublicKeyToken=cf74b75eab2c0170, processorArchitecture=MSIL">
+      <HintPath>..\packages\PushSharp.4.0.10\lib\net45\PushSharp.Apple.dll</HintPath>
+    </Reference>
+    <Reference Include="PushSharp.Blackberry, Version=4.0.10.0, Culture=neutral, PublicKeyToken=cf74b75eab2c0170, processorArchitecture=MSIL">
+      <HintPath>..\packages\PushSharp.4.0.10\lib\net45\PushSharp.Blackberry.dll</HintPath>
+    </Reference>
+    <Reference Include="PushSharp.Core, Version=4.0.10.0, Culture=neutral, PublicKeyToken=cf74b75eab2c0170, processorArchitecture=MSIL">
+      <HintPath>..\packages\PushSharp.4.0.10\lib\net45\PushSharp.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="PushSharp.Firefox, Version=4.0.10.0, Culture=neutral, PublicKeyToken=cf74b75eab2c0170, processorArchitecture=MSIL">
+      <HintPath>..\packages\PushSharp.4.0.10\lib\net45\PushSharp.Firefox.dll</HintPath>
+    </Reference>
+    <Reference Include="PushSharp.Google, Version=4.0.10.0, Culture=neutral, PublicKeyToken=cf74b75eab2c0170, processorArchitecture=MSIL">
+      <HintPath>..\packages\PushSharp.4.0.10\lib\net45\PushSharp.Google.dll</HintPath>
+    </Reference>
+    <Reference Include="PushSharp.Windows, Version=4.0.10.0, Culture=neutral, PublicKeyToken=cf74b75eab2c0170, processorArchitecture=MSIL">
+      <HintPath>..\packages\PushSharp.4.0.10\lib\net45\PushSharp.Windows.dll</HintPath>
+    </Reference>
+    <Reference Include="SimpleInjector, Version=4.3.0.0, Culture=neutral, PublicKeyToken=984cb50dea722e99">
+      <HintPath>..\packages\SimpleInjector.4.3.0\lib\net45\SimpleInjector.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Configuration.Install" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Drawing.Design" />
+    <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.4.0\lib\net461\System.ValueTuple.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Mvc, Version=5.2.6.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.6\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Ajudas\Interface\IAjudaModuloBL.cs" />
+    <Compile Include="Ajudas\Interface\IAjudaCategoriaBL.cs" />
+    <Compile Include="Ajudas\Services\AjudaModuloBL.cs" />
+    <Compile Include="Ajudas\Services\AjudaCategoriaBL.cs" />
+    <Compile Include="AreaAtuacao\Services\AreaAtuacaoTipoAssociadoBL.cs" />
+    <Compile Include="Arquivos\Interface\IArquivoUploadCadastroBL.cs" />
+    <Compile Include="Arquivos\Interface\IArquivoUploadFotoBL.cs" />
+    <Compile Include="Arquivos\Interface\IArquivoUploadPadraoBL.cs" />
+    <Compile Include="Arquivos\Interface\IExportarArquivoAssociadoVWBL.cs" />
+    <Compile Include="Arquivos\Interface\IArquivoAssociadoVWBL.cs" />
+    <Compile Include="Arquivos\Interface\IArquivoUploadBL.cs" />
+    <Compile Include="Arquivos\Interface\IGravadorArquivoBL.cs" />
+    <Compile Include="Arquivos\Services\ArquivoAssociadoVWBL.cs" />
+    <Compile Include="Arquivos\Services\ArquivoUploadCadastroBL.cs" />
+    <Compile Include="Arquivos\Services\ArquivoUploadPlanilhaBL.cs" />
+    <Compile Include="Arquivos\Services\ArquivoUploadLogotipoBL.cs" />
+    <Compile Include="Arquivos\Services\ArquivoUploadDocumentoBL.cs" />
+    <Compile Include="Arquivos\Services\ArquivoUploadPadraoBL.cs" />
+    <Compile Include="Arquivos\Services\ArquivoUploadFotoBL.cs" />
+    <Compile Include="Arquivos\Services\ArquivoUploadBL.cs" />
+    <Compile Include="Arquivos\Services\ExportarArquivoAssociadoVWBL.cs" />
+    <Compile Include="Arquivos\Services\GravadorArquivoBL.cs" />
+    <Compile Include="AssociadosContribuicoes\Emails\IEnvioPagamentoContribuicao.cs" />
+    <Compile Include="AssociadosContribuicoes\Services\AssociadoContribuicaoResumoBL.cs" />
+    <Compile Include="AssociadosContribuicoes\Interface\IAssociadoContribuicaoResumoBL.cs" />
+    <Compile Include="AssociadosContribuicoes\Services\TituloReceitaGeradorContribuicaoDependenteBL.cs" />
+    <Compile Include="AssociadosContribuicoes\Services\AssociadoContribuicaoBoletoGeracaoBL.cs" />
+    <Compile Include="AssociadosContribuicoes\Services\AssociadoContribuicaoFilaBoletoGeracaoBL.cs" />
+    <Compile Include="AssociadosContribuicoes\Services\AssociadoContribuicaoBoletoBL.cs" />
+    <Compile Include="AssociadosContribuicoes\Interface\IAssociadoContribuicaoFilaBoletoGeracaoBL.cs" />
+    <Compile Include="AssociadosContribuicoes\Interface\IAssociadoContribuicaoBoletoBL.cs" />
+    <Compile Include="AssociadosContribuicoes\Services\TituloReceitaGeradorContribuicaoBL.cs" />
+    <Compile Include="AssociadosDependentes\Events\OnAssociadoDependenteCadastrado.cs" />
+    <Compile Include="AssociadosDependentes\Events\OnAssociadoDependenteCadastradoHandler.cs" />
+    <Compile Include="AssociadosDependentes\Interfaces\IAssociadoDependenteCadastroBL.cs" />
+    <Compile Include="AssociadosDependentes\Interfaces\IAssociadoDependenteBL.cs" />
+    <Compile Include="AssociadosDependentes\Services\AssociadoDependenteCadastroBL.cs" />
+    <Compile Include="AssociadosDependentes\Services\AssociadoDependenteBL.cs" />
+    <Compile Include="AssociadosInstitucional\Events\OnSenhaTransacaoAlterada.cs" />
+    <Compile Include="AssociadosInstitucional\Events\OnSenhaTransacaoAlteradaHandler.cs" />
+    <Compile Include="AssociadosNotificacoes\Interfaces\IAssociadoContribuicaoCobrancaNotificacaoBL.cs" />
+    <Compile Include="AssociadosNotificacoes\Services\AssociadoContribuicaoCobrancaNotificacaoBL.cs" />
+    <Compile Include="AssociadosOperacoes\Emails\EnvioAtualizacaoCadastro.cs" />
+    <Compile Include="AssociadosOperacoes\Emails\EnvioRecuperacaoSenha.cs" />
+    <Compile Include="AssociadosOperacoes\Emails\EnvioRecuperacaoSenhaTransacao.cs" />
+    <Compile Include="AssociadosOperacoes\Emails\IEnvioAtualizacaoCadastro.cs" />
+    <Compile Include="AssociadosOperacoes\Emails\IEnvioNovaSenha.cs" />
+    <Compile Include="AssociadosOperacoes\Emails\IEnvioRecuperacaoSenha.cs" />
+    <Compile Include="AssociadosOperacoes\Emails\EnvioNovaSenha.cs" />
+    <Compile Include="AssociadosOperacoes\Emails\IEnvioRecuperacaoSenhaTransacao.cs" />
+    <Compile Include="AssociadosOperacoes\Events\OnEnvioLinkPreAtualizacaoCadastro.cs" />
+    <Compile Include="AssociadosOperacoes\Events\OnEnvioLinkPreAtualizacaoCadastroHandler.cs" />
+    <Compile Include="AssociadosOperacoes\Events\OnNovaSenhaEnviada.cs" />
+    <Compile Include="AssociadosOperacoes\Events\OnTipoAlterado.cs" />
+    <Compile Include="AssociadosOperacoes\Events\OnAdmissaoAlterada.cs" />
+    <Compile Include="AssociadosOperacoes\Events\OnNovaSenhaEnviadaHandler.cs" />
+    <Compile Include="AssociadosOperacoes\Events\OnTipoAlteradoHandler.cs" />
+    <Compile Include="AssociadosOperacoes\Events\OnAdmissaoAlteradaHandler.cs" />
+    <Compile Include="AssociadosOperacoes\Interfaces\IAssociadoAlterarTipoCadastroBL.cs" />
+    <Compile Include="AssociadosOperacoes\Interfaces\IAssociadoNovaSenhaNotificacaoEnvioBL.cs" />
+    <Compile Include="AssociadosOperacoes\Interfaces\IAssociadoNovaSenhaNotificacaoBL.cs" />
+    <Compile Include="AssociadosOperacoes\Interfaces\IAssociadoRecuperacaoSenhaNotificacaoEnvioBL.cs" />
+    <Compile Include="AssociadosOperacoes\Interfaces\IAssociadoRecuperacaoSenhaTransacaoNotificacaoBL.cs" />
+    <Compile Include="AssociadosOperacoes\Interfaces\IAssociadoRecuperacaoSenhaTransacaoNotificacaoEnvioBL.cs" />
+    <Compile Include="AssociadosOperacoes\Interfaces\IAssociadoTipoAlteracaoBL.cs" />
+    <Compile Include="AssociadosOperacoes\Interfaces\IAssociadoRecuperacaoSenhaNotificacaoBL.cs" />
+    <Compile Include="AssociadosOperacoes\Interfaces\IAssociadoAdmissaoAlteracaoBL.cs" />
+    <Compile Include="AssociadosOperacoes\Interfaces\IAssociadoDesativacaoBL.cs" />
+    <Compile Include="AssociadosOperacoes\Interfaces\IAssociadoReativacaoBL.cs" />
+    <Compile Include="AssociadosOperacoes\Interfaces\IAssociadoExclusaoBL.cs" />
+    <Compile Include="AssociadosOperacoes\Interfaces\IAssociadoSituacaoContribuicaoBL.cs" />
+    <Compile Include="AssociadosOperacoes\Interfaces\IAtualizacaoCadastroEmailBL.cs" />
+    <Compile Include="AssociadosOperacoes\Services\AssociadoAlterarTipoCadastroBL.cs" />
+    <Compile Include="AssociadosOperacoes\Services\AssociadoNovaSenhaNotificacaoBL.cs" />
+    <Compile Include="AssociadosOperacoes\Services\AssociadoNovaSenhaTransacaoNotificacaoBL.cs" />
+    <Compile Include="AssociadosOperacoes\Services\AssociadoRecuperacaoSenhaNotificacaoBL.cs" />
+    <Compile Include="AssociadosOperacoes\Services\AssociadoNovaSenhaNotificacaoEnvioBL.cs" />
+    <Compile Include="AssociadosOperacoes\Services\AssociadoRecuperacaoSenhaTransacaoNotificacaoBL.cs" />
+    <Compile Include="AssociadosOperacoes\Services\AssociadoRecuperacaoSenhaTransacaoNotificacaoEnvioBL.cs" />
+    <Compile Include="AssociadosOperacoes\Services\AssociadoSaldoInicialGeradorBL.cs" />
+    <Compile Include="AssociadosOperacoes\Services\AssociadoTipoAlteracaoBL.cs" />
+    <Compile Include="AssociadosOperacoes\Services\AssociadoDesativacaoBL.cs" />
+    <Compile Include="AssociadosOperacoes\Services\AssociadoAdmissaoAlteracaoBL.cs" />
+    <Compile Include="AssociadosOperacoes\Services\AssociadoReativacaoBL.cs" />
+    <Compile Include="AssociadosOperacoes\Services\AssociadoExclusaoBL.cs" />
+    <Compile Include="AssociadosOperacoes\Services\AssociadoSituacaoContribuicaoBL.cs" />
+    <Compile Include="AssociadosOperacoes\Events\OnAssociadoAtivado.cs" />
+    <Compile Include="AssociadosOperacoes\Events\OnAssociadoAtivadoHandler.cs" />
+    <Compile Include="AssociadosOperacoes\Services\AssociadoRecuperacaoSenhaNotificacaoEnvioBL.cs" />
+    <Compile Include="AssociadosOperacoes\Services\AtualizacaoCadastroEmailBL.cs" />
+    <Compile Include="AssociadosOperacoes\Services\NotificacaoAtualizacaoCadastroBL.cs" />
+    <Compile Include="Associados\Events\OnAssociadoAlterado.cs" />
+    <Compile Include="Associados\Events\OnAssociadoAlteradoHandler.cs" />
+    <Compile Include="Associados\Events\OnAreaAssociadoAssociadoCadastrado.cs" />
+    <Compile Include="Associados\Events\OnAreaAssociadoAssociadoCadastradoHandler.cs" />
+    <Compile Include="Associados\Interface\IAssociadoAprovacaoDocumentosBL.cs" />
+    <Compile Include="Associados\Interface\IAssociadoAreaAtuacaoVWBL.cs" />
+    <Compile Include="Associados\Interface\IAssociadoCadastroBL.cs" />
+    <Compile Include="Associados\Interface\IAssociadoEmailVWBL.cs" />
+    <Compile Include="Associados\Interface\IAssociadoAdmissaoBL.cs" />
+    <Compile Include="Associados\Interface\IAssociadoRelatorioVWBL.cs" />
+    <Compile Include="Associados\Interface\IAssociadoValidacaoIndicacaoBL.cs" />
+    <Compile Include="Associados\Interface\ICategoriaTipoAssociadoCadastroBL.cs" />
+    <Compile Include="Associados\Interface\ICategoriaTipoAssociadoConsultaBL.cs" />
+    <Compile Include="Associados\Interface\ICategoriaTipoAssociadoExclusaoBL.cs" />
+    <Compile Include="Associados\Interface\IConfiguracaoMembroCadastroBL.cs" />
+    <Compile Include="Associados\Interface\IConfiguracaoMembroConsultaBL.cs" />
+    <Compile Include="Associados\Interface\IMembroSaldoCadastroBL.cs" />
+    <Compile Include="Associados\Interface\IMembroSaldoConsultaBL.cs" />
+    <Compile Include="Associados\Interface\IMembroSaldoVwBL.cs" />
+    <Compile Include="Associados\Interface\IMotivoDesativacaoBL.cs" />
+    <Compile Include="Associados\Interface\IMotivoDesligamentoBL.cs" />
+    <Compile Include="Associados\Interface\IPendenciaCadastralBL.cs" />
+    <Compile Include="Associados\Interface\IPreEdicaoCadastroValidadorBL.cs" />
+    <Compile Include="Associados\Interface\ITipoAssociadoBL.cs" />
+    <Compile Include="Associados\Interface\ITipoAssociadoCadastroBL.cs" />
+    <Compile Include="Associados\Interface\ITipoAssociadoConsultaBL.cs" />
+    <Compile Include="Associados\Services\AreaAssociadoAssociadoCadastroBL.cs" />
+    <Compile Include="Associados\Services\AssociadoAreaAtuacaoVWBL.cs" />
+    <Compile Include="Associados\Services\AssociadoCadastroDefaultBL.cs" />
+    <Compile Include="Associados\Services\AssociadoInstituicaoBL.cs" />
+    <Compile Include="Associados\Services\AssociadoConsultaBL.cs" />
+    <Compile Include="Associados\Services\AssociadoPesquisaRapidaBL.cs" />
+    <Compile Include="Associados\Services\AssociadoEmailVWBL.cs" />
+    <Compile Include="Associados\Interface\IAssociadoConsultaBL.cs" />
+    <Compile Include="Associados\Interface\IAssociadoInstituicaoBL.cs" />
+    <Compile Include="Associados\Services\AssociadoValidacaoIndicacaoBL.cs" />
+    <Compile Include="Associados\Services\CategoriaTipoAssociadoCadastroBL.cs" />
+    <Compile Include="Associados\Services\CategoriaTipoAssociadoConsultaBL.cs" />
+    <Compile Include="Associados\Services\CategoriaTipoAssociadoExclusaoBL.cs" />
+    <Compile Include="Associados\Services\ConfiguracaoMembroCadastroBL.cs" />
+    <Compile Include="Associados\Services\ConfiguracaoMembroConsultaBL.cs" />
+    <Compile Include="Associados\Services\AssociadoAprovacaoDocumentosBL.cs" />
+    <Compile Include="Associados\Services\MembroSaldoCadastroBL.cs" />
+    <Compile Include="Associados\Services\MembroSaldoConsultaBL.cs" />
+    <Compile Include="Associados\Services\MembroSaldoVwBL.cs" />
+    <Compile Include="Associados\Services\MotivoDesativacaoBL.cs" />
+    <Compile Include="Associados\Services\PendenciaCadastralBL.cs" />
+    <Compile Include="Associados\Services\AssociadoAdmissaoBL.cs" />
+    <Compile Include="Associados\Services\AssociadoRelatorioVWBL.cs" />
+    <Compile Include="Associados\Interface\IAreaAssociadoAssociadoCadastroBL.cs" />
+    <Compile Include="Associados\Services\MotivoDesligamentoBL.cs" />
+    <Compile Include="Associados\Services\AssociadoCadastroBL.cs" />
+    <Compile Include="Associados\Services\PreEdicaoCadastroValidadorBL.cs" />
+    <Compile Include="Associados\Services\TipoAssociadoBL.cs" />
+    <Compile Include="Associados\Services\TipoAssociadoCadastroBL.cs" />
+    <Compile Include="Associados\Services\TipoAssociadoExclusaoBL.cs" />
+    <Compile Include="Associados\Services\TituloReceitaGeradorTaxaInscricaoBL.cs" />
+    <Compile Include="Atendimentos\Emails\EnvioMensagemAtendimento.cs" />
+    <Compile Include="Atendimentos\Emails\IEnvioMensagemAtendimento.cs" />
+    <Compile Include="Atendimentos\Events\OnAtendimentoIniciadoHandler.cs" />
+    <Compile Include="Atendimentos\Events\OnAtendimentoIniciado.cs" />
+    <Compile Include="Atendimentos\Events\OnHistoricoMensagemCadastradoHandler.cs" />
+    <Compile Include="Atendimentos\Events\OnHistoricoMensagemCadastrado.cs" />
+    <Compile Include="Atendimentos\Events\OnHistoricoCadastradoHandler.cs" />
+    <Compile Include="Atendimentos\Events\OnHistoricoCadastrado.cs" />
+    <Compile Include="Atendimentos\Events\OnAtendimentoCadastrado.cs" />
+    <Compile Include="Atendimentos\Events\OnAtendimentoCadastradoHandler.cs" />
+    <Compile Include="Atendimentos\Interfaces\IAtendimentoAcaoBL.cs" />
+    <Compile Include="Atendimentos\Interfaces\IAtendimentoCadastroBL.cs" />
+    <Compile Include="Atendimentos\Interfaces\IAtendimentoConsultaBL.cs" />
+    <Compile Include="Atendimentos\Interfaces\IAtendimentoHistoricoBL.cs" />
+    <Compile Include="Atendimentos\Interfaces\IAtendimentoExclusaoBL.cs" />
+    <Compile Include="Atendimentos\Interfaces\IAtendimentoAreaBL.cs" />
+    <Compile Include="Atendimentos\Interfaces\IAtendimentoTipoBL.cs" />
+    <Compile Include="Atendimentos\Services\AtendimentoAcaoBL.cs" />
+    <Compile Include="Atendimentos\Services\AtendimentoCadastroBL.cs" />
+    <Compile Include="Atendimentos\Services\AtendimentoConsultaBL.cs" />
+    <Compile Include="Atendimentos\Services\AtendimentoHistoricoBL.cs" />
+    <Compile Include="Atendimentos\Services\AtendimentoExclusaoBL.cs" />
+    <Compile Include="Atendimentos\Services\AtendimentoAreaBL.cs" />
+    <Compile Include="Atendimentos\Services\AtendimentoTipoBL.cs" />
+    <Compile Include="AvisosNotificacoes\Interfaces\INotificacaoUsuarioAvulsaBL.cs" />
+    <Compile Include="AvisosNotificacoes\Interfaces\IMensageiroAppFacadeBL.cs" />
+    <Compile Include="AvisosNotificacoes\Interfaces\IMensageiroAppValidacaoBL.cs" />
+    <Compile Include="AvisosNotificacoes\Interfaces\IMensageiroAppBL.cs" />
+    <Compile Include="AvisosNotificacoes\Services\MensageiroAppFacadeBL.cs" />
+    <Compile Include="AvisosNotificacoes\Services\MensageiroAppFactoryBL.cs" />
+    <Compile Include="AvisosNotificacoes\Services\NotificacaoUsuarioAvulsaBL.cs" />
+    <Compile Include="Compras\Services\CarrinhoItemExclusaoBL.cs" />
+    <Compile Include="Compras\Services\CarrinhoItemConsultaBL.cs" />
+    <Compile Include="Compras\Services\CarrinhoItemInclusaoBL.cs" />
+    <Compile Include="Compras\Interfaces\ICarrinhoItemConsultaBL.cs" />
+    <Compile Include="Compras\Interfaces\ICarrinhoItemQuantidadeBL.cs" />
+    <Compile Include="Compras\Interfaces\ICarrinhoItemInclusaoBL.cs" />
+    <Compile Include="Compras\Interfaces\ICarrinhoItemExclusaoBL.cs" />
+    <Compile Include="Compras\Services\GeradorPedidoBL.cs" />
+    <Compile Include="ConfiguracoesAssociados\Extensions\ConfiguracaoAssociadoCampoTipoCadastroExtensions.cs" />
+    <Compile Include="ConfiguracoesAssociados\Interface\IConfiguracaoAssociadoCampoExclusaoBL.cs" />
+    <Compile Include="ConfiguracoesAssociados\Interface\IConfiguracaoAssociadoCampoTipoAssociadoBL.cs" />
+    <Compile Include="ConfiguracoesAssociados\Interface\IConfiguracaoAssociadoCampoTipoAssociadoClonagemBL.cs" />
+    <Compile Include="ConfiguracoesAssociados\Services\ConfiguracaoAssociadoCampoExclusaoBL.cs" />
+    <Compile Include="ConfiguracoesAssociados\Services\ConfiguracaoAssociadoCampoTipoAssociadoBL.cs" />
+    <Compile Include="ConfiguracoesAssociados\Services\ConfiguracaoAssociadoCampoTipoAssociadoClonagemBL.cs" />
+    <Compile Include="ConfiguracoesEcommerce\Extensions\ConfiguracaoEcommerceExtensions.cs" />
+    <Compile Include="ConfiguracoesEtiquetas\Interface\IConfiguracaoEtiquetaBL.cs" />
+    <Compile Include="ConfiguracoesEtiquetas\Services\ConfiguracaoEtiquetaBL.cs" />
+    <Compile Include="ConfiguracoesTextos\Interface\IConfiguracaoLabelExclusaoBL.cs" />
+    <Compile Include="ConfiguracoesTextos\Interface\IConfiguracaoTextoExclusaoBL.cs" />
+    <Compile Include="ConfiguracoesTextos\Interface\IIdiomaCadastroBL.cs" />
+    <Compile Include="ConfiguracoesTextos\Interface\IIdiomaConsultaBL.cs" />
+    <Compile Include="ConfiguracoesTextos\Interface\IIdiomaExclusaoBL.cs" />
+    <Compile Include="ConfiguracoesTextos\Services\ConfiguracaoLabelExclusaoBL.cs" />
+    <Compile Include="ConfiguracoesTextos\Services\ConfiguracaoTextoExclusaoBL.cs" />
+    <Compile Include="ConfiguracoesTextos\Services\IdiomaCadastroBL.cs" />
+    <Compile Include="ConfiguracoesTextos\Services\IdiomaConsultaBL.cs" />
+    <Compile Include="ConfiguracoesTextos\Services\IdiomaExclusaoBL.cs" />
+    <Compile Include="Configuracoes\Interface\IConfiguracaoOperacaoCompraBL.cs" />
+    <Compile Include="Configuracoes\Interface\IConfiguracaoPromocaoBL\IConfiguracaoPromocaoCadastroBL.cs" />
+    <Compile Include="Configuracoes\Interface\IConfiguracaoPromocaoBL\IConfiguracaoPromocaoConsultaBL.cs" />
+    <Compile Include="Configuracoes\Interface\IConfiguracaoPromocaoBL\IConfiguracaoPromocaoExclusaoBL.cs" />
+    <Compile Include="Configuracoes\Interface\IConfiguracaoSaqueBL.cs" />
+    <Compile Include="Configuracoes\Interface\ILeitorConfiguracao.cs" />
+    <Compile Include="Configuracoes\Interface\IValidacaoSaqueBL.cs" />
+    <Compile Include="Configuracoes\Services\ConfiguracaoLinkBaseBL.cs" />
+    <Compile Include="Configuracoes\Services\ConfiguracaoOperacaoCompraBL.cs" />
+    <Compile Include="Configuracoes\Services\ConfiguracaoSaqueBL.cs" />
+    <Compile Include="Configuracoes\Services\ConfiguracaoPromocaoBL\ConfiguracaoPromocaoCadastroBL.cs" />
+    <Compile Include="Configuracoes\Services\ConfiguracaoPromocaoBL\ConfiguracaoPromocaoConsultaBL.cs" />
+    <Compile Include="Configuracoes\Services\ConfiguracaoPromocaoBL\ConfiguracaoPromocaoExclusaoBL.cs" />
+    <Compile Include="Configuracoes\Services\ValidacaoSaqueBL.cs" />
+    <Compile Include="ContasBancarias\Events\OnTransferenciaRealizada.cs" />
+    <Compile Include="ContasBancarias\Events\OnTransferenciaRealizadaHandler.cs" />
+    <Compile Include="ContasBancarias\Interface\IContaBancariaTransferenciaBL.cs" />
+    <Compile Include="ContasBancarias\Services\ContaBancariaTransferenciaBL.cs" />
+    <Compile Include="ContasBancarias\Services\TituloDespesaGeradorMovimentacaoBL.cs" />
+    <Compile Include="ContasBancarias\Services\TituloReceitaGeradorMovimentacaoBL.cs" />
+    <Compile Include="ContasBancarias\Services\TituloDespesaMovimentacaoBL.cs" />
+    <Compile Include="ContasBancarias\Services\TituloReceitaMovimentacaoBL.cs" />
+    <Compile Include="Contatos\Interface\ITipoContatoConsultaBL.cs" />
+    <Compile Include="Contatos\Interface\ITipoContatoCadastroBL.cs" />
+    <Compile Include="Contatos\Interface\ITipoContatoExclusaoBL.cs" />
+    <Compile Include="Contatos\Interface\ITipoContatoVWConsultaBL.cs" />
+    <Compile Include="Contatos\Services\TipoContatoCadastroBL.cs" />
+    <Compile Include="Contatos\Services\TipoContatoConsultaBL.cs" />
+    <Compile Include="Contatos\Services\TipoContatoExclusaoBL.cs" />
+    <Compile Include="Contatos\Services\TipoContatoVWConsultaBL.cs" />
+    <Compile Include="Contribuicoes\Interface\IContribuicaoValidacaoBL.cs" />
+    <Compile Include="Contribuicoes\Services\ContribuicaoValidacaoBL.cs" />
+    <Compile Include="Core\Extensions\StringDecimalConverter.cs" />
+    <Compile Include="CuponsDesconto\Services\CupomUtilizacaoValidador.cs" />
+    <Compile Include="CuponsDesconto\Interface\ICupomUtilizacaoValidador.cs" />
+    <Compile Include="DadosBancarios\Interfaces\IDadoBancarioCadastroBL.cs" />
+    <Compile Include="DadosBancarios\Interfaces\IDadoBancarioConsultaBL.cs" />
+    <Compile Include="DadosBancarios\Interfaces\IDadoBancarioExclusaoBL.cs" />
+    <Compile Include="DadosBancarios\Services\DadoBancarioCadastroBL.cs" />
+    <Compile Include="DadosBancarios\Services\DadoBancarioConsultaBL.cs" />
+    <Compile Include="DadosBancarios\Services\DadoBancarioExclusaoBL.cs" />
+    <Compile Include="Emails\Interface\IMensagemEmailCadastroBL.cs" />
+    <Compile Include="Emails\Interface\IMensagemEmailConsultaBL.cs" />
+    <Compile Include="Emails\Interface\IMensagemEmailExclusaoBL.cs" />
+    <Compile Include="Emails\Services\MensagemEmailCadastroBL.cs" />
+    <Compile Include="Emails\Services\MensagemEmailConsultaBL.cs" />
+    <Compile Include="Emails\Services\MensagemEmailExclusaoBL.cs" />
+    <Compile Include="Escolaridades\Interface\INivelEscolarBL.cs" />
+    <Compile Include="FinanceiroLancamentos\Extensions\DespesaPagamentoExtensionsBL.cs" />
+    <Compile Include="FinanceiroLancamentos\Extensions\ReceitaExtensionsBL.cs" />
+    <Compile Include="FinanceiroLancamentos\Interfaces\ITituloDespesaCloneFacadeBL.cs" />
+    <Compile Include="FinanceiroLancamentos\Interfaces\ITituloReceitaCloneFacadeBL.cs" />
+    <Compile Include="FinanceiroLancamentos\Services\TituloDespesaCloneFacadeBL.cs" />
+    <Compile Include="FinanceiroLancamentos\Services\TituloReceitaCloneFacadeBL.cs" />
+    <Compile Include="Financeiro\Interface\ICotacaoBancoCentralConsultaBL.cs" />
+    <Compile Include="Financeiro\Interface\IConciliacaoFinanceiraDetalheCadastroBL.cs" />
+    <Compile Include="Financeiro\Interface\IConciliacaoFinanceiraDetalheConsultaBL.cs" />
+    <Compile Include="Financeiro\Interface\IConciliacaoFinanceiraDetalheExclusaoBL.cs" />
+    <Compile Include="Financeiro\Interface\IConciliacaoFinanceiraExclusaoBL.cs" />
+    <Compile Include="Financeiro\Interface\IConciliacaoFinanceiraCadastroBL.cs" />
+    <Compile Include="Financeiro\Interface\IConciliacaoFinanceiraConsultaBL.cs" />
+    <Compile Include="Financeiro\Interface\IModoPagamentoDespesaConsultaBL.cs" />
+    <Compile Include="Financeiro\Interface\IReceitasDespesasArquivosVWBL.cs" />
+    <Compile Include="Financeiro\Interface\ITituloDespesaAlteracaoDadoBL.cs" />
+    <Compile Include="Financeiro\Interface\ITituloDespesaPagamentoAlteracaoDadosBL.cs" />
+    <Compile Include="Financeiro\Interface\ITipoDespesaConsultaBL.cs" />
+    <Compile Include="Financeiro\Interface\ITituloReceitaAlteracaoDadoBL.cs" />
+    <Compile Include="Financeiro\Interface\ITituloReceitaConsultaBL.cs" />
+    <Compile Include="Financeiro\Interface\ITituloDespesaGeradorBL.cs" />
+    <Compile Include="Financeiro\Interface\ITituloReceitaPagamentoAlteracaoDadosBL.cs" />
+    <Compile Include="Financeiro\Interface\ITituloReceitaPagamentoBaixaParcelasBL.cs" />
+    <Compile Include="Financeiro\Interface\ITituloReceitaPagamentoCadastroBL.cs" />
+    <Compile Include="Financeiro\Interface\ITituloReceitaPagamentoConsultaBL.cs" />
+    <Compile Include="Financeiro\Interface\ITituloDespesaPagamentoCadastroBL.cs" />
+    <Compile Include="Financeiro\Services\ConciliacaoFinanceiraDetalheCadastroBL.cs" />
+    <Compile Include="Financeiro\Services\ConciliacaoFinanceiraDetalheConsultaBL.cs" />
+    <Compile Include="Financeiro\Services\ConciliacaoFinanceiraDetalheExclusaoBL.cs" />
+    <Compile Include="Financeiro\Services\ConciliacaoFinanceiraExclusaoBL.cs" />
+    <Compile Include="Financeiro\Services\ConciliacaoFinanceiraCadastroBL.cs" />
+    <Compile Include="Financeiro\Services\ConciliacaoFinanceiraConsultaBL.cs" />
+    <Compile Include="Financeiro\Services\TituloDespesaAlteracaoDadoBL.cs" />
+    <Compile Include="Financeiro\Services\TituloReceitaAlteracaoDadoBL.cs" />
+    <Compile Include="Financeiro\Services\ModoPagamentoDespesaConsultaBL.cs" />
+    <Compile Include="Financeiro\Services\ReceitasDespesasArquivosVWBL.cs" />
+    <Compile Include="Financeiro\Services\TituloDespesaPagamentoAlteracaoDadosBL.cs" />
+    <Compile Include="Financeiro\Services\TipoDespesaConsultaBL.cs" />
+    <Compile Include="Financeiro\Services\TituloDespesaPagamentoCadastroBL.cs" />
+    <Compile Include="Financeiro\Services\TituloReceitaConsultaBL.cs" />
+    <Compile Include="Financeiro\Services\TituloDespesaGeradorBL.cs" />
+    <Compile Include="Financeiro\Services\TituloDespesaPadraoBL.cs" />
+    <Compile Include="Financeiro\Services\TituloReceitaPagamentoAlteracaoDadosBL.cs" />
+    <Compile Include="Financeiro\Services\TituloReceitaPagamentoBaixaParcelasBL.cs" />
+    <Compile Include="Financeiro\Services\TituloReceitaPagamentoCadastroBL.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Financeiro\Services\TituloReceitaPagamentoConsultaBL.cs" />
+    <Compile Include="Fornecedores\Interface\IFornecedorCadastroBL.cs" />
+    <Compile Include="Fornecedores\Interface\IFornecedorExclusaoBL.cs" />
+    <Compile Include="Fornecedores\Services\FornecedorConsultaBL.cs" />
+    <Compile Include="Fornecedores\Services\FornecedorExclusaoBL.cs" />
+    <Compile Include="Frete\Interface\ITransportadorBL.cs" />
+    <Compile Include="Frete\Services\TransportadorBL.cs" />
+    <Compile Include="Funcionarios\Extensions\FuncionarioExtensionsBL.cs" />
+    <Compile Include="Funcionarios\Interface\IFuncionarioCadastroBL.cs" />
+    <Compile Include="Funcionarios\Interface\IFuncionarioConsultaBL.cs" />
+    <Compile Include="Funcionarios\Services\FuncionarioCadastroBL.cs" />
+    <Compile Include="Funcionarios\Services\FuncionarioConsultaBL.cs" />
+    <Compile Include="Historicos\Interfaces\IHistoricoAtualizacaoCadastroBL.cs" />
+    <Compile Include="Historicos\Interfaces\IHistoricoAtualizacaoConsultaBL.cs" />
+    <Compile Include="Historicos\Interfaces\IHistoricoAtualizacaoExclusaoBL.cs" />
+    <Compile Include="Historicos\Interfaces\IHistoricoAtualizacaoFinalizacaoBL.cs" />
+    <Compile Include="Historicos\Interfaces\IPreEdicaoCadastroBL.cs" />
+    <Compile Include="Historicos\Services\HistoricoAtualizacaoCadastroBL.cs" />
+    <Compile Include="Historicos\Services\HistoricoAtualizacaoConsultaBL.cs" />
+    <Compile Include="Historicos\Services\HistoricoAtualizacaoExclusaoBL.cs" />
+    <Compile Include="Historicos\Services\HistoricoAtualizacaoFinalizacaoBL.cs" />
+    <Compile Include="Historicos\Services\PreEdicaoCadastroAssociadoBL.cs" />
+    <Compile Include="Hotsites\Interface\IHotsiteCadastroBL.cs" />
+    <Compile Include="Hotsites\Interface\IHotsiteConsultaBL.cs" />
+    <Compile Include="Hotsites\Interface\IHotsiteExclusaoBL.cs" />
+    <Compile Include="Hotsites\Interface\IHotsiteAlteracaoDadosBL.cs" />
+    <Compile Include="Hotsites\Services\HotsiteExclusaoBL.cs" />
+    <Compile Include="Hotsites\Services\HotsiteCadastroBL.cs" />
+    <Compile Include="Hotsites\Services\HotsiteConsultaBL.cs" />
+    <Compile Include="Hotsites\Services\HotsiteAlteracaoDadosBL.cs" />
+    <Compile Include="Localizacao\Interface\ICidadeConsultaBL.cs" />
+    <Compile Include="Localizacao\Services\CidadeConsultaBL.cs" />
+    <Compile Include="Notificacoes\Interface\IConfiguracaoEmailUsuarioCadastroBL.cs" />
+    <Compile Include="Notificacoes\Interface\IConfiguracaoEmailUsuarioConsultaBL.cs" />
+    <Compile Include="Notificacoes\Interface\IGatewayNotificacaoConsultaBL.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Notificacoes\Interface\IGeradorNotificacaoBL.cs" />
+    <Compile Include="Notificacoes\Interface\IMensageiroNotificacao.cs" />
+    <Compile Include="Notificacoes\Interface\INotificacaoPostbackCadastroBL.cs" />
+    <Compile Include="Notificacoes\Interface\INotificacaoPostbackConsultaBL.cs" />
+    <Compile Include="Notificacoes\Interface\INotificacaoPostbackExclusaoBL.cs" />
+    <Compile Include="Notificacoes\Interface\INotificacaoSistemaCadastroBL.cs" />
+    <Compile Include="Notificacoes\Interface\INotificacaoSistemaConsultaBL.cs" />
+    <Compile Include="Notificacoes\Interface\INotificacaoSistemaExclusaoBL.cs" />
+    <Compile Include="Notificacoes\Interface\INotificador.cs" />
+    <Compile Include="Notificacoes\Interface\INotificadorTask.cs" />
+    <Compile Include="Notificacoes\Interface\IPessoaDeviceCadastroBL.cs" />
+    <Compile Include="Notificacoes\Interface\IPessoaDeviceConsultaBL.cs" />
+    <Compile Include="Notificacoes\Interface\IPessoaDeviceExclusaoBL.cs" />
+    <Compile Include="Notificacoes\Interface\ITemplateMensagemCadastroBL.cs" />
+    <Compile Include="Notificacoes\Interface\ITemplateMensagemConsultaBL.cs" />
+    <Compile Include="Notificacoes\Interface\ITemplateMensagemExclusaoBL.cs" />
+    <Compile Include="Notificacoes\Services\ConfiguracaoEmailUsuarioCadastroBL.cs" />
+    <Compile Include="Notificacoes\Services\ConfiguracaoEmailUsuarioConsultaBL.cs" />
+    <Compile Include="Notificacoes\Services\GatewayNotificacaoConsultaBL.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Notificacoes\Services\MensageiroStrategy.cs" />
+    <Compile Include="Notificacoes\Services\NotificacaoOneSignal.cs" />
+    <Compile Include="Notificacoes\Services\NotificacaoFCM.cs" />
+    <Compile Include="Notificacoes\Services\NotificacaoPostbackCadastroBL.cs" />
+    <Compile Include="Notificacoes\Services\NotificacaoPostbackConsultaBL.cs" />
+    <Compile Include="Notificacoes\Services\NotificacaoPostbackExclusaoBL.cs" />
+    <Compile Include="Notificacoes\Services\NotificacaoSistemaCadastroBL.cs" />
+    <Compile Include="Notificacoes\Services\NotificacaoSistemaConsultaBL.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Notificacoes\Services\NotificacaoSistemaExclusaoBL.cs" />
+    <Compile Include="Notificacoes\Services\Notificador.cs" />
+    <Compile Include="Notificacoes\Services\NotificadorTask.cs" />
+    <Compile Include="Notificacoes\Services\PessoaDeviceCadastroBL.cs" />
+    <Compile Include="Notificacoes\Services\PessoaDeviceConsultaBL.cs" />
+    <Compile Include="Notificacoes\Services\PessoaDeviceExclusaoBL.cs" />
+    <Compile Include="Notificacoes\Services\TemplateMensagemCadastroBL.cs" />
+    <Compile Include="Notificacoes\Services\TemplateMensagemConsultaBL.cs" />
+    <Compile Include="Notificacoes\Services\TemplateMensagemExclusaoBL.cs" />
+    <Compile Include="Notificacoes\Vendors\Amazon\AWSNotification.cs" />
+    <Compile Include="Notificacoes\Vendors\Amazon\CommonHeaders.cs" />
+    <Compile Include="Notificacoes\Vendors\Amazon\Header.cs" />
+    <Compile Include="Notificacoes\Vendors\Amazon\Mail.cs" />
+    <Compile Include="Notificacoes\Vendors\Amazon\Message.cs" />
+    <Compile Include="Notificacoes\Vendors\Amazon\Open.cs" />
+    <Compile Include="Notificacoes\Vendors\Amazon\Tags.cs" />
+    <Compile Include="Notificacoes\Vendors\Mailgun\MailgunClient.cs" />
+    <Compile Include="Notificacoes\Vendors\SendGrid\SendGridClient.cs" />
+    <Compile Include="OrganizacaoConfiguracoes\Interface\IOrganizacaoDadosAssociadoBL.cs" />
+    <Compile Include="OrganizacaoConfiguracoes\Services\OrganizacaoDadosAssociadoBL.cs" />
+    <Compile Include="Organizacoes\Interface\IOrganizacaoConsultaBL.cs" />
+    <Compile Include="Organizacoes\Services\OrganizacaoConsultaBL.cs" />
+    <Compile Include="Pedidos\Emails\EnvioFaturamentoPedido.cs" />
+    <Compile Include="Pedidos\Emails\EnvioNovoPedido.cs" />
+    <Compile Include="Pedidos\Emails\IEnvioCobrancaPedido.cs" />
+    <Compile Include="Pedidos\Emails\IEnvioFaturamentoPedido.cs" />
+    <Compile Include="Pedidos\Events\OnPedidoEmMontagem.cs" />
+    <Compile Include="Pedidos\Events\OnPedidoEmMontagemHandler.cs" />
+    <Compile Include="Pedidos\Events\OnPedidoFinalizado.cs" />
+    <Compile Include="Pedidos\Events\OnPedidoExpedido.cs" />
+    <Compile Include="Pedidos\Events\OnPedidoFinalizadoHandler.cs" />
+    <Compile Include="Pedidos\Events\OnPedidoPreparado.cs" />
+    <Compile Include="Pedidos\Events\OnPedidoAtendido.cs" />
+    <Compile Include="Pedidos\Events\OnPedidoExpedidoHandler.cs" />
+    <Compile Include="Pedidos\Events\OnPedidoPreparadoExpedicao.cs" />
+    <Compile Include="Pedidos\Events\OnPedidoPreparadoExpedicaoHandler.cs" />
+    <Compile Include="Pedidos\Events\OnPedidoPreparadoHandler.cs" />
+    <Compile Include="Pedidos\Events\OnPedidoAtendidoHandler.cs" />
+    <Compile Include="Financeiro\Emails\EnvioPagamentoRecebido.cs" />
+    <Compile Include="Financeiro\Emails\EnvioPagamentoRecusado.cs" />
+    <Compile Include="Financeiro\Events\OnPagamentoRecusadoHandler.cs" />
+    <Compile Include="Financeiro\Events\OnPagamentoRecusado.cs" />
+    <Compile Include="Financeiro\Events\OnPagamentoRecebido.cs" />
+    <Compile Include="Financeiro\Events\OnPagamentoRecebidoHandler.cs" />
+    <Compile Include="Financeiro\Interface\ITituloReceitaPagamentoRejeicaoBL.cs" />
+    <Compile Include="Financeiro\Services\TituloReceitaPagamentoRejeicaoBL.cs" />
+    <Compile Include="Pedidos\Events\OnPedidoFaturadoHandler.cs" />
+    <Compile Include="Pedidos\Events\OnPedidoFaturado.cs" />
+    <Compile Include="Pedidos\Interface\IMovimentacaoPedidoBL.cs" />
+    <Compile Include="Pedidos\Interface\IPedidoAcaoFaturamentoBL.cs" />
+    <Compile Include="Pedidos\Interface\IPedidoAcaoCancelamentoBL.cs" />
+    <Compile Include="Pedidos\Interface\IPedidoAcaoAtendimentoBL.cs" />
+    <Compile Include="Pedidos\Interface\IPedidoAcaoPreparacaoBL.cs" />
+    <Compile Include="Pedidos\Interface\IPedidoAcaoExpedicaoBL.cs" />
+    <Compile Include="Pedidos\Interface\IPedidoAcaoFinalizacaoBL.cs" />
+    <Compile Include="Pedidos\Interface\IPedidoCancelamentoBL.cs" />
+    <Compile Include="Pedidos\Interface\IPedidoProdutoOperacaoBL.cs" />
+    <Compile Include="Pedidos\Interface\IPedidoProdutoRendimentoConsultaBL.cs" />
+    <Compile Include="Pedidos\Interface\IPedidoRelatorioBL.cs" />
+    <Compile Include="Pedidos\Services\MovimentacaoPedidoBL.cs" />
+    <Compile Include="Pedidos\Services\PedidoAcaoFinalizacaoBL.cs" />
+    <Compile Include="Pedidos\Services\PedidoAcaoExpedicaoBL.cs" />
+    <Compile Include="Pedidos\Services\PedidoAcaoPreparacaoBL.cs" />
+    <Compile Include="Pedidos\Services\PedidoAcaoAtendimentoBL.cs" />
+    <Compile Include="Pedidos\Services\PedidoAcaoFaturamentoBL.cs" />
+    <Compile Include="Pedidos\Services\PedidoAcaoCancelamentoBL.cs" />
+    <Compile Include="Pedidos\Services\PedidoCancelamentoBL.cs" />
+    <Compile Include="Pedidos\Services\PedidoProdutoOperacaoBL.cs" />
+    <Compile Include="Pedidos\Services\PedidoProdutoRendimentoConsultaBL.cs" />
+    <Compile Include="Pedidos\Services\PedidoRelatorioBL.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Pedidos\Services\PedidoRelatorioGeralBL.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Pessoas\Events\OnPessoaAlterada.cs" />
+    <Compile Include="Pessoas\Events\OnPessoaAlteradaHandler.cs" />
+    <Compile Include="Pessoas\Interface\IPessoaContaBancariaCadastroBL.cs" />
+    <Compile Include="Pessoas\Interface\IPessoaContaBancariaConsultaBL.cs" />
+    <Compile Include="Pessoas\Interface\IPessoaContaBancariaExclusaoBL.cs" />
+    <Compile Include="Pessoas\Interface\IPessoaEmailCadastroBL.cs" />
+    <Compile Include="Pessoas\Interface\IPessoaEmailConsultaBL.cs" />
+    <Compile Include="Pessoas\Interface\IPessoaEmailExclusaoBL.cs" />
+    <Compile Include="Pessoas\Interface\IPessoaEnderecoCadastroBL.cs" />
+    <Compile Include="Pessoas\Interface\IPessoaEnderecoConsultaBL.cs" />
+    <Compile Include="Pessoas\Interface\IPessoaEnderecoExclusaoBL.cs" />
+    <Compile Include="Pessoas\Interface\IPessoaTelefoneCadastroBL.cs" />
+    <Compile Include="Pessoas\Interface\IPessoaTelefoneConsultaBL.cs" />
+    <Compile Include="Pessoas\Interface\IPessoaTelefoneExclusaoBL.cs" />
+    <Compile Include="Pessoas\Interface\IPessoaAtualizacaoBL.cs" />
+    <Compile Include="Pessoas\Interface\IValidadorPessoaEmail.cs" />
+    <Compile Include="Pessoas\Services\PessoaAtualizacaoBL.cs" />
+    <Compile Include="Pessoas\Services\PessoaContaBancariaCadastroBL.cs" />
+    <Compile Include="Pessoas\Services\PessoaContaBancariaConsultaBL.cs" />
+    <Compile Include="Pessoas\Services\PessoaContaBancariaExclusaoBL.cs" />
+    <Compile Include="Pessoas\Services\PessoaEmailCadastroBL.cs" />
+    <Compile Include="Pessoas\Services\PessoaEmailConsultaBL.cs" />
+    <Compile Include="Pessoas\Services\PessoaEmailExclusaoBL.cs" />
+    <Compile Include="Pessoas\Services\PessoaEnderecoCadastroBL.cs" />
+    <Compile Include="Pessoas\Services\PessoaEnderecoExclusaoBL.cs" />
+    <Compile Include="Pessoas\Services\PessoaTelefoneCadastroBL.cs" />
+    <Compile Include="Pessoas\Services\PessoaTelefoneConsultaBL.cs" />
+    <Compile Include="Pessoas\Services\PessoaTelefoneExclusaoBL.cs" />
+    <Compile Include="Pessoas\Services\ValidadorPessoaEmail.cs" />
+    <Compile Include="Planos\Interface\IPlanoCarreiraAlteracaoDadoBL.cs" />
+    <Compile Include="Planos\Interface\IPlanoCarreiraCadastroBL.cs" />
+    <Compile Include="Planos\Interface\IPlanoCarreiraConsultaBL.cs" />
+    <Compile Include="Planos\Interface\IPlanoCarreiraExclusaoBL.cs" />
+    <Compile Include="Planos\Services\PlanoCarreiraAlteracaoDadoBL.cs" />
+    <Compile Include="Planos\Services\PlanoCarreiraCadastroBL.cs" />
+    <Compile Include="Planos\Services\PlanoCarreiraConsultaBL.cs" />
+    <Compile Include="Planos\Services\PlanoCarreiraExclusaoBL.cs" />
+    <Compile Include="Produtos\Interface\IProdutoComposicaoCadastroBL.cs" />
+    <Compile Include="Produtos\Interface\IProdutoComposicaoConsultaBL.cs" />
+    <Compile Include="Produtos\Interface\IProdutoComposicaoExclusaoBL.cs" />
+    <Compile Include="Produtos\Interface\IProdutoSituacaoCadastroBL.cs" />
+    <Compile Include="Produtos\Interface\IProdutoSituacaoConsultaBL.cs" />
+    <Compile Include="Produtos\Interface\IProdutoSituacaoExclusaoBL.cs" />
+    <Compile Include="Produtos\Interface\IProdutoItemExclusaoBL.cs" />
+    <Compile Include="Produtos\Interface\IProdutoItemCadastroBL.cs" />
+    <Compile Include="Produtos\Interface\IProdutoRedeConfiguracaoCadastroBL.cs" />
+    <Compile Include="Produtos\Interface\IProdutoRedeConfiguracaoConsultaBL.cs" />
+    <Compile Include="Produtos\Interface\IProdutoRedeConfiguracaoExclusaoBL.cs" />
+    <Compile Include="Produtos\Interface\IProdutoTipoAssociadoBL.cs" />
+    <Compile Include="Produtos\Interface\IProdutoItemConsultaBL.cs" />
+    <Compile Include="Produtos\Interface\IUnidadeMedidaConsultaBL.cs" />
+    <Compile Include="Produtos\Services\ProdutoComposicaoCadastroBL.cs" />
+    <Compile Include="Produtos\Services\ProdutoComposicaoConsultaBL.cs" />
+    <Compile Include="Produtos\Services\ProdutoComposicaoExclusaoBL.cs" />
+    <Compile Include="Produtos\Services\ProdutoSituacaoCadastroBL.cs" />
+    <Compile Include="Produtos\Services\ProdutoSituacaoConsultaBL.cs" />
+    <Compile Include="Produtos\Services\ProdutoSituacaoExclusaoBL.cs" />
+    <Compile Include="Produtos\Services\ProdutoItemExclusaoBL.cs" />
+    <Compile Include="Produtos\Services\ProdutoItemCadastroBL.cs" />
+    <Compile Include="Produtos\Services\ProdutoRedeConfiguracaoCadastroBL.cs" />
+    <Compile Include="Produtos\Services\ProdutoRedeConfiguracaoConsultaBL.cs" />
+    <Compile Include="Produtos\Services\ProdutoRedeConfiguracaoExclusaoBL.cs" />
+    <Compile Include="Produtos\Services\ProdutoTipoAssociadoBL.cs" />
+    <Compile Include="Produtos\Services\ProdutoItemConsultaBL.cs" />
+    <Compile Include="Produtos\Services\UnidadeMedidaConsultaBL.cs" />
+    <Compile Include="Profissoes\Interface\IProfissaoCadastroBL.cs" />
+    <Compile Include="Profissoes\Interface\IProfissaoConsultaBL.cs" />
+    <Compile Include="Profissoes\Interface\IProfissaoExclusaoBL.cs" />
+    <Compile Include="Profissoes\Services\ProfissaoCadastroBL.cs" />
+    <Compile Include="Profissoes\Services\ProfissaoConsultaBL.cs" />
+    <Compile Include="Profissoes\Services\ProfissaoExclusaoBL.cs" />
+    <Compile Include="Publicacoes\Interface\IConteudoCadastroBL.cs" />
+    <Compile Include="Publicacoes\Interface\IConteudoConsultaBL.cs" />
+    <Compile Include="Publicacoes\Interface\IConteudoExclusaoBL.cs" />
+    <Compile Include="Publicacoes\Services\ConteudoCadastroBL.cs" />
+    <Compile Include="Publicacoes\Services\ConteudoConsultaBL.cs" />
+    <Compile Include="Publicacoes\Services\ConteudoExclusaoBL.cs" />
+    <Compile Include="RedeAfiliados\Interfaces\IGeradorPontuacaoRede.cs" />
+    <Compile Include="RedeAfiliados\Interfaces\IRedeAfiliadoConsultaBL.cs" />
+    <Compile Include="RedeAfiliados\Interfaces\IRedeBinariaCadastroBL.cs" />
+    <Compile Include="RedeAfiliados\Interfaces\IRedeDireitaConsultaBL.cs" />
+    <Compile Include="RedeAfiliados\Interfaces\IRedeEsquerdaConsultaBL.cs" />
+    <Compile Include="RedeAfiliados\Interfaces\IRedeLinearConsultaBL.cs" />
+    <Compile Include="RedeAfiliados\Interfaces\IRedeBinariaConsultaBL.cs" />
+    <Compile Include="RedeAfiliados\Interfaces\IRedePontuacaoConsultaBL.cs" />
+    <Compile Include="RedeAfiliados\Services\GeradorPontuacaoRede.cs" />
+    <Compile Include="RedeAfiliados\Services\PagadorRedeFacadeBL.cs" />
+    <Compile Include="RedeAfiliados\Services\RedeBinariaCadastroBL.cs" />
+    <Compile Include="RedeAfiliados\Services\RedeDireitaConsultaBL.cs" />
+    <Compile Include="RedeAfiliados\Services\RedeEsquerdaConsultaBL.cs" />
+    <Compile Include="RedeAfiliados\Services\RedePontuacaoCadastroBL.cs" />
+    <Compile Include="RedeAfiliados\Services\RedeAfiliadoConsultaBL.cs" />
+    <Compile Include="RedeAfiliados\Services\RedeBinariaConsultaBL.cs" />
+    <Compile Include="RedeAfiliados\Services\RedeLinearConsultaBL.cs" />
+    <Compile Include="RedeAfiliados\Services\RedePontuacaoConsultaBL.cs" />
+    <Compile Include="Relacionamentos\Interface\IOcorrenciaRelacionamentoCadastroBL.cs" />
+    <Compile Include="Relacionamentos\Interface\IOcorrenciaRelacionamentoConsultaBL.cs" />
+    <Compile Include="Relacionamentos\Interface\IOcorrenciaRelacionamentoExclusaoBL.cs" />
+    <Compile Include="Relacionamentos\Interface\IOcorrenciaRelacionamentoVWConsultaBL.cs" />
+    <Compile Include="Relacionamentos\Interface\IPessoaRelacionamentoVWBL.cs" />
+    <Compile Include="Relacionamentos\Services\OcorrenciaRelacionamentoCadastroBL.cs" />
+    <Compile Include="Relacionamentos\Services\OcorrenciaRelacionamentoConsultaBL.cs" />
+    <Compile Include="Relacionamentos\Services\OcorrenciaRelacionamentoExclusaoBL.cs" />
+    <Compile Include="Relacionamentos\Services\OcorrenciaRelacionamentoVWConsultaBL.cs" />
+    <Compile Include="Relacionamentos\Services\PessoaRelacionamentoVWBL.cs" />
+    <Compile Include="ConfiguracoesEcommerce\Interface\IConfiguracaoEcommerceBL.cs" />
+    <Compile Include="ConfiguracoesEcommerce\Services\ConfiguracaoEcommerceBL.cs" />
+    <Compile Include="Frete\Services\FreteSyncBL.cs" />
+    <Compile Include="Localizacao\Interface\ICepBrasilSyncBL.cs" />
+    <Compile Include="Localizacao\Services\CepBrasilSyncBL.cs" />
+    <Compile Include="PedidosTemp\Interfaces\IPedidoTempBL.cs" />
+    <Compile Include="PedidosTemp\Interfaces\IPedidoProdutoTempBL.cs" />
+    <Compile Include="PedidosTemp\Interfaces\IPedidoTempOperacaoBL.cs" />
+    <Compile Include="PedidosTemp\Services\PedidoProdutoTempBL.cs" />
+    <Compile Include="PedidosTemp\Services\PedidoTempOperacaoBL.cs" />
+    <Compile Include="PedidosTemp\Services\PedidoTempBL.cs" />
+    <Compile Include="Pedidos\Events\OnProdutoRemovido.cs" />
+    <Compile Include="Pedidos\Events\OnProdutoAdicionado.cs" />
+    <Compile Include="Pedidos\Events\OnEnderecoEntregaAlterado.cs" />
+    <Compile Include="Pedidos\Events\OnProdutoRemovidoHandler.cs" />
+    <Compile Include="Pedidos\Events\OnProdutoAdicionadoHandler.cs" />
+    <Compile Include="Pedidos\Events\OnEnderecoEntregaAlteradoHandler.cs" />
+    <Compile Include="Pedidos\Interface\IPedidoCadastroBL.cs" />
+    <Compile Include="Pedidos\Interface\IPedidoEntregaOperacaoBL.cs" />
+    <Compile Include="Pedidos\Interface\IPedidoFreteBL.cs" />
+    <Compile Include="Pedidos\Interface\IPedidoProdutoBL.cs" />
+    <Compile Include="Pedidos\Interface\IPedidoRecalculoBL.cs" />
+    <Compile Include="Pedidos\Services\PedidoRecalculoBL.cs" />
+    <Compile Include="Pedidos\Services\PedidoFreteBL.cs" />
+    <Compile Include="Pedidos\Services\PedidoEntregaOperacaoBL.cs" />
+    <Compile Include="Pedidos\Services\PedidoCadastroBL.cs" />
+    <Compile Include="Pessoas\Interface\IPessoaBL.cs" />
+    <Compile Include="Representantes\Interface\IRepresentanteCadastroBL.cs" />
+    <Compile Include="Representantes\Interface\IRepresentanteConsultaBL.cs" />
+    <Compile Include="Representantes\Interface\IRepresentanteExclusaoBL.cs" />
+    <Compile Include="Representantes\Services\RepresentanteCadastroBL.cs" />
+    <Compile Include="Representantes\Services\RepresentanteConsultaBL.cs" />
+    <Compile Include="Representantes\Services\RepresentanteExclusaoBL.cs" />
+    <Compile Include="SegmentosAtuacao\Interface\ISegmentoAtuacaoCadastroBL.cs" />
+    <Compile Include="SegmentosAtuacao\Interface\ISegmentoAtuacaoConsultaBL.cs" />
+    <Compile Include="SegmentosAtuacao\Interface\ISegmentoAtuacaoExclusaoBL.cs" />
+    <Compile Include="SegmentosAtuacao\Services\SegmentoAtuacaoCadastroBL.cs" />
+    <Compile Include="SegmentosAtuacao\Services\SegmentoAtuacaoConsultaBL.cs" />
+    <Compile Include="SegmentosAtuacao\Services\SegmentoAtuacaoExclusaoBL.cs" />
+    <Compile Include="Associados\Interface\IConfiguracaoTipoAssociadoBL.cs" />
+    <Compile Include="Associados\Services\ConfiguracaoTipoAssociadoBL.cs" />
+    <Compile Include="Core\Extensions\IgnoreObjectsResolver.cs" />
+    <Compile Include="Core\Extensions\BLLExtensions.cs" />
+    <Compile Include="Financeiro\Events\OnAtualizarValorTituloReceita.cs" />
+    <Compile Include="Financeiro\Events\OnAtualizarValorTituloReceitaHandler.cs" />
+    <Compile Include="Financeiro\Interface\IFluxoCaixaBL.cs" />
+    <Compile Include="Financeiro\Interface\ITituloDespesaBL.cs" />
+    <Compile Include="Financeiro\Interface\ITituloReceitaPagamentoCancelamentoBL.cs" />
+    <Compile Include="Financeiro\Interface\ITituloReceitaPagamentoCloneBL.cs" />
+    <Compile Include="Financeiro\Interface\ITituloDespesaPagamentoCloneBL.cs" />
+    <Compile Include="Financeiro\Interface\IReceitasDespesasVWBL.cs" />
+    <Compile Include="Financeiro\Interface\ISpContaBancariaSaldoAtualBL.cs" />
+    <Compile Include="Financeiro\Interface\ITituloReceitaResumoBL.cs" />
+    <Compile Include="Financeiro\Services\DescontoAntecipacaoConsultaBL.cs" />
+    <Compile Include="Financeiro\Interface\IDescontoAntecipacaoConsultaBL.cs" />
+    <Compile Include="Financeiro\Services\TituloReceitaPagamentoCancelamentoBL.cs" />
+    <Compile Include="Financeiro\Services\TituloReceitaResumoBL.cs" />
+    <Compile Include="Financeiro\Services\FluxoCaixaBL.cs" />
+    <Compile Include="Financeiro\Services\ReceitasDespesasVWBL.cs" />
+    <Compile Include="Financeiro\Services\SpContaBancariaSaldoAtualBL.cs" />
+    <Compile Include="Financeiro\Services\TituloDespesaBL.cs" />
+    <Compile Include="Financeiro\Services\TituloReceitaPagamentoCloneBL.cs" />
+    <Compile Include="Financeiro\Services\TituloDespesaPagamentoCloneBL.cs" />
+    <Compile Include="Financeiro\Services\TituloReceitaPagamentoBaixaCheckoutBL.cs" />
+    <Compile Include="ConfiguracoesRedesSociais\Interface\IConfiguracaoRedesSociaisBL.cs" />
+    <Compile Include="ConfiguracoesRedesSociais\Services\ConfiguracaoRedesSociaisBL.cs" />
+    <Compile Include="Contatos\Interface\ITipoContatoPadraoBL.cs" />
+    <Compile Include="Financeiro\Events\OnAtualizarValorTituloDespesa.cs" />
+    <Compile Include="Financeiro\Events\OnAtualizarValorTituloDespesaHandler.cs" />
+    <Compile Include="FinanceiroLancamentos\Interfaces\ITituloReceitaPagamentoResumoVWBL.cs" />
+    <Compile Include="AvisosNotificacoes\Interfaces\INotificacaoAssociadoAvulsaBL.cs" />
+    <Compile Include="AvisosNotificacoes\Services\NotificacaoAssociadoAvulsaBL.cs" />
+    <Compile Include="FinanceiroLancamentos\Events\OnReceitaCadastrada.cs" />
+    <Compile Include="FinanceiroLancamentos\Events\OnReceitaCadastradaHandler.cs" />
+    <Compile Include="FinanceiroLancamentos\Interfaces\ICredorVWBL.cs" />
+    <Compile Include="FinanceiroLancamentos\Interfaces\IReceitaCadastroBL.cs" />
+    <Compile Include="FinanceiroLancamentos\Interfaces\IDevedorVWBL.cs" />
+    <Compile Include="FinanceiroLancamentos\Interfaces\IDevedorBL.cs" />
+    <Compile Include="FinanceiroLancamentos\Services\ReceitaCadastroBL.cs" />
+    <Compile Include="FinanceiroLancamentos\Services\DevedorVWBL.cs" />
+    <Compile Include="FinanceiroLancamentos\Events\OnDespesaCadastrada.cs" />
+    <Compile Include="FinanceiroLancamentos\Events\OnDespesaCadastradaHandler.cs" />
+    <Compile Include="FinanceiroLancamentos\Interfaces\IDespesaCadastroBL.cs" />
+    <Compile Include="FinanceiroLancamentos\Interfaces\ICredorBL.cs" />
+    <Compile Include="FinanceiroLancamentos\Services\DevedorBL.cs" />
+    <Compile Include="FinanceiroLancamentos\Services\DespesaCadastroBL.cs" />
+    <Compile Include="FinanceiroLancamentos\Services\CredorBL.cs" />
+    <Compile Include="FinanceiroLancamentos\Services\CredorVWBL.cs" />
+    <Compile Include="FinanceiroLancamentos\Interfaces\ITituloDespesaPagamentoResumoVWBL.cs" />
+    <Compile Include="FinanceiroLancamentos\Services\TituloDespesaPagamentoResumoVWBL.cs" />
+    <Compile Include="FinanceiroLancamentos\Services\TituloReceitaPagamentoResumoVWBL.cs" />
+    <Compile Include="LogsAlteracoes\Interfaces\ILogTituloReceitaPagamentoBL.cs" />
+    <Compile Include="LogsAlteracoes\Interfaces\ILogTituloReceitaBL.cs" />
+    <Compile Include="LogsAlteracoes\Interfaces\ILogTituloDespesaBL.cs" />
+    <Compile Include="LogsAlteracoes\Interfaces\ILogTituloDespesaPagamentoBL.cs" />
+    <Compile Include="LogsAlteracoes\Interfaces\ILogAlteracaoBL.cs" />
+    <Compile Include="LogsAlteracoes\Services\LogTituloReceitaPagamentoBL.cs" />
+    <Compile Include="LogsAlteracoes\Services\LogTituloReceitaBL.cs" />
+    <Compile Include="LogsAlteracoes\Services\LogTituloDespesaBL.cs" />
+    <Compile Include="LogsAlteracoes\Services\LogTituloDespesaPagamentoBL.cs" />
+    <Compile Include="LogsAlteracoes\Services\LogAlteracaoBL.cs" />
+    <Compile Include="LogsAlteracoes\Extension\LogAlteracaoExtensionBL.cs" />
+    <Compile Include="NaoAssociados\Events\OnAreaAssociadoNaoAssociadoCadastrado.cs" />
+    <Compile Include="NaoAssociados\Events\OnAreaAssociadoNaoAssociadoCadastradoHandler.cs" />
+    <Compile Include="NaoAssociados\Interface\IAreaAssociadoNaoAssociadoCadastroBL.cs" />
+    <Compile Include="NaoAssociados\Services\AreaAssociadoNaoAssociadoCadastroBL.cs" />
+    <Compile Include="NaoAssociados\Interface\INaoAssociadoConsultaBL.cs" />
+    <Compile Include="NaoAssociados\Services\NaoAssociadoConsultaBL.cs" />
+    <Compile Include="Notificacoes\Interface\INotificacaoSistemaEnvioPadraoBL.cs" />
+    <Compile Include="Notificacoes\Interface\INotificacaoSistemaEnvioOperacaoBL.cs" />
+    <Compile Include="Notificacoes\Interface\INotificacaoSistemaEnvioCobrancaBL.cs" />
+    <Compile Include="AssociadosNotificacoes\Services\NotificacaoSistemaEnvioCobrancaContribuicaoBL.cs" />
+    <Compile Include="Notificacoes\Services\NotificacaoSistemaEnvioCobrancaBL.cs" />
+    <Compile Include="Notificacoes\Services\NotificacaoSistemaEnvioPadraoBL.cs" />
+    <Compile Include="Notificacoes\Services\NotificacaoSistemaEnvioOperacaoBL.cs" />
+    <Compile Include="ConfiguracoesRecibo\Interface\IConfiguracaoReciboBL.cs" />
+    <Compile Include="ConfiguracoesRecibo\Services\ConfiguracaoReciboBL.cs" />
+    <Compile Include="ConfiguracoesAssociados\Interface\IConfiguracaoAssociadoCampoClonagemBL.cs" />
+    <Compile Include="ConfiguracoesAssociados\Services\ConfiguracaoAssociadoCampoClonagemBL.cs" />
+    <Compile Include="ConfiguracoesScripts\Extensions\ConfiguracaoScriptExtensions.cs" />
+    <Compile Include="ConfiguracoesScripts\Interface\IConfiguracaoScriptsBL.cs" />
+    <Compile Include="ConfiguracoesScripts\Services\ConfiguracaoScriptsBL.cs" />
+    <Compile Include="Configuracoes\Interface\IConfiguracaoFinanceiroBL.cs" />
+    <Compile Include="Configuracoes\Interface\IConfiguracaoContribuicaoBL.cs" />
+    <Compile Include="Configuracoes\Interface\IConfiguracaoPerfilComissionavelBL.cs" />
+    <Compile Include="Configuracoes\Interface\IConfiguracaoComissaoBL.cs" />
+    <Compile Include="Configuracoes\Services\ConfiguracaoPerfilComissionavelBL.cs" />
+    <Compile Include="Configuracoes\Services\ConfiguracaoComissaoBL.cs" />
+    <Compile Include="ConfiguracoesAssociados\Interface\IConfiguracaoAssociadoCampoOpcaoBL.cs" />
+    <Compile Include="ConfiguracoesAssociados\Interface\IConfiguracaoAssociadoCampoPropriedadeBL.cs" />
+    <Compile Include="ConfiguracoesAssociados\Interface\IFuncaoFiltroBL.cs" />
+    <Compile Include="ConfiguracoesAssociados\Services\ConfiguracaoAssociadoCampoBL.cs" />
+    <Compile Include="ConfiguracoesAssociados\Services\ConfiguracaoAssociadoCampoGrupoBL.cs" />
+    <Compile Include="ConfiguracoesAssociados\Interface\IConfiguracaoAssociadoCampoGrupoBL.cs" />
+    <Compile Include="ConfiguracoesAssociados\Interface\IConfiguracaoAssociadoCampoBL.cs" />
+    <Compile Include="ConfiguracoesAssociados\Services\ConfiguracaoAssociadoCampoOpcaoBL.cs" />
+    <Compile Include="ConfiguracoesAssociados\Services\ConfiguracaoAssociadoCampoPropriedadeBL.cs" />
+    <Compile Include="ConfiguracoesAssociados\Services\FuncaoFiltroBL.cs" />
+    <Compile Include="ConfiguracoesCarteirinha\Interface\IConfiguracaoCarteirinhaBL.cs" />
+    <Compile Include="ConfiguracoesCarteirinha\Services\ConfiguracaoCarteirinhaBL.cs" />
+    <Compile Include="ConfiguracoesAssociados\Interface\IConfiguracaoAssociadoPJBL.cs" />
+    <Compile Include="ConfiguracoesAssociados\Interface\IConfiguracaoAssociadoPFBL.cs" />
+    <Compile Include="ConfiguracoesAssociados\Services\ConfiguracaoAssociadoPJBL.cs" />
+    <Compile Include="ConfiguracoesAssociados\Services\ConfiguracaoAssociadoPFBL.cs" />
+    <Compile Include="ConfiguracoesTextos\Extensions\LabelExtensions.cs" />
+    <Compile Include="ConfiguracoesTextos\Extensions\TextoExtensions.cs" />
+    <Compile Include="ConfiguracoesTextos\Interface\IConfiguracaoLabelBL.cs" />
+    <Compile Include="ConfiguracoesTextos\Interface\IConfiguracaoTextoBL.cs" />
+    <Compile Include="ConfiguracoesTextos\Interface\IConfiguracaoTextoCategoriaBL.cs" />
+    <Compile Include="ConfiguracoesTextos\Services\ConfiguracaoLabelBL.cs" />
+    <Compile Include="ConfiguracoesTextos\Services\ConfiguracaoTextoBL.cs" />
+    <Compile Include="ConfiguracoesTextos\Services\ConfiguracaoTextoCategoriaBL.cs" />
+    <Compile Include="Configuracoes\Extensions\ConfiguracaoSistemaExtensions.cs" />
+    <Compile Include="Configuracoes\Interface\IConfiguracaoEmailBL.cs" />
+    <Compile Include="Configuracoes\Interface\IConfiguracaoNotificacaoBL.cs" />
+    <Compile Include="Configuracoes\Interface\IConfiguracaoRotinaAutomaticaBL.cs" />
+    <Compile Include="Configuracoes\Interface\IConfiguracaoSistemaBL.cs" />
+    <Compile Include="Configuracoes\Services\ConfiguracaoEmailBL.cs" />
+    <Compile Include="Configuracoes\Services\ConfiguracaoJsonBL.cs" />
+    <Compile Include="Configuracoes\Services\ConfiguracaoRotinaAutomaticaBL.cs" />
+    <Compile Include="Configuracoes\Services\ConfiguracaoSistemaBL.cs" />
+    <Compile Include="Configuracoes\Services\ConfiguracaoTipoCampoBL.cs" />
+    <Compile Include="Configuracoes\Interface\IConfiguracaoTipoCampoBL.cs" />
+    <Compile Include="Contatos\Interface\IPessoaContatoVWBL.cs" />
+    <Compile Include="Contatos\Services\PessoaContatoVWBL.cs" />
+    <Compile Include="Diretorias\Interface\IDiretoriaVWBL.cs" />
+    <Compile Include="Diretorias\Interface\IDiretoriaMembroBL.cs" />
+    <Compile Include="Diretorias\Interface\IDiretoriaBL.cs" />
+    <Compile Include="Diretorias\Services\DiretoriaVWBL.cs" />
+    <Compile Include="Diretorias\Services\DiretoriaMembroBL.cs" />
+    <Compile Include="Diretorias\Services\DiretoriaBL.cs" />
+    <Compile Include="DocumentosDigitais\Interface\IDocumentoDigitalBL.cs" />
+    <Compile Include="DocumentosDigitais\Interface\ITipoDocumentoDigitalBL.cs" />
+    <Compile Include="DocumentosDigitais\Services\DocumentoDigitalBL.cs" />
+    <Compile Include="DocumentosDigitais\Services\TipoDocumentoDigitalBL.cs" />
+    <Compile Include="Emails\Interface\ITipoEmailBL.cs" />
+    <Compile Include="Emails\Services\TipoEmailBL.cs" />
+    <Compile Include="Empresas\Services\EmpresaPorteBL.cs" />
+    <Compile Include="Empresas\Interface\IEmpresaPorteBL.cs" />
+    <Compile Include="Financeiro\Interface\ITituloReceitaPagamentoExclusaoBL.cs" />
+    <Compile Include="Financeiro\Interface\ITituloReceitaReciboVWBL.cs" />
+    <Compile Include="Financeiro\Interface\ITituloReceitaQuitacaoBL.cs" />
+    <Compile Include="Financeiro\Interface\ITituloReceitaGeradorBL.cs" />
+    <Compile Include="Financeiro\Interface\ITituloReceitaExclusaoBL.cs" />
+    <Compile Include="Financeiro\Services\TituloReceitaExclusaoBL.cs" />
+    <Compile Include="Financeiro\Services\TituloReceitaGeradorBL.cs" />
+    <Compile Include="Financeiro\Services\TituloReceitaReciboVWBL.cs" />
+    <Compile Include="Financeiro\Services\TituloReceitaQuitacaoBL.cs" />
+    <Compile Include="Financeiro\Services\TituloReceitaPagamentoExclusaoBL.cs" />
+    <Compile Include="Institucionais\Interface\IConveniosBL.cs" />
+    <Compile Include="Institucionais\Interface\ITipoConvenioBL.cs" />
+    <Compile Include="Institucionais\Services\ConvenioBL.cs" />
+    <Compile Include="Institucionais\Services\TipoConvenioBL.cs" />
+    <Compile Include="Institucionais\Interface\IAssociacaoHistoriaBL.cs" />
+    <Compile Include="Institucionais\Services\AssociacaoHistoriaBL.cs" />
+    <Compile Include="Localizacao\Interface\ICepBrasilBL.cs" />
+    <Compile Include="Localizacao\Interface\IPaisBL.cs" />
+    <Compile Include="Localizacao\Interface\ITipoRegiaoBL.cs" />
+    <Compile Include="Localizacao\Services\TipoRegiaoBL.cs" />
+    <Compile Include="LogsPermissao\Services\LogUsuarioSistemaAcessoBL.cs" />
+    <Compile Include="NaoAssociados\Interface\INaoAssociadoRelatorioVWBL.cs" />
+    <Compile Include="NaoAssociados\Services\NaoAssociadoRelatorioVWBL.cs" />
+    <Compile Include="Notificacoes\Interface\INotificacaoLeituraBL.cs" />
+    <Compile Include="Notificacoes\Services\NotificacaoLeituraBL.cs" />
+    <Compile Include="NaoAssociados\Interface\INaoAssociadoCadastroBL.cs" />
+    <Compile Include="NaoAssociados\Services\NaoAssociadoCadastroBL.cs" />
+    <Compile Include="Organizacoes\Interface\IAcessoRecursoGrupoOrganizacaoBL.cs" />
+    <Compile Include="Organizacoes\Interface\IOrganizacaoBL.cs" />
+    <Compile Include="Organizacoes\Interface\IStatusOrganizacaoBL.cs" />
+    <Compile Include="Organizacoes\Interface\IUsuarioOrganizacaoBL.cs" />
+    <Compile Include="Organizacoes\Services\AcessoRecursoGrupoOrganizacaoBL.cs" />
+    <Compile Include="Organizacoes\Services\OrganizacaoBL.cs" />
+    <Compile Include="AssociadosContribuicoes\Emails\EnvioCobrancaContribuicao.cs" />
+    <Compile Include="AssociadosContribuicoes\Emails\EnvioPagamentoContribuicao.cs" />
+    <Compile Include="AssociadosContribuicoes\Emails\IEnvioCobrancaContribuicao.cs" />
+    <Compile Include="AssociadosContribuicoes\Events\OnContribuicaoDesvinculadaHandler.cs" />
+    <Compile Include="AssociadosContribuicoes\Events\OnContribuicaoDesvinculada.cs" />
+    <Compile Include="AssociadosContribuicoes\Events\OnContribuicaoIsentaHandler.cs" />
+    <Compile Include="AssociadosContribuicoes\Events\OnContribuicaoIsenta.cs" />
+    <Compile Include="AssociadosContribuicoes\Events\OnContribuicaoVinculada.cs" />
+    <Compile Include="AssociadosContribuicoes\Extensions\AssociadoContribuicaoExtensions.cs" />
+    <Compile Include="AssociadosContribuicoes\Interface\IAssociadoContribuicaoIsencaoBL.cs" />
+    <Compile Include="AssociadosContribuicoes\Interface\IAssociadoContribuicaoExclusaoBL.cs" />
+    <Compile Include="AssociadosContribuicoes\Services\AssociadoAlteracaoBL.cs" />
+    <Compile Include="AssociadosContribuicoes\Interface\IAssociadoAlteracaoBL.cs" />
+    <Compile Include="AssociadosContribuicoes\Services\AssociadoContribuicaoFilaGeracaoBL.cs" />
+    <Compile Include="AssociadosContribuicoes\Services\AssociadoContribuicaoEmailBL.cs" />
+    <Compile Include="AssociadosContribuicoes\Services\AssociadoContribuicaoVencimentoBL.cs" />
+    <Compile Include="AssociadosContribuicoes\Services\AssociadoContribuicaoIsencaoBL.cs" />
+    <Compile Include="AssociadosContribuicoes\Services\AssociadoContribuicaoGeracaoBL.cs" />
+    <Compile Include="AssociadosContribuicoes\Interface\IContribuicaoGeracaoBL.cs" />
+    <Compile Include="AssociadosContribuicoes\Services\AssociadoContribuicaoExclusaoBL.cs" />
+    <Compile Include="AssociadosContribuicoes\Interface\IAssociadoContribuicaoEmailBL.cs" />
+    <Compile Include="AssociadosContribuicoes\Interface\IAssociadoContribuicaoVencimentoBL.cs" />
+    <Compile Include="AssociadosContribuicoes\Interface\IAssociadoContribuicaoFilaGeracaoBL.cs" />
+    <Compile Include="Contribuicoes\Services\ContribuicaoCobrancaBL.cs" />
+    <Compile Include="Contribuicoes\Interface\IContribuicaoCobrancaBL.cs" />
+    <Compile Include="Financeiro\Interface\ITituloReceitaBaixaBL.cs" />
+    <Compile Include="AssociadosContribuicoes\Services\TituloReceitaContribuicaoBaixaBL.cs" />
+    <Compile Include="AssociadosContribuicoes\Services\TituloReceitaContribuicaoBL.cs" />
+    <Compile Include="Associados\Services\TituloReceitaTaxaInscricaoBL.cs" />
+    <Compile Include="Configuracoes\Interface\IConfiguracaoImagemBL.cs" />
+    <Compile Include="Configuracoes\Services\ConfiguracaoNotificacaoBL.cs" />
+    <Compile Include="Configuracoes\Services\ConfiguracaoImagemBL.cs" />
+    <Compile Include="Contribuicoes\Interface\IContribuicaoPrecoDescontoBL.cs" />
+    <Compile Include="Contribuicoes\Interface\IContribuicaoVencimentoBL.cs" />
+    <Compile Include="Contribuicoes\Interface\IContribuicaoTabelaPrecoBL.cs" />
+    <Compile Include="Contribuicoes\Interface\IPeriodoContribuicaoBL.cs" />
+    <Compile Include="Contribuicoes\Services\ContribuicaoPadraoBL.cs" />
+    <Compile Include="Contribuicoes\Services\ContribuicaoPrecoDescontoBL.cs" />
+    <Compile Include="Contribuicoes\Services\ContribuicaoVencimentoBL.cs" />
+    <Compile Include="Contribuicoes\Services\ContribuicaoTabelaPrecoBL.cs" />
+    <Compile Include="Contribuicoes\Services\PeriodoContribuicaoBL.cs" />
+    <Compile Include="Financeiro\Events\OnTituloAlterado.cs" />
+    <Compile Include="Financeiro\Events\OnTituloCadastrado.cs" />
+    <Compile Include="Financeiro\Events\OnTituloAlteradoHandler.cs" />
+    <Compile Include="Financeiro\Events\OnTituloCadastradoHandler.cs" />
+    <Compile Include="Financeiro\Interface\ITituloReceitaPagamentoBaixaBL.cs" />
+    <Compile Include="Financeiro\Services\TituloReceitaBaixaBL.cs" />
+    <Compile Include="Financeiro\Services\TituloReceitaBaixaFactoryBL.cs" />
+    <Compile Include="Financeiro\Services\TituloReceitaFactoryBL.cs" />
+    <Compile Include="Financeiro\Services\TituloReceitaPagamentoBaixaBL.cs" />
+    <Compile Include="NaoAssociados\Emails\EnvioNaoAssociadoFichaCadastral.cs" />
+    <Compile Include="NaoAssociados\Emails\EnvioNovoNaoAssociado.cs" />
+    <Compile Include="NaoAssociados\Events\OnNaoAssociadoEnvioFicha.cs" />
+    <Compile Include="NaoAssociados\Events\OnNaoAssociadoEnvioFichaHandler.cs" />
+    <Compile Include="NaoAssociados\Events\OnNaoAssociadoDesativacao.cs" />
+    <Compile Include="NaoAssociados\Events\OnNaoAssociadoDesativacaoHandler.cs" />
+    <Compile Include="NaoAssociados\Events\OnNaoAssociadoCadastrado.cs" />
+    <Compile Include="NaoAssociados\Events\OnNaoAssociadoCadastradoHandler.cs" />
+    <Compile Include="NaoAssociados\Events\OnNaoAssociadoReativacao.cs" />
+    <Compile Include="NaoAssociados\Events\OnNaoAssociadoReativacaoHandler.cs" />
+    <Compile Include="NaoAssociados\Events\OnTornarAssociado.cs" />
+    <Compile Include="NaoAssociados\Events\OnTornarAssociadoHandler.cs" />
+    <Compile Include="NaoAssociados\Interface\INaoAssociadoEnvioFichaBL.cs" />
+    <Compile Include="NaoAssociados\Interface\INaoAssociadoAcaoBL.cs" />
+    <Compile Include="NaoAssociados\Interface\INaoAssociadoBL.cs" />
+    <Compile Include="NaoAssociados\Services\NaoAssociadoEnvioFichaBL.cs" />
+    <Compile Include="NaoAssociados\Services\NaoAssociadoAcaoBL.cs" />
+    <Compile Include="NaoAssociados\Services\NaoAssociadoBL.cs" />
+    <Compile Include="AssociadosContribuicoes\Interface\IAssociadoContribuicaoPadraoBL.cs" />
+    <Compile Include="AssociadosContribuicoes\Services\AssociadoContribuicaoCobrancaBL.cs" />
+    <Compile Include="Associados\Emails\EnvioAssociadoFichaCadastral.cs" />
+    <Compile Include="Associados\Events\OnAssociadoEnvioFicha.cs" />
+    <Compile Include="Associados\Events\OnAssociadoEnvioFichaHandler.cs" />
+    <Compile Include="Associados\Interface\IAssociadoEnvioFichaBL.cs" />
+    <Compile Include="Associados\Services\AssociadoEnvioFichaBL.cs" />
+    <Compile Include="Configuracoes\Services\ConfiguracaoFinanceiroBL.cs" />
+    <Compile Include="Contribuicoes\Interface\ITipoGeracaoContribuicaoBL.cs" />
+    <Compile Include="Contribuicoes\Interface\ITipoVencimentoBL.cs" />
+    <Compile Include="Contribuicoes\Services\TipoGeracaoContribuicaoBL.cs" />
+    <Compile Include="Contribuicoes\Services\TipoVencimentoBL.cs" />
+    <Compile Include="CuponsDesconto\Emails\IEnvioCupom.cs" />
+    <Compile Include="Financeiro\Interface\ICentroCustoMacroContaBL.cs" />
+    <Compile Include="Financeiro\Interface\ITituloReceitaDescontoBL.cs" />
+    <Compile Include="Financeiro\Services\CentroCustoMacroContaBL.cs" />
+    <Compile Include="Financeiro\Services\TituloReceitaDescontoBL.cs" />
+    <Compile Include="AssociadosCarteirinha\Events\OnEnvioCarteirinha.cs" />
+    <Compile Include="AssociadosCarteirinha\Events\OnEnvioCarteirinhaHandler.cs" />
+    <Compile Include="AssociadosCarteirinha\Interface\IAssociadoCarteirinhaBL.cs" />
+    <Compile Include="AssociadosCarteirinha\Services\AssociadoCarteirinhaBL.cs" />
+    <Compile Include="AssociadosInstitucional\Emails\EnvioLinkSenha.cs" />
+    <Compile Include="AssociadosInstitucional\Emails\IEnvioLinkSenha.cs" />
+    <Compile Include="Caches\Services\CacheService.cs" />
+    <Compile Include="AreaAtuacao\Interface\IAreaAtuacaoBL.cs" />
+    <Compile Include="AreaAtuacao\Services\AreaAtuacaoBL.cs" />
+    <Compile Include="Cargos\Interface\ICargoBL.cs" />
+    <Compile Include="Configuracoes\Interface\IConfigJsonBL.cs" />
+    <Compile Include="Configuracoes\Services\ConfiguracaoContribuicaoBL.cs" />
+    <Compile Include="Financeiro\Interface\IGestaoTituloVWBL.cs" />
+    <Compile Include="Financeiro\Services\GestaoTituloVWBL.cs" />
+    <Compile Include="MeiosDivulgacao\Interface\IMeioDivulgacaoBL.cs" />
+    <Compile Include="MeiosDivulgacao\Services\MeioDivulgacaoBL.cs" />
+    <Compile Include="Notificacoes\Emails\EnvioEmailNotificacao.cs" />
+    <Compile Include="Notificacoes\Emails\IEnvioEmailNotificacao.cs" />
+    <Compile Include="Notificacoes\Events\OnNotificacaoExcluidaHandler.cs" />
+    <Compile Include="Notificacoes\Events\OnNotificacaoExcluida.cs" />
+    <Compile Include="Notificacoes\Events\OnNotificacaoCadastrada.cs" />
+    <Compile Include="Notificacoes\Events\OnNotificacaoCadastradaHandler.cs" />
+    <Compile Include="Organizacoes\Services\StatusOrganizacao.cs" />
+    <Compile Include="Organizacoes\Services\UsuarioOrganizacaoBL.cs" />
+    <Compile Include="Paginas\Interfaces\IPaginaEstatutoBL.cs" />
+    <Compile Include="Paginas\Interfaces\IPaginaAssocieBL.cs" />
+    <Compile Include="Paginas\Services\PaginaEstatutoBL.cs" />
+    <Compile Include="Paginas\Services\PaginaAssocieBL.cs" />
+    <Compile Include="Pedidos\Events\OnPedidoCancelado.cs" />
+    <Compile Include="Pedidos\Events\OnPedidoCanceladoHandler.cs" />
+    <Compile Include="Pedidos\Services\TituloReceitaPedidoBaixaBL.cs" />
+    <Compile Include="Pedidos\Services\TituloReceitaGeradorPedidoBL.cs" />
+    <Compile Include="Permissao\Emails\EnvioNovoUsuario.cs" />
+    <Compile Include="Permissao\Emails\IEnvioNovoUsuario.cs" />
+    <Compile Include="Permissao\Emails\RecuperacaoSenhaUsuario.cs" />
+    <Compile Include="Permissao\Emails\ReenvioSenhaUsuario.cs" />
+    <Compile Include="Permissao\Interface\IPerfilAcessoBL.cs" />
+    <Compile Include="Permissao\Interface\IUsuarioSistemaAcessoBL.cs" />
+    <Compile Include="Permissao\Interface\IUsuarioSistemaBL.cs" />
+    <Compile Include="Permissao\Services\UsuarioSistemaAcessoBL.cs" />
+    <Compile Include="Pessoas\Interface\IPessoaVWBL.cs" />
+    <Compile Include="Pessoas\Services\PessoaVWBL.cs" />
+    <Compile Include="Portais\Interface\IPortalBL.cs" />
+    <Compile Include="Portais\Services\PortalBL.cs" />
+    <Compile Include="Publicacoes\Interface\IJornalBL.cs" />
+    <Compile Include="Publicacoes\Interface\ICategoriaNoticiaBL.cs" />
+    <Compile Include="Publicacoes\Interface\ITipoGaleriaFotoBL.cs" />
+    <Compile Include="Publicacoes\Services\JornalBL.cs" />
+    <Compile Include="Publicacoes\Services\CategoriaNoticiaBL.cs" />
+    <Compile Include="Publicacoes\Services\TipoGaleriaFotoBL.cs" />
+    <Compile Include="RamosAtividade\Interface\ISetorAtuacaoBL.cs" />
+    <Compile Include="RamosAtividade\Interface\IRamoAtividadeBL.cs" />
+    <Compile Include="RamosAtividade\Services\SetorAtuacaoBL.cs" />
+    <Compile Include="RamosAtividade\Services\RamoAtividadeBL.cs" />
+    <Compile Include="OrgaosClasses\Interface\IOrgaoClasseBL.cs" />
+    <Compile Include="OrgaosClasses\Services\OrgaoClasseBL.cs" />
+    <Compile Include="NaoAssociadosInstitucional\Emails\EnvioRecuperacaoSenha.cs" />
+    <Compile Include="NaoAssociadosInstitucional\Events\OnNaoAssociadoInstitucionalCadastrado.cs" />
+    <Compile Include="NaoAssociadosInstitucional\Events\OnNaoAssociadoInstitucionalCadastradoHandler.cs" />
+    <Compile Include="NaoAssociadosInstitucional\Events\OnSenhaAlterada.cs" />
+    <Compile Include="NaoAssociadosInstitucional\Events\OnSenhaAlteradaHandler.cs" />
+    <Compile Include="NaoAssociadosInstitucional\Interface\INaoAssociadoAcessoBL.cs" />
+    <Compile Include="NaoAssociadosInstitucional\Interface\INaoAssociadoInstitucionalBL.cs" />
+    <Compile Include="NaoAssociadosInstitucional\Services\NaoAssociadoAcessoBL.cs" />
+    <Compile Include="NaoAssociadosInstitucional\Services\NaoAssociadoInstitucionalBL.cs" />
+    <Compile Include="Associados\Interface\IAssociadoAbrangenciaBL.cs" />
+    <Compile Include="Associados\Interface\IAssociadoAcaoBL.cs" />
+    <Compile Include="ContasBancarias\Interface\IContaBancariaMovimentacaoBL.cs" />
+    <Compile Include="ContasBancarias\Services\ContaBancariaMovimentacaoBL.cs" />
+    <Compile Include="Financeiro\Emails\EnvioCobrancaPagamento.cs" />
+    <Compile Include="Financeiro\Emails\IEnvioCobrancaPagamento.cs" />
+    <Compile Include="Financeiro\Interface\ITituloReceitaPagamentoCobrancaBL.cs" />
+    <Compile Include="Financeiro\Services\TituloReceitaPagamentoCobrancaBL.cs" />
+    <Compile Include="Mailings\Interface\IMailingBL.cs" />
+    <Compile Include="Mailings\Interface\ITipoMailingBL.cs" />
+    <Compile Include="Mailings\Services\MailingBL.cs" />
+    <Compile Include="Mailings\Services\TipoMailingBL.cs" />
+    <Compile Include="Associados\Interface\IAssociadoRepresentanteBL.cs" />
+    <Compile Include="Associados\Interface\IAssociadoAreaAtuacaoBL.cs" />
+    <Compile Include="Associados\Events\OnSituacaoContribuicaoAlterada.cs" />
+    <Compile Include="Associados\Events\OnSituacaoContribuicaoAlteradaHandler.cs" />
+    <Compile Include="Associados\Interface\IAssociadoRelacionamentoBL.cs" />
+    <Compile Include="Associados\Interface\ITipoAssociadoRepresentanteBL.cs" />
+    <Compile Include="Associados\Services\AssociadoAbrangenciaBL.cs" />
+    <Compile Include="Associados\Services\AssociadoRepresentanteBL.cs" />
+    <Compile Include="Associados\Services\AssociadoAreaAtuacaoBL.cs" />
+    <Compile Include="Associados\Services\TipoAssociadoRepresentanteBL.cs" />
+    <Compile Include="ContasBancarias\Interface\IContaBancariaBL.cs" />
+    <Compile Include="Emails\Interface\IEnvioSenhaAssociado.cs" />
+    <Compile Include="ContasBancarias\Services\ContaBancariaBL.cs" />
+    <Compile Include="Financeiro\Events\OnTituloQuitadoHandler.cs" />
+    <Compile Include="Financeiro\Events\OnTituloQuitado.cs" />
+    <Compile Include="AssociadosContribuicoes\Interface\IAssociadoContribuicaoBL.cs" />
+    <Compile Include="AssociadosContribuicoes\Interface\IAssociadoContribuicaoCobrancaBL.cs" />
+    <Compile Include="AssociadosContribuicoes\Services\AssociadoContribuicaoBL.cs" />
+    <Compile Include="AssociadosInstitucional\Emails\EnvioRecuperacaoSenha.cs" />
+    <Compile Include="AssociadosInstitucional\Events\OnAssociadoInstitucionalCadastrado.cs" />
+    <Compile Include="AssociadosInstitucional\Events\OnAssociadoInstitucionalCadastradoHandler.cs" />
+    <Compile Include="AssociadosInstitucional\Events\OnSenhaAlterada.cs" />
+    <Compile Include="AssociadosInstitucional\Events\OnSenhaAlteradaHandler.cs" />
+    <Compile Include="AssociadosInstitucional\Interface\IAssociadoAcessoBL.cs" />
+    <Compile Include="AssociadosInstitucional\Interface\IAssociadoInstitucionalBL.cs" />
+    <Compile Include="AssociadosInstitucional\Services\AssociadoAcessoBL.cs" />
+    <Compile Include="AssociadosInstitucional\Services\AssociadoInstitucionalBL.cs" />
+    <Compile Include="Associados\Abstract\AbstAssociadoInstitucionalBL.cs" />
+    <Compile Include="Associados\Events\OnAssociadoCadastradoHandler.cs" />
+    <Compile Include="AssociadosOperacoes\Events\OnAssociadoExcluidoHandler.cs" />
+    <Compile Include="AssociadosOperacoes\Events\OnDesativacaoHandler.cs" />
+    <Compile Include="AssociadosOperacoes\Events\OnDesativacao.cs" />
+    <Compile Include="Associados\Events\OnAdmissaoHandler.cs" />
+    <Compile Include="Associados\Events\OnAdmissao.cs" />
+    <Compile Include="Associados\Events\OnAssociadoCadastrado.cs" />
+    <Compile Include="AssociadosOperacoes\Events\OnAssociadoExcluido.cs" />
+    <Compile Include="Associados\Interface\IAssociadoBL.cs" />
+    <Compile Include="Associados\Interface\IAssociadoTituloBL.cs" />
+    <Compile Include="Associados\Interface\IAssociadoCargoBL.cs" />
+    <Compile Include="Associados\Interface\IAssociadoSituacaoBL.cs" />
+    <Compile Include="Associados\Interface\ICategoriaTipoAssociadoBL.cs" />
+    <Compile Include="Associados\Interface\ITipoAssociadoExclusaoBL.cs" />
+    <Compile Include="Associados\Interface\ITipoTituloBL.cs" />
+    <Compile Include="Associados\Services\AssociadoBL.cs" />
+    <Compile Include="Associados\Services\AssociadoAcaoBL.cs" />
+    <Compile Include="Associados\Services\AssociadoCargoBL.cs" />
+    <Compile Include="Associados\Services\AssociadoRelacionamentoBL.cs" />
+    <Compile Include="Associados\Services\AssociadoSituacaoBL.cs" />
+    <Compile Include="Associados\Services\AssociadoTituloBL.cs" />
+    <Compile Include="Associados\Services\CategoriaTipoAssociadoBL.cs" />
+    <Compile Include="Associados\Services\TipoAssociadoConsultaBL.cs" />
+    <Compile Include="Associados\Services\TipoTituloBL.cs" />
+    <Compile Include="Transacoes\Compras\Interfaces\IGeradorMovimentoCompra.cs" />
+    <Compile Include="Transacoes\Compras\Interfaces\ICompraFacade.cs" />
+    <Compile Include="Transacoes\Compras\Interfaces\IMediadorBase.cs" />
+    <Compile Include="Transacoes\Compras\Interfaces\IValidadorCompra.cs" />
+    <Compile Include="Transacoes\Compras\Services\CompraFacade.cs" />
+    <Compile Include="Transacoes\Compras\Services\GeradorMovimentoCompra.cs" />
+    <Compile Include="Transacoes\Compras\Services\MediadorCompra.cs" />
+    <Compile Include="Transacoes\Compras\Services\MediadorBase.cs" />
+    <Compile Include="Transacoes\Compras\Services\MediadorSaque.cs" />
+    <Compile Include="Transacoes\Compras\Services\ValidadorPagamento.cs" />
+    <Compile Include="Transacoes\Core\Interfaces\IConferenciaSaldoBL.cs" />
+    <Compile Include="Transacoes\Core\Interfaces\IMovimentoCadastroBL.cs" />
+    <Compile Include="Transacoes\Core\Interfaces\ITipoTransacaoConsultaBL.cs" />
+    <Compile Include="Transacoes\Core\Interfaces\ITotalMovimentoBL.cs" />
+    <Compile Include="Transacoes\Core\Services\ConferenciaSaldoBL.cs" />
+    <Compile Include="Transacoes\Core\Services\MovimentoCadastroBL.cs" />
+    <Compile Include="Transacoes\Core\Services\TipoTransacaoBL.cs" />
+    <Compile Include="Transacoes\Core\Services\TotalMovimentoBL.cs" />
+    <Compile Include="Transacoes\Debitos\Interfaces\IGeradorMovimentoDebito.cs" />
+    <Compile Include="Transacoes\Debitos\Interfaces\IDebitoFacade.cs" />
+    <Compile Include="Transacoes\Debitos\Services\GeradorMovimentoDebito.cs" />
+    <Compile Include="Transacoes\Debitos\Services\DebitoFacade.cs" />
+    <Compile Include="Transacoes\Debitos\Services\ValidadorDebito.cs" />
+    <Compile Include="Transacoes\Movimentos\Interfaces\IAtualizadorSaldoBL.cs" />
+    <Compile Include="Transacoes\Movimentos\Interfaces\ICarregadorDadosOperacao.cs" />
+    <Compile Include="Transacoes\Movimentos\Interfaces\IExtratoConsultaBL.cs" />
+    <Compile Include="Transacoes\Movimentos\Interfaces\IExtratoPedidoConsultaBL.cs" />
+    <Compile Include="Transacoes\Movimentos\Interfaces\IValidadorOperacao.cs" />
+    <Compile Include="Transacoes\Movimentos\Services\AtualizadorSaldoBL.cs" />
+    <Compile Include="Transacoes\Movimentos\Services\CarregadorDadosOperacao.cs" />
+    <Compile Include="Transacoes\Movimentos\Services\ExtratoConsultaBL.cs" />
+    <Compile Include="Transacoes\Movimentos\Services\ExtratoPedidoConsultaBL.cs" />
+    <Compile Include="Transacoes\Movimentos\Services\ValidadorBase.cs" />
+    <Compile Include="Transacoes\Pagamentos\Interfaces\IGeradorMovimentoTransferencia.cs" />
+    <Compile Include="Transacoes\Pagamentos\Interfaces\IPagamentoFacade.cs" />
+    <Compile Include="Transacoes\Pagamentos\Interfaces\IValidadorPagamento.cs" />
+    <Compile Include="Transacoes\Pagamentos\Services\GeradorMovimentoPagamento.cs" />
+    <Compile Include="Transacoes\Pagamentos\Services\PagamentoFacade.cs" />
+    <Compile Include="Transacoes\Pagamentos\Services\ValidadorPagamento.cs" />
+    <Compile Include="Transacoes\ProdutosLinkey\Interfaces\IGeradorMovimento.cs" />
+    <Compile Include="Transacoes\ProdutosLinkey\Interfaces\IPagadorLinkeyFacade.cs" />
+    <Compile Include="Transacoes\ProdutosLinkey\Services\GeradorMovimento.cs" />
+    <Compile Include="Transacoes\ProdutosLinkey\Services\PagadorLinkeyFacade.cs" />
+    <Compile Include="Transacoes\ProdutosLinkey\Services\ValidadorPagamento.cs" />
+    <Compile Include="Transacoes\Transferencias\Interfaces\IGeradorMovimentoTransferencia.cs" />
+    <Compile Include="Transacoes\Transferencias\Interfaces\ITransferenciaFacade.cs" />
+    <Compile Include="Transacoes\Transferencias\Services\GeradorMovimentoTransferencia.cs" />
+    <Compile Include="Transacoes\Transferencias\Services\TransferenciaFacade.cs" />
+    <Compile Include="Transacoes\Transferencias\Services\ValidadorTransferencia.cs" />
+    <Compile Include="Unidades\Interface\IUnidadeConsultaBL.cs" />
+    <Compile Include="Unidades\Services\UnidadeConsultaBL.cs" />
+    <Compile Include="Cargos\Services\CargoBL.cs" />
+    <Compile Include="Compras\Interfaces\ICarrinhoBL.cs" />
+    <Compile Include="Compras\Interfaces\ICarrinhoResumoBL.cs" />
+    <Compile Include="Compras\Interfaces\ICarrinhoItemBL.cs" />
+    <Compile Include="Compras\Services\CarrinhoBL.cs" />
+    <Compile Include="Compras\Services\CarrinhoResumoBL.cs" />
+    <Compile Include="Compras\Services\CarrinhoItemQuantidadeBL.cs" />
+    <Compile Include="Pedidos\Emails\EnvioCobrancaPedido.cs" />
+    <Compile Include="Pedidos\Emails\IEnvioNovoPedido.cs" />
+    <Compile Include="Pedidos\Events\OnPedidoQuitado.cs" />
+    <Compile Include="Pedidos\Events\OnPedidoQuitadoHandler.cs" />
+    <Compile Include="Pedidos\Interface\IPedidoCobrancaBL.cs" />
+    <Compile Include="Pedidos\Services\PedidoCobrancaBL.cs" />
+    <Compile Include="Publicacoes\Interface\ITipoParceiroBL.cs" />
+    <Compile Include="Publicacoes\Services\TipoParceiroBL.cs" />
+    <Compile Include="Contatos\Services\TipoContatoPadraoBL.cs" />
+    <Compile Include="Contratos\Interface\IContratoBL.cs" />
+    <Compile Include="Contratos\Interface\IStatusContratoBL.cs" />
+    <Compile Include="Contratos\Interface\ITipoContratoBL.cs" />
+    <Compile Include="Contratos\Services\ContratoBL.cs" />
+    <Compile Include="Contratos\Services\StatusContratoBL.cs" />
+    <Compile Include="Contratos\Services\TipoContratoBL.cs" />
+    <Compile Include="Contribuicoes\Interface\IContribuicaoAcaoBL.cs" />
+    <Compile Include="Contribuicoes\Interface\IContribuicaoAtualBL.cs" />
+    <Compile Include="Contribuicoes\Interface\IContribuicaoBL.cs" />
+    <Compile Include="Contribuicoes\Interface\IContribuicaoPrecoBL.cs" />
+    <Compile Include="Contribuicoes\Interface\ITipoContribuicaoBL.cs" />
+    <Compile Include="Contribuicoes\Services\ContribuicaoBL.cs" />
+    <Compile Include="Contribuicoes\Services\ContribuicaoPrecoBL.cs" />
+    <Compile Include="Contribuicoes\Services\TipoContribuicaoBL.cs" />
+    <Compile Include="Core\Base\DefaultBL.cs" />
+    <Compile Include="Core\Events\EventAggregator.cs" />
+    <Compile Include="Core\Events\IHandler.cs" />
+    <Compile Include="CuponsDesconto\Emails\EnvioCupom.cs" />
+    <Compile Include="Documentos\Interface\ITipoDocumentoBL.cs" />
+    <Compile Include="Documentos\Services\CategoriaDocumentoBL .cs" />
+    <Compile Include="Documentos\Services\TipoDocumentoBL.cs" />
+    <Compile Include="Associados\Emails\EnvioNovoAssociado.cs" />
+    <Compile Include="Emails\Envios\EnvioContatoPortal.cs" />
+    <Compile Include="Emails\Envios\EnvioCorreioInterno.cs" />
+    <Compile Include="Emails\Envios\EnvioEmailAdapter.cs" />
+    <Compile Include="Associados\Emails\EnvioSenhaAssociado.cs" />
+    <Compile Include="Emails\Interface\IEnvioNovoAssociado.cs" />
+    <Compile Include="Emails\Interface\IEnvioContatoPortal.cs" />
+    <Compile Include="Emails\Interface\IEnvioAnuidadePaga.cs" />
+    <Compile Include="Empresas\Interface\IEmpresaBL.cs" />
+    <Compile Include="Empresas\Services\EmpresaBL.cs" />
+    <Compile Include="Empresas\Services\EmpresaEnderecoBL.cs" />
+    <Compile Include="Erros\Services\LogErroBL.cs" />
+    <Compile Include="Escolaridades\Services\NivelEscolarBL.cs" />
+    <Compile Include="Financeiro\Interface\ITituloDespesaPagamentoBL.cs" />
+    <Compile Include="Financeiro\Interface\IGatewayPagamentoBL.cs" />
+    <Compile Include="Financeiro\Interface\IMacroContaBL.cs" />
+    <Compile Include="Financeiro\Interface\IMeioPagamentoBL.cs" />
+    <Compile Include="Financeiro\Interface\IReceitaConsultaBL.cs" />
+    <Compile Include="Financeiro\Interface\ICategoriaTituloBL.cs" />
+    <Compile Include="Bancos\Interface\IBancoBL.cs" />
+    <Compile Include="Financeiro\Interface\IPeriodoRepeticaoBL.cs" />
+    <Compile Include="Financeiro\Interface\IFormaPagamentoBL.cs" />
+    <Compile Include="Financeiro\Interface\ICentroCustoBL.cs" />
+    <Compile Include="Financeiro\Interface\ITipoReceitaBL.cs" />
+    <Compile Include="Financeiro\Interface\ITituloReceitaBL.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Financeiro\Interface\ITituloReceitaPagamentoBL.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Bancos\Services\BancoBL.cs" />
+    <Compile Include="Financeiro\Services\TituloDespesaPagamentoBL.cs" />
+    <Compile Include="Financeiro\Services\GatewayPagamentoBL.cs" />
+    <Compile Include="Financeiro\Services\MacroContaBL.cs" />
+    <Compile Include="Financeiro\Services\MeioPagamentoBL.cs" />
+    <Compile Include="Financeiro\Services\ReceitaConsultaBL.cs" />
+    <Compile Include="Financeiro\Services\CategoriaTituloBL.cs" />
+    <Compile Include="Financeiro\Services\CentroCustoBL.cs" />
+    <Compile Include="Financeiro\Services\FormaPagamentoBL.cs" />
+    <Compile Include="Financeiro\Services\PeriodoRepeticaoBL.cs" />
+    <Compile Include="Financeiro\Services\TipoReceitaBL.cs" />
+    <Compile Include="Financeiro\Services\TituloReceitaBL.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Financeiro\Services\TituloReceitaPadraoBL.cs" />
+    <Compile Include="Financeiro\Services\TituloReceitaPagamentoBL.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Fornecedores\Interface\IFornecedorConsultaBL.cs" />
+    <Compile Include="Fornecedores\Services\FornecedorCadastroBL.cs" />
+    <Compile Include="Frete\Interface\ITipoFreteBL.cs" />
+    <Compile Include="Frete\Services\FreteBL.cs" />
+    <Compile Include="Frete\Services\CorreiosBL.cs" />
+    <Compile Include="Frete\Services\TipoFreteBL.cs" />
+    <Compile Include="Funcionarios\Interface\IFuncionarioBeneficioBL.cs" />
+    <Compile Include="Funcionarios\Interface\IFuncionarioExclusaoBL.cs" />
+    <Compile Include="Funcionarios\Interface\IFuncionarioContaBancariaBL.cs" />
+    <Compile Include="Funcionarios\Interface\IFuncionarioDependenteBL.cs" />
+    <Compile Include="Funcionarios\Interface\IFuncionarioFeriasBL.cs" />
+    <Compile Include="Funcionarios\Services\FuncionarioBeneficioBL.cs" />
+    <Compile Include="Funcionarios\Services\FuncionarioExclusaoBL.cs" />
+    <Compile Include="Funcionarios\Services\FuncionarioContaBancariaBL.cs" />
+    <Compile Include="Funcionarios\Services\FuncionarioDependenteBL.cs" />
+    <Compile Include="Funcionarios\Services\FuncionarioFeriasBL.cs" />
+    <Compile Include="Institucionais\Services\BuscaInstitucionalBL.cs" />
+    <Compile Include="Instituicoes\Interface\IInstituicaoBL.cs" />
+    <Compile Include="Instituicoes\Services\InstituicaoBL.cs" />
+    <Compile Include="LinksUteis\Interface\ILinkUtilBL.cs" />
+    <Compile Include="LinksUteis\Services\LinkUtilBL.cs" />
+    <Compile Include="Localizacao\Interface\ICepBrasil.cs" />
+    <Compile Include="Localizacao\Interface\IEstadoBL.cs" />
+    <Compile Include="Localizacao\Interface\ICidadeBL.cs" />
+    <Compile Include="Localizacao\Services\CepBrasilBL.cs" />
+    <Compile Include="Localizacao\Services\CidadeBL.cs" />
+    <Compile Include="Localizacao\Services\EstadoBL.cs" />
+    <Compile Include="Localizacao\Services\PaisBL.cs" />
+    <Compile Include="MateriaisApoio\Interface\IMaterialApoioBL.cs" />
+    <Compile Include="MateriaisApoio\Interface\IMaterialApoioPessoaBL.cs" />
+    <Compile Include="MateriaisApoio\Interface\ITipoMaterialApoioBL.cs" />
+    <Compile Include="MateriaisApoio\Services\MaterialApoioBL.cs" />
+    <Compile Include="MateriaisApoio\Services\MaterialApoioPessoaBL.cs" />
+    <Compile Include="MateriaisApoio\Services\TipoMaterialApoioBL.cs" />
+    <Compile Include="Notificacoes\Interface\INotificacaoSistemaEnvioBL.cs" />
+    <Compile Include="Notificacoes\Services\NotificacaoSistemaEnvioBL.cs" />
+    <Compile Include="Pedidos\Events\OnPedidoCadastrado.cs" />
+    <Compile Include="Planos\Emails\EnvioPlanoContratacao.cs" />
+    <Compile Include="Planos\Events\OnPlanoContratadoHandler.cs" />
+    <Compile Include="Pedidos\Interface\IPedidoBL.cs" />
+    <Compile Include="Pedidos\Interface\IPedidoEntregaBL.cs" />
+    <Compile Include="Pedidos\Interface\IPedidoHistoricoBL.cs" />
+    <Compile Include="Pedidos\Interface\IStatusPedidoBL.cs" />
+    <Compile Include="Pedidos\Services\PedidoBL.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Pedidos\Services\PedidoEntregaBL.cs" />
+    <Compile Include="Pedidos\Services\PedidoHistoricoBL.cs" />
+    <Compile Include="Pedidos\Services\PedidoProdutoBL.cs" />
+    <Compile Include="Pedidos\Services\StatusPedidoBL.cs" />
+    <Compile Include="Pedidos\Services\TituloReceitaPedidoBL.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Permissao\Interface\IUsuarioSistemaVWBL.cs" />
+    <Compile Include="Permissao\Interface\IAcessoPermissaoBL.cs" />
+    <Compile Include="Permissao\Interface\IAcessoRecursoAcaoBL.cs" />
+    <Compile Include="Permissao\Interface\IAcessoRecursoBL.cs" />
+    <Compile Include="Permissao\Interface\IAcessoRecursoGrupoBL.cs" />
+    <Compile Include="Permissao\Services\UsuarioSistemaVWBL.cs" />
+    <Compile Include="Pessoas\Interface\IPessoaContatoBL.cs" />
+    <Compile Include="Pessoas\Interface\IPessoaRelacionamentoBL.cs" />
+    <Compile Include="Pessoas\Services\PessoaBL.cs" />
+    <Compile Include="Pessoas\Services\PessoaContatoBL.cs" />
+    <Compile Include="Pessoas\Services\PessoaEnderecoConsultaBL.cs" />
+    <Compile Include="Pessoas\Services\PessoaRelacionamentoBL.cs" />
+    <Compile Include="Planos\Events\OnPlanoContratado.cs" />
+    <Compile Include="Pedidos\Events\OnPedidoCadastradoHandler.cs" />
+    <Compile Include="Planos\Interface\IPlanoContratacaoBL.cs" />
+    <Compile Include="Planos\Interface\IPlanoBL.cs" />
+    <Compile Include="Planos\Services\PlanoContratacaoBL.cs" />
+    <Compile Include="Planos\Services\PlanoPeriodoBL.cs" />
+    <Compile Include="Planos\Services\PlanoBL.cs" />
+    <Compile Include="Emails\Events\EmailEnviadoHandler.cs" />
+    <Compile Include="Emails\Events\EmailRecebidoHandler.cs" />
+    <Compile Include="Emails\Events\OnEmailEnviado.cs" />
+    <Compile Include="Emails\Events\OnEmailRecebido.cs" />
+    <Compile Include="Emails\Interface\IEmailBL.cs" />
+    <Compile Include="Emails\Services\EmailBL.cs" />
+    <Compile Include="Planos\Services\StatusPlanoContratacaoBL.cs" />
+    <Compile Include="CuponsDesconto\Interface\ICupomDescontoBL.cs" />
+    <Compile Include="CuponsDesconto\Services\CupomDescontoBL.cs" />
+    <Compile Include="Planos\Services\TituloReceitaPlanoContratacaoBL.cs" />
+    <Compile Include="Popups\Interface\IHomePopupBL.cs" />
+    <Compile Include="Popups\Services\HomePopupBL.cs" />
+    <Compile Include="Produtos\Extensions\ProdutoExtensions.cs" />
+    <Compile Include="Produtos\Interface\IEstoqueEntradaBL.cs" />
+    <Compile Include="Produtos\Interface\IEstoqueSaidaBL.cs" />
+    <Compile Include="Produtos\Interface\IProdutoBL.cs" />
+    <Compile Include="Produtos\Interface\ITipoProdutoBL.cs" />
+    <Compile Include="Produtos\Interface\ITipoReferenciaSaidaBL.cs" />
+    <Compile Include="Produtos\Services\EstoqueEntradaBL.cs" />
+    <Compile Include="Produtos\Services\EstoqueSaidaBL.cs" />
+    <Compile Include="Produtos\Services\ProdutoBL.cs" />
+    <Compile Include="Produtos\Services\TipoProdutoBL.cs" />
+    <Compile Include="Produtos\Services\TipoReferenciaSaidaBL.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Permissao\Services\AcessoPermissaoBL.cs" />
+    <Compile Include="Permissao\Services\AcessoRecursoAcaoBL.cs" />
+    <Compile Include="Permissao\Services\AcessoRecursoBL.cs" />
+    <Compile Include="Permissao\Services\AcessoRecursoGrupoBL.cs" />
+    <Compile Include="Permissao\Services\PerfilAcessoBL.cs" />
+    <Compile Include="Permissao\Services\UsuarioSistemaBL.cs" />
+    <Compile Include="Publicacoes\Interface\IBannerBL.cs" />
+    <Compile Include="Publicacoes\Interface\IGaleriaFotoBL.cs" />
+    <Compile Include="Publicacoes\Interface\INoticiaBL.cs" />
+    <Compile Include="Publicacoes\Interface\IParceiroBL.cs" />
+    <Compile Include="Publicacoes\Interface\IPublicacaoBL.cs" />
+    <Compile Include="Publicacoes\Interface\IVideoBL.cs" />
+    <Compile Include="Publicacoes\Services\BannerBL.cs" />
+    <Compile Include="Publicacoes\Services\ComunicadoBL.cs" />
+    <Compile Include="Publicacoes\Services\GaleriaFotoBL.cs" />
+    <Compile Include="Publicacoes\Services\NoticiaBL.cs" />
+    <Compile Include="Publicacoes\Services\ParceiroBL.cs" />
+    <Compile Include="Publicacoes\Services\PublicacaoBL.cs" />
+    <Compile Include="Publicacoes\Services\PodcastBL.cs" />
+    <Compile Include="Publicacoes\Services\RevistaBL.cs" />
+    <Compile Include="Publicacoes\Services\VagaEstagioBL.cs" />
+    <Compile Include="Publicacoes\Services\VagaIniciacaoCientificaBL.cs" />
+    <Compile Include="Publicacoes\Services\VideoBL.cs" />
+    <Compile Include="Relacionamentos\Interface\IOcorrenciaRelacionamentoPadraoBL.cs" />
+    <Compile Include="Relacionamentos\Services\OcorrenciaRelacionamentoPadraoBL.cs" />
+    <Compile Include="Request\Interface\IRequestPost.cs" />
+    <Compile Include="Request\Interface\IRequestGet.cs" />
+    <Compile Include="Request\Interface\IRequestAsync.cs" />
+    <Compile Include="Request\Services\RequestPost.cs" />
+    <Compile Include="Request\Services\RequestGet.cs" />
+    <Compile Include="Request\Services\RequestAsync.cs" />
+    <Compile Include="Telefones\Interface\ITipoTelefoneBL.cs" />
+    <Compile Include="Telefones\Interface\IOperadoraTelefoniaBL.cs" />
+    <Compile Include="Telefones\Services\OperadoraTelefoniaBL.cs" />
+    <Compile Include="Telefones\Services\TipoTelefoneBL.cs" />
+    <Compile Include="Tipos\Interface\ITipoDependenteBL.cs" />
+    <Compile Include="Tipos\Services\TipoDependenteBL.cs" />
+    <Compile Include="Unidades\Interface\IUnidadeBL.cs" />
+    <Compile Include="Unidades\Interface\IUnidadeResumoVWBL.cs" />
+    <Compile Include="Unidades\Services\UnidadeBL.cs" />
+    <Compile Include="Unidades\Services\UnidadeContaBancariaBL.cs" />
+    <Compile Include="Unidades\Services\UnidadeResumoVWBL.cs" />
+    <Compile Include="UsuariosInternos\Events\OnUsuarioInternoCadastrado.cs" />
+    <Compile Include="UsuariosInternos\Events\OnUsuarioInternoCadastradoHandler.cs" />
+    <Compile Include="UsuariosInternos\Services\UsuarioInternoBL.cs" />
+    <Compile Include="UsuariosUnidades\Interface\IUsuarioUnidadeBL.cs" />
+    <Compile Include="UsuariosUnidades\Services\UsuarioUnidadeBL.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Arquivos\Events\" />
+    <Folder Include="Associados\Config\" />
+    <Folder Include="Caches\Const\" />
+    <Folder Include="Contratos\Events\" />
+    <Folder Include="Contribuicoes\Events\" />
+    <Folder Include="DadosFiscais\NFSe\" />
+    <Folder Include="DadosFiscais\Vendors\" />
+    <Folder Include="DocumentosDigitais\Events\" />
+    <Folder Include="EDIExportacoes\RemessasReceita\" />
+    <Folder Include="Institucionais\Config\" />
+    <Folder Include="Permissao\Config\" />
+    <Folder Include="Permissao\Events\" />
+    <Folder Include="Pessoas\Extensions\" />
+    <Folder Include="Produtos\Events\" />
+    <Folder Include="Unidades\Events\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DAL\DAL.csproj">
+      <Project>{d0a8af5a-37c8-477b-a2ae-80a3ee13262a}</Project>
+      <Name>DAL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\UTIL\UTIL.csproj">
+      <Project>{d26b1e83-d874-437b-a9cc-3af27bf8eb23}</Project>
+      <Name>UTIL</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

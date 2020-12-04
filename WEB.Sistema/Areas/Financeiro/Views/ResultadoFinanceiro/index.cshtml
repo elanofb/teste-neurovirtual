@@ -1,0 +1,23 @@
+﻿@model WEB.Areas.Financeiro.ViewModels.ResultadoFinanceiroForm
+
+@{
+    ViewBag.titlePage = "Resultado Financeiro";
+}
+
+@section styles{
+    <link href="@UtilConfig.linkResourses()css/associatec/table-fixed.css" rel="stylesheet" />
+}
+
+@section scripts {
+    @Html.includeDatePicker()
+    @Html.includeBootstrapMultiselect()
+    @Html.includeJqueryLoading()
+
+    <script src="@UtilConfig.linkResourses()Areas/Financeiro/js/resultado-financeiro.js"></script>
+}
+
+@{ Html.RenderPartial("partial-filtros"); }
+
+<div id="boxResultados">
+
+</div>

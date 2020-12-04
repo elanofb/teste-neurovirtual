@@ -1,0 +1,18 @@
+﻿@model WEB.Areas.Planos.ViewModels.PlanoForm
+
+@if (Model.Plano.id > 0) { 
+
+    <div class="col-md-1">
+	    <label>ID</label>
+	    <input type="text" class="form-control input-sm" readonly="readonly" value="@Model.Plano.id" />
+    </div>
+    <div class="col-md-2">
+	    <label>Cadastrado em:</label>
+	    <input type="text" class="form-control input-sm" readonly="readonly" value="@Model.Plano.dtCadastro" />
+    </div>
+    <div class="col-md-2">
+	    <label>Alterado em:</label>
+	    <input type="text" class="form-control input-sm" readonly="readonly" value="@Model.Plano.dtAlteracao" />
+    </div>
+    <div class="clearfix"></div>
+}

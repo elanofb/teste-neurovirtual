@@ -1,0 +1,122 @@
+﻿@model PagedList.IPagedList<DAL.Permissao.PerfilAcesso>
+@using DAL.Permissao
+@using DAL.Permissao.Security.Extensions
+@using PagedList.Mvc
+@using WEB.Areas.Associacoes.Helpers
+
+@{
+    ViewBag.titlePage = "Grupos de usuários";
+}
+<div class="box box-primary">
+    <div class="box-header with-border">
+        <h3 class="box-title">
+            <i class="fa fa-search"></i> Filtros de Busca
+        </h3>
+    </div>
+    <div class="box-body">
+        @using (Html.BeginForm(null, null, FormMethod.Get, new { @class = "filtros" })) {
+
+            if (User.idPerfil() == PerfilAcessoConst.DESENVOLVEDOR) {
+                <div class="form-group col-sm-4">
+                </div>
+                <div class="form-group col-sm-3">
+                    <label>Associação</label>
+                    @Html.DropDownList("idOrganizacao", AssociacaoHelper.getInstance.selectList(UtilRequest.getInt32("idOrganizacao"), false), "Todas", new { @class = "form-control input-sm" })
+                </div>
+            } else {
+                <div class="form-group col-sm-7">
+                </div>
+            }
+
+            <div class="form-group col-sm-2">
+                <label>Status</label>
+                @Html.DropDownList("flagAtivo", ComboHelper.selectListStatus(UtilRequest.getString("flagAtivo")), "Todos", new { @class = "form-control input-sm" })
+            </div>
+            <div class="form-group col-sm-3">
+                <label>Buscar</label>
+                @Html.buttonSearch(UtilRequest.getString("valorBusca"))
+            </div>
+        }
+        <div class="clearfix"></div>
+    </div>
+</div>
+
+<div class="box-body col-xs-12 box box-solid">
+    <div class="table-responsive">
+        <div class="dataTables_wrapper form-inline" role="grid">
+
+            <div class="links-table">
+                <div class="btn-group">
+                    <a href="javascript:void(0);" data-url="@Url.Action("excluir")" class="btn btn-default btn-flat" title="Remover itens selecionados" onclick="return DefaultAction.removeAll(this);">
+                        <i class="fa fa-trash"></i>
+                    </a>
+                    <a href="@Url.Action("editar")" class="btn btn-default btn-flat" title="Adicionar novo registro">
+                        <i class="far fa-plus-circle"></i>
+                    </a>
+                </div>
+            </div>
+
+            <table class="table table-bordered table-striped dataTable">
+                <thead>
+                    <tr role="row">
+                        <th class="width-50 text-center"><input type="checkbox" name="marcarTodos" data-childs="checkRegistro[]" id="checkMarcarTodos" /></th>
+
+                        @if (User.idPerfil() == PerfilAcessoConst.DESENVOLVEDOR) {
+                            <th width="100">Associação</th>
+                        }
+
+                        <th>Perfil</th>
+                        <th class="width-100">Status</th>
+                        <th width="125">Cadastro</th>
+                        <th class="width-100">&nbsp;</th>
+                        <th class="width-50">Acessos</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.PageCount > 0) {
+                        foreach (var Item in Model) {
+                            <tr>
+                                <td class="text-center"><input type="checkbox" name="checkRegistro[]" value="@Item.id" /></td>
+
+                                @if (User.idPerfil() == PerfilAcessoConst.DESENVOLVEDOR) {
+                                    <td class="text-center">@(Item.Organizacao?.Pessoa?.nome)</td>
+                                }
+
+                                <td>
+                                    @Item.descricao<br />
+                                    @if (Item.flagTodasUnidades == true){
+                                        <em class="fs-11 text-green"><i class="fa fa-check"></i> TEM permissão para todas as unidades.</em>
+                                    } else {
+                                        <em class="fs-11 text-red"><i class="fa fa-ban"></i> NÃO TEM permissão para todas as unidades.</em>
+                                    }
+                                </td>
+                                <td class="text-center">@Html.badgeStatus(Item.ativo)</td>
+                                <td class="text-center">@Item.dtCadastro.exibirData(true)</td>
+                                <td class="text-left box-acoes">
+                                    @if (Item.flagSistema == "S") {
+                                        <a href="@Url.Action("editar", new{id=Item.id})">Protegido</a>
+                                    } else {
+                                        <a href="@Url.Action("editar", new{id=Item.id})" title="Editar Registro" data-toggle="tooltip"><i class="fa fa-edit"></i></a>
+                                        <a href="javascript:void(0);" class="delete-default margin-left-10" data-id="@Item.id" data-url="@Url.Action("excluir")" title="Excluir Registro" data-toggle="tooltip"><i class="fa fa-trash"></i></a>
+                                    }
+                                </td>
+                                <td class="text-center box-acoes">
+                                    <a href="@Url.Action("editar-permissao", "inicio", new{ area="permissao", idPerfil=Item.id})" title="Configurar Permissões" data-toggle="tooltip" class="margin-left-10"><i class="fa fa-lock"></i></a>
+                                </td>
+                            </tr>
+                        }
+                    } else {
+                        <tr>
+                            <td class="text-center" colspan="6">Nenhum registro cadastrado</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            @(Html.paginarRegistros(Model, Html.PagedListPager(Model, nroPagina => Url.Action("listar", new { nroPagina }), PagedListRenderOptions.OnlyShowFivePagesAtATime)))
+
+
+        </div>
+    </div>
+
+</div>
+<div class="clearfix"></div>

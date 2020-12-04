@@ -1,0 +1,15 @@
+﻿@model List<DAL.Associados.AssociadoAreaAtuacao>
+
+@if (Model.Any()) {
+    <div class="margin-top-5">
+        <strong>Áreas de Atuação</strong>
+    </div>
+}
+
+@foreach (var OAreaAtuacao in Model) {
+    
+    <div>
+        - @OAreaAtuacao.AreaAtuacao.descricao
+    </div>
+    
+}

@@ -1,0 +1,100 @@
+﻿@model WEB.Areas.AvisosNotificacoes.ViewModels.PessoasNotificadasVW
+
+@{
+    Layout = null;
+}
+
+@using PagedList.Mvc
+@using DAL.Notificacoes
+@using WEB.Areas.AvisosNotificacoes.Extensions
+
+<div id="boxAssociadosNotificados">
+    <div class="col-sm-6">
+    
+        <button type="button" class="btn btn-sm bg-blue">
+            <i class="fa fa-send"></i> Total enviados: @Model.qtdeEnviados
+        </button>
+    
+        <button type="button" class="btn btn-sm bg-red">
+            <i class="fa fa-exclamation-circle"></i> Total com problema: @Model.qtdeProblemaEnvio
+        </button>
+    
+        <button type="button" class="btn btn-sm bg-black">
+            <i class="fa fa-spinner"></i> Total na fila: @Model.qtdeFila
+        </button>
+    
+    </div>
+    
+    <div class="col-sm-6">
+        <div class="row">
+            <div class="col-sm-6 pull-right">
+                @using (Ajax.BeginForm("partialAssociadosNotificacao", null, new AjaxOptions { HttpMethod = "POST", OnSuccess = "", UpdateTargetId = "boxAssociadosNotificados", InsertionMode = InsertionMode.Replace }, new { id = "formAssociadosNotificados" })) {
+                    @Html.HiddenFor(m => m.idNotificacao)
+                    @Html.buttonSearch(UtilRequest.getString("valorBusca"))
+                }
+            </div>
+        </div>
+    </div>
+    
+    <div class="clearfix"></div><br />
+    
+    @if (!Model.listaPessoasNotificadas.Any()) {
+        <div class="alert alert-info">
+            Nenhum associado foi encontrado.
+        </div>
+    }
+    
+    @foreach(NotificacaoSistemaEnvio OItem in Model.listaPessoasNotificadas) {
+    
+        <div class="col-sm-12">
+            
+            <div class="col-sm-12 box-info-item bordered-destaque @OItem.cssBorderNotificacaoEnvio()">
+    
+                <div class="row fs-11">
+    
+                    <div class="col-lg-3 col-md-6">
+                        <span>
+                            <i class="fa fa-user"></i> @OItem.nome
+                        </span>
+                    </div>
+    
+                    <div class="col-lg-4 col-sm-6 col-xs-6">
+                        <span data-toggle="tooltip" title="E-mail principal">
+                            <i class="fa fa-envelope"></i> @OItem.email
+                        </span>
+                    </div>
+    
+                    <div class="col-lg-2 col-sm-6 col-xs-3">
+                        <span data-toggle="tooltip" title="Data de envio"><i class="fa fa-share"></i> @OItem.dtEnvioEmail.exibirData()</span> <br />
+                        <span data-toggle="tooltip" title="Data de leitura"><i class="fa fa-calendar"></i> @OItem.dtLeitura.exibirData() </span>
+                    </div>
+    
+                    <div class="col-lg-3 col-md-6 col-xs-3 text-right box-acoes">
+    
+                        @if(OItem.flagExcluido == true) {
+                            <div class="text-left">
+                                <strong>Erro:</strong> <em>@OItem.motivoExclusao</em>
+                            </div>
+                        }
+    
+                        @if (!OItem.dtEnvioEmail.HasValue && OItem.flagExcluido == false) {
+                            <a href="javascript:void(0);" data-toggle="tooltip" title="Excluir Registro" onclick="AvisoNotificacao.excluirEnvio('@OItem.id')" ><i class="fa fa-trash"></i></a>
+                        }
+    
+                    </div>
+                    <div class="clearfix"></div>
+    
+                </div>
+    
+            </div>
+    
+        </div>
+        <div class="clearfix"></div>
+    
+    }
+    
+    @(Html.paginarRegistros(Model.listaPessoasNotificadas, Html.PagedListPager(Model.listaPessoasNotificadas, nroPagina =>
+                            Url.Action("partialAssociadosNotificacao", new { nroPagina, idNotificacao = Model.idNotificacao }),
+                            PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(PagedListRenderOptions.OnlyShowFivePagesAtATime, 
+                                new AjaxOptions() { UpdateTargetId = "boxAssociadosEnvio", HttpMethod = "GET" }))))
+</div>

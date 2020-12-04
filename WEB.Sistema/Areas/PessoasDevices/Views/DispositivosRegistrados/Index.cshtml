@@ -1,0 +1,189 @@
+﻿@model WEB.Areas.PessoasDevices.ViewModels.DispositivosRegistradosVM
+
+@using PagedList.Mvc
+@using WEB.Areas.PessoasDevices.Helpers
+@using WEB.Helpers
+
+@{
+    ViewBag.titlePage = "Aparelhos Registrados";
+}
+
+@section styles {
+    <link href="@UtilConfig.linkResourses("css/associatec/list-custom.css")" rel="stylesheet" />
+}
+
+@section scripts {
+    
+}
+
+<div class="box box-primary">
+
+    @Html.headerBox("Filtros de Busca", "fa fa-filter")
+
+    <div class="box-body">
+        
+        @using (Html.BeginForm(null, null, FormMethod.Get, new { id = "formFiltros", @class = "filtros" })) {
+
+            <div class="col-md-3">
+            </div>
+            
+            <div class="col-md-3 col-sm-4">
+                <label>Busca</label>
+                @Html.TextBox("valorBusca", Model.valorBusca, new { @class = "form-control input-sm" })
+            </div>
+            
+            <div class="col-md-3 col-sm-4">
+                <label>Plataforma</label>
+                @Html.DropDownList("plataforma", PlataformaHelper.getInstance.selectList(Model.plataforma), "Selecione...", new { @class = "form-control input-sm" })
+            </div>
+
+            <div class="col-md-3 col-sm-4">
+                <label>Tipo de Saída</label>
+                @Html.buttonFlagTipoSaida(Model.flagTipoSaida)
+            </div>
+            <div class="clearfix"></div>
+
+        }
+        <div class="clearfix"></div>
+    </div>
+</div>
+
+<div class="box box-primary">
+
+    <div class="box-header with-border">
+    
+        <div class="box-title">
+            <i class="far fa-chart-bar"></i> Resultados <em class="fs-12">@Model.listaDispositivos.TotalItemCount registro(s) encontrado(s)</em>
+        </div>
+    
+        <div class="box-tools pull-right">
+            
+            <div class="btn-group">
+                
+                <button type="button" class="btn btn-box-tool dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+                    <i class="fa fa-cog fs-16"></i>
+                </button>
+                
+                <ul class="dropdown-menu" role="menu">
+                    
+                    <li>
+                        <a href="javascript:void(0);" data-url="@Url.Action("excluir", "DispositivoExclusao")" onclick="return DefaultAction.removeAll(this);">
+                            <i class="fa fa-trash"></i> Excluir selecionados
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </div>
+
+            <div class="btn-group pull-right">
+                <label class="btn btn-default btn-xs" data-toggle="tooltip" title="Selecionar Todos">
+                    <input type="checkbox" name="marcarTodos" data-childs="checkRegistro[]" id="checkMarcarTodos" style="margin-left: 2px;" />
+                </label>
+            </div>
+            <div class="clearfix"></div>
+            
+        </div>
+        <div class="clearfix"></div>
+        
+    </div>
+
+    <div class="box-body">
+        
+        @if (!Model.listaDispositivos.Any()) {
+            
+            <div class="alert alert-info">
+                Nenhum dispositivo registrado até o momento.
+            </div>
+            
+        }        
+        
+        @foreach (var ODispositivo in Model.listaDispositivos) {
+            
+            <div class="box-info-item">
+                
+                <div class="row">
+                    
+                    <div class="col-xs-12 text-right">
+                        
+                        <input type="checkbox" class="pull-right" name="checkRegistro[]" value="@ODispositivo.id"/>
+                                    
+                        <div class="dropdown pull-right margin-right-5">
+    
+                            <a href="javascript:;" class="dropdown-toggle text-black fs-14" data-toggle="dropdown" aria-expanded="true">
+                                <i class="fa fa-cog"></i>
+                            </a>
+    
+                            <ul class="dropdown-menu" role="menu">
+                                
+                                <li>
+                                    <a href="javascript:void(0);" class="delete-default" data-id="@ODispositivo.id" data-url="@Url.Action("excluir", "DispositivoExclusao")">
+                                        <i class="fa fa-trash"></i> Excluir
+                                    </a>
+                                </li>
+                                
+                            </ul>
+    
+                        </div>
+                        
+                    </div>
+                    <div class="clearfix"></div>
+                    
+                </div>
+                
+                <div class="row">
+                    
+                    <div class="col-md-6 col-xs-12 abreviar">
+                        
+                        <div>
+                            <i class="far fa-user"></i> #@ODispositivo.id @(ODispositivo.idPessoa > 0 ? " - " + ODispositivo.Pessoa.nome : "")
+                        </div>
+                        
+                        <div>
+                            
+                            <strong data-toggle="tooltip" title="Código do Aparelho">
+
+                                <i class="fa fa-terminal"></i> @ODispositivo.idDevice
+                                
+                            </strong>
+                            
+                        </div>
+                        
+                    </div>
+                    
+                    <div class="col-md-3 col-sm-6 col-xs-12">
+                        
+                        <div>
+                            
+                            <span data-toggle="tooltip" title="Plataforma">
+                                <i class="fa fa-mobile"></i> @(ODispositivo.flagAndroid == true ? "Android" : (ODispositivo.flagIOS == true ? "IOS" : "Não Identificado"))
+                            </span>
+                            
+                        </div>
+                        
+                        <div>
+                            <strong>Versão: </strong> @ODispositivo.versao
+                        </div>
+                        
+                    </div>
+                    
+                    <div class="col-md-3">
+                        
+                        <div>
+                            <i class="fa fa-calendar"></i> @ODispositivo.dtCadastro.exibirData(true)
+                        </div>
+                        
+                    </div>
+                    <div class="clearfix"></div>
+                    
+                </div>
+                
+            </div>
+            
+        }
+        
+        @(Html.paginarRegistros(Model.listaDispositivos, Html.PagedListPager(Model.listaDispositivos, nroPagina => UtilRequest.linkPaginacao(nroPagina, "Index"), PagedListRenderOptions.OnlyShowFivePagesAtATime)))
+        
+    </div>
+    
+</div>

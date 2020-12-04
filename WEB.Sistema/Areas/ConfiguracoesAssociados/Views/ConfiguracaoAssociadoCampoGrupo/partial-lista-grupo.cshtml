@@ -1,0 +1,33 @@
+﻿@model List<DAL.ConfiguracoesAssociados.ConfiguracaoAssociadoCampoGrupo>
+
+@{
+    Layout = null;
+}
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th width="50" class="text-center">&nbsp;</th>
+            <th>Grupo</th>
+            <th width="100">&nbsp;</th>
+        </tr>
+    </thead>
+    <tbody class="sortable-grupos-campos">
+        @if (Model.Any()) {
+            foreach (var Item in Model) {
+                <tr data-id="@Item.id" data-idtipocampocadastro="@Item.idTipoCampoCadastro">
+                    <td class="text-center"><i class="fa fa-arrows handle cursor-pointer"></i></td>
+                    <td>@Item.descricao</td>
+                    <td>
+                        <a href="javascript:void(0)" onclick="AssociadoCampoGrupo.editar(this)" data-url="@Url.Action("partial-form-grupo", "ConfiguracaoAssociadoCampoGrupo", new {Item.id, Item.idTipoCampoCadastro, idOrganizacao = Item.idOrganizacao})" data-idtipocampocadastro="@Item.idTipoCampoCadastro" data-id="@Item.id" data-toggle="tooltip" title="Editar registro"><i class="far fa-edit text-black"></i></a>&nbsp;
+                        <a href="javascript:void(0)" onclick="AssociadoCampoGrupo.excluir(this)" data-url="@Url.Action("excluir")" data-id="@Item.id" data-toggle="tooltip"  data-idtipocampocadastro="@Item.idTipoCampoCadastro" title="Excluir registro"><i class="far fa-trash-alt text-black"></i></a>
+                    </td>
+                </tr>
+            }
+        } else {
+            <tr>
+                <td colspan="3">Nenhum registro encontrado</td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,46 @@
+﻿@using MvcFlashMessages
+@model DAL.Financeiro.TituloDespesa
+
+@{
+    ViewBag.modalTitle = $"Excluir a despesa {Model.descricao}";
+    ViewBag.modalWidthClass = "md";
+    Layout = IsPost ? null : "~/views/shared/associatec/masterpage-modal.cshtml";
+}
+
+<div id="@(IsPost ? null : "boxFormExcluirDespesa")">
+
+    <div class="alert alert-warning">
+        <strong>Atenção! </strong> Ao remover uma despesa, todos os pagamentos serão removidos juntamente a ela.
+    </div>
+
+    @Html.RenderFlash()
+
+    @using (Ajax.BeginForm("excluir", null, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "boxFormExcluirDespesa", InsertionMode = InsertionMode.Replace, OnSuccess = "DespesaDetalhe.onSuccessExclusaoDespesa" }, new { id = "formExclusaoDepesa", @class = "default col-md-12" })) {
+        @Html.legendaRequired()<br />
+        {Html.EnableClientValidation(false);}
+        @Html.ValidationSummary(false)
+        @Html.HiddenFor(m => m.id)
+        @Html.HiddenFor(x => x.descricao)
+
+        <div class="row">
+            <div class="col-md-8 no-padding-bottom">
+                @Html.labelRequired("Motivo da exclusao")
+            </div>
+            <div class="clearfix"></div>
+            <div class="col-md-12 no-padding-top">
+                @Html.TextAreaFor(x => x.motivoExclusao, new { @class = "form-control input-sm", rows = "4", maxlength = 500})
+            </div>
+        </div>
+        <div class="clearfix"></div><br />
+
+    }
+</div>
+
+@section modalFooter{
+    <div class="col-md-12">
+        <div class="text-right">
+            <input type="button" value="Cancelar" class="btn btn-default" data-dismiss="modal" aria-hidden="true" />
+            <input type="button" value="Confirmar Exclusão" class="btn btn-danger link-loading" onclick="$('#formExclusaoDepesa').submit();" />
+        </div>
+    </div>
+}

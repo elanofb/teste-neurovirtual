@@ -1,0 +1,72 @@
+﻿@model WEB.Areas.ConfiguracoesTextos.ViewModels.ConfiguracaoTextoForm
+@using MvcFlashMessages
+
+@{
+    ViewBag.modalTitle = "Adicionar configuração de texto";
+
+    Layout = "~/views/shared/associatec/masterpage-modal.cshtml";
+
+    if (IsPost) {
+        Layout = null;
+    }
+}
+
+<div id="boxAdicionarConfiguracaoTexto" class="margin-bottom-15">
+
+    @Html.RenderFlash()
+    
+    @using (Ajax.BeginForm("salvar-configuracao-texto", null, new AjaxOptions { HttpMethod = "POST", InsertionMode = InsertionMode.Replace, UpdateTargetId = "boxAdicionarConfiguracaoTexto", OnSuccess = "ConfiguracaoTexto.onSuccessForm" }, new { enctype = "multipart/formdata" })) {
+        var cont = 0;
+        
+        @Html.ValidationSummary(false)
+
+        <div class="col-sm-12">
+            
+            <div class="row">
+                    
+                @Html.HiddenFor(m => m.ConfiguracaoTextoPadrao.id)
+
+                <div class="col-md-6">
+                    <label>Key</label>
+                    @Html.TextBoxFor(m => m.ConfiguracaoTextoPadrao.key, new {@class = "input-sm form-control"})
+                    @Html.ValidationMessageFor(m => m.ConfiguracaoTextoPadrao.key)
+                </div>
+
+                <div class="col-md-6">
+                    <label>Texto Padrão</label>
+                    @Html.TextAreaFor(m => m.ConfiguracaoTextoPadrao.texto, new {@class = "input-sm form-control"})
+                    @Html.ValidationMessageFor(m => m.ConfiguracaoTextoPadrao.texto)
+                </div>
+
+            </div>
+
+            @foreach (var OTexto in Model.listaConfiguracaoTexto) {
+                
+                <h4 class="separator-form-icon"><i class="fa fa-globe"></i> @OTexto.Idioma.descricao (@OTexto.Idioma.sigla)</h4>
+
+                <div class="row">
+
+                    @Html.Hidden("listaConfiguracaoTexto["+cont+"].id", OTexto.id)
+                    @Html.Hidden("listaConfiguracaoTexto["+cont+"].idIdioma", OTexto.idIdioma)
+
+                    <div class="col-md-12">
+                        <label>Texto</label>
+                        @Html.TextArea("listaConfiguracaoTexto["+cont+"].texto", OTexto.texto, new {@class = "input-sm form-control"})
+                    </div>
+
+                </div>
+
+                cont++;
+            }
+
+        </div>
+        <div class="clearfix"></div>
+
+        <div class="col-md-2 margin-top-20 pull-right text-right">
+            <input type="submit" value="Salvar" class="btn btn-sm btn-primary link-loading"/>
+        </div>
+        
+        <div class="clearfix"></div>
+    }
+</div>
+<div class="clearfix"></div>

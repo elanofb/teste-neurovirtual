@@ -1,0 +1,31 @@
+﻿@model WEB.Areas.Mailings.ViewModels.TipoMailingForm
+
+@using (Html.BeginForm("editar", null, FormMethod.Post, new { role = "form", @class = "default" })){
+	@Html.legendaRequired()<br />
+    @Html.ValidationSummary(false)
+	@Html.HiddenFor(m => m.TipoMailing.id)
+    @Html.HiddenFor(m => m.TipoMailing.dtCadastro)
+
+	<div class="form-horizontal">
+
+		<div class="col-md-6">
+            @Html.labelRequired("Descrição")
+			@Html.TextBoxFor(m => m.TipoMailing.descricao, new { @class = "form-control input-sm", maxlength = "100" })
+			@Html.ValidationMessageFor(m => m.TipoMailing.descricao)
+		</div>
+
+		<div class="col-md-2">
+			<label>Status</label>
+			@Html.DropDownListFor(m => m.TipoMailing.ativo, WEB.Helpers.ComboHelper.selectListStatus(Model.TipoMailing.ativo), "...", new { @class = "form-control input-sm" })
+			@Html.ValidationMessageFor(m => m.TipoMailing.ativo)
+		</div>
+		<div class="clearfix"></div>
+
+	</div>
+	<div class="clearfix"></div>
+	<br />
+	<div class="text-right">
+		@Html.exibirBotoesFormulario(Url.Action("listar"), Model.TipoMailing.flagSistema)
+	</div>
+
+}

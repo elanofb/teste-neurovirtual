@@ -1,0 +1,194 @@
+﻿@model PagedList.IPagedList<DAL.CuponsDesconto.CupomDesconto>
+@using PagedList.Mvc
+@using DAL.CuponsDesconto
+
+@{
+    ViewBag.titlePage = "Cupom de Desconto";
+    ViewBag.ativarMenuTabelas = "active";
+}
+
+@section styles{
+    <link href="@UtilConfig.linkResourses()css/associatec/list-custom.css" rel="stylesheet" />
+}
+
+<div class="alert alert-info">
+    <strong>Instruções:</strong> Nesse ambiente você pode gerar cupons de desconto para seus associados em pedidos, eventos, mensalidades ou anuidades.<br />
+    Veja abaixo a relação de cupons gerados anteriormente.
+</div>
+
+<div class="clearfix"></div>
+
+<div class="box box-primary">
+
+    @Html.headerBox("Filtros de Busca", "fa fa-filter")
+
+    <div class="box-body">
+        @using (Html.BeginForm(null, null, FormMethod.Get, new { id = "fmFiltro" })) {
+
+            <div class="form-group col-md-5"></div>
+
+            <div class="clearfix visible-sm"></div>
+
+            <div class="form-group col-md-2 col-sm-3">
+                <label>Utilizado?</label>
+                @Html.DropDownList("flagUsado", ComboHelper.selectListTrueFalse(UtilRequest.getBool("flagUsado")), "Todos", new { @class = "form-control input-sm" })
+            </div>
+
+            <div class="form-group col-md-2 col-sm-3">
+                <label>Status</label>
+                @Html.DropDownList("flagAtivo", ComboHelper.selectListStatus(UtilRequest.getString("flagAtivo")), "Todos", new { @class = "form-control input-sm" })
+            </div>
+
+            <div class="form-group col-md-3 col-sm-6">
+                <label>Buscar</label>
+                @Html.buttonSearch(UtilRequest.getString("valorBusca"))
+            </div>
+            <div class="clearfix"></div>
+        }
+    </div>
+</div>
+<div class="clearfix"></div>
+
+<div class="box box-primary">
+
+    <div class="box-header with-border">
+        <div class="box-title">
+            <i class="far fa-chart-bar"></i> Resultados
+        </div>
+
+        <div class="box-tools pull-right">
+
+            <label class="pull-right margin-top-5" data-toggle="tooltip" title="Selecionar Todos">
+                <input type="checkbox" name="marcarTodos" data-childs="checkRegistro[]" id="checkMarcarTodos" class="" />
+            </label>
+
+            <div class="dropdown pull-right  margin-top-5 margin-right-15">
+                <a href="javascript:;" class="dropdown-toggle fs-16 text-black" type="button" data-toggle="dropdown"><i class="fa fa-cog"></i></a>
+
+                <ul class="dropdown-menu dropdown-menu-right">
+                    <li><a href="@Url.Action("editar")" class=""><i class="far fa-plus-circle"></i> Novo Registro</a></li>
+                    <li class="divider"></li>
+                    <li><a href="javascript:void(0);" data-url="@Url.Action("excluir")" title="Remover itens selecionados" onclick="return DefaultAction.removeAll(this);" data-toggle="tooltip"><i class="fa fa-trash"></i> Excluir Selecionados</a></li>
+                </ul>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="box-body">
+
+
+            @if (Model.Any()) {
+                foreach (var item in Model) {
+                    <div class="box-info-item bordered-destaque border-@(item.flagUtilizado || item.qtdeUsos <= item.qtdeUsados? "green" : (item.dtVencimento < DateTime.Now || item.ativo == "N") ? "red" : "blue" )">
+                        <div class="col-sm-12">
+                            <label class="pull-right" data-toggle="tooltip" title="Selecionar Todos">
+                                <input type="checkbox" name="checkRegistro[]" value="@item.id"/>
+                            </label>
+
+                            <div class="dropdown pull-right margin-right-10">
+                                <a href="javascript:;" class="dropdown-toggle text-black fs-16" type="button" data-toggle="dropdown"><i class="fa fa-cog"></i></a>
+                                <ul class="dropdown-menu dropdown-menu-right">
+                                    <li><a href="@Url.Action("editar", new {item.id})"><i class="fa fa-edit"></i> Editar</a></li>
+                                    <li class="divider"></li>
+                                    <li>@Html.linkAjaxExcluir(item.id, "", "", "", "", "Excluir")</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-2">
+                            <strong><i class="fa fa-hashtag"></i>@item.codigo</strong><br/>
+
+                            @if (item.qtdeUsos > 0){
+                                <span><i class="fa fa-ticket fs-16"></i></span>
+                                <span data-toggle="tooltip" title="Total de Cupons">@item.qtdeUsos <em class="fs-10">(Limite de Uso)</em></span><br/>
+                                <span data-toggle="tooltip" title="Cupons usados"><i class="fa fa-check"></i> @item.qtdeUsados <em class="fs-10">(Utilizados)</em></span><br/>
+                            }
+
+                            
+                        </div>
+
+                        <div class="col-sm-2">
+
+                            <span data-toggle="tooltip" data-original-title="Valor de desconto"><i class="far fa-money-bill"></i> @item.valorDesconto.ToString("C")</span><br/>
+
+                            @utlizacao(item)<br/>
+
+                            @if (item.dtVencimento.HasValue){
+                                <span data-toggle="tooltip" data-original-title="Data de Vencimento"><i class="fa fa-window-close"></i> @item.dtVencimento.exibirData() </span><br/>
+                            }
+
+                            @if (item.dtUso.HasValue){
+                                <span data-toggle="tooltip" data-original-title="Data de Uso"><i class="fa fa-calendar-check"></i> @item.dtUso.exibirData()</span><br/>
+                            }
+
+                        </div>
+
+                        <div class="col-sm-3">
+
+                            @if (item.flagPedido){
+                                <span><i class="fa fa-check" aria-hidden="true"></i> Pedidos</span><br/>
+                            }
+
+                            @if (item.flagEvento){
+                                <span><i class="fa fa-check" aria-hidden="true"></i> Eventos</span><br/>
+                            }
+
+                            @if (item.flagContribuicao){
+                                <span><i class="fa fa-check" aria-hidden="true"></i> Contribuições</span><br/>
+                            }
+
+                        </div>
+
+                        <div class="col-sm-3">
+
+                            @if (!item.nome.isEmpty())
+                            {
+                                <i class="fa fa-user" aria-hidden="true"></i>
+                                @item.nome<br/>
+                            }
+
+                            @if (!item.emailPrincipal.isEmpty())
+                            {
+                                <i class="fa fa-envelope" aria-hidden="true"></i>
+                                @item.emailPrincipal<br/>
+                            }
+
+                            @if (!item.emailSecundario.isEmpty())
+                            {
+                                <i class="fa fa-envelope" aria-hidden="true"></i>
+                                @item.emailSecundario<br/>
+                            }
+                        </div>
+                        <div class="col-sm-2">
+                            @Html.linkStatusDefault(item.id, item.ativo)<br/>
+                            <span data-toggle="tooltip" data-original-title="Data de Cadastro"><i class="fa fa-calendar"></i> @item.dtCadastro.exibirData() </span>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                }
+            } else {
+                <div>
+                    <div class="callout callout-warning">
+                        Nenhum cupom encontrado.
+                    </div>
+                </div>
+            }
+        @(Html.paginarRegistros(Model, Html.PagedListPager(Model, nroPagina => UtilRequest.linkPaginacao(nroPagina, "listar"), PagedListRenderOptions.OnlyShowFivePagesAtATime)))
+    </div>
+</div>
+
+@helper utlizacao(CupomDesconto OCupomDesconto) {
+    if (OCupomDesconto.flagUtilizado || OCupomDesconto.qtdeUsos <= OCupomDesconto.qtdeUsados) {
+        <span class="text-green"><i class="fa fa-check"></i> Utilizado</span>
+        return;
+    }
+
+    if (OCupomDesconto.flagUtilizado == false && OCupomDesconto.qtdeUsos > 0 && OCupomDesconto.qtdeUsados > 0 && OCupomDesconto.ativo == "S") {
+        <span class="text-yellow"><i class="far fa-minus"></i> Em utilização</span>
+        return;
+    }
+
+    <span class="text-blue"><i class="fa fa-times"></i> Não Utilizado</span>
+}

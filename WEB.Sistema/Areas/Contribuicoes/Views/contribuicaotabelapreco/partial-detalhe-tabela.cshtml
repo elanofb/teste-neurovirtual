@@ -1,0 +1,65 @@
+﻿@model ContribuicaoTabelaPreco
+@using DAL.Contribuicoes
+@*@using Vereyon.Web*@
+
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">
+            <span><i class="fa fa-table"></i> @Model.descricao  <small>(desde @Model.dtInicioVigencia.exibirData())</small></span>
+            <a href="javascript:void(0)" onclick="ContribuicaoTabelaPreco.removerTabela(this)" data-id="@Model.id" class="pull-right padding-left-10" data-toggle="tooltip" title="Remover tabela de preço"><i class="fa fa-trash text-black"></i></a>
+            <a href="javascript:void(0)" onclick="DefaultSistema.showModal('@Url.Action("modal-form-cadastro", new {Model.id})')" class="pull-right" data-toggle="tooltip" title="Editar dados da tabela de preço"><i class="fa fa-edit text-black"></i></a>
+        </h3>
+    </div>
+    <div class="panel-body">
+        <p class="text-right">
+            <a href="javascript:void(0)" onclick="DefaultSistema.showModal('@Url.Action("modal-form-tabela-preco-item", "ContribuicaoTabelaPrecoItem", new {idTabelaPreco = Model.id})')" data-toggle="tooltip" title="Adicionar tipo de associado"><i class="fa fa-plus"></i> Adicionar</a>
+        </p>
+        @if (!Model.listaPrecos.Any()) {
+            <div class="flash-messages">
+                <div class="flash-message flash-message-danger">
+                    Não valores configurados para essa tabela.
+                </div>
+            </div>
+        }
+        @foreach (var OPreco in Model.listaPrecos) {
+            <div class="row">
+                <div class="col-xs-12">
+                    @exibirBoxItem(OPreco)
+                </div>
+            </div>
+        }
+        <div class="clearfix"></div>
+    </div>
+</div>
+
+@helper exibirBoxItem(ContribuicaoPreco Item) {
+    Item.listaDesconto = Item.listaDesconto.Where(x => x.dtExclusao == null).ToList();
+    <div class="box-info-item">
+        <div class="row">
+            <div class="col-lg-5 col-sm-5 col-xs-5">
+                <span class="titulo"><i class="fa fa-user"></i> @Item.TipoAssociado.descricao</span><br/>
+                <small><em>(Inscrição @Item.TipoAssociado.valorTaxaInscricao.exibirValor())</em></small>
+            </div>
+            <div class="col-lg-4 col-sm-3 col-xs-4">
+                @if (Item.listaDesconto.Any() && Item.flagIsento != true){
+
+                    foreach (var ODesconto in Item.listaDesconto){
+                        <small class="fs-10 text-italic">@(Decimal.Subtract(UtilNumber.toDecimal(Item.valorFinal), ODesconto.valorDesconto).ToString("C")) (@ODesconto.qtdeDiasAntecipacao dias antes)</small><br/>
+                    }
+                }
+            </div>
+            <div class="col-lg-3 col-sm-4 col-xs-3">
+                <p class="text-right no-margin">
+                    <span><strong>@(Item.flagIsento == true ? "Isento" : Item.valorFinal.exibirValor()) </strong></span>
+                </p>
+                <p class="text-right margin-top-10">
+                    <a href="javascript:void(0)" onclick="DefaultSistema.showModal('@Url.Action("modal-form-tabela-preco-item", "ContribuicaoTabelaPrecoItem", new {Item.id, idTabelaPreco = Model.id})')" class="text-black" data-toggle="tooltip" title="Editar valores"><i class="fa fa-edit fs-16"></i></a>&nbsp;
+                    <a href="javascript:void(0)" onclick="ContribuicaoTabelaPrecoItem.removerItem(this)" data-id="@Item.id" class="text-black" data-toggle="tooltip" title="Remover tipo de associado da tabela"><i class="fa fa-trash fs-16"></i></a>
+                </p>
+            </div>
+        </div>
+        <hr class="no-margin"/>
+    </div>
+
+}

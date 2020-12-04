@@ -1,0 +1,51 @@
+﻿@model WEB.Areas.Pedidos.ViewModels.PedidoDetalhesHistoricoVM
+
+<div class="box-header with-border">
+        
+    <h3 class="box-title">
+        <i class="fa fa-history"></i> Histórico do Pedido
+    </h3> 
+
+</div>
+            
+<div class="box-body">
+        
+    <div id="boxListaHistoricoPedido">
+        
+        <div class="row">
+            
+            <div class="col-xs-12">
+                
+                @foreach (var OHistorico in Model.listaOcorrencias) {
+    
+                    <div class="box-info-item-dotted fs-12">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <span class="text-bold">
+                                    <i class="far fa-chevron-right"></i> @(OHistorico.TipoOcorrenciaPedido?.descricao)
+                                </span>
+                                <span class="pull-right" data-toggle="tooltip" title="Data da Ocorrência">
+                                    <i class="far fa-calendar-alt"></i> @OHistorico.dtOcorrencia.exibirData(true)
+                                </span>
+                            </div>
+                            <div class="clearfix"></div>
+                                    
+                            @if (!OHistorico.observacoes.IsEmpty()) {
+                                <div class="fs-12 margin-top-5">
+                                    <div class="col-md-12">
+                                        <p class="campo-info">
+                                            <label>Obs:</label> @OHistorico.observacoes
+                                        </p>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+    
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</div>

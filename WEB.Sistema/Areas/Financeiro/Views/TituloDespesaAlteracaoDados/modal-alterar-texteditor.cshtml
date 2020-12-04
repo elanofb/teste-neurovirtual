@@ -1,0 +1,41 @@
+﻿@using MvcFlashMessages
+@model UTIL.UtilClasses.EditableItem
+@{
+    ViewBag.modalTitle = Model.nomeCampoDisplay;
+    ViewBag.modalWidthClass = "lg";
+    if (!UtilRequest.getString("flagEnvio").isEmpty()){
+        Layout = null;
+    }else{
+        Layout = "~/views/shared/associatec/masterpage-modal.cshtml";
+    }
+}
+
+<div id="boxFormAlterarEditor">
+    
+    @Html.RenderFlash()
+
+    @using (Ajax.BeginForm("alterar-dados", "TituloDespesaAlteracaoDadosController", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "boxFormAlterarEditor", InsertionMode = InsertionMode.Replace, OnSuccess = "EditableCustom.onSuccessForm" }, new { id = "formAlterarDados", @class = "default" })) {
+
+        @Html.Hidden("flagEnvio", "S")
+        { Html.EnableClientValidation(false); }
+        @Html.ValidationSummary(false)
+
+        @Html.HiddenFor(m => m.pk)
+        @Html.HiddenFor(m => m.name)
+        @Html.HiddenFor(m => m.nomeCampoDisplay)
+        @Html.HiddenFor(m => m.targetBox)
+        @Html.HiddenFor(m => m.viewName)
+
+        <div class="col-sm-12">
+            @Html.TextAreaFor(m => m.value, new {@class = "form-control input-sm froala-editor", rows = "7"})
+        </div>
+        <div class="clearfix"></div><br />
+    }
+</div>
+
+@section modalFooter{
+	<div class="text-right">
+		<input type="button" value="Cancelar" class="btn btn-default" data-dismiss="modal"  aria-hidden="true" />
+		<input type="button" value="Salvar Alteração" class="btn btn-primary link-loading" onclick="$('#formAlterarDados').submit();" />
+	</div>
+}

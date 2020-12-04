@@ -1,0 +1,55 @@
+﻿@using MvcFlashMessages
+@model WEB.Areas.Produtos.ViewModels.TipoProdutoForm
+
+@{
+    if(IsPost) {
+        Layout = null;
+		
+    } else { 
+        Layout = "~/views/shared/associatec/masterpage-modal.cshtml";
+    }
+    
+    ViewBag.modalTitle = "Cadastrar Tipo de Produto";
+}
+
+
+<div id="@(IsPost ? "" : "boxFormTipoProduto")">
+
+	@Html.RenderFlash()
+
+	@using (Ajax.BeginForm("salvar-modal-editar", null, new AjaxOptions { UpdateTargetId = "boxFormTipoProduto", HttpMethod = "POST", OnSuccess = "TipoProduto.onSuccess" }, new { role = "form", @class = "default" })) {
+			
+        @Html.legendaRequired()
+
+		@Html.HiddenFor(m => m.TipoProduto.id)
+
+		@Html.ValidationSummary(false)
+
+		<div class="col-md-12">
+			@Html.labelRequired("Tipo de Produto")
+			@Html.TextBoxFor(m => m.TipoProduto.descricao, new {@class = "form-control input-sm", maxlength = "100"})
+			@Html.ValidationMessageFor(m => m.TipoProduto.descricao)
+		</div>
+		<div class="clearfix"></div>
+
+        <div class="col-md-6">
+            @Html.labelRequired("Produto")
+            @Html.DropDownListFor(m => m.TipoProduto.flagProduto, ComboHelper.selectListTrueFalse(Model.TipoProduto.flagProduto),"...", new { @class = "form-control input-sm" })
+            @Html.ValidationMessageFor(m => m.TipoProduto.flagProduto)
+        </div>
+        <div class="col-md-6">
+            @Html.labelRequired("Serviço")
+            @Html.DropDownListFor(m => m.TipoProduto.flagServico, ComboHelper.selectListTrueFalse(Model.TipoProduto.flagServico), "...", new { @class = "form-control input-sm" })
+            @Html.ValidationMessageFor(m => m.TipoProduto.flagServico)
+        </div>
+		<div class="clearfix"></div><br />
+
+	    <div class="col-xs-12 text-right">
+	        <input type="submit" class="btn btn-primary link-loading" value="Salvar"/>
+	    </div>
+	    <div class="clearfix"></div>
+	}
+
+</div>
+<div class="clearfix"></div><br />
+

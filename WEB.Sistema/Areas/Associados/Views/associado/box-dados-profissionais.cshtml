@@ -1,0 +1,13 @@
+﻿@model WEB.Areas.Associados.ViewModels.AssociadoForm
+@using WEB.Areas.OrgaosClasses.Helpers
+
+<h4 class="separator-form">Dados Profissionais</h4>
+<div class="row">
+    <div class="col-md-3 col-lg-2">
+        <label>Órgão de Classe</label>
+        @Html.DropDownListFor(m => m.Associado.Pessoa.idOrgaoClasse, OrgaoClasseHelper.getInstance.selectList(Model.Associado.Pessoa.idOrgaoClasse), "...", new {@class = "form-control input-sm"})
+        @Html.ValidationMessageFor(m => m.Associado.Pessoa.idOrgaoClasse)
+    </div>
+
+    <div class="clearfix"></div>
+</div>

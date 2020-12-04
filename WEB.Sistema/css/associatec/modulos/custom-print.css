@@ -1,0 +1,113 @@
+/****/
+.field-datetime { width:117px !important; }
+.width-25 { width:25px !important; }
+.width-35 { width:35px !important; }
+.width-40 { width:40px !important; }
+.width-50 { width:50px !important; }
+.width-60 { width:60px !important; }
+.width-75 { width:75px !important; }
+.width-100 { width:100px !important; }
+.width-125 { width:125px !important; }
+.width-150 { width:150px !important; }
+.width-175 { width:175px !important; }
+.width-200 { width:200px !important; }
+.width-250 { width:250px !important; }
+.width-300 { width:300px !important; }
+.width-350 { width:350px !important; }
+.width-450 { width:450px !important; }
+.width-500 { width:500px !important; }
+.min-width-800 { min-width:800px !important; }
+.min-width-600 { min-width:600px !important; }
+.min-width-500 { min-width:500px !important; }
+.min-width-400 { min-width:400px !important; }
+
+.margin-10 { margin:10px; }
+.margin-right-10 { margin-right:10px; }
+.margin-left-10 { margin-left:10px; }
+.margin-top-10 { margin-top:10px; }
+.margin-bottom-10 { margin-bottom:10px; }
+
+.no-margin { margin:0px !important; }
+.no-margin-top { margin-top:0px !important; }
+.no-margin-bottom { margin-bottom:0px !important; }
+.no-margin-right { margin-right:0px !important; }
+.no-margin-left { margin-left:0px !important; }
+
+.padding-10 { padding:10px; }
+.padding-right-10 { padding-right:10px; }
+.padding-left-10 { padding-left:10px; }
+.padding-top-10 { padding-top:10px; }
+.padding-bottom-10 { padding-bottom:10px; }
+
+.padding-20 { padding:20px; }
+.padding-right-20 { padding-right:20px; }
+.padding-left-20 { padding-left:20px; }
+.padding-top-20 { padding-top:20px; }
+.padding-bottom-20 { padding-bottom:20px; }
+
+.padtop22 { padding-top:22px; }
+
+.no-padding { padding:0px !important; }
+.no-padding-top { padding-top:0px !important; }
+.no-padding-bottom { padding-bottom:0px !important; }
+.no-padding-right { padding-right:0px !important; }
+.no-padding-left { padding-left:0px !important; }
+
+.text-center { text-align: center; }
+
+.text-right { text-align: right; }
+
+/************** CLASSES TEXT SIZES *****************/
+.fs-8 { font-size: 8pt !important; }
+.fs-9 { font-size: 9pt !important; }
+.fs-11 { font-size: 11pt !important; }
+.fs-10 { font-size: 10pt !important; }
+.fs-12 { font-size: 12pt !important; }
+.fs-14 { font-size: 14pt !important; }
+.fs-16 { font-size: 16pt !important; }
+.fs-18 { font-size: 18pt !important; }
+.fs-20 { font-size: 20pt !important; }
+.fs-22 { font-size: 22pt !important; }
+.fs-24 { font-size: 24pt !important; }
+.fs-26 { font-size: 26pt !important; }
+.fs-28 { font-size: 28pt !important; }
+.fs-30 { font-size: 30pt !important; }
+.fs-40 { font-size: 40pt !important; }
+.fs-50 { font-size: 50pt !important; }
+.fs-60 { font-size: 60pt !important; }
+
+/************** PRINT BUTTON *****************/
+.btn {
+    display: inline-block;
+    padding: 6px 12px;
+    margin-bottom: 0;
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 1.42857143;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-image: none;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+
+.btn {
+    border-radius: 3px;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    border: 1px solid transparent;
+}
+
+.btn-default {
+    background-color: #f4f4f4;
+    color: #444;
+    border-color: #ddd;
+}

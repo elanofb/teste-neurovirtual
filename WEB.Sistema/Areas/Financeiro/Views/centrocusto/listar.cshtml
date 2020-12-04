@@ -1,0 +1,157 @@
+﻿@model PagedList.IPagedList<DAL.Financeiro.CentroCusto>
+
+@using DAL.Permissao.Security.Extensions
+@using PagedList.Mvc
+@using WEB.Helpers
+
+@{
+    ViewBag.titlePage = "Centros de Custo Cadastrados";
+}
+
+@section styles {
+    <link href="@UtilConfig.linkResourses()css/associatec/list-custom.css" rel="stylesheet" />
+}
+
+<div class="box box-primary">
+
+    @Html.headerBox("Filtros de Busca", "fa fa-filter")
+
+    <div class="box-body">
+
+        @using (Html.BeginForm(null, null, FormMethod.Get, new {id = "fmFiltro"})) {
+
+            <div class="form-group col-md-7"></div>
+
+            <div class="form-group col-md-2 col-sm-6">
+                <label>Status</label>
+                @Html.DropDownList("flagAtivo", ComboHelper.selectListStatus(UtilRequest.getString("flagAtivo")), "Todos", new {@class = "form-control input-sm"})
+            </div>
+
+            <div class="form-group col-md-3 col-sm-6">
+                <label>Buscar</label>
+                @Html.buttonSearch(UtilRequest.getString("valorBusca"))
+            </div>
+            <div class="clearfix"></div>
+
+        }
+
+    </div>
+
+</div>
+
+<div class="box box-primary">
+
+    <div class="box-header with-border">
+
+        <h3 class="box-title">
+            <i class="far fa-chart-bar"></i> Resultados
+        </h3>
+
+        <div class="box-tools pull-right">
+            <div class="btn-group">
+                
+                <button type="button" class="btn btn-box-tool dropdown-toggle text-black fs-16" data-toggle="dropdown">
+                    <i class="fa fa-cog"></i> 
+                </button>
+                <ul class="dropdown-menu dropdown-menu-right" role="menu">
+
+                    @using (Html.BeginForm("gerar-excel", null, FormMethod.Post, new { id = "formExcel", role = "form", @class = "default", target = "_blank" })) {
+
+                        @Html.Hidden("ids", 0, new { id = "idsExcel" })
+
+                    }
+                    
+                    <li>
+                        <a href="@Url.Action("editar")"><i class="far fa-plus"></i> Novo Centro de Custo</a>
+                    </li>
+                    
+                    <li>
+                        <a href="javascript:void(0);" onclick="return DefaultAction.gerarExcel();"><i class="far fa-file-excel"></i> Gerar Excel</a>
+                    </li>
+                    
+                    <li class="divider"></li>
+                    
+                    <li>
+                        <a href="javascript:void(0);" data-url="@Url.Action("excluir")" onclick="return DefaultAction.removeAll(this);"><i class="far fa-trash-alt"></i> Excluir selecionados</a>
+                    </li>
+                    
+                </ul>
+
+            </div>
+        </div>
+
+    </div>
+    
+    <div class="box-body">
+
+        @if(!Model.Any()) {
+            <div class="col-sm-12">
+                <div class="alert alert-info">
+                    Nenhum centro de custo foi encontrado.
+                </div>
+            </div>
+        }
+
+        @foreach (var Item in Model) {
+
+            <div class="box-info-item-dotted">
+
+                <div class="row fs-12">
+                    <div class="col-lg-2 col-sm-2 col-xs-6">
+                        <span data-toggle="tooltip" title="Código Fiscal">
+                            <strong><i class="fas fa-balance-scale"></i> #@Item.codigoFiscal</strong>
+                        </span>
+                    </div>
+
+                    <div class="col-lg-3 col-sm-3 col-xs-6 abreviar">
+                        <span data-toggle="tooltip" title="Centro de Custo">
+                            <i class="fa fa-tag"></i> @Item.descricao
+                        </span>
+                        @if (User.idOrganizacao() == 0) {
+                            <br/><em><i class="fa fa-building"></i> @Item.Organizacao.Pessoa.nome</em>
+                        }
+                    </div>
+
+                    <div class="col-lg-3 col-sm-3 col-xs-6 text-left abreviar">
+                        <span data-toggle="tooltip" title="Data de Cadastro">
+                            <i class="fa fa-calendar"></i> @Item.dtCadastro.exibirData()
+                        </span><br />
+                    </div>
+
+                    <div class="col-lg-3 col-sm-2 col-xs-6 text-left abreviar">
+                        @Html.linkStatusDefault(Item.id, Item.ativo)
+                    </div>
+
+                    <div class="col-lg-1 col-sm-2 col-xs-6 text-right">
+                        <div class="row">
+                            <div class="col-sm-6 no-padding-right">
+                                <div class="dropdown">
+                                    <a href="javascript:;" class="dropdown-toggle text-black fs-14" data-toggle="dropdown">
+                                        <span class="fa fa-cog"></span>
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-right">
+                                        <li>@Html.linkTexto("<i class=\"fa fa-edit\"></i> Editar Cadastro", Url.Action("editar", "centrocusto", new { Item.id }))</li>
+                                        <li class="divider"></li>
+                                        <li>@Html.linkAjaxExcluir(Item.id, "N", Url.Action("excluir", "centrocusto"), "", "", "Excluir")</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div>
+                                    <input type="checkbox" name="checkRegistro[]" value="@Item.id" data-id="@Item.id" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        }
+
+        @(Html.paginarRegistros(Model, Html.PagedListPager(Model, nroPagina => UtilRequest.linkPaginacao(nroPagina, "index"), PagedListRenderOptions.OnlyShowFivePagesAtATime)))
+
+    </div>
+
+</div>

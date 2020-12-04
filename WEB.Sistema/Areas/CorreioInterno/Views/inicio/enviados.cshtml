@@ -1,0 +1,10 @@
+﻿@model PagedList.IPagedList<LogEmail>
+@using DAL.Entities
+@{
+	Layout = "~/Areas/CorreioInterno/views/shared/masterpage-correio-interno.cshtml";
+	ViewBag.nomeCaixa = "Itens Enviados";	
+}
+
+@section conteudoEmails{
+	<div id="boxCaixaEmails" data-url="@Url.Action("caixa-emails-enviados")"></div>
+}

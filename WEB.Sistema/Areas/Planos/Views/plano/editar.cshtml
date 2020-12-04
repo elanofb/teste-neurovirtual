@@ -1,0 +1,74 @@
+﻿@model WEB.Areas.Planos.ViewModels.PlanoForm
+@{
+    Layout = "~/views/shared/associatec/masterpage-edit.cshtml";
+    ViewBag.titlePage = "Plano ";
+    ViewBag.subTitlePage = (Model.Plano.id > 0 ? Model.Plano.nome : "Novo Cadastro");
+}
+
+@section scripts{
+    <script type="text/javascript" src="@UtilConfig.linkResourses()js/plugins/ckeditor/ckeditor.js"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses()js/plugins/ckeditor/config.js"></script>
+    <script src="@UtilConfig.linkResourses()Areas/Planos/js/plano.js"></script>
+}
+
+@section navTabs{
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#tab-1" data-toggle="tab">Principal</a></li>
+    </ul>
+}
+
+@section tabContent{
+    <div id="tab-1" class="tab-pane active">
+        @using (Html.BeginForm("editar", null, FormMethod.Post, new { role = "form", @class = "default" })) {
+            @Html.HiddenFor(m => m.Plano.id)
+            @Html.HiddenFor(m => m.Plano.dtCadastro)
+            @Html.ValidationSummary(false)
+            { Html.RenderPartial("partialInfoCadastro"); }
+
+            <div class="form-horizontal">
+                <div class="col-md-12 no-padding">
+                    <h4 class="separator-form">Informações do Plano</h4>
+                    <div class="col-md-4">
+                        @Html.labelRequired("Nome")
+                        @Html.TextBoxFor(m => m.Plano.nome, new {@class = "form-control input-sm"})
+                        @Html.ValidationMessageFor(m => m.Plano.nome)
+                    </div>
+
+                    <div class="col-md-2">
+	                    <label>Status</label>
+	                    @Html.DropDownListFor(m => m.Plano.ativo, ComboHelper.selectListStatus(Model.Plano.ativo), new { @class = "form-control input-sm" })
+                    </div>
+
+                    <div class="clearfix"></div><br />
+
+                    <div class="col-md-2">
+                        @Html.labelRequired("Exibir no Portal?")
+                        @Html.DropDownListFor(m => m.Plano.flagExibirPortal, ComboHelper.selectListTrueFalse((Model.Plano.flagExibirPortal == null) ? true : Model.Plano.flagExibirPortal), new { @class = "form-control input-sm" })
+                        @Html.ValidationMessageFor(m => m.Plano.flagExibirPortal)
+                    </div>
+
+                    <div class="col-md-2">
+                        @Html.labelRequired("Vigência em Meses")
+                        @Html.TextBoxFor(m => m.Plano.qtdeMesVigencia, new { @class = "form-control input-sm" })
+                        @Html.ValidationMessageFor(m => m.Plano.qtdeMesVigencia)
+                    </div>
+                    <div class="col-md-2">
+                        <label>Valor:</label>
+                        @Html.TextBoxFor(m => m.Plano.valor, new { @class = "form-control input-sm", @alt = "decimal" })
+                        @Html.ValidationMessageFor(m => m.Plano.valor)
+                    </div>
+                </div>
+            </div>
+
+            <div class="clearfix"></div><br />
+
+            <div class="text-right">
+                <a href="@Url.Action("listar")" class=" btn btn-default">Voltar</a>&nbsp;
+                <input type="submit" name="enviar" value="Salvar" class="btn btn-primary" />
+            </div>
+        }
+    </div>
+
+    <div class="clearfix"></div>
+}
+

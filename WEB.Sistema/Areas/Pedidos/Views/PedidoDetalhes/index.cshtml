@@ -1,0 +1,112 @@
+﻿@using DAL.Pedidos
+@using WEB.Areas.Arquivos.Helpers
+@model WEB.Areas.Pedidos.ViewModels.PedidoDetalhesVM
+
+@{
+    ViewBag.titlePage    = String.Concat("Pedido Nº ", Model.Pedido.id);
+    ViewBag.subTitlePage = String.Concat("Cliente: ", Model.Pedido.nomePessoa);
+}
+
+@section breadcrump{
+    <ol class="breadcrumb">
+        <li><a href="@Url.Action("index", "PedidoConsulta")" class="active fs-14">
+            <i class="fa fa-arrow-left"></i> 
+            Voltar
+        </a></li>
+    </ol>
+}
+@section styles{
+    @Html.includeCSSModuloArquivos()
+    
+    <link rel="stylesheet" href="@UtilConfig.linkResourses("Areas/Pessoas/js/plugins/datatables/media/css/jquery.dataTables.bootstrap.css")" />
+    <link rel="stylesheet" href="@UtilConfig.linkResourses("Areas/Arquivos/css/arquivo-documento.css")" />
+    <link rel="stylesheet" href="@UtilConfig.linkResourses("Areas/Pedidos/css/pedido-detalhe.css")" />
+    <link rel="stylesheet" href="@UtilConfig.linkResourses("css/associatec/list-custom.css")" />
+    <link rel="stylesheet" href="@UtilConfig.linkResourses("css/associatec/material-design-colors/material-design-color-palette.css?v=1")" />
+}
+
+@section scripts {
+    @Html.includeDatePicker()
+    @Html.includeJSModuloArquivos()
+    @Html.includeFileApiJS()
+    @Html.includeBootstrapEditable()
+    @Html.includeFroalaEditorJS()
+    
+    <script type="text/javascript" src="@UtilConfig.linkResourses("Areas/Localizacao/js/localizacao.js")"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses("Areas/Pedidos/js/pedido-detalhes.js?v=1.2")"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses("Areas/Pedidos/js/pedido-cobranca.js?v=1")"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses("Areas/Pedidos/js/pedido-detalhes-frete.js")"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses("Areas/Pedidos/js/pedido-detalhes-produto.js")"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses("Areas/Pedidos/js/pedido-acao.js")"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses("Areas/Pedidos/js/pedido-acao-faturamento.js")"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses("Areas/Pedidos/js/pedido-acao-cancelamento.js")"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses("Areas/financeiro/js/combo-centro-custo.js?v=1")"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses("Areas/financeiro/js/combo-macro-conta.js?v=1")"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses("Areas/financeiro/js/combo-sub-conta.js?v=1")"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses("Areas/Financeiro/js/receita-baixa.js?v=1.0")"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses("Areas/Arquivos/js/arquivo-documento.js")"></script>
+    
+    <script type="text/javascript" src="@UtilConfig.linkResourses("Areas/FinanceiroParcelamentos/js/titulo-receita-parcelamento.js?v=1.0")"></script>
+}
+
+
+<main class="row">
+    <div class="col-md-12">
+        <div class="box box-primary">
+            @{ Html.RenderPartial("partial-dados-pedido", Model); }
+        </div>
+    </div>
+    
+    @if(Model.Pedido.StatusPedido.id    == StatusPedidoConst.EM_ABERTO 
+        || Model.Pedido.StatusPedido.id == StatusPedidoConst.AGUARDANDO_PAGAMENTO ) {
+        
+        <div class="col-md-12">
+            <div class="box box-primary">
+                @{ Html.RenderPartial("partial-documentos-pedido", Model); }
+            </div>
+        </div>
+    }
+    
+    <div class="col-md-12">
+        <div class="box box-primary">
+            <div id="boxItensPedido" class="carregando" data-url="@Url.Action("partial-lista-produtos", "PedidoDetalhesProduto", new {idPedido = Model.Pedido.id})">
+                <div class="box-header">
+                    <h3 class="box-title">
+                        <i class="fa fa-list"></i>
+                        Itens do Pedido
+                    </h3>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="box box-primary">
+            <div class="box-header">
+                <h3 class="box-title">
+                    <i class="fa fa-history"></i>
+                    Histórico do Pagamentos
+                </h3>
+            </div>
+            <div class="box-body">
+                <div id="boxHistoricoPagamento" class="carregando content-load" data-url="@Url.Action("partial-lista-movimento", "MovimentoPedidoConsulta", new {area = "Movimentacoes", idPedido = Model.Pedido.id})">
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="box box-primary">
+            <div id="boxHistoricoPedido" class="carregando" data-url="@Url.Action("partial-lista-ocorrencias", "PedidoDetalhesHistorico", new {idPedido = Model.Pedido.id})">
+                <div class="box-header">
+                    <h3 class="box-title">
+                        <i class="fa fa-history"></i>
+                        Histórico do Pedido
+                    </h3>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="clearfix"></div>
+</main>

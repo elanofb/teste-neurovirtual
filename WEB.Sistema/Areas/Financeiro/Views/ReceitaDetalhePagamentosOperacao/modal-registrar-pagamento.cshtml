@@ -1,0 +1,76 @@
+﻿@model WEB.Areas.Financeiro.ViewModels.BaixaTituloReceitaPagamentoForm
+@using WEB.Helpers
+@using MvcFlashMessages
+@{
+    ViewBag.modalTitle = "Registrar Pagamento(s) " + (Model.TituloReceitaPagamento.TituloReceita.descricao.isEmpty() ? "" : " - " + Model.TituloReceitaPagamento.TituloReceita.descricao);
+
+    ViewBag.modalWidthClass = "lg";
+
+    string idBox = "boxRegistrarPagamentoForm";
+
+    bool flagSubmit = this.ViewContext.RouteData.Values["action"].ToString() == "registrar-pagamento";
+
+    Layout = flagSubmit ? null : "~/views/shared/associatec/masterpage-modal.cshtml";
+}
+
+<div id="@(flagSubmit? "": idBox)">
+    @Html.RenderFlash()
+
+	@if (Model.listaTituloReceitaPagamento.Any()) {
+		<div class="row">
+			<div class="col-sm-12">
+				<span class="badge bg-yellow"><i class="far fa-exclamation-triangle"></i> <strong>Atenção!</strong> Essa operação não poderá ser desfeita. Preencha as informações atentamente.</span>
+			</div>
+		</div>
+		
+        using (Ajax.BeginForm("registrar-pagamento", "ReceitaDetalhePagamentosOperacao", new { area = "financeiro" }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = idBox,  InsertionMode = InsertionMode.Replace, OnSuccess = "ReceitaRegistrarPagamento.onSuccessPagamentoForm" }, new { @class="form-min-label"})) {
+            @Html.legendaRequired()<br />
+            @Html.HiddenFor(x => x.TituloReceitaPagamento.TituloReceita.descricao)
+
+            { Html.EnableClientValidation(false); }
+            @Html.ValidationSummary(false);
+	        
+	        { Html.RenderPartial("~/Areas/Financeiro/Views/ReceitaBaixa/partial-form-baixa.cshtml", Model); }
+	        
+	        <div class="row margin-top-10">
+		        <div class="col-md-12 text-right">
+			        <input type="submit" class="btn btn-primary link-loading" title="Adicionar" value="Salvar Pagamento" />
+		        </div>
+	        </div>
+            
+	        <h4 class="separator-form-icon"><i class="far fa-search"></i> Você está registrando os pagamento abaixo:</h4>
+            <div class="col-md-12">
+                <table class="table dataTable table-bordered table-striped fs-12">
+                    <thead>
+                    <tr>
+                        <th width="30">ID</th>
+                        <th>Receita</th>
+                        <th>Descrição</th>
+                        <th width="150">Data Vencimento</th>
+                        <th width="150">Valor</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @{ var count = 0;}
+                    @foreach (var Item in Model.listaTituloReceitaPagamento) {
+                        @Html.HiddenFor(m => m.listaTituloReceitaPagamento[count].id)
+                        @Html.HiddenFor(m => m.listaTituloReceitaPagamento[count].TituloReceita.descricao)
+                        @Html.HiddenFor(m => m.listaTituloReceitaPagamento[count].descricaoParcela)
+                        @Html.HiddenFor(m => m.listaTituloReceitaPagamento[count].dtVencimento)
+                        @Html.HiddenFor(m => m.listaTituloReceitaPagamento[count].valorOriginal)
+                        <tr>
+                            <td class="text-center">@Item.id</td>
+                            <td class="text-left">@Item.TituloReceita.descricao<br/></td>
+                            <td class="text-left">@Item.descricaoParcela.defaultIfEmpty("-")<br/></td>
+                            <td class="text-left">@Item.dtVencimento.exibirData()</td>
+                            <td class="text-left">@Item.valorOriginal.ToString("C")</td>
+                        </tr>
+                        count++;
+                    }
+                    </tbody>
+                </table>            
+            </div>
+		}
+	}
+
+</div>

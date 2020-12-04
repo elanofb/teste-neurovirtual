@@ -1,0 +1,18 @@
+.small-box-footer-2 {
+    position: relative;
+    text-align: center;
+    padding: 5px 10px 5px 6px;
+    color: #fff;
+    color: rgba(255, 255, 255, 0.8);
+    display: block;
+    z-index: 10;
+    background: rgba(0, 0, 0, 0.1);
+    text-decoration: none;
+    float: left;
+    margin-top: 10px;
+}
+
+.small-box > .small-box-footer:hover, .small-box-footer-2:hover {
+    color: #fff;
+    background: rgba(0, 0, 0, 0.15);
+}

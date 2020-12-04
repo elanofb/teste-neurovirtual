@@ -1,0 +1,118 @@
+﻿@model PagedList.IPagedList<DAL.ContasBancarias.ContaBancariaMovimentacao>
+@using PagedList.Mvc
+@using DAL.ContasBancarias
+@using WEB.Helpers
+
+@{
+    ViewBag.titlePage = "Conta - " + ViewBag.nomeConta;
+    ViewBag.subTitlePage = "";
+    string dtOperacao = ViewBag.dtOperacao;
+}
+
+@section styles{
+    <link type="text/css" rel="stylesheet" href="@UtilConfig.linkResourses()areas/ContasBancarias/js/plugins/bootstrap-datepicker/css/datepicker3.css"/>
+    <link type="text/css" rel="stylesheet" href="@UtilConfig.linkResourses()areas/ContasBancarias/css/daterangepicker/daterangepicker-bs3.css" />
+}
+
+@section scripts{
+    <script type="text/javascript" src="@UtilConfig.linkResourses()areas/ContasBancarias/js/plugins/daterangepicker/daterangepicker.js"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses()areas/ContasBancarias/js/movimentacao.js"></script>
+    @Html.includeDatePicker()
+}
+
+<div class="col-xs-12 box box-solid internal-default">
+    <div>
+        @using (Html.BeginForm(null, null, FormMethod.Get, new {@class = "filtros"})) {
+
+            @Html.Hidden("idContaBancariaOrigem", UtilRequest.getInt32("idContaBancariaOrigem"), new {@class = "form-control input-sm"})
+            @Html.Hidden("idTipoOperacao", UtilRequest.getInt32("idTipoOperacao"), new {@class = "form-control input-sm"})
+
+            <div class="form-group col-xs-6">
+            </div>
+            <div class="form-group col-md-3">
+                <label>Data da Operação</label>
+                <div class="input-group">
+                    <div class="input-group-addon"><i class="fa fa-calendar"></i>
+                    </div>
+                    @Html.TextBox("dtOperacao", dtOperacao, new { @class = "form-control input-sm" })
+                </div>
+            </div>
+            <div class="form-group col-xs-3">
+                <label>Buscar</label>
+                @Html.buttonSearch(UtilRequest.getString("valorBusca"))
+            </div>
+        }
+        <div class="clearfix"></div>
+    </div>
+
+    <div class="table-responsive">
+        <div class="dataTables_wrapper form-inline" role="grid">
+
+            <div class="links-table">
+                <div class="btn-group">
+                    <a href="@Url.Action("editar", new { id = 0, idContaBancariaOrigem = UtilRequest.getInt32("idContaBancariaOrigem"), idTipoOperacao = UtilRequest.getInt32("idTipoOperacao"), urlRetorno = Request.Url.AbsoluteUri})" class="btn btn-default btn-flat" title="Adicionar novo registro">
+                        <i class="far fa-plus-circle"></i>
+                    </a>
+                    <a href="javascript:void(0);" data-url="@Url.Action("excluir")" class="btn btn-default btn-flat" title="Remover itens selecionados" onclick="return DefaultAction.removeAll(this);">
+                        <i class="fa fa-trash"></i>
+                    </a>
+                </div>
+            </div>
+
+            <table class="table table-bordered table-striped dataTable">
+                <thead>
+                <tr role="row">
+                    <th class="width-50 text-center"><input type="checkbox" name="marcarTodos" data-childs="checkRegistro[]" id="checkMarcarTodos"/></th>
+                    <th>Conta Destino</th>
+                    <th>Data</th>
+                    <th>Descrição</th>
+                    <th>Valor </th>
+                    <th class="width-50">&nbsp;</th>
+                </tr>
+                </thead>
+                <tbody>
+                @if (Model.PageCount > 0) {
+                    foreach (ContaBancariaMovimentacao Item in Model) {
+                        <tr>
+                            <td class="text-center"><input type="checkbox" name="checkRegistro[]" value="@Item.id"/></td>
+
+                            @if (UtilRequest.getInt32("idTipoOperacao") == ContaTipoOperacaoConst.TRANSFERENCIA) {
+                                <td>@Item.ContaBancariaDestino.descricao</td>
+                            }
+
+                            <td>@Item.dtOperacao.ToShortDateString()</td>
+                            <td>@Item.descricao</td>
+                            <td class="text-right">@Item.valor.ToString("C")</td>
+                            <td class="text-center">
+                                @Html.linkEditar(Item.id, Url.Action("editar", new {Item.id, Item.idContaBancariaOrigem, Item.idTipoOperacao, urlRetorno = Request.Url.AbsoluteUri })) &nbsp;&nbsp;
+                                @Html.linkAjaxExcluir(Item.id, "N")
+                            </td>
+                        </tr>
+                    }
+                } else {
+                    <tr>
+                        <td class="text-center" colspan="15">Nenhum registro cadastrado</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+
+            @(Html.paginarRegistros<ContaBancariaMovimentacao>(Model, Html.PagedListPager(
+                  Model,
+                  nroPagina => Url.Action("listar", new {
+                      nroPagina,
+                      idConta = UtilRequest.getInt32("idConta"),
+                      idTipoOperacao = UtilRequest.getInt32("idTipoOperacao"),
+                      dtOperacao = UtilRequest.getString("dtOperacao")
+                  }), PagedListRenderOptions.OnlyShowFivePagesAtATime)))
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <div class="text-center">
+            <a href="@Url.Action("listar", "contabancaria", new {area = "ContasBancarias"})" class="btn btn-primary margin-left-20">Voltar para Contas</a>
+        </div>
+    </div>
+
+    <div class="clearfix"></div><br/>
+</div>

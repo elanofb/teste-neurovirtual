@@ -1,0 +1,100 @@
+﻿@model WEB.Areas.AssociadosConsultas.ViewModels.AssociadoEmailConsultaForm
+@using PagedList.Mvc
+
+@{
+    ViewBag.titlePage = "Base de E-mails";
+}
+
+@section scripts {
+    @Html.includeBootstrapMultiselect()
+
+    <script src="@UtilConfig.linkResourses()Areas/AssociadosConsultas/js/associado-email-consulta.js"></script>
+}
+
+@section styles {
+    <link href="@UtilConfig.linkResourses()css/associatec/list-custom.css" rel="stylesheet" />
+}
+
+<div class="box box-primary">
+
+    @Html.headerBox("Filtros de Busca", "fa fa-filter")
+
+    <div class="box-body">
+
+        @{ Html.RenderPartial("partial-filtros"); }
+
+    </div>
+
+</div>
+
+<div class="box box-primary">
+
+    @Html.headerBox("Resultados", "far fa-chart-bar")
+
+    <div class="box-body">
+
+        @if(!Model.listaEmails.Any()) {
+            <div class="col-sm-12">
+                <div class="alert alert-info">
+                    Nenhum e-mail foi encontrado.
+                </div>
+            </div>
+        }
+
+        @foreach(var OEmail in Model.listaEmails) {
+
+            <div class="box-info-item">
+
+                <div class="row">
+
+                    <div class="col-md-4 col-sm-12">
+                        
+                        @if (OEmail.idAssociado.toInt() == 0) {
+                            <span>
+                                <i class="fa fa-user"></i> @OEmail.nome.abreviar(30).ToUpper()
+                            </span>
+                        }
+                        
+                        @if (OEmail.idAssociado > 0) {
+                            <span>
+                                <a href="@Url.Action("editar", "AssociadoCadastro", new { Area = "Associados", id = OEmail.idAssociado })" target="_blank" class="text-black">
+                                    <i class="fa fa-user"></i> @OEmail.nome.abreviar(30).ToUpper()
+                                </a> 
+                            </span>
+                        }
+                        
+                        
+                    </div>
+
+                    <div class="col-md-4 col-sm-6">
+                        <span>
+                            <i class="fa fa-envelope"></i> @OEmail.email
+                        </span>
+                    </div>
+
+                    <div class="col-md-2 col-sm-3">
+                        <span>
+                            <i class="fa fa-tag"></i> @OEmail.descricaoTipoEmail
+                        </span>
+                    </div>
+
+                    <div class="col-md-2 col-sm-3 col-sm-3">
+                        <span>
+                            <i class="fa fa-calendar"></i> @OEmail.dtCadastro.exibirData()
+                        </span>
+                    </div>
+                    
+                    <div class="clearfix"></div>
+
+
+                </div>
+
+            </div>
+
+        }
+
+        @(Html.paginarRegistros(Model.listaEmails, Html.PagedListPager(Model.listaEmails, nroPagina => UtilRequest.linkPaginacao(nroPagina, "consultar"), PagedListRenderOptions.OnlyShowFivePagesAtATime)))
+
+    </div>
+
+</div>

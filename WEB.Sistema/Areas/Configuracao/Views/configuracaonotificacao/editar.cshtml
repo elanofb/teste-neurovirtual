@@ -1,0 +1,171 @@
+﻿@model WEB.Areas.Configuracao.ViewModels.ConfiguracaoNotificacaoForm
+@using DAL.Permissao.Security.Extensions
+@using WEB.Areas.Associacoes.Helpers
+
+@{
+    ViewBag.titlePage = "Configurações das Notificações";
+}
+
+@section scripts{
+    @Html.includeFroalaEditorJS()
+    <script src="@UtilConfig.linkResourses("Areas/Configuracao/js/configuracoes.js")"></script>
+    <script src="@UtilConfig.linkResourses("Areas/Configuracao/js/configuracao-notificacao.js")"></script>
+    <script src="@UtilConfig.linkResourses("Areas/Configuracao/js/plugins/colorpicker/bootstrap-colorpicker.js")"></script>
+    @Html.Raw(Html.scripts().scriptFroala)
+}
+
+@section styles {
+    @Html.includeFroalaEditorCSS()
+    <link href="@UtilConfig.linkResourses("Areas/Configuracao/js/plugins/bootstrap-fileinput/css/fileinput.min.css")" rel="stylesheet" />
+    <link href="@UtilConfig.linkResourses("Areas/Configuracao/js/plugins/colorpicker/bootstrap-colorpicker.css")" rel="stylesheet" />
+}
+
+@section breadcrump{
+    <ol class="breadcrumb">
+        <li><a href="@Url.Action("listar")" class="active fs-14"><i class="fa fa-arrow-left"></i> Voltar</a></li>
+    </ol>
+}
+
+<div class="col-sm-12 box box-primary">
+
+    @using (Html.BeginForm("editar", null, FormMethod.Post, new { role = "form", @class = "tab-content", enctype = "multipart/form-data" })) {
+
+        @Html.ValidationSummary(false)
+
+        if (User.idOrganizacao() == 0) {
+            <div class="col-sm-12 no-padding-left">
+                <h4 class="separator-form">Configurações Gerais de Notificações</h4>
+
+                <div class="col-md-3 col-sm-6 no-padding-left">
+                    <label>Associação</label>
+                    @Html.DropDownListFor(m => m.ConfiguracaoNotificacao.idOrganizacao, AssociacaoHelper.getInstance.selectList(Model.ConfiguracaoNotificacao.idOrganizacao), "Padrão Sistema", new { @class = "form-control input-sm", type = "number" })
+                </div>
+            </div>
+        }
+        <div class="clearfix"></div><br/>
+        
+
+        <div class="nav-tabs-custom">
+
+            <ul class="nav nav-tabs" role="tablist">
+                <li class="active"><a href="#tab-configuracao" data-toggle="tab">Configuração de envios</a></li>
+                <li><a href="#tab-usuario" data-toggle="tab">Usuários</a></li>
+                <li><a href="#tab-associacao" data-toggle="tab">Associado</a></li>
+                <li><a href="#tab-contribuicao" data-toggle="tab">Contribuições</a></li>
+                <li><a href="#tab-evento" data-toggle="tab">Eventos</a></li>
+                <li><a href="#tab-pedido" data-toggle="tab">Pedidos</a></li>
+                <li><a href="#tab-atendimento" data-toggle="tab">Atendimentos</a></li>
+                <li><a href="#tab-outras" data-toggle="tab">Outras Mensagens</a></li>
+            </ul>
+
+            <div class="tab-content">
+
+                <div id="tab-configuracao" role="tabpanel" class="tab-pane active">
+                    @{ Html.RenderPartial("partial-form-notificacao", Model); }
+                </div>
+
+                <div id="tab-usuario" role="tabpanel" class="tab-pane">
+                    @{ Html.RenderPartial("partial-form-usuariosistema", Model); }
+                </div>
+
+                <div id="tab-associacao" role="tabpanel" class="tab-pane">
+                    @{ Html.RenderPartial("partial-form-associado", Model); }
+                </div>
+
+                <div id="tab-contribuicao" role="tabpanel" class="tab-pane">
+                    @{ Html.RenderPartial("partial-form-contribuicao", Model); }
+                </div>
+
+                <div id="tab-evento" role="tabpanel" class="tab-pane">
+                    @{ Html.RenderPartial("partial-form-evento", Model); }
+                </div>
+
+                <div id="tab-pedido" role="tabpanel" class="tab-pane">
+                    @{ Html.RenderPartial("partial-form-pedido", Model); }
+                </div>
+                
+                <div id="tab-atendimento" role="tabpanel" class="tab-pane">
+                    @{ Html.RenderPartial("partial-form-atendimento", Model); }
+                </div>
+
+                <div id="tab-outras" role="tabpanel" class="tab-pane">
+                    @{ Html.RenderPartial("partial-form-outras", Model); }
+                </div>
+            </div>
+            <div class="clearfix"></div><br />
+
+            <div class="text-right">
+                <input type="submit" name="enviar" value="Salvar Configurações" class="btn btn-primary"/>
+            </div>
+            <div class="clearfix"></div><br />
+
+        </div>
+
+        <div class="hidden" id="hashtags-email-associado">
+            <div>
+                <strong class="btn btn-info">#TRATAMENTO# </strong> Forma como o associado quer ser tratados (Sr, Sra, Dr, etc)<br /><br />
+                <strong class="btn btn-info">#NOME# </strong> Nome do associado<br /><br />
+                <strong class="btn btn-info">#NUMERO_ASSOCIADO#: </strong> Número do associado no sistema<br /><br />
+                <strong class="btn btn-info">#COMPLEMENTO_MENSAGEM_SUCESSO#: </strong> Complemento para a mensagem de sucesso (será utilizado para incluir o link do termo de adesão, por exemplo)<br /><br />
+
+            </div>
+        </div>
+
+        <div class="hidden" id="hashtags-email-inscricao-evento">
+            <div>
+                <strong class="btn btn-info">#NOME_INSCRITO# </strong> Nome da pessoa inscrita no evento<br /><br />
+                <strong class="btn btn-info">#TITULO_EVENTO# </strong> Título do evento<br /><br />
+                <strong class="btn btn-info">#INSTRUCOES_PAGAMENTO#: </strong> Link/Instruções para pagamento da inscrição (se não for gratuito)<br /><br />
+                <strong class="btn btn-info">#LOCAL_EVENTO# </strong> Local onde será realizado o evento.<br /><br />
+                <strong class="btn btn-info">#ENDERECO_EVENTO# </strong> Endereço do local onde será realizado o evento.<br /><br />
+                <strong class="btn btn-info">#DATAS_EVENTO# </strong> Datas de realização do evento.<br /><br />
+            </div>
+        </div>
+
+        <div class="hidden" id="hashtags-degustacao-associado">
+            <div>
+                <strong class="btn btn-info">#QTD_DIAS_DEG#: </strong> Qtde de dias faltantes para o período de degustação<br /><br />
+                <strong class="btn btn-info">#DT_INI_DEG#: </strong> Data inicial da degustação<br /><br />
+                <strong class="btn btn-info">#DT_FIM_DEG#: </strong> Data final da degustação<br /><br />
+            </div>
+        </div>
+        <div class="hidden" id="hashtags-cobranca">
+            <div>
+                <strong class="btn btn-info">#NOME_PESSOA#: </strong> Nome da pessoa cobrada<br /><br />
+                <strong class="btn btn-info">#VALOR_COBRANCA#: </strong> Valor a ser pago<br /><br />
+                <strong class="btn btn-info">#LINK_PGTO#: </strong> Link para pagamento da cobrança<br/><br/>
+                <strong class="btn btn-info">#DATA_VENCIMENTO#: </strong> Data de vencimento da cobrança<br/><br/>
+                <strong class="btn btn-info">#VALOR_RECEBIDO#: </strong> Valor recebido (se houver) <br/><br/>
+                <strong class="btn btn-info">#DATA_PAGAMENTO#: </strong> Data de realização do pagamento (se houver)<br /><br />
+                <strong class="btn btn-info">#DESCRICAO_COBRANCA#: </strong> Descrição do item a ser cobrado<br /><br />
+            </div>
+        </div>
+        <div class="hidden" id="hashtags-recuperacao-senha-associado">
+            <div>
+                <strong class="btn btn-info">#SIGLA_ASSOCIACAO#: </strong> Sigla da Associação<br /><br />
+                
+                <strong class="btn btn-info">#NOME#: </strong> Nome do Associado<br /><br />
+
+                Para utilização do link gerado automaticamente: <br /><br />
+                <strong class="btn btn-info">#LINK_RECUPERACAO#: </strong> Link gerado automaticamente pelo sistema<br /><br />
+                
+                Para utilização de um link customizado (em caso de portais):<br />
+                <small></small><br /><br />
+                <strong class="btn btn-info">#PARAMETRO_A#: </strong> Parâmetro de Criptografia<br />
+                <strong class="btn btn-info">#PARAMETRO_ACR#: </strong> Parâmetro de Criptografia<br />
+                <strong class="btn btn-info">#PARAMETRO_MLCR#: </strong> Parâmetro de Criptografia<br /><br />
+
+            </div>
+        </div>
+        
+        <div class="hidden" id="hashtags-email-novo-pedido">
+            <div>
+                <strong class="btn btn-info">#CLIENTE# </strong> Nome do cliente/comprador<br /><br />
+                <strong class="btn btn-info">#ID_PEDIDO# </strong> Número identificardor do pedido<br /><br />
+                <strong class="btn btn-info">#INFO_PGTO#: </strong> Informações referente a pagamento (incluindo o link para o mesmo, se houver valor)<br /><br />
+                <strong class="btn btn-info">#INFO_ENTREGA#: </strong> Informações sobre a entrega<br /><br />
+            </div>
+        </div>
+    }
+</div>
+<div class="clearfix"></div><br/>

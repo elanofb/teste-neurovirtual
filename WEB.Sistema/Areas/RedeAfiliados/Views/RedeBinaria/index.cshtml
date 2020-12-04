@@ -1,0 +1,105 @@
+﻿@using DAL.RedeAfiliados
+@model WEB.Areas.AreaAssociados.Rede.Models.ViewModel.RedeBinariaApiVM
+@{
+    ViewBag.titlePage = "Rede Binária";
+    var PrimeiroNo = Model.listaRedeBinaria.FirstOrDefault();
+}
+
+@section styles {
+    <link href="@UtilConfig.linkResourses("Areas/AreaAssociados/Rede/js/jquery.orgchart/jquery.orgchart.css")" rel="stylesheet"/>
+    <link href="@UtilConfig.linkResourses("Areas/AreaAssociados/Rede/css/rede-afiliados.css")" rel="stylesheet"/>
+}
+
+@section scripts{
+    
+    <script src="@UtilConfig.linkResourses("js/associatec/plugins/dragscroll/dragscroll.js")"></script>
+    <script src="@UtilConfig.linkResourses("Areas/AreaAssociados/Rede/js/jquery.orgchart/jquery.orgchart.js")"></script>
+    <script>
+        $(function() {
+            $("#basic-chart-source").orgChart({ container: $("#chart") });
+        });
+    </script>
+}
+
+<div class="row">
+    <div class="col-sm-12">
+    
+        <div id="chart"></div>
+    
+        <ul id="basic-chart-source" class="hide">
+            @boxNo(PrimeiroNo, Model.listaRedeBinaria, 0)
+        </ul>
+    </div>
+    <div class="clearfix"></div>
+</div>
+
+@helper boxNo(RedeBinaria ItemRede, List<RedeBinaria> listaRedeBinaria, int nivel) {
+
+    if (nivel > 4) {
+        return;
+    }
+
+    <li class="nivel_@nivel">
+        
+        @boxPessoa(ItemRede)
+        
+        @if (ItemRede != null) {
+            
+            nivel++;
+
+            var LadoEsquerdo = listaRedeBinaria.FirstOrDefault(x => x.idMembro == ItemRede.idMembroEsquerda);
+    
+            var LadoDireito = listaRedeBinaria.FirstOrDefault(x => x.idMembro == ItemRede.idMembroDireita);
+            
+            <ul>
+                
+                @boxNo(LadoEsquerdo, listaRedeBinaria, nivel)
+                
+                @boxNo(LadoDireito, listaRedeBinaria, nivel)
+                
+            </ul>
+            
+        }
+        
+    </li>
+    
+}
+
+@helper boxPessoa(RedeBinaria ItemRede) {
+    
+    <div class="pessoa-rede">
+            
+        @if (ItemRede == null) {
+            
+            <a href="javascript:;" class="disabled">
+                <i class="far fa-times text-red"></i><br/>
+                <span>---</span><br />
+                <span>---</span>
+            </a>
+        }
+        
+        @if (ItemRede == null) {
+            return;
+        }
+
+        @if (ItemRede.idMembro == UtilRequest.getInt32("idMembro")) {
+            <a href="@Url.Action("index", new{idMembro =ItemRede.idMembro})">
+                <i class="fa fa-user text-black"></i><br/>
+                <span>@ItemRede.nroMembro</span><br/>
+                <span class="fs-11">@(ItemRede.PessoaMembro?.nome.abreviar(12) ?? "Não Localizado")</span>
+            </a>    
+        }
+        
+        @if (ItemRede.idMembro != UtilRequest.getInt32("idMembro")) {
+            
+            <a href="@Url.Action("index", new{idMembro =ItemRede.idMembro})">
+                <i class="fa fa-user text-green"></i><br/>
+                <span>@ItemRede.nroMembro</span><br/>
+                @(ItemRede.PessoaMembro?.nome.abreviar(12) ?? "Não Localizado")
+            </a>    
+        }
+            
+            
+    </div>
+    
+}

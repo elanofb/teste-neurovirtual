@@ -1,0 +1,49 @@
+﻿@using DAL.Permissao.Security.Extensions
+@using WEB.Areas.Associacoes.Helpers
+@using WEB.Areas.ContasBancarias.Helpers
+@using WEB.Areas.Financeiro.Helpers
+@model WEB.Areas.Configuracao.ViewModels.ConfiguracaoContribuicaoForm
+
+@if (User.idOrganizacao() == 0){
+    <h4 class="separator-form">Associação</h4>
+    <div class="col-md-3 col-sm-6">
+        <label>Associação</label>
+        @Html.DropDownListFor(m => m.ConfiguracaoContribuicao.idOrganizacao, AssociacaoHelper.getInstance.selectList(Model.ConfiguracaoContribuicao.idOrganizacao), "Padrão  Sistema", new { @class = "form-control input-sm", type = "number" })
+    </div>
+}
+<div class="clearfix"></div>
+
+<h4 class="separator-form">Configuração financeira para cobranças de planos/contribuições</h4>
+<div class="col-md-4">
+    <label>Conta bancária padrão</label>
+    @Html.DropDownListFor(m => m.ConfiguracaoContribuicao.idContaBancariaPadrao, ContaBancariaHelper.getInstance.selectList(Model.ConfiguracaoContribuicao.idContaBancariaPadrao), "...", new {@class = "form-control input-sm"})
+</div>
+
+<div class="col-md-3">
+    <label>Centro de custo padrão</label>
+    @Html.DropDownListFor(m => m.ConfiguracaoContribuicao.idCentroCustoPadrao, CentroCustoHelper.getInstance.selectList(Model.ConfiguracaoContribuicao.idCentroCustoPadrao), "...", new {@class = "form-control input-sm"})
+</div>
+
+<div class="col-md-3">
+    <label>Macro conta padrão</label>
+    @Html.DropDownListFor(m => m.ConfiguracaoContribuicao.idMacroContaPadrao, MacroContaHelper.getInstance.selectList(Model.ConfiguracaoContribuicao.idMacroContaPadrao), "...", new {@class = "form-control input-sm"})
+</div>
+
+@*<div class="col-md-2">
+    <label>Limite de Parcelamentos</label>
+    @Html.TextBoxFor(m => m.ConfiguracaoContribuicao.limiteParcelamento, new { @class = "form-control input-sm", maxlength = 3, type = "number" })
+</div>*@
+
+<div class="clearfix"></div>
+
+<h4 class="separator-form">Configuração de Isenções</h4>
+
+<div class="col-lg-3 col-sm-4">
+    <label>Isentar membros a partir da idade</label>
+    @Html.TextBoxFor(m => m.ConfiguracaoContribuicao.idadeIsencao, new { @class = "form-control input-sm", type = "number", min = "1", max = "150" })
+</div>
+
+<div class="clearfix"></div><br />
+
+
+

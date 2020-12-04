@@ -1,0 +1,43 @@
+﻿@model WEB.Areas.Atendimentos.ViewModels.AtendimentoAcaoSairForm
+    
+@{ 
+    Layout = "~/views/shared/associatec/masterpage-modal.cshtml";
+
+    if (IsPost) {
+
+        Layout = null;
+
+    }
+
+    ViewBag.modalTitle = "Sair do Atendimento";
+}
+
+<div id="boxSair">
+    
+    @using (Ajax.BeginForm("sair", new AjaxOptions { HttpMethod = "POST", InsertionMode = InsertionMode.Replace, UpdateTargetId = "boxSair", OnSuccess = "AtendimentoAcao.onSuccessForm" })) {
+
+        { Html.EnableClientValidation(false); }
+
+        @Html.HiddenFor(m => m.AtendimentoHistorico.idAtendimento)
+
+        <div class="row">
+
+            <div class="col-xs-12">
+                <label>Observações</label>
+                @Html.TextAreaFor(m => m.AtendimentoHistorico.mensagem, new { @class = "form-control input-sm", rows = 5 })
+                @Html.ValidationMessageFor(m => m.AtendimentoHistorico.mensagem)
+            </div>
+            <div class="clearfix"></div><br />
+
+            <div class="col-xs-12 text-right">
+                
+                <button class="btn btn-primary link-loading"><i class="fa fa-sign-out"></i> Sair</button>
+
+            </div>
+            <div class="clearfix"></div>
+
+        </div>
+
+    }
+
+</div>

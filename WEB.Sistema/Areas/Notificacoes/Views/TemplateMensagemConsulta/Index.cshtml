@@ -1,0 +1,92 @@
+﻿@model WEB.Areas.Notificacoes.ViewModels.TemplateMensagemConsultaVM
+
+@using System.Web.Mvc.Html
+@using WEB.Helpers
+
+@{
+    Layout = "~/views/shared/associatec/masterpage.cshtml";
+    ViewBag.contentHeaderClass = "content-header-action";
+    ViewBag.titlePage = "Templates Mensagem";
+}
+
+@section breadcrump{
+    <ol class="breadcrumb">
+        <li><a href="javascript:;" onclick="$('.box-filtros').toggle()" class="fs-16"><i class="fa fa-filter"></i></a></li>
+    </ol>
+}
+
+@section scripts {
+    <script src="@UtilConfig.linkResourses("Areas/Notificacoes/js/templates.js?v=1.0")"></script>
+}
+
+@section styles {
+    <link href="@UtilConfig.linkResourses("css/associatec/list-custom.css")" rel="stylesheet" />
+}
+
+<div class="box box-primary box-filtros nao-exibir">
+    
+    @Html.headerBox("Filtros de Busca", "fa fa-filter")
+    
+    <div class="box-body">
+        
+        @using (Html.BeginForm(null, null, FormMethod.Get, new { id = "formFiltros", @class = "filtros" })) {
+
+            <div class="col-sm-7 hidden-xs"></div>
+
+            <div class="form-group col-sm-5 col-xs-12">
+                
+                <label>Buscar</label>
+
+                @Html.buttonSearch(UtilRequest.getString("valorBusca"), "", "link-loading")
+
+            </div>
+
+            <div class="clearfix visible-sm"></div>
+
+        }
+        
+        <div class="clearfix"></div>
+        
+    </div>
+    
+</div>
+
+<div class="row">
+    
+    <div class="col-lg-12">
+
+        <ul class="nav nav-tabs" id="tabs">
+            
+            <li class="active"><a data-toggle="tab" href="#ativos" class="text-black"> Templates Ativos <span class="badge bg-green">@Model.listaAtivos.Count</span></a></li>
+            
+            <li class=""><a data-toggle="tab" href="#desativados" class="text-black"> Templates Desativados <span class="badge bg-red">@Model.listaDesativados.Count</span></a></li>
+            
+        </ul>
+
+    </div>
+
+    <div class="clearfix"></div>
+
+    <div class="col-lg-12">
+
+        <div class="tab-content padding-10" style="background-color: white">
+
+            <div id="ativos" class="tab-pane active">
+                
+                @{Html.RenderPartial("partial-lista", Model.listaAtivos);}
+                
+            </div>
+            
+            <div id="desativados" class="tab-pane">
+                
+                @{Html.RenderPartial("partial-lista", Model.listaDesativados);}
+                
+            </div>
+
+        </div>
+
+    </div>
+    
+    <div class="clearfix"></div>
+    
+</div>

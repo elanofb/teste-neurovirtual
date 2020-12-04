@@ -1,0 +1,11 @@
+﻿@model WEB.Areas.MateriaisApoio.ViewModels.TipoMaterialApoioForm
+@if (Model.TipoMaterialApoio.id > 0) { 
+<div class="form-horizontal">
+	<div class="col-md-6">
+		<a class="btn btn-default bg-gray"><strong>ID:</strong> @Model.TipoMaterialApoio.id</a> &nbsp;
+		<a class="btn btn-default bg-gray"><strong>Cadastro:</strong> @Model.TipoMaterialApoio.dtCadastro</a> &nbsp;
+		<a class="btn btn-default bg-gray"><strong>Alterado em:</strong> @Model.TipoMaterialApoio.dtAlteracao</a>
+	</div>
+</div>
+<div class="clearfix"></div><br />
+}

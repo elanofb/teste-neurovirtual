@@ -1,0 +1,22 @@
+﻿@*@model WEB.ViewModels.ConfiguracoesVM
+
+
+@using (Html.BeginForm("postagem", "facebook", FormMethod.Post, new { role = "form", @class = "default" })){
+	
+
+	<div class="form-horizontal">
+		<h4 class="separator-form">Facebook</h4>
+		<div class="col-md-3">
+			<label>Mensagem:</label>
+			@Html.TextArea("txtMensagem",new { @class = "form-control"})
+		</div>
+	
+        <div class="clearfix"></div>
+		
+	<div class="text-right">
+		<input type="button" name="voltar" value="Limpar" class="btn btn-default bg-gray" onclick="document.forms[0].reset();" />&nbsp;
+		<input type="submit" name="enviar" value="Salvar" class="btn btn-primary" />
+	</div>
+        </div>
+
+}*@

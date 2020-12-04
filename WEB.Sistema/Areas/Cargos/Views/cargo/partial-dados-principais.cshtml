@@ -1,0 +1,44 @@
+﻿@model WEB.Areas.Cargos.ViewModels.CargoForm
+
+@using DAL.Permissao.Security.Extensions
+@using WEB.Areas.Associacoes.Helpers
+
+@using (Html.BeginForm("editar", null, FormMethod.Post, new { role = "form", @class = "default" })){
+	
+	@Html.HiddenFor(m => m.Cargo.id)
+
+	@Html.ValidationSummary(true, "Alguns campos não foram validados")
+
+    <h4 class="separator-form">Dados Principais do Cargo</h4>
+
+	<div class="form-horizontal">
+
+        @if (User.idOrganizacao() == 0) {
+            <div class="col-sm-4 col-md-3">
+                <label>Organização</label>
+                @Html.DropDownListFor(m => m.Cargo.idOrganizacao, AssociacaoHelper.getInstance.selectList(Model.Cargo.idOrganizacao), "Padrão", new {@class = "form-control input-sm"})
+            </div>
+            <div class="clearfix"></div>
+        }
+
+	    <div class="col-md-6">
+			@Html.labelRequired("Descrição")
+			@Html.TextBoxFor(m => m.Cargo.descricao, new { @class = "form-control input-sm", maxlength="100" })
+			@Html.ValidationMessageFor(m => m.Cargo.descricao)
+		</div>
+
+		<div class="col-md-2">
+			<label>Status</label>
+			@Html.DropDownListFor(m => m.Cargo.ativo, ComboHelper.selectListStatus(Model.Cargo.ativo), "...", new { @class = "form-control input-sm" })
+			@Html.ValidationMessageFor(m => m.Cargo.ativo)
+		</div>
+		<div class="clearfix"></div>
+
+	</div>
+	<div class="clearfix"></div>
+	<br />
+	<div class="text-right">
+		@Html.exibirBotoesFormulario(Url.Action("listar"), "N")
+	</div>
+
+}

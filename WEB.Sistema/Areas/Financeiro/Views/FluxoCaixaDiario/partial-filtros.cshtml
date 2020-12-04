@@ -1,0 +1,35 @@
+﻿@using WEB.Areas.ContasBancarias.Helpers
+@model WEB.Areas.Financeiro.ViewModels.FluxoCaixaDiarioForm
+
+<form id="formFiltros">
+
+    @Html.HiddenFor(m => m.dtInicioPeriodo, new { @class = "form-control input-sm", alt = "date" }.isReadOnly(true))
+    @Html.HiddenFor(m => m.dtFimPeriodo, new { @class = "form-control input-sm", alt = "date" }.isReadOnly(true))
+    
+    <div class="row">
+        <div class="col-sm-6 col-md-4 col-lg-3">           
+            @Html.labelHelp("Período", "Você deve informar o período (data inicial e final) em que deseja realizar a pesquisa, caso contrário o mês vigente será utilizado como base para a pesquisa.")
+            <div class="input-group">
+                <div id="dtVencimentoLabel" class="form-control input-sm fs-12 text-center">
+                    @Model.dtInicioPeriodo.Value.ToShortDateString() - @Model.dtFimPeriodo.Value.ToShortDateString()
+                </div>
+
+                <span id="dtVencimentoRange" class="input-group-addon padding-5">
+                    <i class="fa fa-caret-down"></i>
+                </span>
+            </div>
+        </div>
+        
+        <div class="col-sm-6 col-md-3">
+            @Html.labelRequired("Conta Bancária")
+            @Html.DropDownListFor(m => m.idContaBancaria, ContaBancariaHelper.getInstance.selectList(Model.idContaBancaria, false), new { @class = "form-control input-sm" })
+        </div>
+        
+        <div class="col-sm-4 col-md-2 margin-top-25">
+            <button type="button" class="btn btn-primary btn-sm btn-block link-loading" onclick="FluxoCaixaDiario.filtrar();"><i class="fa fa-search"></i> Filtrar</button>
+        </div>
+        <div class="clearfix"></div>
+
+    </div>
+
+</form>

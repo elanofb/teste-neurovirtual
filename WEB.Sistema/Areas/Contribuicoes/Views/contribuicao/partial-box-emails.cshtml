@@ -1,0 +1,54 @@
+﻿@model WEB.Areas.Contribuicoes.ViewModels.ContribuicaoPadraoForm
+
+<div class="panel panel-info">
+    <div class="panel-heading">
+        <h3 class="panel-title fs-14">Configurações de e-mails</h3>
+    </div>
+    <div class="panel-body">
+        <div class="col-sm-12">
+            <label>Título do e-mail de cobrança</label>
+            @Html.TextBoxFor(x => x.Contribuicao.emailCobrancaTitulo, new {@class = "form-control input-sm", maxlength="100"})
+            @Html.ValidationMessageFor(x => x.Contribuicao.emailCobrancaTitulo)
+        </div>
+        <div class="col-lg-12 col-sm-12">
+            <label>Corpo do e-mail de cobrança</label>
+            @Html.TextAreaFor(x => x.Contribuicao.emailCobrancaHtml, new {@class = "form-control input-sm", id = "emailCobranca"})
+            @Html.ValidationMessageFor(x => x.Contribuicao.emailCobrancaHtml)
+            <a id="email-cobranca" href="javascript:void(0)" class="fs-11" data-toggle="popover" data-placement="top" data-title="Hash Tags"><i class="fa fa-question-circle"></i> Hash tags dinâmicas</a>
+        </div>
+        <div class="col-sm-12">
+            <label>Título do e-mail de confirmação de pagamento</label>
+            @Html.TextBoxFor(x => x.Contribuicao.emailPagamentoTitulo, new {@class = "form-control input-sm", maxlength="100"})
+            @Html.ValidationMessageFor(x => x.Contribuicao.emailPagamentoTitulo)
+        </div>
+        <div class="col-lg-12 col-sm-12">
+            <label>Corpo do e-mail de confirmação de pagamento</label>
+            @Html.TextAreaFor(x => x.Contribuicao.emailPagamentoHtml, new {@class = "form-control input-sm", id = "emailPagamento"})
+            @Html.ValidationMessageFor(x => x.Contribuicao.emailPagamentoHtml)
+            <a id="email-pagamento" href="javascript:void(0)" class="fs-11" data-toggle="popover" data-placement="top" data-title="Hash Tags"><i class="fa fa-question-circle"></i> Hash tags dinâmicas</a>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+</div>
+
+<div class="hidden" id="hashtags-email-cobranca">
+	<div>
+		<strong class="bg-blue">#NOME_ASSOCIADO# </strong> Nome da pessoa que receberá a cobrança<br/><br/>
+	    <strong class="bg-blue">#DESCRICAO_PAGAMENTO# </strong> Título do plano/contribuição<br/><br/>
+        <strong class="bg-blue">#VALOR#: </strong> Valor da contribuição<br/><br/>
+		<strong class="bg-blue">#VENCIMENTO#: </strong> Data de vencimento da contribuição<br/><br/>
+		<strong class="bg-blue">#DATA_PAGAMENTO#: </strong> Data em que o pagamento foi realizado (não se aplica para cobrança)<br/><br/>
+		<strong class="bg-blue">#LINK_PGTO# </strong> Link para pagamento.<br/><br/>
+	</div>
+</div>
+
+<div class="hidden" id="hashtags-email-pagamento">
+    <div>
+        <strong class="bg-blue">#NOME# </strong> Nome da pessoa que receberá a cobrança<br/><br/>
+        <strong class="bg-blue">#DESCRICAO_PAGAMENTO# </strong> Título do plano/contribuição<br/><br/>
+        <strong class="bg-blue">#VALOR#: </strong> Valor da contribuição<br/><br/>
+        <strong class="bg-blue">#VENCIMENTO#: </strong> Data de vencimento da contribuição<br/><br/>
+        <strong class="bg-blue">#DATA_PAGAMENTO#: </strong> Data em que o pagamento foi realizado (não se aplica para cobrança)<br/><br/>
+        <strong class="bg-blue">#LINK_PGTO# </strong> Link para pagamento.<br/><br/>
+    </div>
+</div>

@@ -1,0 +1,25 @@
+﻿@model WEB.Areas.Financeiro.ViewModels.PagamentosRecebidosVM
+
+<div class="row">
+
+    <div class="col-sm-12 margin-bottom-5">
+        <div class="widget-small bg-green cursor-pointer">
+            <i class="far fa-check-circle pull-left fs-26 cursor-pointer"></i>
+            <p>
+                Total<br/> <label class="destaque fs-16 cursor-pointer">@Model.valorTotalRecebido.ToString("C")</label>
+            </p>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+
+    <div class="col-sm-12">
+        <div class="widget-small bg-yellow cursor-pointer">
+            <i class="far fa-money-bill pull-left fs-26 cursor-pointer"></i>
+            <p>
+                Tarifas<br/> <label class="destaque fs-16 cursor-pointer">@Model.valorTotalTarifas.ToString("C")</label>
+            </p>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+
+</div>

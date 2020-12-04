@@ -1,0 +1,33 @@
+﻿@model PagedList.IPagedList<LogEmail>
+@using DAL.Entities
+@{
+	Layout = null;
+}
+
+<div class="box-body no-padding">
+	<div class="mailbox-controls">
+		<div class="col-xs-3 no-padding">
+			@{ Html.RenderPartial("partial-botoes-acao-lixeira"); }
+		</div>
+		<div class="col-xs-9 no-padding">
+			@{ Html.RenderPartial("partial-email-paginacao", Model); }
+		</div>
+		<div class="clearfix"></div>
+	</div>
+
+	<div class="table-responsive mailbox-messages">
+		@{ Html.RenderPartial("partial-lista-lixeira", Model); }
+	</div>
+</div>
+
+<div class="box-footer no-padding">
+	<div class="mailbox-controls">
+		<div class="col-xs-3 no-padding">
+			@{ Html.RenderPartial("partial-botoes-acao-lixeira"); }
+		</div>
+		<div class="col-xs-9 no-padding">
+			@{ Html.RenderPartial("partial-email-paginacao", Model); }
+		</div>
+		<div class="clearfix"></div>
+	</div>
+</div>

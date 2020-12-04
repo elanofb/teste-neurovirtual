@@ -1,0 +1,38 @@
+﻿@using DAL.Financeiro
+@model WEB.Areas.Financeiro.ViewModels.ModalDetalhePagamento
+
+
+<table class="table table-striped margin-top-10">
+    <thead>
+        <tr role="row">
+            <th>ID</th>
+            <th>Forma de Pagamento</th>
+            <th>Status</th>
+            <th>Valor Original</th>
+            <th>Vencimento</th>
+            <th>Data Exclusão</th>
+            <th>Motivo</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.listaPagamentosCancelados.Any()) {
+            foreach (var OItem in Model.listaPagamentosCancelados) {
+                <tr>
+                    <td class="text-center">@OItem.id</td>
+                    <td>@OItem.descricaoFormaPagamento()</td>
+                    <td>@(OItem.StatusPagamento == null ? "-" : OItem.StatusPagamento.descricao)</td>
+                    <td class="text-right">@OItem.valorOriginal.ToString("C")</td>
+                    <td class="text-center">@OItem.dtVencimento.exibirData()</td>
+                    <td class="text-center">@OItem.dtExclusao.exibirData(true)</td>
+                    <td class="text-left box-acoes">@OItem.motivoExclusao</td>
+                </tr>
+
+            }
+        } else {
+            <tr>
+                <td class="text-center" colspan="7">Não existem log para exibir no momento.</td>
+            </tr>
+        }
+    </tbody>
+</table>
+

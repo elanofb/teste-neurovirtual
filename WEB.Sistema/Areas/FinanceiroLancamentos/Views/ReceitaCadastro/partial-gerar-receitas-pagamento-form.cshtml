@@ -1,0 +1,59 @@
+﻿@model WEB.Areas.FinanceiroLancamentos.ViewModels.ReceitaCadastroForm
+
+@{
+    int count = 0;
+    Layout = null;
+}
+
+<div class="col-md-12 boxParcelas">
+    <div class="box box-primary">
+        <div class="box-header with-border">
+            <h3 class="box-title"><i class="fa fa-clone"></i> Parcelas</h3>
+            <div class="pull-right">Total das Parcelas: <span class="valorTotalLabel">@Model.TituloReceita.listaTituloReceitaPagamento.Sum(x => x.valorOriginal).ToString("C")</span></div>
+        </div>
+        <div class="box-body">
+            <div id="boxListaParcelamentos">
+                @foreach (var Item in Model.TituloReceita.listaTituloReceitaPagamento) {
+                    <div class="col-md-12 no-padding">
+
+                        <div class="col-sm-5 col-md-4 no-padding-left">
+                            <label>Desc. parcela</label>
+                            @Html.TextBoxFor(m => m.TituloReceita.listaTituloReceitaPagamento[count].descricaoParcela, new {@class = "form-control input-sm"})
+                            @Html.ValidationMessageFor(m => m.TituloReceita.listaTituloReceitaPagamento[count].descricaoParcela)
+                        </div>
+
+                        <div class="col-sm-7 col-md-8 no-padding">
+                            <div class="col-sm-3 col-md-3 no-padding-left">
+                                <label>Valor a pagar</label>
+                                @Html.TextBoxFor(m => m.TituloReceita.listaTituloReceitaPagamento[count].valorOriginal, new { @class = "form-control input-sm valorParcela", alt = "decimal", onfocusout = "DespesaCadastro.calcularTotalParcelas()" })
+                                @Html.ValidationMessageFor(m => m.TituloReceita.listaTituloReceitaPagamento[count].valorOriginal)
+                            </div>
+
+                            <div class="col-sm-3 col-md-3 no-padding-left">
+                                <label>Dt. Vencimento</label>
+                                @Html.TextBoxFor(m => m.TituloReceita.listaTituloReceitaPagamento[count].dtVencimento, new { @class = "form-control input-sm input-datepicker", alt = "date" })
+                                @Html.ValidationMessageFor(m => m.TituloReceita.listaTituloReceitaPagamento[count].dtVencimento)
+                            </div>
+
+                            <div class="col-sm-3 col-md-3 no-padding-left">
+                                <label>Dt. Previsão Pgto</label>
+                                @Html.TextBoxFor(m => m.TituloReceita.listaTituloReceitaPagamento[count].dtPrevisaoPagamento, new { @class = "form-control input-sm input-datepicker", alt = "date" })
+                                @Html.ValidationMessageFor(m => m.TituloReceita.listaTituloReceitaPagamento[count].dtPrevisaoPagamento)
+                            </div>
+
+                            <div class="col-sm-3 col-md-3 no-padding-left">
+                                <label>Dt. Competência</label>
+                                @Html.TextBoxFor(m => m.TituloReceita.listaTituloReceitaPagamento[count].dtCompetencia, new { @class = "form-control input-sm input-datepicker", alt = "date" })
+                                @Html.ValidationMessageFor(m => m.TituloReceita.listaTituloReceitaPagamento[count].dtCompetencia)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div><hr/>
+                    count++;
+                }
+            </div>
+            <div class="clearfix"></div><br/>
+        </div>
+    </div>
+</div>
+

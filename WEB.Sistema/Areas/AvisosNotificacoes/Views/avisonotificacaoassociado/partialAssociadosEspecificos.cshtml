@@ -1,0 +1,94 @@
+﻿@using DAL.Notificacoes
+@using MvcFlashMessages
+
+@{
+    Layout = null;
+}
+
+<h4 class="separator-form">Adicionar Associados</h4>
+
+@Html.RenderFlash()
+
+<div class="row">
+
+    <div class="col-md-6">
+
+        <div class="row">
+
+            @using(Ajax.BeginForm("adicionarAssociadoEspecifico", "avisonotificacaoassociado", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "boxAssociadoEspecifico", OnSuccess = "AvisoNotificacaoAssociado.retornoAposAdicionar();", InsertionMode = InsertionMode.Replace }, new { id = "formAssociadosEspecificos" })) {
+    
+                <div class="col-md-12">
+                    <label>Adicionar por Lote</label>
+                    @Html.TextArea("cnpfAssociadosLote", new { @class = "form-control input-sm", rows = 5 })
+                    @Html.instrucao("Insira a lista de CPF/CNPJ separados por uma quebra de linha.")
+                </div>
+                <div class="clearfix"></div>
+
+                <div class="col-md-12">
+                    <label>Selecione os Associados</label><br />
+                    @Html.DropDownList("idAssociado", Enumerable.Empty<SelectListItem>(), new { id = "novoAssociadoEspecifico", @class = "form-control input-sm", data_title = "Digite o nome ou documento do associado", data_url = Url.Action("autocompletar-associados", "AvisoNotificacaoAssociado", new { area = "AvisosNotificacoes" }) })
+                </div>
+
+                <div class="form-group col-md-12 padtop22 text-right">
+                    <button type="button" class="btn btn-primary btn-sm link-loading" title=""
+                            data-toggle="tooltip" data-original-title="Adicionar Associado" onclick="$('#formAssociadosEspecificos').submit()">
+            
+                        Adicionar
+                    </button>
+                </div>
+                <div class="clearfix"></div>
+            }
+
+        </div>
+
+    </div>
+
+    <div class="col-md-6">
+
+        <div class="row">
+
+            <div class="col-md-12">
+
+                @if (SessionNotificacoes.getListAssociadosEspecificos() == null || 
+                    !SessionNotificacoes.getListAssociadosEspecificos().Any()) {
+
+                    <div class="alert alert-info">
+                        Nenhum associado foi adicionado até o momento
+                    </div>
+
+                }
+
+                @foreach (NotificacaoSistemaEnvio Item in SessionNotificacoes.getListAssociadosEspecificos()) {
+
+                    <div class="box-info-item">
+
+                        <div class="row fs-11">
+
+                            <div class="col-xs-10">
+                                <i class="fa fa-user"></i> @Item.nome
+                            </div>
+                            <div class="col-xs-2 text-right box-acoes">
+                                <a href="javascript:void(0);" class="delete-default" data-id="@Item.idReferencia" data-url='@Url.Action("excluirAssociadoEspecifico", "avisonotificacaoassociado")' title="Excluir Registro"><i class="fa fa-trash"></i></a>
+                            </div>
+                            <div class="clearfix"></div>
+
+                            <div class="col-xs-12">
+                                <i class="fa fa-envelope"></i> @Item.email
+                            </div>
+                            <div class="clearfix"></div>
+
+                        </div>
+
+                    </div>
+
+                }
+
+            </div>
+            <div class="clearfix"></div>
+
+        </div>
+
+    </div>
+
+</div>
+

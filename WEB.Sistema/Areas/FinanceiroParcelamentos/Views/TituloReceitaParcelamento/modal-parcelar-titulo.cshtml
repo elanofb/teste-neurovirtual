@@ -1,0 +1,56 @@
+﻿@model WEB.Areas.FinanceiroParcelamentos.ViewModels.TituloReceitaParcelamentoForm
+@using DAL.Financeiro
+@using MvcFlashMessages
+
+@{
+    Layout = "~/views/shared/associatec/masterpage-modal.cshtml";
+    ViewBag.modalTitle = "Parcelamento de Cobrança";
+
+    if (IsPost) {
+        Layout = null;
+    }
+}
+
+<div id="@(IsPost ? "" : "boxRegistrarParcelamento")">
+    @Html.RenderFlash()
+
+    @if (Model.TituloReceita.id == 0){
+        <div class="text-center">
+            <strong class="fs-18">COBRANÇA NÃO LOCALIZADA</strong>
+        </div>
+    }
+
+    @if (Model.TituloReceita.id > 0) {
+        <div class="row">
+            <div class="col-sm-12">
+                <span><i class="fa fa-hashtag"></i> @Model.TituloReceita.id</span>
+            </div>
+            <div class="col-sm-6">
+                <span><i class="fa fa-user"></i> @Model.TituloReceita.nomePessoa</span>
+            </div>
+            <div class="col-sm-3">
+                <span><i class="far fa-money-bill"></i> @Model.TituloReceita.valorTotalComDesconto().ToString("C")</span><br/>
+            </div>
+            <div class="col-sm-3">
+                <span><i class="fa fa-calendar"></i> @Model.TituloReceita.dtVencimento.exibirData()</span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 fs-12">
+                <span><i class="fa fa-tag"></i> @Model.TituloReceita.TipoReceita.descricao - @Model.TituloReceita.descricao</span>
+            </div>
+        </div>
+        <hr/>
+
+        if (Model.TituloReceita.limiteParcelamento.toInt() < 2){
+            <div class="text-center">
+                <strong class="fs-18"><i class="fa fa-frown-o"></i> A configuração dessa cobrança não permite parcelamento</strong>
+            </div>
+        } else {
+            <div id="box-form-parcelas">
+                @{ Html.RenderPartial("partial-form-parcelas", Model);}
+            </div>
+        }
+    }
+    <div class="clearfix"></div>
+</div>

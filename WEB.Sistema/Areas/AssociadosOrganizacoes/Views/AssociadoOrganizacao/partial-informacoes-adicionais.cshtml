@@ -1,0 +1,165 @@
+﻿@model WEB.Areas.AssociadosOrganizacoes.ViewModels.AssociadoOrganizacaoVM
+@using WEB.Areas.Associados.Extensions
+
+@if (Model.OAssociado == null || Model.OAssociado.Pessoa.nroDocumento.isEmpty() || !Model.listaAssociadosOutrasOrganizacoes.Any()) {
+
+    <div class="alert alert-info">
+        Nenhuma informação adicional foi localizada.
+    </div>
+
+    return;
+}
+
+@foreach (var OOrganizacao in Model.listaOutrasOrganizacoes) {
+
+    var listaAssociadosOrganizacao = Model.listaAssociadosOutrasOrganizacoes.Where(x => x.idOrganizacao == OOrganizacao.id).ToList();
+
+    var OConfiguracaoOrganizacao = Model.listaConfiguracoesOrganizacoes.FirstOrDefault(x => x.idOrganizacao == OOrganizacao.id);
+    
+    <h4 class="separator-form-icon"><i class="far fa-edit"></i> @OOrganizacao.Pessoa.nome</h4>
+    
+    <div class="row">
+        
+        <div class="col-xs-12">
+
+            @foreach (var OAssociado in listaAssociadosOrganizacao) {
+
+                <div class="box-info-item-dotted">
+
+                    <div class="row fs-12">
+
+                        <div class="col-md-3 col-sm-6 abreviar">
+
+                            <div>
+                                <strong>
+                                    <i class="fa fa-user"></i> @OAssociado.Pessoa.nome.abreviar(30, "").ToUpper()
+                                </strong>
+                            </div>
+
+                            @if (OConfiguracaoOrganizacao == null || OConfiguracaoOrganizacao.flagCadastroAssociado == true) {
+                                
+                                <div class="margin-top-10">
+                                    
+                                    @{ Html.RenderPartial("partial-dados-cadastro", OAssociado); }
+                                    
+                                </div>
+                                
+                            }
+                            
+                            @if (OConfiguracaoOrganizacao == null || OConfiguracaoOrganizacao.flagSituacaoAssociado == true) {
+                                <div>
+                                    <span class="@OAssociado.exibirClasseTextoSituacaoFinanceira()">
+                                        <i class="fa @OAssociado.exibirIconeSituacaoFinanceira()"></i> @OAssociado.exibirSituacao()
+                                    </span>
+                                </div>
+                            }
+                            
+                            @if ((OConfiguracaoOrganizacao == null || OConfiguracaoOrganizacao.flagDadosEmpresa == true) &&
+                                 OAssociado.Pessoa.flagTipoPessoa == "J") {
+                                
+                                <div class="margin-top-10">
+                                    @{ Html.RenderPartial("partial-dados-empresa", OAssociado); }
+                                </div>
+                                
+                            }
+                            
+                        </div>
+
+                        @if (OConfiguracaoOrganizacao == null || OConfiguracaoOrganizacao.flagDadosEndereco == true) {
+                            
+                            <div class="col-md-3 col-sm-6">
+
+                                @{ Html.RenderPartial("partial-dados-endereco", OAssociado.Pessoa.listaEnderecos); }
+
+                            </div>
+                            
+                        }
+                        
+                        @if (OConfiguracaoOrganizacao == null || OConfiguracaoOrganizacao.flagDadosEmail == true || 
+                             OConfiguracaoOrganizacao.flagDadosTelefone == true) {
+                            
+                            <div class="col-md-3 col-sm-6">
+
+                                <h4 class="separator-form-icon no-margin-top"> Contatos</h4>
+                            
+                                @if (OConfiguracaoOrganizacao == null || OConfiguracaoOrganizacao.flagDadosEmail == true) {
+                                
+                                    { Html.RenderPartial("partial-dados-email", OAssociado.Pessoa.listaEmails); }
+                                
+                                }
+                            
+                                @if (OConfiguracaoOrganizacao == null || OConfiguracaoOrganizacao.flagDadosTelefone == true) {
+                                
+                                    { Html.RenderPartial("partial-dados-telefone", OAssociado.Pessoa.listaTelefones); }
+                                
+                                }
+                                
+                            </div>
+                            
+                        }
+                        
+                        @if (OAssociado.Pessoa.flagTipoPessoa == "F") {
+                            
+                            if (OConfiguracaoOrganizacao == null || OConfiguracaoOrganizacao.flagDadosProfissao == true ||
+                                OConfiguracaoOrganizacao.flagAreasAtuacao == true) {
+                                
+                                <div class="col-md-3 col-sm-6">
+                                
+                                    <h4 class="separator-form-icon no-margin-top"> Dados Profissionais</h4>
+                                    
+                                    @if (OConfiguracaoOrganizacao == null || OConfiguracaoOrganizacao.flagDadosProfissao == true) {
+                                        
+                                        { Html.RenderPartial("partial-dados-profissionais", OAssociado.Pessoa); }
+                                        
+                                    }
+                                    
+                                    
+                                </div>    
+                                
+                            }
+                            
+                        }
+                        
+                        @if (OAssociado.Pessoa.flagTipoPessoa == "J") {
+
+                            if (OConfiguracaoOrganizacao == null || OConfiguracaoOrganizacao.flagDadosResponsavelEmpresa == true || 
+                                OConfiguracaoOrganizacao.flagDadosFuncionario == true) {
+                                
+                                <div class="col-md-3 col-sm-6">
+                                    
+                                    @if (OConfiguracaoOrganizacao == null || OConfiguracaoOrganizacao.flagDadosResponsavelEmpresa == true) {
+                                        
+                                        <h4 class="separator-form-icon no-margin-top"> Responsável Pela Empresa</h4>
+                                        
+                                        { Html.RenderPartial("partial-dados-responsavel-empresa", OAssociado.Pessoa); }
+                                        
+                                    }
+                                    
+                                    @if (OConfiguracaoOrganizacao == null || OConfiguracaoOrganizacao.flagDadosFuncionario == true) {
+                                        
+                                        <h4 class="separator-form-icon"> Funcionários da Empresa</h4>
+                                        
+                                        { Html.RenderPartial("partial-dados-funcionarios-empresa", OAssociado.Pessoa); }
+                                        
+                                    }
+                                    
+                                </div>
+                                
+                            }
+                            
+                        }
+                        
+                        <div class="clearfix"></div>
+
+                    </div>
+
+                </div>
+
+            }
+
+        </div>
+        <div class="clearfix"></div>
+        
+    </div>
+    
+}

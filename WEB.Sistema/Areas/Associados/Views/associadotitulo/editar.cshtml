@@ -1,0 +1,42 @@
+﻿@model  WEB.Areas.Associados.ViewModels.AssociadoTituloForm
+@{
+	Layout = null;				
+}
+
+<div id="boxFormAssociadoTitulo" >
+	@Html.showFlashMessage()
+	@using (Ajax.BeginForm("editar", "associadotitulo", new { area = "associados" }, new AjaxOptions { HttpMethod = "POST", InsertionMode = InsertionMode.Replace, UpdateTargetId = "boxFormAssociadoTitulo", OnSuccess = "AssociadoTitulo.onSuccessForm" }, new { @class = "" })) {
+		{ Html.EnableClientValidation(false); }
+		@Html.legendaRequired()<br />
+		
+		@Html.HiddenFor(m => m.AssociadoTitulo.id)
+		@Html.HiddenFor(m => m.AssociadoTitulo.ativo)
+		@Html.HiddenFor(m => m.AssociadoTitulo.idAssociado, new { @class = "nao-limpar" })
+		
+		@Html.ValidationSummary(true, "Algumas informações precisam ser corrigidas abaixo.")
+
+		<div class="col-md-4">
+			@Html.labelRequired("Título / Certificação")
+			@Html.DropDownListFor(m => m.AssociadoTitulo.idTipoTitulo, TipoTituloHelper.selectList(0, Model.AssociadoTitulo.idTipoTitulo), "...", new { @class = "form-control input-sm" })
+			@Html.ValidationMessageFor(m => m.AssociadoTitulo.idTipoTitulo)
+		</div>
+		
+		<div class="col-md-2">
+			@Html.labelRequired("Data Aquisição")
+			@Html.TextBoxFor(m => m.AssociadoTitulo.dtAquisicao, new { @class = "form-control input-sm", alt = "date" }.isDateTime(Model.AssociadoTitulo.dtAquisicao))
+			@Html.ValidationMessageFor(m => m.AssociadoTitulo.dtAquisicao)
+		</div>
+
+		<div class="col-md-2">
+			@Html.labelRequired("Próxima Renovação")
+			@Html.TextBoxFor(m => m.AssociadoTitulo.dtProximaRenovacao, new { @class = "form-control input-sm", alt = "date" })
+			@Html.ValidationMessageFor(m => m.AssociadoTitulo.dtProximaRenovacao)
+		</div>
+
+		<div class="col-md-2 padding-top-20">
+			<input type="submit" name="salvar" value="Salvar Título" class="btn btn-primary link-loading" />
+		</div>
+		<div class="clearfix"></div><br />
+	}
+</div>
+<div class="clearfix"></div>

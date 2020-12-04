@@ -1,0 +1,58 @@
+﻿@model WEB.Areas.Permissao.ViewModels.AlterarSenhaForm
+@using DAL.Permissao.Security.Extensions
+
+@{
+	Layout = "~/views/shared/associatec/masterpage-edit.cshtml";
+	ViewBag.titlePage = "Alteração de Senha";
+}
+
+@section navTabs{
+	<ul class="nav nav-tabs">
+		<li class="active"><a href="#tab-1" data-toggle="tab">Alteração de Senha</a></li>
+	</ul>
+}
+
+@section tabContent{
+
+	@if (User.flagAlterarSenha() == "S") {
+		<div class="alert alert-info">
+			Olá, nesse acesso você precisa alterar sua senha antes de continuar utilizando o sistema.
+		</div>
+	}
+
+	<div id="tab-1" class="tab-pane active">
+		@using (Html.BeginForm("alterar-senha", null, FormMethod.Post, new { role = "form", @class = "default" })) {
+
+			@Html.ValidationSummary(false)
+
+			<div class="form-horizontal">
+
+				<div class="col-md-4">
+					<label>Senha</label>
+					@Html.PasswordFor(m => m.senhaAtual, new { @class = "form-control input-sm", maxlength = "12" })
+					@Html.ValidationMessageFor(m => m.senhaAtual)
+				</div>
+				<div class="col-md-4">
+					<label>Nova Senha</label>
+					@Html.PasswordFor(m => m.senha, new { @class = "form-control input-sm", maxlength = "12" })
+					@Html.ValidationMessageFor(m => m.senha)
+				</div>
+				<div class="col-md-4">
+					<label>Confirme a Senha</label>
+					@Html.PasswordFor(m => m.confirmarSenha, new { @class = "form-control input-sm", maxlength = "12" })
+					@Html.ValidationMessageFor(m => m.confirmarSenha)
+				</div>
+				<div class="clearfix"></div>
+			</div>
+			<div class="clearfix"></div>
+			<br />
+			<div class="text-right">
+				<input type="button" name="voltar" value="Voltar" class="btn btn-default" />&nbsp;
+				<input type="submit" name="enviar" value="Salvar" class="btn btn-primary" />
+			</div>
+
+		}
+
+	</div><div class="clearfix"></div>
+}
+

@@ -1,0 +1,124 @@
+﻿@model IPagedList<DocumentoDigital>
+
+@using DAL.DocumentosDigitais
+@using DAL.Permissao.Security.Extensions
+@using PagedList
+@using PagedList.Mvc
+@using WEB.Areas.Pessoas.Helpers
+
+@{
+    ViewBag.titlePage = "Documentos Digitais Cadastrados";
+    var idOrganizacao = UtilRequest.getInt32("idOrganizacao");
+}
+
+@section breadcrump{
+    <ol class="breadcrumb">
+        <li><a href="javascript:;" onclick="$('.box-filtros').toggle('slow')" class="fs-16"><i class="fa fa-filter"></i></a></li>
+        
+        @if (User.idOrganizacao() == 0) {
+            <li><a class="active fs-14" href="@Url.Action("index")"><i class="fa fa-arrow-left"></i> Voltar</a></li>
+        }
+    </ol>
+}
+
+<div class="row">
+    <div class="col-sm-12 nao-exibir box-filtros">
+        
+        <div class="card-gray margin-bottom-15">
+
+            <h4 class="separator-form-icon no-margin"><i class="far fa-filter"></i> Filtros de Busca</h4>
+
+            @using (Html.BeginForm(null, null, FormMethod.Get, new {id = "fmFiltro"})) {
+
+                <div class="form-group col-md-7">
+                </div>
+                
+                <div class="clearfix visible-sm"></div>            
+             
+                <div class="form-group col-md-2 col-sm-3">
+                    <label>Status</label>
+                    @Html.DropDownList("flagAtivo", ComboHelper.selectListStatus(UtilRequest.getBool("flagAtivo")), "Todos", new {@class = "form-control input-sm"})
+                </div>
+                
+                <div class="form-group col-md-3 col-sm-6">
+                    <label>Buscar</label>
+                    @Html.buttonSearch(UtilRequest.getString("valorBusca"))
+                </div>
+                <div class="clearfix"></div>
+            }
+        </div>
+    </div>
+    <div class="clearfix"></div>
+</div>
+
+<div class="box box-primary">
+
+    @Html.headerBox("Resultados", "fa fa-list")
+
+    <div class="box-body">
+
+        <div class="btn-group">
+
+            <a href="javascript:void(0);" data-url="@Url.Action("excluir", "DocumentoDigitalOperacao")" class="btn btn-default btn-flat" title="Remover itens selecionados" data-toggle="tooltip" onclick="return DefaultAction.removeAll(this);">
+                <i class="fa fa-trash"></i>
+            </a>
+
+            @if (idOrganizacao > 0) {
+                <a href="@Url.Action("editar",  new { idOrganizacao = idOrganizacao })" class="btn btn-default btn-flat" title="Adicionar novo registro" data-toggle="tooltip"><i class="far fa-plus-circle"></i></a>
+            } else {
+                <a href="@Url.Action("editar")" class="btn btn-default btn-flat" title="Adicionar novo registro" data-toggle="tooltip"><i class="far fa-plus-circle"></i></a>
+            }
+        </div>
+
+        <table class="table table-bordered table-striped dataTable">
+            <thead>
+                <tr role="row">
+                    <th class="width-50 text-center"><input type="checkbox" name="marcarTodos" data-childs="checkRegistro[]" id="checkMarcarTodos" /></th>
+					<th class="width-250">Titulo</th>
+					<th>Tipo Documento Digital</th>
+                    <th>Tipo Pessoa</th>
+                    <th class="width-125">Cadastro</th>
+                    <th class="width-100">Status</th>
+                    <th class="width-75">&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody>
+            
+                @if(!Model.Any()) {
+                    <tr>
+                        <td class="text-center" colspan="7">Nenhum registro cadastrado</td>
+                    </tr>
+                }
+
+                @foreach (DocumentoDigital Item in Model) {
+                    <tr>
+                        <td class="text-center"><input type="checkbox" name="checkRegistro[]" value="@Item.id" /></td>
+						<td class="text-left">@Item.titulo</td>
+                        <td>@Item.TipoDocumentoDigital.descricao</td>
+                        <td>@TipoPessoaHelper.getInstance.getTipoPessoa(Item.flagTipoPessoa)</td>
+                        <td class="text-center">@Item.dtCadastro.exibirData(true)</td>
+                        <td class="text-center">
+                            @Html.linkStatusDefault(Item.id, Item.ativo, "DocumentoDigitalOperacao")
+                        </td>
+                        <td class="text-center box-acoes">
+                            @if (idOrganizacao > 0) {
+                                <a href="@Url.Action("editar", new { Item.id, idOrganizacao = idOrganizacao })" title="Editar Registro"><i class="fa fa-edit"></i></a>
+                            } else {
+                                <a href="@Url.Action("editar", new { Item.id })" title="Editar Registro"><i class="fa fa-edit"></i></a>
+                            }
+                            
+
+                            <a href="javascript:void(0);" class="delete-default" data-id="@Item.id" data-url="@Url.Action("excluir", "DocumentoDigitalOperacao")" title="Excluir Registro"><i class="fa fa-trash"></i></a>
+
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+
+        @(Html.paginarRegistros(Model, Html.PagedListPager(Model, nroPagina => UtilRequest.linkPaginacao(nroPagina, "listar"), PagedListRenderOptions.OnlyShowFivePagesAtATime)))
+    
+    </div>
+
+</div>

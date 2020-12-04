@@ -1,0 +1,109 @@
+﻿@model WEB.Areas.FinanceiroLancamentos.ViewModels.ConciliacaoVM
+@using WEB.Areas.ContasBancarias.Helpers
+@using WEB.Areas.Financeiro.Helpers
+@using WEB.Helpers
+@using WEB.Areas.FinanceiroLancamentos.Helpers
+
+@{
+    ViewBag.titlePage = "Extrato para conciliação financeira";
+}
+
+@section styles {
+    <link href="@UtilConfig.linkResourses("css/associatec/list-custom.css")" rel="stylesheet"/>
+    <link href="@UtilConfig.linkResourses("css/associatec/modulos/widgets.css")" rel="stylesheet"/>
+}
+
+@section scripts{
+    @Html.includeDatePicker()
+    @Html.includeDateRangePicker()
+    @Html.includeJqueryLoading()
+    @Html.includeBootstrapMultiselect()
+
+    <script src="@UtilConfig.linkResourses("areas/financeiro/js/auxiliares.js")"></script>
+    <script src="@UtilConfig.linkResourses("Areas/FinanceiroLancamentos/js/conciliacao.js?v=1.0")"></script>
+    <script src="@UtilConfig.linkResourses("Areas/FinanceiroLancamentos/js/conciliacao-acao.js?v=1.0")"></script>
+}
+
+@section breadcrump{
+    <ol class="breadcrumb">
+        <li>
+            <a href="javascript:;" onclick="$('.box-filtros').toggle('slow')" class="fs-16">
+                <i class="fa fa-filter"></i>
+            </a>
+        </li>
+    </ol>
+}
+
+<div class="row">
+    <div class="col-sm-12 nao-exibir box-filtros">
+
+        <div class="card-gray margin-bottom-15">
+
+            <h4 class="separator-form-icon no-margin"><i class="far fa-filter"></i> Filtros de Busca</h4>
+
+            @using (Html.BeginForm(null, null, FormMethod.Post, new {@class = "filtros", id = "formFiltro"}))
+            {
+                <div class="row margin-top-10">
+
+                    <div class="col-md-2 col-xs-12">
+                        <label>Busca em Lote</label>
+                        @Html.TextAreaFor(m => m.valorBuscaLote, new {@class = "form-control input-sm", rows = "7"})
+                    </div>
+
+                    <div class="col-md-10">
+                        <div class="row">
+                            <div class="col-sm-3 col-xs-12">
+                                <label>Pesquisar Por?</label>
+                                @Html.DropDownListFor(m => m.pesquisarPor, FinanceiroLancamentosHelper.getDtPesquisaFinanceiroConciliacao(Model.pesquisarPor), new {@class = "form-control input-sm"})
+                            </div>
+
+                            <div class="col-lg-3 col-md-3 col-xs-6">
+                                <label>Data de Cadastro</label>
+                                <div class="input-group no-padding">
+                                    @Html.TextBoxFor(m => m.dtInicio, new {@class = "form-control input-sm input-datepicker", alt = "date"})
+                                    <span class="input-group-addon"></span>
+                                    @Html.TextBoxFor(m => m.dtFim, new {@class = "form-control input-sm input-datepicker", alt = "date"})
+                                </div>
+                            </div>
+
+                            <div class="col-lg-3 col-xs-12">
+                                <label>Data da Conciliação</label>
+                                @Html.TextBoxFor(m => m.dtConciliacao, new {@class = "form-control input-sm input-datepicker", alt = "date"})
+                            </div>
+
+                            <div class="col-md-3 col-lg-3">
+                                <label>Conta Bancária</label>
+                                @Html.DropDownListFor(m => m.idContaBancaria, ContaBancariaHelper.getInstance.selectList(Model.idContaBancaria), "Todas", new {@class = "form-control input-sm"})
+                            </div>
+
+                            <div class="col-md-3 col-lg-3">
+                                <label>Receita/Despesa</label>
+                                @Html.DropDownListFor(m => m.flagTipoTitulo, TipoTituloHelper.getInstance.selectList(Model.flagTipoTitulo), "Todos", new {@class = "form-control input-sm"})
+                            </div>
+
+                            <div class="col-md-6 col-lg-6">
+                                <label>Busca</label>
+                                @Html.buttonSearch(Model.valorBusca)
+                            </div>
+                            <div class="clearfix"></div><br/>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    <div class="clearfix"></div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="box box-primary" id="boxListaLancamentos">
+            <br/>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="box box-primary" id="boxListaConciliacoes">
+            <br/>
+        </div>
+    </div>
+</div>

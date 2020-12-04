@@ -1,0 +1,35 @@
+﻿@model  WEB.Areas.Associados.ViewModels.AssociadoAbrangenciaForm
+@using WEB.Areas.Localizacao.Helpers
+
+@{
+	Layout = null;
+    var idEstado = ((Model.AssociadoAbrangencia.Cidade != null) ? Model.AssociadoAbrangencia.Cidade.idEstado : 0);
+}
+
+<div id="boxFormAssociadoAbrangencia">
+	@Html.showFlashMessage()
+	@using (Ajax.BeginForm("editar", "associadoabrangencia", new{area="associados"}, new AjaxOptions { HttpMethod = "POST", InsertionMode = InsertionMode.Replace, UpdateTargetId = "boxFormAssociadoAbrangencia", OnSuccess = "AssociadoAbrangencia.onSuccessForm" }, new { @class = "" })) {
+		{ Html.EnableClientValidation(false); }
+		@Html.legendaRequired()<br />
+		@Html.HiddenFor(m => m.AssociadoAbrangencia.id)
+		@Html.HiddenFor(m => m.AssociadoAbrangencia.idAssociado, new { @class = "nao-limpar" })
+		
+		@Html.ValidationSummary(true, "Algumas informações precisam ser corrigidas abaixo.")
+
+        <div class="col-md-6">
+            <label>UF/Cidade</label>
+            <div class="form-inline enderecoPrincipalBrasil">
+                @Html.DropDownList("idEstado", EstadoHelper.selectList(idEstado), "...", new { @class = "form-control input-sm width-75", id = "idEstadoEnderecoAbrangencia", rel = "idEstadoEnderecoAbrangencia", onchange = "Localizacao.carregarCidades('EnderecoAbrangencia', '');" })
+                @Html.DropDownListFor(m => m.AssociadoAbrangencia.idCidade, CidadeHelper.selectList(idEstado, Model.AssociadoAbrangencia.idCidade), "...", new Dictionary<string, Object> { { "class", "form-control input-sm no-padding w275" }, { "rel", "idCidadeEnderecoAbrangencia" }, { "data-toogle", "select2" } })
+                <div class="clearfix"></div>
+                @Html.ValidationMessageFor(m => m.AssociadoAbrangencia.idCidade)
+            </div>
+        </div>
+        <div class="clearfix"></div><br/>
+		<div class="text-right">
+			<input type="button" name="limpar" value="Limpar" class="btn btn-default link-loading" onclick="DefaultSistema.limparForm(this.form)" />
+			<input type="submit" name="salvar" value="Salvar" class="btn btn-primary" />
+		</div>
+	}
+</div>
+<div class="clearfix"></div>

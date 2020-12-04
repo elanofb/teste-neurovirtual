@@ -1,0 +1,134 @@
+.container {
+    width: 325px;
+    margin: 0 auto;
+}
+
+.wd-carteirinha {
+    width: 325px;
+    height: 204px;
+    margin: 0 auto;
+    background-color: #EEEEEE;
+    border-radius: 15px;
+}
+
+#frente-carteirinha {
+    background-image: url(../img/carteirinha/frente.png);
+    background-position: right center;
+    background-repeat: no-repeat;
+    position: relative;
+}
+
+#frente-carteirinha #titulos {
+    padding-top: 6px;
+}
+
+#frente-carteirinha #titulos .titulo {
+    color: #376092;
+    font-size: 14px;    
+    font-family: Calibri;
+    font-weight: bold;
+    margin-bottom: 0px;
+    margin-top: 0px;
+    text-align: center;
+}
+
+#frente-carteirinha #foto {
+    margin-top: 10px;
+    width: 114px;
+    text-align: center;    
+    float: left;
+}
+
+
+#frente-carteirinha #foto p#legenda {
+    font-size: 9px;
+    font-family: Arial; 
+    font-weight: bold;
+    margin-top: 0px;
+}
+
+#frente-carteirinha #informacoes {
+    margin-top: 7px;
+    width: 200px;
+    float: left;
+}
+
+#frente-carteirinha #informacoes p {
+    font-size: 11px;
+    margin-bottom: 1px;
+    margin-top: 0px;
+    font-family: Calibri;
+}
+
+#frente-carteirinha #informacoes p#assinatura {
+    margin-top: 22px;
+}
+
+#frente-carteirinha #informacoes p#validade {
+    font-size: 10px;
+    position: absolute;
+    bottom: 2px;
+    right: 10px;
+    padding: 0px;
+}
+
+
+#tras-carteirinha {
+    background-image: url(../img/carteirinha/tras.png);
+    background-position: center center;
+    background-repeat: no-repeat;
+    position: relative;
+}
+
+#tras-carteirinha #texto {
+    width: 255px;
+    float: left;
+    padding-top: 40px;
+    padding-left: 20px;
+}
+
+#tras-carteirinha #texto p {
+    font-size: 11px;
+    font-weight: bold;
+    line-height: 17px;
+    font-family: Calibri;
+}
+
+#tras-carteirinha #lateral-direita {
+    position: absolute;
+    float: right;
+    -moz-transform: rotate(270deg);  /* FF3.5+ */
+    -o-transform: rotate(270deg);  /* Opera 10.5 */
+    -webkit-transform: rotate(-90deg);  /* Saf3.1+, Chrome */
+    -moz-transform-origin: 97% 114%;
+    -o-transform-origin: 97% 114%;
+    -webkit-transform-origin: 97% 114%;
+    right: 0px;
+    top: 15px;
+}
+
+#tras-carteirinha #lateral-direita p {
+    font-size: 8px;
+    font-family: Calibri;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    font-weight: bold;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.clearfix {
+    clear: both;
+}
+
+@media print {
+    button {
+        display: none;
+    }
+}

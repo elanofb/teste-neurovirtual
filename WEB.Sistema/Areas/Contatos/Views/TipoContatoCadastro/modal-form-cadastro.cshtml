@@ -1,0 +1,56 @@
+﻿@model WEB.Areas.Contatos.ViewModels.TipoContatoForm
+
+@{
+
+	if (IsPost) {
+		Layout = null;
+	} else{
+		Layout = "~/views/shared/associatec/masterpage-modal.cshtml";	
+	}
+
+	ViewBag.modalTitle = "Cadastro de Tipo de Contato";
+}
+
+<div id="boxFormTipoContato">
+
+	@using (Ajax.BeginForm("salvar", "TipoContatoCadastro", new AjaxOptions { HttpMethod = "POST", InsertionMode = InsertionMode.Replace, UpdateTargetId = "boxFormTipoContato", OnSuccess = "TipoContatoCadastro.onSuccessForm" }, new { id = "formTipoContato" })){
+
+		@Html.HiddenFor(m => m.TipoContato.id)
+		
+		@Html.HiddenFor(m => m.idComboSelecionar)
+		
+		@Html.HiddenFor(m => m.flagRecarregar)
+
+		@Html.ValidationSummary(false)
+
+		<div class="row">
+
+			<div class="col-sm-6">
+				@Html.labelRequired("Descrição")
+				@Html.TextBoxFor(m => m.TipoContato.descricao, new { @class = "form-control input-sm", maxlength="100" })
+				@Html.ValidationMessageFor(m => m.TipoContato.descricao)
+			</div>
+
+			<div class="col-sm-3">
+				<label>Status</label>
+				@Html.DropDownListFor(m => m.TipoContato.ativo, ComboHelper.selectListTrueFalse(Model.TipoContato.ativo), new { @class = "form-control input-sm" })
+				@Html.ValidationMessageFor(m => m.TipoContato.ativo)
+			</div>
+			<div class="clearfix"></div><br />
+
+		</div>
+	}
+	
+</div>
+
+@section modalFooter {
+	
+	<div class="text-right">
+		
+		<button class="btn btn-primary link-loading" onclick="$('#formTipoContato').submit()">
+			<i class="fa fa-hdd"></i> Salvar
+		</button>
+		
+	</div>
+	
+}

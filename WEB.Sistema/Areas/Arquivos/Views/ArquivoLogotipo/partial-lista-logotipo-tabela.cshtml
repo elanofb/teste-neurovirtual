@@ -1,0 +1,62 @@
+﻿@model  List<ArquivoUpload>
+@using DAL.Arquivos
+
+<table id="" class="table table-bordered table-striped dataTable">
+    
+    <thead>
+        <tr>
+            <th class="width-25"></th>
+            <th>Imagem</th>
+            <th>Legenda/Título</th>
+            <th width="100">Foto ativa?</th>
+            <th width="50">&nbsp;</th>
+        </tr>
+    </thead>
+    <tbody>
+    
+        @if(!Model.Any()) {
+            <tr>
+                <td class="text-center" colspan="5">Nenhuma imagem disponível no momento.</td>
+            </tr>
+        }
+
+        @{ int cont = 1; }
+
+        @foreach (ArquivoUpload Item in Model) {
+
+            <tr id="orderItem-@Item.id" class="itemListaFotos" data-id="@Item.id">
+                
+                <td class="text-center">@cont</td>
+
+                <td class="text-center">
+                    
+                    <a href="~/@Item.srcImg()" class="itemFotoListaFotos" data-fancybox-group="gallery" title="@Item.legenda">
+                        <img src="~/@Item.srcImgThumb()" height="50" title="@Item.legenda" />
+                    </a>
+
+                </td>
+
+                <td class="text-center">
+                    <a href="#" data-type="text" data-pk="@Item.id" data-name="legenda" data-url="@Url.Action("alterar-dados", "Arquivo")" data-value="@Item.legenda" data-title="Editar Legenda" class="txtEditable">@(!String.IsNullOrEmpty(Item.legenda) ? Item.legenda : "-")</a>
+                </td>
+
+                <td class="text-center">
+                    @Html.linkStatusDefault(Item.id, Item.ativo, "ArquivoLogotipo", "alterar-status", "Arquivos")
+                </td>
+
+                <td class="text-center box-acoes">
+                    @Html.linkAjaxExcluir(Item.id, "N", Url.Action("excluir"))
+                </td>
+
+            </tr>
+
+            cont++;
+
+        }
+    
+    </tbody>
+
+</table>
+
+@Html.instrucao("As fotos ativas mais recentes terão prioridade na exibição.")
+<div class="clearfix"></div>

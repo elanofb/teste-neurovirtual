@@ -1,0 +1,58 @@
+﻿@model List<DAL.ConfiguracoesAssociados.ConfiguracaoAssociadoPF>
+
+@{
+    ViewBag.titlePage = "Configurações de Associado PF Cadastradas";
+}
+
+<div class="col-xs-12 box box-solid">
+
+    <div class="clearfix"></div><br />
+
+    <div class="table-responsive">
+        <div class="dataTables_wrapper form-inline" role="grid">
+
+            <div class="links-table">
+                <div class="btn-group">
+                    <a href="@Url.Action("editar")" class="btn btn-default btn-flat" title="Adicionar novo registro" data-toggle="tooltip">
+                        <i class="far fa-plus-circle"></i>
+                    </a>
+                </div>
+            </div>
+
+            <table class="table table-bordered table-striped dataTable">
+                <thead>
+                    <tr role="row">
+                        <th>Organização</th>
+                        <th width="150">Cadastro</th>
+                        <th width="250">Usuário</th>
+                        <th class="width-50">&nbsp;</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Any()) {
+                        foreach (var Item in Model) {
+                            <tr>
+                                <td class="text-left">
+                                    @(Item.Organizacao?.Pessoa?.nome ?? "Padrão do Sistema")
+                                </td>
+                                <td>@Item.dtCadastro.exibirData(true)</td>
+                                <td>@(Item.UsuarioCadastro?.nome)</td>
+                                <td class="text-center box-acoes">
+                                    <a href="@Url.Action("editar", new{ Item.idOrganizacao })" title="Editar Registro" data-toggle="tooltip">
+                                        <i class="fa fa-edit"></i>
+                                    </a> &nbsp;
+                                </td>
+                            </tr>
+                        }
+                    } else {
+                        <tr>
+                            <td class="text-center" colspan="4">Nenhum registro cadastrado</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+<div class="clearfix"></div>

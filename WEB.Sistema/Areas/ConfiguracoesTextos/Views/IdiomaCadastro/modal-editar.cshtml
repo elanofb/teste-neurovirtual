@@ -1,0 +1,46 @@
+﻿@model WEB.Areas.ConfiguracoesTextos.ViewModels.IdiomaCadastroForm
+@using MvcFlashMessages
+
+@{
+    ViewBag.modalTitle = "Adicionar idiomas de textos";
+    string idModalContent = "boxAdicionarIdioma";
+    Layout = IsPost? null: "~/views/shared/associatec/masterpage-modal.cshtml";
+
+}
+
+<div id="@idModalContent">
+
+    <div class="row">
+        @Html.RenderFlash()
+    </div>
+    
+    @using (Ajax.BeginForm("salvar-idioma", null, new AjaxOptions { HttpMethod = "POST", InsertionMode = InsertionMode.Replace, UpdateTargetId = idModalContent, OnSuccess = "Idioma.onSuccessForm" }, new { id="formIdioma" })) {
+
+        @Html.HiddenFor(m => m.Idioma.id)
+        @Html.HiddenFor(m => m.Idioma.ativo)
+        
+        <div class="row">
+            
+            @Html.ValidationSummary(false)
+            
+            <div class="col-md-6">
+                <label>Descrição</label>
+                @Html.TextBoxFor(m => m.Idioma.descricao, new {@class = "input-sm form-control", maxlength = "100"})
+                @Html.ValidationMessageFor(m => m.Idioma.descricao)
+            </div>
+
+            <div class="col-md-6">
+                <label>Sigla</label>
+                @Html.TextBoxFor(m => m.Idioma.sigla, new {@class = "input-sm form-control", maxlength = "5"})
+                @Html.ValidationMessageFor(m => m.Idioma.sigla)
+            </div>
+        </div>
+        
+        <div class="row bg-gray margin-top-15 padding-top-10 padding-bottom-10">
+            <div class="col-md-12 text-right">
+                <input type="button" value="Salvar" class="btn btn-primary link-loading" onclick="$('#formIdioma').submit()" />
+            </div>
+        </div>
+    }
+</div>
+<div class="clearfix"></div>

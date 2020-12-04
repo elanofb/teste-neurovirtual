@@ -1,0 +1,25 @@
+﻿@{
+    Layout = "~/views/shared/associatec/masterpage.cshtml";
+}
+
+@section styles{
+    @RenderSection("styles", false)
+}
+
+@section scripts{
+    @RenderSection("scripts", false)
+}
+
+@section breadcrump{
+    @RenderSection("breadcrump", false)
+}
+<div class="row">
+    <div class="col-sm-12">
+        <div class="nav-tabs-custom">
+            @RenderSection("navTabs", false)
+            <div class="tab-content">
+                @RenderSection("tabContent", false)
+            </div>
+        </div>
+    </div>
+</div>

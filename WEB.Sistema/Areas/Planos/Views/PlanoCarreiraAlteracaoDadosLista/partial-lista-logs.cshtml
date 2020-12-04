@@ -1,0 +1,45 @@
+﻿@model List<DAL.LogsAlteracoes.LogAlteracao>
+
+@if (!Model.Any()) {
+    <div class="alert alert-info">
+        Nenhum log de alteração foi encontrado.
+    </div>
+}
+
+@foreach(var OLog in Model) {
+    
+    <div class="box-info-item bordered-destaque">
+        
+        <div class="row">
+
+            <div class="col-md-6">
+                <strong>
+                    <i class="fa fa-user"></i> @(OLog.UsuarioAlteracao?.nome ?? "Não registrado")
+                </strong>
+            </div>
+            
+            <div class="col-md-6 text-right">
+                <i class="fa fa-calendar"></i> @OLog.dtAlteracao.exibirData(true)
+            </div>
+            <div class="clearfix"></div>
+            
+            <div class="col-xs-12">
+                <strong><i class="fa fa-retweet"></i>Campo Alterado:</strong> @OLog.nomeCampoDisplay
+            </div>
+            <div class="clearfix"></div>
+            
+            <div class="col-xs-12">
+                <strong>Valor Antigo:</strong> @Html.Raw(OLog.valorAntigo)
+            </div>
+            <div class="clearfix"></div>
+            
+            <div class="col-xs-12">
+                <strong>Novo Valor:</strong> @Html.Raw(OLog.valorNovo)
+            </div>
+            <div class="clearfix"></div>
+
+        </div>
+
+    </div>
+
+}

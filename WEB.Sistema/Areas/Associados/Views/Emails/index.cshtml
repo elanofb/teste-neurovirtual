@@ -1,0 +1,40 @@
+﻿@model WEB.Areas.Associados.ViewModels.ConfiguracaoEmailForm
+
+@{
+    ViewBag.titlePage = "E-mails de Associados";
+    ViewBag.subTitlePage = "Configuração";
+}
+
+@section scripts {
+    @Html.includeSelect2()
+    @Html.includeFroalaEditorJS()
+    <script src="@UtilConfig.linkResourses("js/associatec/froala-custom.js?v=1.0")"></script>
+}
+
+@section styles {
+    @Html.includeFroalaEditorCSS()
+}
+
+<div>
+    
+    <div class="box box-primary">
+        
+        <div class="box-header with-border">
+
+            <div class="box-title text-bold fs-14">
+
+                <i class="far fa-edit"></i> E-mails
+
+            </div>
+        
+        </div>
+        
+        <div class="box-body minh200" id="boxConfiguracaoNotificacao">
+            
+            @{ Html.RenderPartial("partial-form", Model); }
+            
+        </div>
+        
+    </div>
+    <div class="clearfix"></div>
+</div>

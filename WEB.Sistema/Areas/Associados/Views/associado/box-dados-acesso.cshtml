@@ -1,0 +1,28 @@
+﻿@model WEB.Areas.Associados.ViewModels.AssociadoForm
+
+<h4 class="separator-form">Dados de Acesso</h4>
+<div class="row">
+    @if (Model.Associado.id == 0) {
+        <p class="form-instrucao">
+            * A senha será gerada pelo sistema e enviado por e-mail após a realização do cadastro.
+        </p>
+    }
+
+    @if (Model.Associado.id > 0) {
+        <p class="form-instrucao">
+            * Ao utilizar o botão "Reenviar Senha", o sistema irá gerar e enviar uma nova senha para os e-mails cadastrados.
+        </p>
+    }
+
+    <div class="col-md-6">
+        @Html.labelRequired("Login")
+        @Html.TextBoxFor(m => m.Associado.Pessoa.login, new { @class = "form-control input-sm" })
+        @Html.ValidationMessageFor(m => m.Associado.Pessoa.login)
+    </div>
+    @if (Model.Associado.id > 0) {
+        <div class="col-md-1">
+            <a href="javascript:void(0)" onclick="AssociadoAcao.reenviarSenha('@Model.Associado.id');" class="btn btn-primary" style="margin-top:20px;"><i class="fa fa-arrow-circle-o-right"></i> Reenviar Senha</a>
+        </div>
+    }
+    <div class="clearfix"></div>
+</div>

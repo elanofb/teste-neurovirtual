@@ -1,0 +1,85 @@
+﻿@using WEB.Helpers
+
+@{
+    ViewBag.titlePage = "Painel de Contribuição";
+}
+
+@section scripts{
+}
+
+@section styles{
+    <link href="@UtilConfig.linkResourses()css/associatec/modulos/widgets.css" rel="stylesheet" />
+    <link href="@UtilConfig.linkResourses()css/associatec/modulos/dropdown-menu.css" rel="stylesheet" />
+}
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="box box-primary">
+            <div class="box-header with-border">
+                <h3 class="box-title">
+                    <i class="fa fa-search"></i> Filtros de Pesquisa
+                </h3>
+            </div>
+            <div class="box-body">
+                <div class="row">
+                    @using (Html.BeginForm(null, null, FormMethod.Get, new { @class = "no-margin" })) {
+                        <div class="col-xs-3 col-sm-1 col-lg-3">
+
+                        </div>
+                        <div class="col-xs-2 col-sm-2 col-lg-2">
+                            <label>Ano</label>
+                            @Html.DropDownList("ano", ComboHelper.selectListAno(UtilRequest.getString("ano"), 3, 2), new { @class = "form-control input-sm" })
+                        </div>
+                        <div class="col-xs-2 col-sm-3 col-lg-2">
+                            <label>Vencimentos</label>
+                            @Html.DropDownList("ano", ComboHelper.selectListAno(UtilRequest.getString("ano"), 3, 2), "...", new { @class = "form-control input-sm" })
+                        </div>
+                        <div class="col-xs-2 col-sm-3 col-lg-2">
+                            <label>Situação</label>
+                            <select class="form-control input-sm">
+                                <option>Todos</option>
+                                <option>Somente não pagos</option>
+                                <option>Somente não pagos vencidos</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-3 col-sm-3 col-lg-3">
+                            <label>Buscar</label>
+                            @Html.buttonSearch(UtilRequest.getString("valorBusca"))
+                        </div>
+
+                    }
+                </div>
+            </div>
+            <div class="clearfix"></div><br />
+        </div>
+    </div>
+
+</div>
+<div class="row">
+    <div class="col-sm-12">
+        <div class="box box-primary">
+            <div class="box-header with-border">
+                <h3 class="box-title">
+                    <i class="far fa-chart-bar"></i> Resultados
+                </h3>
+                <div class="box-tools pull-right">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-box-tool dropdown-toggle text-black" data-toggle="dropdown">
+                            <i class="fa fa-wrench"></i> Ações
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                            <li><a href="#">Enviar e-mails de cobrança</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="box-body">
+                @{ Html.RenderPartial("partial-widget-resultados");}
+
+                @{ Html.RenderPartial("partial-relacao-associados");}
+
+            </div>
+            <div class="clearfix"></div><br />
+        </div>
+    </div>
+</div>

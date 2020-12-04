@@ -1,0 +1,75 @@
+﻿@model WEB.Areas.Financeiro.ViewModels.ResultadoFinanceiroForm
+
+<div class="box box-primary">
+
+    @Html.headerBox("Filtros", "fa fa-filter")
+
+    <div class="box-body">
+
+        <form id="formFiltros">
+
+            <div class="row">
+
+                <div class="col-md-3 col-sm-4">
+
+                    <p class="radio">
+                        <label class="radio-label">@Html.RadioButtonFor(m => m.tipoBuscaPeriodo, "dtPagamento") Data de Pagamento</label>
+                    </p>
+
+                    <p class="radio">
+                        <label class="radio-label">@Html.RadioButtonFor(m => m.tipoBuscaPeriodo, "dtCompetencia") Data de Competência</label>
+                    </p>
+                    
+                    <p class="radio">
+                        <label class="radio-label">@Html.RadioButtonFor(m => m.tipoBuscaPeriodo, "dtVencimento") Data de Vencimento</label>
+                    </p>
+
+                </div>
+
+                <div class="col-md-9 col-sm-8 padding-bottom-10 bordered-gray-left-1">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            @Html.labelHelp("Período", "Você deve informar o período em que deseja realizar a pesquisa, caso contrário o mês vigente será utilizado como base para a pesquisa.")
+                            <div class="input-group">
+                                @Html.TextBoxFor(m => m.dtInicioPeriodo, new {@class = "form-control input-sm input-datepicker", alt = "date"})
+                                <span class="input-group-addon">-</span>
+                                @Html.TextBoxFor(m => m.dtFimPeriodo, new {@class = "form-control input-sm input-datepicker", alt = "date"})
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-4 col-sm-6">
+                            <label>Centro de Custo</label>
+                            @Html.ListBoxFor(m => m.idsCentroCusto, CentroCustoHelper.getInstance.selectMultList(Model.idsCentroCusto), new {@class = "form-control input-sm input-multiselect", multiple = "multiple"})
+                        </div>
+
+                        <div class="col-lg-4 col-sm-6">
+                            <label>Macro Conta</label>
+                            @Html.ListBoxFor(m => m.idsMacroConta, MacroContaHelper.getInstance.selectMultList(Model.idsMacroConta), new {@class = "form-control input-sm input-multiselect", multiple = "multiple"})
+                        </div>
+                        <div class="col-lg-4 col-sm-6">
+                            <label>Sub Conta</label>
+                            @Html.ListBoxFor(m => m.idsSubConta, CategoriaTituloHelper.getInstance.selectMultList(Model.idsSubConta, 0), new {@class = "form-control input-sm input-multiselect", multiple = "multiple"})
+                        </div>
+                        <div class="clearfix"></div>
+
+                        <div class="pull-right col-md-2 padtop22 padding-bottom-10">
+                            <button type="button" class="btn btn-sm btn-primary btn-block link-loading" onclick="ResultadoFinanceiro.filtrar();">
+                                <i class="fa fa-search"></i> Filtrar
+                            </button>
+                        </div>
+
+                        <div class="clearfix"></div>
+
+                    </div>
+
+                </div>
+                <div class="clearfix"></div>
+
+            </div>
+
+        </form>
+    </div>
+
+</div>

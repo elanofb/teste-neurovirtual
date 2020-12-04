@@ -1,0 +1,19 @@
+﻿@model List<DAL.Pessoas.PessoaTelefone>
+
+@if (!Model.Any()) {
+    <div class="alert alert-info">
+        Nenhum telefone cadastrado
+    </div>
+}
+
+@foreach (var OTelefone in Model) {
+
+    if (OTelefone.nroTelefone.isEmpty()) {
+        continue;
+    }
+    
+    <div>
+        <i class="far fa-phone"></i> @UtilString.formatPhone(OTelefone.nroTelefone)
+    </div>
+
+}

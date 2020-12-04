@@ -1,0 +1,73 @@
+﻿@model WEB.Areas.Produtos.ViewModels.EstoqueEntradaForm
+@using WEB.Areas.Produtos.Helpers
+@{
+	Layout = "~/views/shared/associatec/masterpage-edit.cshtml";
+	ViewBag.tituloPagina = "Cadastro e Edição de Entradas no Estoque";
+}
+
+@section styles{
+}
+
+@section scripts{
+    @Html.includeDatePicker()
+}
+
+@section navTabs{
+	<ul class="nav nav-tabs">
+		<li class="active"><a href="#tab-1" data-toggle="tab">Principal</a></li>
+	</ul>
+}
+
+@section tabContent{
+	<div id="tab-1" class="tab-pane active">
+		@{ Html.RenderPartial("partial-info-cadastro", Model); }
+
+		@using (Html.BeginForm("editar", null, FormMethod.Post, new { role = "form", enctype = "multipart/form-data" })) {
+            { Html.EnableClientValidation(false); }
+            @Html.legendaRequired()<br />
+			@Html.HiddenFor(m => m.EstoqueEntrada.id)
+            @Html.ValidationSummary(true, "Algumas informações precisam ser corrigidas abaixo.") <br />
+
+			<h4 class="separator-form margin-left-15">Informações para entradas no estoque</h4>
+
+            <div class="col-md-2">
+                @Html.labelRequired("Data de Entrada ")
+                @Html.TextBoxFor(m => m.EstoqueEntrada.ProdutoEstoque.dtMovimentacao, new { @class = "form-control input-sm input-datepicker", alt = "date" })
+                @Html.ValidationMessageFor(m => m.EstoqueEntrada.ProdutoEstoque.dtMovimentacao)
+            </div>
+                        
+            <div class="col-md-2">
+                @Html.labelRequired("Fornecedor")
+                @Html.DropDownListFor(m => m.EstoqueEntrada.idFornecedor, WEB.Areas.Fornecedores.Helpers.FornecedorHelper.getInstance.selectList(Model.EstoqueEntrada.idFornecedor), "...", new { @class = "form-control input-sm" })
+                @Html.ValidationMessageFor(m => m.EstoqueEntrada.idFornecedor)
+            </div>
+            
+            int idProdutoEstoque = (Model.EstoqueEntrada.ProdutoEstoque == null) ? 0 : Model.EstoqueEntrada.ProdutoEstoque.idProduto;
+            if (Model.EstoqueEntrada.id > 0)
+            {
+                @Html.HiddenFor(x => x.EstoqueEntrada.ProdutoEstoque.idProduto);
+                @Html.HiddenFor(x => x.EstoqueEntrada.ProdutoEstoque.qtdMovimentada);
+            }
+ 
+            <div class="col-md-2">
+                @Html.labelRequired("Produto")
+                @Html.DropDownListFor(m => m.EstoqueEntrada.ProdutoEstoque.idProduto, ProdutoHelper.getInstance.selectList(0, idProdutoEstoque), "...", new { @class = "form-control input-sm" }.isDisabled(Model.EstoqueEntrada.id > 0))
+                @Html.ValidationMessageFor(m => m.EstoqueEntrada.ProdutoEstoque.idProduto)            
+            </div>
+            <div class="col-md-2">
+                @Html.labelRequired("Quantidade")
+                @Html.TextBoxFor(m => m.EstoqueEntrada.ProdutoEstoque.qtdMovimentada, new { @class = "form-control input-sm width-75" }.isDisabled(Model.EstoqueEntrada.id > 0))
+                @Html.ValidationMessageFor(m => m.EstoqueEntrada.ProdutoEstoque.qtdMovimentada)
+            </div>
+			<div class="clearfix"></div><br /><br />
+
+			<div class="col-md-7">
+                <div class="text-right">
+                    @Html.exibirBotoesFormulario(Url.Action("listar"), "N")
+                </div>
+			</div>
+			<div class="clearfix"></div><br /><br />
+		}
+	</div>
+}
+

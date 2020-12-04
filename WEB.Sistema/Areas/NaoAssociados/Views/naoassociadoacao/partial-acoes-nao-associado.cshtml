@@ -1,0 +1,40 @@
+﻿@model DAL.Associados.Associado
+
+@if (Model.id > 0) {
+    <div>
+
+        @if (Model.ativo == "S" || Model.ativo == "E") {
+            <button class="btn btn-danger btn-lg col-md-12" onclick="DefaultSistema.showModal('@Url.Action("partial-desativacao-nao-associado", "naoassociadoacao", new{ area = "naoassociados", idAssociado = Model.id })');">
+                <i class="fa fa-remove"></i> Desativar Cadastro
+            </button>
+            <div class="clearfix"></div><br />
+        }
+
+        @if (Model.ativo == "N") {
+            <button class="btn btn-warning btn-lg col-md-12" onclick="DefaultSistema.showModal('@Url.Action("partial-reativacao-nao-associado", "naoassociadoacao", new{ area = "naoassociados", idAssociado = Model.id })');">
+                <i class="fa fa-edit"></i> Reativar Cadastro
+            </button>
+            <div class="clearfix"></div><br />
+        }
+
+        <button class="btn btn-danger btn-lg col-md-12" onclick="DefaultSistema.showModal('@Url.Action("partial-excluir-nao-associado", "naoassociadoacao", new {area = "naoassociados", idAssociado = Model.id})');">
+            <i class="fa fa-edit"></i> Excluir Cadastro
+        </button>
+
+        <div class="clearfix"></div><br />
+
+        <button class="btn btn-success btn-lg col-md-12" onclick="NaoAssociadoAcao.showModalTornarAssociado('@Url.Action("partial-tornar-associado", "naoassociadoacao", new {area = "naoassociados", idAssociado = Model.id})');">
+            <i class="fa fa fa-user"></i> Tornar Associado
+        </button>
+
+        <div class="clearfix"></div><br />
+
+        <button class="btn btn-primary btn-lg col-md-12" onclick="DefaultSistema.showModal('@Url.Action("modal-envio-cadastro-por-email", "naoassociadoacao", new {Area = "naoassociados", idAssociado = Model.id})');">
+            <i class="fa fa-envelope"></i> Enviar Cadastro por E-mail
+        </button>
+
+        <div class="clearfix"></div><br />
+
+    </div>
+
+}

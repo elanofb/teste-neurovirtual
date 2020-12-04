@@ -1,0 +1,175 @@
+﻿@model ExtratoConsultaVM
+@using WEB.Areas.ContasBancarias.Helpers
+@using WEB.Areas.Financeiro.Helpers
+@using WEB.Helpers
+@using WEB.Areas.FinanceiroLancamentos.Helpers
+@using WEB.Areas.LancamentoRecebimentos.ViewModels
+
+@{
+    ViewBag.titlePage = "Lançamentos por Pessoas";
+}
+
+@section styles {
+    <link href="@UtilConfig.linkResourses("css/associatec/list-custom.css")" rel="stylesheet"/>
+    <link href="@UtilConfig.linkResourses("css/associatec/modulos/widgets.css")" rel="stylesheet"/>
+}
+
+@section scripts{
+    @Html.includeDatePicker()
+    @Html.includeJqueryLoading()
+    @Html.includeBootstrapMultiselect()
+    <script src="@UtilConfig.linkResourses("areas/financeiro/js/auxiliares.js")"></script>
+    <script src="@UtilConfig.linkResourses("areas/FinanceiroLancamentos/js/lancamentos-despesas.js?v=1.3")"></script>
+
+    <script src="@UtilConfig.linkResourses("Areas/Financeiro/js/receita-baixa.js?v=1.0")"></script>
+    <script src="@UtilConfig.linkResourses("Areas/Financeiro/js/receita-registrar-pagamento.js?v=1.0")"></script>
+    <script src="@UtilConfig.linkResourses("Areas/Financeiro/js/despesa-registrar-pagamento.js?v=1.0")"></script>
+
+    <script src="@UtilConfig.linkResourses("Areas/Financeiro/js/extrato-pessoa.js?v=1.0")"></script>
+}
+
+@section breadcrump{
+    <ol class="breadcrumb">
+        <li>
+            <a href="javascript:;" onclick="$('.box-filtros').toggle('slow')" class="fs-16">
+                <i class="fa fa-filter"></i>
+            </a>
+        </li>
+    </ol>
+}
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="box box-primary nao-exibir box-filtros">
+            @Html.headerBox("Filtros de Busca", "fa fa-filter")
+            <div class="box-body padding-top-20 padding-bottom-20">
+
+                @using (Html.BeginForm(null, null, FormMethod.Post, new {@class = "formFiltro", id = "formFiltro"}))
+                {
+                    @Html.Hidden("nroPagina", "", new {id = "nroPagina"})
+
+                    <div class="col-md-2 col-xs-12">
+                        <label>Busca em Lote</label>
+                        @Html.TextAreaFor(m => m.valorBuscaLote, new {@class = "form-control input-sm", rows = "7"})
+                    </div>
+
+                    <div class="col-md-10 col-xs-12">
+                        <div class="row">
+                            <div class="col-lg-3 col-md-6 col-xs-6">
+                                <label>Pesquisar Por?</label>
+                                @Html.DropDownListFor(m => m.pesquisarPor, FinanceiroLancamentosHelper.getDtPesquisaFinanceiroExtrato(UtilRequest.getString("pesquisarPor")), new {@class = "form-control input-sm"})
+                            </div>
+
+                            <div class="col-lg-3 col-md-6 col-xs-6">
+                                <label>Data</label><br/>
+                                <div class="input-group">
+                                    @Html.TextBoxFor(m => m.dtInicio, new {@class = "form-control input-sm input-datepicker", alt = "date"})
+                                    <span class="input-group-addon">-</span>
+                                    @Html.TextBoxFor(m => m.dtFim, new {@class = "form-control input-sm input-datepicker", alt = "date"})
+                                </div>
+                            </div>
+
+                            <div class="col-lg-3 col-md-6 col-xs-6">
+                                <label>Situação</label>
+                                @Html.DropDownListFor(m => m.flagPago, FinanceiroLancamentosHelper.getSituacao(Model.flagPago), new {@class = "form-control input-sm"})
+                            </div>
+
+                            <div class="col-lg-3 col-md-6 col-xs-6">
+                                <label>Tipo Receita</label>
+                                @Html.ListBoxFor(m => m.idsTipoReceita, TipoReceitaHelper.getInstance.multiSelectList(Model.idsTipoReceita.ToArray()), new {@class = "form-control input-sm multiSelectTipoReceita"})
+                            </div>
+
+
+                            <div class="col-lg-3 col-md-6 col-xs-6">
+                                <label>Centro de Custo</label>
+                                @Html.DropDownListFor(m => m.idCentroCusto, CentroCustoHelper.getInstance.selectList(Model.idCentroCusto), "Todos", new {@class = "form-control input-sm", onchange = "Auxiliares.carregarMacroConta('D')"})
+                            </div>
+
+                            <div class="col-lg-3 col-md-6 col-xs-6">
+                                <label>Macro Conta</label>
+                                @Html.DropDownListFor(m => m.idMacroConta, MacroContaHelper.getInstance.selectListPorTipo(Model.idMacroConta, ""), "Todos", new {@class = "form-control input-sm", data_val = UtilRequest.getInt32("idMacroConta")})
+                            </div>
+
+                            <div class="col-lg-3 col-md-6 col-xs-6">
+                                <label>Conta Bancária</label>
+                                @Html.DropDownListFor(m => m.idContaBancaria, ContaBancariaHelper.getInstance.selectList(Model.idContaBancaria), "Todos", new {@class = "form-control input-sm"})
+                            </div>
+
+                            <div class="col-lg-3 col-md-6 col-xs-6">
+                                <label>Tipo Baixa</label>
+                                @Html.DropDownListFor(m => m.flagTipoBaixa, TipoBaixarHelper.selectList(Model.flagTipoBaixa), "Todos", new {@class = "form-control input-sm"})
+                            </div>
+
+                            <div class="col-lg-3 col-md-6 col-xs-6">
+                                <label>Gateway</label>
+                                @Html.DropDownListFor(m => m.idGateway, GatewayPagamentoHelper.getInstance.selectList(Model.idGateway), "Todos", new {@class = "form-control input-sm"})
+                            </div>
+
+                            <div class="col-lg-3 col-md-6 col-xs-6">
+                                <label>Meio de Pagamento</label>
+                                @Html.DropDownListFor(m => m.idMeioPagamento, MeioPagamentoHelper.getInstance.selectList(Model.idMeioPagamento), "Todos", new {@class = "form-control input-sm"})
+                            </div>
+
+                            <div class="col-lg-6 col-md-6 col-xs-6">
+                                <label>Busca Livre</label>
+                                @Html.buttonSearch(Model.valorBusca)
+                            </div>
+
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="row">
+            
+            <div class="col-sm-3">
+                <div class="widget-small bg-green cursor-pointer">
+                    <i class="far fa-money-bill pull-left fs-26 cursor-pointer"></i>
+                    <p class="text-right">
+                        A receber<br/> <label class="destaque fs-14 cursor-pointer">@Model.totalReceitasAReceber.ToString("C")</label>
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-sm-3">
+                <div class="widget-small bg-green cursor-pointer">
+                    <i class="fa fa-check-circle pull-left fs-26 cursor-pointer"></i>
+                    <p class="text-right">
+                        Total Recebido <label class="destaque no-margin fs-14 cursor-pointer">@Model.totalReceitasRecebidas.ToString("C")</label><br />
+                        Líquido <label class="destaque fs-14 cursor-pointer">@Model.totalReceitasLiquidaRecebidas.exibirValor()</label>
+                        
+                    </p>
+                </div>
+            </div>
+            
+            <div class="col-sm-3">
+                <div class="widget-small bg-red cursor-pointer">
+                    <i class="far fa-money-bill pull-left fs-26 cursor-pointer"></i>
+                    <p class="text-right">
+                        A pagar<br/> <label class="destaque fs-14 cursor-pointer">@((Model.totalDespesasAPagar).ToString("C"))</label>
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-sm-3">
+                <div class="widget-small bg-red cursor-pointer">
+                    <i class="far fa-check-circle pull-left fs-26 cursor-pointer"></i>
+                    <p class="text-right">
+                        Pago<br/> <label class="destaque fs-14 cursor-pointer">@Model.totalDespesasPagas.ToString("C")</label>
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="clearfix"></div>
+
+@{ Html.RenderPartial("partial-lista-itens"); }
+

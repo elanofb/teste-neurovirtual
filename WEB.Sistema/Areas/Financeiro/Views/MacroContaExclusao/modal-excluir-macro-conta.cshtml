@@ -1,0 +1,57 @@
+﻿@using MvcFlashMessages
+@model WEB.Areas.Financeiro.ViewModels.MacroContaExclusaoVM
+
+@{
+    Layout = IsPost ? null : "~/views/shared/associatec/masterpage-modal.cshtml";
+
+    ViewBag.modalTitle = "Excluir Macro Conta";
+    ViewBag.modalWidthClass = "md";
+}
+
+<div id="@(IsPost ? "" : "boxFormMacroConta")">
+
+    @Html.RenderFlash()
+
+    <div class="col-xs-12">
+        <div class="row">
+            @using (Ajax.BeginForm("excluir-macro-conta", null, new AjaxOptions { UpdateTargetId = "boxFormSubConta", HttpMethod = "POST", OnSuccess = "ComboMacroConta.onSuccessMacroContaExcluir" }, new { role = "form", @class = "default" })) {
+
+                @Html.RenderFlash()
+
+                @Html.HiddenFor(x => x.idMacroConta)
+
+                if (Model.qtdItens > 0) {
+                     
+                    <div class="alert alert-danger"><p>Existem @Model.qtdItens titulos associado a essa macro conta. Para excluir a macro conta é necessário que indique outra macro conta para esses titulos.</p></div>
+                
+                    <h4 class="separator-form">Substituir Macro Conta</h4>
+
+                    <div class="form-horizontal">
+                    
+                        <div class="col-sm-6">
+                            <label>Substituir a macroconta @Model.nomeMacroConta por:</label>
+                            @Html.DropDownListFor(m => m.idMacroContaNova, MacroContaHelper.getInstance.selectList(Model.idMacroContaNova, false), "...", new { id = "idMacroContaNova", @class = "form-control input-sm" })
+                            @Html.ValidationMessageFor(m => m.idMacroContaNova)
+                        </div>
+
+                        <div class="clearfix"></div>
+
+                    </div>
+
+                } else {
+                    <div class="alert alert-info">
+                        <p>Não há título associado a essa macro conta</p>
+                    </div>
+                }
+
+                <div class="clearfix"></div><br/>
+
+                <div class="text-right">
+                    <input type="submit" class="btn btn-danger link-loading" value="Confirmar Exclusão" />
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<div class="clearfix"></div><br />
+

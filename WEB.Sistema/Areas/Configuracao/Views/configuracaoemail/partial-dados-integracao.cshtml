@@ -1,0 +1,14 @@
+﻿@model WEB.Areas.Configuracao.ViewModels.ConfiguracaoEmailForm
+
+
+<h4 class="separator-form-icon"><i class='far fa-edit'></i> Configurações de Integração:</h4>
+
+<div class="col-md-4">
+	<label>Chave Integração</label>
+	@Html.TextBoxFor(m => m.ConfiguracaoEmail.chaveIntegracao, new { @class="form-control input-sm", maxlength = "150" })
+</div>
+<div class="col-md-2">
+	<label>Limite de Envios</label>
+	@Html.TextBoxFor(m => m.ConfiguracaoEmail.qtdeLimite, new { @class = "form-control input-sm", alt = "number_6" })
+</div>
+<div class="clearfix"></div><br/>

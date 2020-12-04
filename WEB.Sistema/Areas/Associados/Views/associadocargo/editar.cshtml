@@ -1,0 +1,42 @@
+﻿@model  WEB.Areas.Associados.ViewModels.AssociadoCargoForm
+@using WEB.Areas.Cargos.Helpers
+@{
+	Layout = null;				
+}
+
+<div id="boxFormAssociadoCargo" >
+	@Html.showFlashMessage()
+	@using (Ajax.BeginForm("editar", "associadocargo", new{area="associados"}, new AjaxOptions { HttpMethod = "POST", InsertionMode = InsertionMode.Replace, UpdateTargetId = "boxFormAssociadoCargo", OnSuccess = "AssociadoCargo.onSuccessForm" }, new { @class = "" })) {
+		{ Html.EnableClientValidation(false); }
+		@Html.legendaRequired()<br />
+		@Html.HiddenFor(m => m.AssociadoCargo.id)
+		@Html.HiddenFor(m => m.AssociadoCargo.idAssociado, new { @class = "nao-limpar" })
+		
+		@Html.ValidationSummary(true, "Algumas informações precisam ser corrigidas abaixo.")
+
+		<div class="col-md-4">
+			@Html.labelRequired("Cargo")
+			@Html.DropDownListFor(m => m.AssociadoCargo.idCargo, CargoHelper.getInstance.selectList(Model.AssociadoCargo.idCargo, null), "...", new { @class = "form-control input-sm" })
+			@Html.ValidationMessageFor(m => m.AssociadoCargo.idCargo)
+		</div>
+        
+		<div class="col-md-2">
+			@Html.labelRequired("Início da Gestão")
+			@Html.TextBoxFor(m => m.AssociadoCargo.inicioGestao, new { @class = "form-control input-sm", alt="date" })
+			@Html.ValidationMessageFor(m => m.AssociadoCargo.inicioGestao)
+		</div>
+
+		<div class="col-md-2">
+			@Html.labelRequired("Fim da Gestão")
+			@Html.TextBoxFor(m => m.AssociadoCargo.fimGestao, new { @class = "form-control input-sm", alt = "date" })
+			@Html.ValidationMessageFor(m => m.AssociadoCargo.fimGestao)
+		</div>
+		<div class="clearfix"></div><br />
+
+		<div class="text-right">
+			<input type="button" name="limpar" value="Limpar" class="btn btn-default link-loading" onclick="DefaultSistema.limparForm(this.form)" />
+			<input type="submit" name="salvar" value="Salvar Cargo" class="btn btn-primary" />
+		</div>
+	}
+</div>
+<div class="clearfix"></div>

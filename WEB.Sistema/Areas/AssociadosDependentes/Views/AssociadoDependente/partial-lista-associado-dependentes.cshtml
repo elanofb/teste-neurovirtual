@@ -1,0 +1,65 @@
+﻿@model PagedList.IPagedList<WEB.Areas.AssociadosDependentes.ViewModels.ItemListaDependente>
+@using PagedList.Mvc
+@{
+    Layout = null;
+}
+
+@if (!Model.Any()) {
+    <div class="col-sm-12">
+        <div class="alert alert-info">
+            Nenhum dependente foi encontrado.
+        </div>
+    </div>
+}
+
+@foreach (var ODependente in Model) {
+
+    <div class="box-info-item">
+
+        <div class="row">
+                    
+            <div class="col-md-4 col-sm-4 col-xs-4">
+                <a href="@Url.Action("editar", "AssociadoDependenteCadastro", new {ODependente.id})" class="titulo text-black" target="_blank">
+                    <span data-toggle="tooltip" title="Nome"><i class="fa fa-user"></i> @ODependente.nome.abreviar(30, "").ToUpper()</span> <em data-toggle="tooltip" title="Parentesco">@ODependente.descricaoTipoDependente</em>
+                </a><br />
+                <span data-toggle="tooltip" title="Nº"># @ODependente.id</span> <small><em data-toggle="tooltip" title="Tipo Dependente">(@ODependente.descricaoTipoAssociado)</em></small>
+            </div>
+
+            <div class="col-md-4 col-sm-3 col-xs-3">
+                <span data-toggle="tooltip" title="Documento do dependente"><i class="fa fa-id-card"></i> @(ODependente.nroDocumento.isEmpty() ? "-" : UtilString.formatCPFCNPJ(ODependente.nroDocumento))</span><br />
+                <a href="@Url.Action("editar", "AssociadoCadastro", new { area="Associados", id = ODependente.idAssociadoResponsavel})" class="text-black" target="_blank">
+                    <span data-toggle="tooltip" title="Nome do associado responsável"><i class="fa fa-user-plus"></i> @ODependente.nomeAssociado.abreviar(30, "").ToUpper()</span>
+                </a>
+
+            </div>
+
+            <div class="col-md-2 col-sm-3 col-xs-3">
+                <span class="@ODependente.exibirClasseStatus()"><i class="fa @ODependente.exibirIconeStatus()"></i> @ODependente.exibirStatus()</span><br />
+                <span data-toggle="tooltip" title="Data de Cadastro"><i class="fa fa-calendar"></i> @ODependente.dtCadastro.exibirData()</span>
+            </div>
+
+            <div class="col-md-2 col-sm-2 text-right">
+
+                <div class="dropdown">
+                    <a href="javascript:;" class="dropdown-toggle" type="button" data-toggle="dropdown">
+                        Ações
+                        <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-right">
+                        <li>@Html.linkTexto("<i class=\"fa fa-edit\"></i> Editar Cadastro", Url.Action("editar", "AssociadoDependenteCadastro", new { area = "AssociadosDependentes", id = ODependente.id}))</li>
+                    </ul>
+                </div>
+
+
+            </div>
+
+            <div class="clearfix"></div>
+
+
+        </div>
+
+    </div>
+
+}
+
+@(Html.paginarRegistros(Model, Html.PagedListPager(Model, nroPagina => UtilRequest.linkPaginacao(nroPagina, "listar"), PagedListRenderOptions.OnlyShowFivePagesAtATime)))

@@ -1,0 +1,170 @@
+﻿@model List<DAL.Contribuicoes.Contribuicao>
+@using DAL.Contribuicoes
+
+@{
+    ViewBag.titlePage = "Contribuições/Planos de Cobrança";
+
+    var listaAtivos = Model.Where(x => x.ativo == "S" && (x.dtValidade >= DateTime.Today || x.dtValidade == null)).ToList();
+
+    var listaVencidos = Model.Where(x => x.ativo == "S" && x.dtValidade < DateTime.Today).ToList();
+
+    var listaDesativados = Model.Where(x => x.ativo == "N").ToList();
+
+}
+
+@section styles{
+    <link href="@UtilConfig.linkResourses()js/associatec/plugins/tab-bhochie/tab-bhoechie.css" rel="stylesheet"/>
+}
+
+@section scripts{
+    <script src="@UtilConfig.linkResourses()js/associatec/plugins/tab-bhochie/tab.js?v=1.2"></script>
+}
+
+<div class="alert alert-warning">
+    <strong>Instruções:</strong> Nesse módulo você pode consultar as contribuições e os planos de cobrança de sua entidade. No detalhamento de cada item você verá:
+    Valores e datas de vencimentos, visualizar quantidade pagas e em aberto, agendar envio do link para pagamento para os membros, etc.
+</div>
+
+<div class="box box-primary">
+    @Html.headerBox("Filtros de Busca", "fa fa-filter")
+    <div class="box-body">
+        @using (Html.BeginForm(null, null, FormMethod.Get, new { @class = "filtros" })) {
+            <div class="form-group col-xs-7">
+
+            </div>
+            <div class="form-group col-xs-2">
+                <label>Status</label>
+                @Html.DropDownList("flagAtivo", ComboHelper.selectListStatus(UtilRequest.getString("flagAtivo")), "Todos", new { @class = "form-control input-sm" })
+            </div>
+            <div class="form-group col-xs-3">
+                <label>Buscar</label>
+                @Html.buttonSearch(UtilRequest.getString("valorBusca"))
+            </div>
+        }
+    </div>
+</div>
+
+
+
+<div class="box box-primary">
+    @Html.headerBox($"Resultados: <small>{Model.Count} registros encontrados</small>", "far fa-chart-bar", false, Url.Action("editar"))
+    <div class="box-body no-padding">
+
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="col-lg-1 col-sm-2 bhoechie-tab-menu">
+
+                    <div class="list-group">
+                        <a href="#" class="list-group-item text-center text-green active">
+                            <h4 class="glyphicon glyphicon-ok-circle"></h4><br />Vigentes
+                        </a>
+                        <a href="#" class="list-group-item text-center text-blue">
+                            <h4 class="fa fa-play"></h4><br />Vencidas
+                        </a>
+                        <a href="#" class="list-group-item text-center text-red">
+                            <h4 class="fa fa-ban"></h4><br />Desativadas
+                        </a>
+                    </div>
+                </div>
+
+                <div class="col-lg-11 col-sm-10 bhoechie-tab no-padding" style="border-top:solid 1px #ddd">
+
+                    <div class="bhoechie-tab-content active">
+                        
+                        <div id="boxCobrancasAtivas">
+                            @if (listaAtivos.Any()){
+
+                                foreach (var Item in listaAtivos){
+
+                                    @boxItemContribuicao(Item)
+
+                                }
+                            }else{
+                                <div class="col-sm-12">
+                                    <div class="alert alert-info">
+                                        Nenhuma contribuição ou plano ativo foi encontrado.
+                                    </div>
+                                </div>
+                            }
+                            <div class="clearfix"></div>
+
+                        </div>
+                    </div>
+
+                    <div class="bhoechie-tab-content">
+                        <div id="boxCobrancasVencidas">
+                            @if (listaVencidos.Any()) {
+
+                                foreach (var Item in listaVencidos) {
+
+                                    @boxItemContribuicao(Item)
+
+                                }
+                            } else {
+                                <div class="col-sm-12">
+                                    <div class="alert alert-info">
+                                        Nenhuma contribuição ou plano vencido foi encontrado.
+                                    </div>
+                                </div>
+                            }
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+
+                    <div class="bhoechie-tab-content">
+                        <div id="boxCobrancasDesativadas">
+                            @if (listaDesativados.Any()) {
+
+                                foreach (var Item in listaDesativados) {
+
+                                    @boxItemContribuicao(Item)
+
+                                }
+
+                            } else {
+                                <div class="col-sm-12">
+                                    <div class="alert alert-info">
+                                        Nenhuma contribuição ou plano desativado foi encontrado.
+                                    </div>
+                                </div>
+                            }
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+@helper boxItemContribuicao(Contribuicao Item) {
+
+    <div class="col-lg-4 col-sm-4 margin-bottom-20">
+        <div class="col-sm-12 box-info-item @(Item.ativo == "S" ? (Item.dtValidade >= DateTime.Today || Item.dtValidade == null? "bg-green": "bg-blue") : "bg-red")">
+            <div class="row">
+                <div class="col-xs-12">
+                    <span class="titulo">#@Item.id - @Item.descricao.abreviar(23, "..")</span><br />
+                    <span><i class="fa fa-calendar"></i> @(Item.PeriodoContribuicao == null ? "-" : Item.PeriodoContribuicao.descricao) <em class="fs-11">(@(Item.dtValidade.HasValue ? $"Válida até {Item.dtValidade.exibirData()}" : "Validade indefida"))</em></span><br />
+                    <small>@(Item.TipoVencimento == null ? "-" : Item.TipoVencimento.descricao)</small>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-6">
+                    <div class="text-left">
+                        <span class="fs-10 text-italic">@(Item.ativo == "S" ? "Ativo" : "Desativado")</span>
+                    </div>
+                </div>
+                <div class="col-xs-6">
+                    <div class="text-right">
+                        <a href="@Url.Action("index", "PainelCobranca", new {area = "ContribuicoesPainel", Item.id})" class="text-white" data-toggle="tooltip" title="Painel de cobranças"><i class="fa fa-dashboard"></i></a>&nbsp;&nbsp;
+                        <a href="@Url.Action("editar", new {Item.id})" class="text-white" data-toggle="tooltip" title="Clique para editar o registro"><i class="fa fa-edit"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

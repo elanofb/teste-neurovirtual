@@ -1,0 +1,46 @@
+﻿@model  List<DAL.Arquivos.ArquivoUpload>
+
+<table border="0" cellpadding="0" cellspacing="0" class="table table-bordered table-striped dataTable">
+    <tr>
+        <th class="width-150 text-center">Arquivo</th>
+        <th class="text-center">Título</th>
+        <th class="text-center">Legenda</th>
+        <th class="width-150 text-center">Data do Arquivo</th>
+        <th class="width-75 text-center">Status</th>
+        <th class="width-120">&nbsp;</th>
+    </tr>
+    @if (Model.Count > 0) {
+		foreach (DAL.Arquivos.ArquivoUpload Item in Model) {
+            <tr>
+                <td class="text-center">
+                    @if (UTIL.Upload.UploadConfig.isImageExtension(Item.extensao)) {
+                        <a href="@Url.Action("exibir-imagem", "default", new { area="Imagem", pathImagem = Item.path })" class="ampliacao">
+                            <img src="@Url.Action("exibir-imagem", "default", new { area="Imagem",pathImagem = Item.pathThumb })" title="@Item.legenda" alt="@Item.legenda" data-toggle="tooltip" height="50" />
+                        </a>
+                    } else {
+                        @*<a href="@Url.Action("exibir-arquivo", "arquivoupload", new {idArquivo = Item.id})" target="_blank">
+                            @Html.exibirIcone(Item.extensao)
+                        </a>*@
+                    }
+                </td>
+                <td class="text-center width-300">@Item.titulo</td>
+                <td class="text-center">@Item.legenda</td>
+                <td class="text-center">@Item.dtCadastro</td>
+                <td class="text-center">
+                    @*@Html.linkAjaxStatus(Item.id, Item.ativo, Url.Action("alterar-status", "default", new{ area = "arquivos"} ))*@
+                </td>
+				<td class="text-center width-75">
+					<a href="?idArquivo=@Item.id" title="Editar Arquivo">
+						<img src="@UtilConfig.linkResourses()img/icons/bs/ic_edit.png" alt="Editar Contato" />
+					</a>&nbsp;
+				</td>
+            </tr>
+        }
+
+    } else {
+        <tr>
+            <td class="text-center" colspan="6">Nenhum arquivo cadastrado no momento.</td>
+        </tr>
+    }
+</table>
+<div class="clear"></div>

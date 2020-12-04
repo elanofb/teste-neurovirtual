@@ -1,0 +1,48 @@
+﻿@model WEB.Areas.Contribuicoes.ViewModels.ContribuicaoPadraoForm
+
+<table class="table dataTable table-responsive">
+    <thead>
+        <tr>
+            <th class="fs-11 text-center">Datas de vencimento</th>
+            <th class="fs-11 text-center">Início Vigência</th>
+            <th class="fs-11 text-center">Fim Vigência</th>
+        </tr>
+    </thead>
+    <tbody>
+    @for (int i = 0; i < Model.Contribuicao.listaContribuicaoVencimento.Count; i++) {
+        <tr>
+            <td class="text-center">
+                <div class="form-inline">
+                    @Html.DropDownListFor(m => m.Contribuicao.listaContribuicaoVencimento[i].diaVencimento, ComboHelper.selectListDiasMes(Model.Contribuicao.listaContribuicaoVencimento[i].diaVencimento.ToString()), "...", new {@class = "form-control input-mini"}.isReadOnly(Model.Contribuicao.id > 0))
+                    @Html.DropDownListFor(m => m.Contribuicao.listaContribuicaoVencimento[i].mesVencimento, ComboHelper.selectListMeses(Model.Contribuicao.listaContribuicaoVencimento[i].mesVencimento.ToString()), "...", new {@class = "form-control input-mini" }.isReadOnly(Model.Contribuicao.id > 0))
+                    <div class="clearfix"></div>
+                    @Html.ValidationMessageFor(m => m.Contribuicao.listaContribuicaoVencimento[i].diaVencimento)
+                    @Html.ValidationMessageFor(m => m.Contribuicao.listaContribuicaoVencimento[i].mesVencimento)
+                </div>
+            </td>
+            <td class="text-center bg-gray">
+                <div class="col-sm-4 no-padding">
+                    @Html.DropDownListFor(m => m.Contribuicao.listaContribuicaoVencimento[i].diaInicioVigencia, ComboHelper.selectListDiasMes(Model.Contribuicao.listaContribuicaoVencimento[i].diaInicioVigencia.ToString()), "...", new { @class = "form-control input-mini" }.isReadOnly(Model.Contribuicao.id > 0))
+                    @Html.ValidationMessageFor(m => m.Contribuicao.listaContribuicaoVencimento[i].diaInicioVigencia)
+                </div>
+                <div class="col-sm-8 no-padding">
+                    @Html.DropDownListFor(m => m.Contribuicao.listaContribuicaoVencimento[i].mesInicioVigencia, ComboHelper.selectListMeses(Model.Contribuicao.listaContribuicaoVencimento[i].mesInicioVigencia.ToString()), "...", new { @class = "form-control input-mini" }.isReadOnly(Model.Contribuicao.id > 0))
+                    @Html.ValidationMessageFor(m => m.Contribuicao.listaContribuicaoVencimento[i].mesInicioVigencia)
+                </div>
+                <div class="clearfix"></div>
+            </td>
+            <td class="text-center bg-gray">
+                <div class="col-sm-4 no-padding">
+                    @Html.DropDownListFor(m => m.Contribuicao.listaContribuicaoVencimento[i].diaFimVigencia, ComboHelper.selectListDiasMes(Model.Contribuicao.listaContribuicaoVencimento[i].diaFimVigencia.ToString()), "...", new { @class = "form-control input-mini" }.isReadOnly(Model.Contribuicao.id > 0))
+                    @Html.ValidationMessageFor(m => m.Contribuicao.listaContribuicaoVencimento[i].diaFimVigencia)
+                </div>
+                <div class="col-sm-8 no-padding">
+                    @Html.DropDownListFor(m => m.Contribuicao.listaContribuicaoVencimento[i].mesFimVigencia, ComboHelper.selectListMeses(Model.Contribuicao.listaContribuicaoVencimento[i].mesFimVigencia.ToString()), "...", new { @class = "form-control input-mini" }.isReadOnly(Model.Contribuicao.id > 0))
+                    @Html.ValidationMessageFor(m => m.Contribuicao.listaContribuicaoVencimento[i].mesFimVigencia)
+                </div>
+                <div class="clearfix"></div>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

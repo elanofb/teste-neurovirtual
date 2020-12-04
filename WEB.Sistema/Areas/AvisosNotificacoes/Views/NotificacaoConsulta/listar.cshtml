@@ -1,0 +1,298 @@
+﻿@model WEB.Areas.AvisosNotificacoes.ViewModels.AvisoNotificacaoConsultaVM
+@using PagedList.Mvc;
+@using DAL.Notificacoes;
+@using WEB.Areas.AvisosNotificacoes.Helpers
+
+@{
+    Layout = "~/views/shared/associatec/masterpage.cshtml";
+    ViewBag.titlePage = "Notificações";
+}
+
+@section styles {
+    <link href="@UtilConfig.linkResourses("css/associatec/list-custom.css")" rel="stylesheet" />
+}
+
+@section scripts {
+    @Html.includeDatePicker()
+}
+
+<div class="box box-primary">
+
+    @Html.headerBox("Filtros de Busca", "fa fa-filter")
+
+    <div class="box-body">
+
+        @using (Html.BeginForm(null, null, FormMethod.Get, new { @class = "filtros" })) {
+            
+            <div class="col-md-2">
+            </div>
+            
+            <div class="col-md-4 col-sm-12">
+                <label>Data de Programação do Envio</label>
+                
+                <div class="input-group">
+                    @Html.TextBox("dtProgramacaoInicio", UtilRequest.getString("dtProgramacaoInicio"), new { @class = "form-control input-sm input-datepicker", alt = "date" })
+                    <span class="input-group-addon">-</span>
+                    @Html.TextBox("dtProgramacaoFim", UtilRequest.getString("dtProgramacaoFim"), new { @class = "form-control input-sm input-datepicker", alt = "date" })
+                </div>
+            </div>
+            
+            <div class="col-md-3 col-sm-6">
+                <label>Alvo Envio</label>
+                @Html.DropDownList("alvoEnvio", AlvoEnvioHelper.getInstance.selectList(UtilRequest.getString("alvoEnvio")), "Todos", new { @class = "form-control input-sm" })
+            </div>
+            
+            <div class="col-md-3 col-sm-6">
+                <label>Buscar</label>
+                @Html.buttonSearch(UtilRequest.getString("valorBusca"))
+            </div>
+            
+        }
+        
+        <div class="clearfix"></div>
+        
+    </div>
+
+</div>
+
+<div class="box box-primary">
+
+    <div class="box-header with-border">
+    
+        <div class="box-title">
+            <i class="far fa-chart-bar"></i> Resultados <em class="fs-12">@Model.listaNotificacoes.TotalItemCount registro(s) encontrado(s)</em>
+        </div>
+    
+        <div class="box-tools pull-right">
+            
+            <div class="btn-group">
+                
+                <button type="button" class="btn btn-box-tool dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+                    <i class="fa fa-cog fs-16"></i>
+                </button>
+                
+                <ul class="dropdown-menu" role="menu">
+                    
+                    <li>
+                        <a href="@Url.Action("editar", "NotificacaoCadastro")">
+                            <i class="fa fa-plus"></i> Nova Notificação
+                        </a>
+                    </li>
+                    <li class="divider"></li>
+                    <li>
+                        <a href="javascript:void(0);" data-url="@Url.Action("excluir", "NotificacaoExclusao")" onclick="return DefaultAction.removeAll(this);">
+                            <i class="fa fa-trash"></i> Excluir selecionados
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </div>
+
+            <div class="btn-group pull-right">
+                <label class="btn btn-default btn-xs" data-toggle="tooltip" title="Selecionar Todos">
+                    <input type="checkbox" name="marcarTodos" data-childs="checkRegistro[]" id="checkMarcarTodos" style="margin-left: 2px;" />
+                </label>
+            </div>
+            <div class="clearfix"></div>
+            
+        </div>
+        <div class="clearfix"></div>
+        
+    </div>
+
+    <div class="box-body">
+        
+        @if (!Model.listaNotificacoes.Any()) {
+            
+            <div class="alert alert-info">
+                Nenhuma notificação foi encontrada.
+            </div>
+            
+        }        
+        
+        @foreach (NotificacaoSistema Item in Model.listaNotificacoes) {
+
+            var listaDestinatariosNotificacao = Model.listaDestinatarios.Where(x => x.idNotificacao == Item.id).ToList();
+            var qtdeTotal = listaDestinatariosNotificacao.Count.toDecimal();
+            var qtdEnviados = listaDestinatariosNotificacao.Count(x => x.dtEnvioEmail.HasValue);
+            var qtdProblemas = listaDestinatariosNotificacao.Count(x => x.flagExcluido == true);
+            var qtdFila = listaDestinatariosNotificacao.Count(x => !x.dtEnvioEmail.HasValue && x.flagExcluido == false);
+
+            if (qtdeTotal == 0) {
+                qtdeTotal = 1;
+            }
+            
+            
+            var porcentagemProcessamento = ((qtdEnviados.toDecimal() + qtdProblemas.toDecimal()) / qtdeTotal) * (decimal)100;
+            
+            <div class="box-info-item-dotted">
+                
+                <div class="row">
+                    
+                    <div class="col-sm-6">
+                        <div>
+                            <i class="far fa-file"></i> #@Item.id - @Item.titulo
+                        </div>
+                    </div>
+
+                    <div class="col-xs-6 text-right">
+
+                        <input type="checkbox" class="pull-right" name="checkRegistro[]" value="@Item.id"/>
+
+                        <div class="dropdown pull-right margin-right-5">
+
+                            <a href="javascript:;" class="dropdown-toggle text-black fs-16" data-toggle="dropdown" aria-expanded="true">
+                                <i class="fa fa-cog"></i>
+                            </a>
+
+                            <ul class="dropdown-menu" role="menu">
+
+                                <li>
+                                    <a href="@Url.Action("editar", "NotificacaoCadastro", new {Item.id})">
+                                        <i class="far fa-search"></i> Detalhes
+                                    </a>
+                                </li>
+                                <li class="divider"></li>
+                                <li>
+                                    <a href="javascript:void(0);" class="delete-default" data-id="@Item.id" data-url="@Url.Action("excluir", "NotificacaoExclusao")" data-fncallback="location.reload();">
+                                        <i class="far fa-trash-alt"></i> Excluir
+                                    </a>
+                                </li>
+
+                            </ul>
+
+                        </div>
+
+                    </div>
+                    
+                    <div class="clearfix"></div>
+
+                </div>
+                
+                <div class="row">
+                    
+                    <div class="col-md-6 col-xs-12 abreviar">
+                        
+                        <div>
+                            
+                            <strong>
+                                
+                                @if (Item.dtProgramacaoEnvio.HasValue) {
+                                    <span data-toggle="tooltip" title="Programação do envio"><i class="fa fa-share"></i> @Item.dtProgramacaoEnvio.exibirData() | </span>
+                                }
+                                
+                                @listaDestinatariosNotificacao.Count destinatários cadastrados
+                                
+                            </strong>
+                            
+                        </div>
+                                
+                        <div>
+                            <span class="text-green"><i class="fa fa-envelope"></i> @qtdEnviados enviados</span>&nbsp;&nbsp;
+                            <span class="text-red"><i class="fa fa-exclamation-circle"></i> @qtdProblemas com problemas</span>&nbsp;&nbsp;
+                            <span class="text-blue"><i class="fa fa-spinner"></i> @qtdFila na fila</span>
+                        </div>
+                        
+                        <div class="progress no-margin-bottom" style="max-width: 280px;">
+                            <div class="progress-bar progress-bar-@(porcentagemProcessamento == 100 ? "success" : "primary")" role="progressbar" aria-valuenow="@(porcentagemProcessamento)" aria-valuemin="0" aria-valuemax="100" style="width: @(porcentagemProcessamento.ToString().Replace(',','.'))%;@(porcentagemProcessamento == 0 ? "color:#3c8dbc" : "")">
+                                @Html.Raw(porcentagemProcessamento == 100 ? "<i class='fa fa-check'></i> Concluído" : "<i class='fa fa-spinner'></i> "+porcentagemProcessamento.ToString("n2")+"% Processado")
+                            </div>
+                        </div>
+                        
+                    </div>
+                    
+                    <div class="col-md-3 col-sm-6 col-xs-12">
+                        
+                        <div>
+                            <span data-toggle="tooltip" title="Envio para o APP?">
+                                <i class="far fa-mobile"></i> @(Item.flagMobile == true ? "Sim" : "Não")
+                            </span>
+                        </div>
+                        
+                        <div>
+                            <span data-toggle="tooltip" title="Envio para E-mail?">
+                                <i class="far fa-envelope"></i> @(Item.flagEmail == true ? "Sim" : "Não")
+                            </span>
+                        </div>
+                        
+                    </div>
+                    
+                    <div class="col-md-3">
+                        
+                        <div>
+                            <i class="far fa-calendar-alt"></i> @Item.dtCadastro.exibirData(true)
+                        </div>
+                        
+                        <div>
+                            <i class="far fa-user"></i> @(Item.UsuarioCadastro == null ? "Automático" : Item.UsuarioCadastro.nome)
+                        </div>
+                        
+                    </div>
+                    <div class="clearfix"></div>
+                    
+                </div>
+                
+            </div>
+            
+        }
+        
+        @(Html.paginarRegistros<NotificacaoSistema>(Model.listaNotificacoes, Html.PagedListPager(Model.listaNotificacoes, nroPagina => UtilRequest.linkPaginacao(nroPagina, "listar"), PagedListRenderOptions.OnlyShowFivePagesAtATime)))
+        
+        @*<div class="table-responsive">
+            
+            <div class="dataTables_wrapper form-inline" role="grid">
+
+                <div class="btn-group">
+
+                    <a href="javascript:void(0);" data-url="@Url.Action("excluir")" class="btn btn-default btn-flat" title="Remover itens selecionados" onclick="return DefaultAction.removeAll(this);">
+                        <i class="fa fa-trash"></i>
+                    </a>
+                </div>
+
+                <table class="table table-bordered table-striped dataTable">
+                    <thead>
+                    <tr role="row">
+                        <th class="width-50 text-center"><input type="checkbox" name="marcarTodos" data-childs="checkRegistro[]" id="checkMarcarTodos"/></th>
+                        <th>Título</th>
+                        <th>Cadastro</th>
+                        <th width="100">Status</th>
+                        <th width="100">&nbsp;</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @if (Model.Count > 0) {
+                        foreach (NotificacaoSistema Item in Model) {
+                            <tr>
+                                <td class="text-center"><input type="checkbox" name="checkRegistro[]" value="@Item.id"/></td>
+                                <td>
+                                    <span><i class="far fa-file"></i> @Item.titulo</span>
+                                </td>
+                                <td class="text-left">
+                                    <span><i class="fa fa-calendar"></i> @Item.dtCadastro.exibirData(true)</span><br/>
+                                    <span><i class="fa fa-user"></i> @(Item.UsuarioCadastro == null ? "Automático" : Item.UsuarioCadastro.nome)</span>
+                                </td>
+                                <td class="text-center">@Html.badgeStatus(Item.ativo)</td>
+                                <td class="text-center box-acoes">
+                                    <a href="@Url.Action("editar", new {
+                                                 id = Item.id
+                                             })" title="Editar Registro"><i class="fa fa-edit"></i></a>
+                                    <a href="javascript:void(0);" class="delete-default" data-id="@Item.id" data-url="@Url.Action("excluir")" data-fncallback="AvisoNotificacao.recarregarContadorTarefas();" title="Excluir Registro"><i class="fa fa-trash"></i></a>
+                                </td>
+                            </tr>
+                        }
+                    } else {
+                        <tr>
+                            <td class="text-center" colspan="6">Nenhum registro cadastrado</td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+
+                @(Html.paginarRegistros<NotificacaoSistema>(Model, Html.PagedListPager(Model, nroPagina => UtilRequest.linkPaginacao(nroPagina, "listar"), PagedListRenderOptions.OnlyShowFivePagesAtATime)))
+            </div>
+        </div>*@
+        
+    </div>
+    
+</div>

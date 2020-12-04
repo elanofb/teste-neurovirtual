@@ -1,0 +1,312 @@
+﻿@model WEB.Areas.FinanceiroLancamentos.ViewModels.DespesaCadastroForm
+@using DAL.Financeiro
+@using WEB.Areas.ContasBancarias.Helpers
+@using WEB.Areas.Financeiro.Helpers
+@using MvcFlashMessages
+@using WEB.Areas.DadosBancarios.Helpers
+
+@{
+    ViewBag.titlePage = "Novo Lançamento a pagar";
+}
+
+@section scripts {
+    
+    @Html.includeDatePicker()
+    @Html.includeJqueryLoading()
+    @Html.includeBootstrapMultiselect()
+    <script src="@UtilConfig.linkResourses("areas/financeiro/js/combo-centro-custo.js?v=1")"></script>
+    <script src="@UtilConfig.linkResourses("areas/financeiro/js/combo-macro-conta.js?v=1")"></script>
+    <script src="@UtilConfig.linkResourses("areas/financeiro/js/combo-sub-conta.js?v=1")"></script>
+    <script src="@UtilConfig.linkResourses("areas/DadosBancarios/js/dados-bancarios-combo.js?v1.0")"></script>
+    <script src="@UtilConfig.linkResourses("areas/financeirolancamentos/js/despesa-cadastro.js?v2.3")"></script>
+    <script src="@UtilConfig.linkResourses("Areas/FinanceiroLancamentos/js/credor.js?v3")"></script>
+    <script src="@UtilConfig.linkResourses("areas/DadosBancarios/js/dados-bancarios-cadastro.js?v1.0")"></script>
+}
+
+@section breadcrump {
+    <ol class="breadcrumb">
+        <li><a class="active fs-14" href="@(Model.urlRetorno.isEmpty() ? Url.Action("listar", "LancamentoDespesas") : Model.urlRetorno)"><i class="fa fa-arrow-left"></i> Voltar</a></li>
+    </ol>
+}
+
+<div class="box box-primary">
+
+    <div class="box-header with-border">
+        <h3 class="box-title"><i class="far fa-money-bill"></i> Dados da Despesa</h3>
+    </div>
+
+    <div class="box-body">
+        @Html.RenderFlash()
+
+        @using (Html.BeginForm("index", null, FormMethod.Post, new { role = "form", @class = "default no-margin" })) {
+            @Html.HiddenFor(x => x.flagTipoRepeticao)
+            @Html.HiddenFor(x => x.flagValorTotalParcelamento)
+            @Html.HiddenFor(x => x.flagValorTotalParcelamento)
+
+            { Html.EnableClientValidation(false); }
+
+            @Html.legendaRequired()<br />
+
+            @Html.ValidationSummary(false)
+            
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <h4 class="separator-form-icon"><i class="far fa-edit"></i> Dados da despesa</h4>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            @Html.labelRequired("Título/Descrição da despesa")
+                            @Html.TextBoxFor(m => m.TituloDespesa.descricao, new { @class = "form-control input-sm" })
+                            @Html.ValidationMessageFor(m => m.TituloDespesa.descricao)
+                            <hr class="no-margin-bottom margin-top-10"/>
+                        </div>
+                    </div>
+                    <div class="row margin-top-10">
+                        <div class="col-sm-12">
+                            <div class="row">
+                                <div class="col-sm-9 no-padding-right">
+                                    @Html.spanFieldForm("Data em que ocorreu a despesa", "fs-12")<br/>
+                                    @Html.instrucao("Se for referente a um período, informe o primeiro ou último dia.")
+                                </div>
+                                <div class="col-sm-3">
+                                    @Html.TextBoxFor(m => m.TituloDespesa.dtDespesa, new { @class = "form-control input-sm input-datepicker", autocomplete="off", alt = "date", id = "dtDespesa" })
+                                    @Html.ValidationMessageFor(m => m.TituloDespesa.dtDespesa)
+                                </div>
+                            </div>
+                            <hr class="no-margin-bottom margin-top-5"/>
+                        </div>
+                    </div>		
+
+                    
+                    <div class="row margin-top-10">
+                        <div class="col-sm-12">
+                            <h4 class="separator-form-icon"><i class="far fa-edit"></i> Dados do Favorecido</h4>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            @Html.DropDownListFor(m => m.idReferenciaPessoa, new SelectList(new List<bool>()), "...", new { datavalue = Model.idReferenciaPessoa, @class = "form-control input-sm idCredor" })
+                            @Html.ValidationMessageFor(m => m.idReferenciaPessoa)
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 no-display">
+                            @Html.Label("Documento")
+                            @Html.TextBox("nroDocumentoCredor", "", new { @class = "form-control input-sm nroDocumentoCredor", disabled = "disabled", alt = "cpf" })
+                        </div>
+                        <div class="col-md-6 no-display">
+                            @Html.Label("N° Telefone")
+                            @Html.TextBox("nroTelefoneCredor", "", new { @class = "form-control input-sm nroTelefoneCredor", disabled = "disabled", alt = "phone" })
+                        </div>
+                    </div>
+                    
+                    <div class="row margin-top-10">
+                        <div class="col-sm-12">
+                            <h4 class="separator-form-icon"><i class="far fa-edit"></i> Informações de Documentos</h4>
+                        </div>
+                    </div>
+                    
+                    <div class="row margin-top-10">
+                        <div class="col-sm-12">
+                            <div class="row">
+                                <div class="col-sm-9 no-padding-right">
+                                    @Html.spanFieldForm("Número da nota fiscal", "fs-12", false)
+                                </div>
+                                <div class="col-sm-3">
+                                    @Html.TextBoxFor(m => m.TituloDespesa.nroNotaFiscal, new { @class = "form-control input-sm", autocomplete="off", type = "number" })
+                                    @Html.ValidationMessageFor(m => m.TituloDespesa.nroNotaFiscal)
+                                </div>
+                            </div>
+                            <hr class="no-margin-bottom margin-top-5"/>
+                        </div>
+                    </div>		
+                    
+                    <div class="row margin-top-10">
+                        <div class="col-sm-12">
+                            <div class="row">
+                                <div class="col-sm-9 no-padding-right">
+                                    @Html.spanFieldForm("Número da fatura ou Nº boleto", "fs-12", false)
+                                </div>
+                                <div class="col-sm-3">
+                                    @Html.TextBoxFor(m => m.TituloDespesa.nroDocumento, new { @class = "form-control input-sm", autocomplete="off", maxlength = "20" })
+                                    @Html.ValidationMessageFor(m => m.TituloDespesa.nroDocumento)
+                                </div>
+                            </div>
+                            <hr class="no-margin-bottom margin-top-5"/>
+                        </div>
+                    </div>		
+                    
+                    <div class="row margin-top-10">
+                        <div class="col-sm-12">
+                            <div class="row">
+                                <div class="col-sm-9 no-padding-right">
+                                    @Html.spanFieldForm("Número do contrato", "fs-12", false)<br/>
+                                    @Html.instrucao("Opcional")
+                                </div>
+                                <div class="col-sm-3">
+                                    @Html.TextBoxFor(m => m.TituloDespesa.nroContrato, new { @class = "form-control input-sm", autocomplete="off", type = "number" })
+                                    @Html.ValidationMessageFor(m => m.TituloDespesa.nroContrato)
+                                </div>
+                            </div>
+                            <hr class="no-margin-bottom margin-top-5"/>
+                        </div>
+                    </div>		
+                    
+                    <div class="row margin-top-10">
+                        <div class="col-sm-12">
+                            <label>Observações ou Informações Adicionais</label>
+                            @Html.TextAreaFor(m => m.TituloDespesa.observacao, new { @class = "form-control input-sm", rows = "4" })
+                            @Html.ValidationMessageFor(m => m.TituloDespesa.observacao)
+                        </div>    
+                    </div>
+                </div>
+                
+                <div class="col-sm-6">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <h4 class="separator-form-icon"><i class="far fa-edit"></i> Classificação da conta</h4>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            @Html.Label("Tipo da Despesa")
+                            @Html.DropDownListFor(m => m.TituloDespesa.idTipoDespesa, TipoDespesaHelper.getInstance.selectList(Model.TituloDespesa.idTipoDespesa), "Selecione...", new { id = "idTipoDespesa", @class = "select2 form-control input-sm", onchange = "DespesaCadastro.changeCampoModoPagamento()" })
+                            @Html.ValidationMessageFor(m => m.TituloDespesa.idTipoDespesa)
+                        </div>
+                        
+                        <div class="col-sm-6">
+                            @Html.Label("Centro de Custo")
+                            @Html.DropDownListFor(m => m.TituloDespesa.idCentroCusto, CentroCustoHelper.getInstance.selectList(Model.TituloDespesa.idCentroCusto), "...", new { @class = "form-control input-sm idCentroCusto", data_flagReceitaDespesa = "D" })
+                            @Html.ValidationMessageFor(m => m.TituloDespesa.idCentroCusto)
+                        </div>
+
+                        <div class="col-sm-6">
+                            @Html.Label("Macro Conta")
+                            @Html.DropDownListFor(m => m.TituloDespesa.idMacroConta, MacroContaHelper.getInstance.selectList(Model.TituloDespesa.idCentroCusto.toInt(), Model.TituloDespesa.idMacroConta, false), "Selecione o Centro de Custo", new { @class = "form-control input-sm idMacroConta" })
+                            @Html.ValidationMessageFor(m => m.TituloDespesa.idMacroConta)
+                        </div>
+                        
+                        <div class="col-sm-6">
+                            @Html.Label("Sub-Conta")
+                            @Html.DropDownListFor(m => m.TituloDespesa.idCategoria, CategoriaTituloHelper.getInstance.selectList(Model.TituloDespesa.idCategoria, Model.TituloDespesa.idMacroConta), "...", new { @class = "form-control input-sm idSubConta" })
+                            @Html.ValidationMessageFor(m => m.TituloDespesa.idCategoria)
+                        </div>
+                    </div>
+                    
+                    <div class="row margin-top-10">
+                        <div class="col-sm-12">
+                            <h4 class="separator-form-icon"><i class="far fa-edit"></i> Informações do Pagamento</h4>
+                        </div>
+                    </div>
+                    
+                    <div class="row margin-top-10">
+                        <div class="col-sm-12">
+                            <div class="row">
+                                <div class="col-sm-7 no-padding-right">
+                                    @Html.spanFieldForm("Conta Debitada", "fs-12", false)<br/>
+                                    @Html.instrucao("Conta da qual os recursos serão debitados para pagamento")
+                                </div>
+                                <div class="col-sm-5">
+                                    @Html.DropDownListFor(m => m.TituloDespesa.idContaBancaria, ContaBancariaHelper.getInstance.selectList(Model.TituloDespesa.idContaBancaria, false), "...", new { @class = "form-control input-sm" })
+                                    @Html.ValidationMessageFor(m => m.TituloDespesa.idContaBancaria)
+                                </div>
+                            </div>
+                            <hr class="no-margin-bottom margin-top-5"/>
+                        </div>
+                    </div>		
+                    
+                    <div class="row margin-top-10">
+                        <div class="col-sm-12">
+                            <div class="row">
+                                <div class="col-sm-4 no-padding-right">
+                                    @Html.spanFieldForm("Modo de Pagamento", "fs-12", false)<br/>
+                                    @Html.instrucao("Informe como a despesa será paga")
+                                </div>
+                                <div class="col-sm-8">
+                                    @Html.DropDownListFor(m => m.TituloDespesa.idModoPagamento, ModoPagamentoDespesaHelper.getInstance.selectList(Model.TituloDespesa.idModoPagamento), "Selecione...", new {@class = "select2 form-control input-sm", datavalue = Model.TituloDespesa.idModoPagamento, id = "selectModoPagamento", onchange = "DespesaCadastro.verificarModoPagamento()"})
+                                    @Html.ValidationMessageFor(m => m.TituloDespesa.idModoPagamento)
+                                </div>
+                            </div>
+                            <hr class="no-margin-bottom margin-top-5"/>
+                        </div>
+                    </div>		
+                    
+                    <div class="row margin-top-10" id="boxDadosBancarioFavorecido">
+                        <div class="col-sm-12">
+                            <div class="row">
+                                <div class="col-sm-4 no-padding-right">
+                                    @Html.spanFieldForm("Conta Bancária Favorecido", "fs-12", false)
+                                </div>
+                                <div class="col-sm-8">
+                                    <div class="input-group input-group-sm">
+                                        @Html.DropDownListFor(m => m.TituloDespesa.idContaBancariaFavorecida, DadoBancarioHelper.getInstance.selectList(Model.TituloDespesa.idContaBancariaFavorecida, 0), "Selecione...", new {@class = "form-control input-sm", id = "selectDadoBancario", datavalue = Model.TituloDespesa.idContaBancariaFavorecida})
+                                        <div class="input-group-btn">
+                                            <a href="javascript:;" onclick="DadosBancariosCadastro.modalNovoDadoBancarioCredor()" class="btn btn-primary btn-sm"><i class="fas fa-plus"></i></a>
+                                        </div>                                        
+                                    </div>
+                                    @Html.ValidationMessageFor(m => m.TituloDespesa.idContaBancariaFavorecida)
+                                </div>
+                            </div>
+                            <hr class="no-margin-bottom margin-top-5"/>
+                        </div>
+                    </div>	                    
+                    
+                    <div class="row margin-top-10" id="boxNroBoleto">
+                        <div class="col-sm-12">
+                            <div class="row">
+                                <div class="col-sm-5 no-padding-right">
+                                    @Html.spanFieldForm("Linha digitável do boleto", "fs-12", false)
+                                </div>
+                                <div class="col-sm-7">
+                                    @Html.TextBoxFor(m => m.TituloDespesa.codigoBoleto, new {@class = "form-control input-sm", id = "codigoBoleto"})
+                                    @Html.ValidationMessageFor(m => m.TituloDespesa.codigoBoleto)
+                                </div>
+                            </div>
+                            <hr class="no-margin-bottom margin-top-5"/>
+                        </div>
+                    </div>	                    
+                    
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <h4 class="separator-form-icon"><i class="far fa-edit"></i> Repetições de Pagamento</h4>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <div class="col-sm-6 no-padding-right">
+                                    <button type="button" class="btn btn-block btn-default btn-repeticao btn-repeticao-nenhuma" onclick="DespesaCadastro.changeBtnRepeticao(this)" value="@TipoRepeticaoConst.NENHUMA">Pagamento Único</button>
+                                </div>
+                                <div class="col-sm-6 no-padding-left">
+                                    <button type="button" class="btn btn-block btn-default btn-repeticao btn-repeticao-parcelamento" onclick="DespesaCadastro.changeBtnRepeticao(this)" value="@TipoRepeticaoConst.PARCELAMENTO">Parcelas/Recorrência</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="boxDadosPagamento">
+                        @if (Model.flagTipoRepeticao == TipoRepeticaoConst.NENHUMA || Model.flagTipoRepeticao == 0) {
+                            {   Html.RenderPartial("partial-dados-pagamento", Model); }
+                        }
+
+                        @if (Model.flagTipoRepeticao == TipoRepeticaoConst.PARCELAMENTO) {
+                            { Html.RenderPartial("partial-dados-pagamento-parcelado", Model); }
+                        }
+                    </div>
+
+                </div>
+            </div>
+            <div class="clearfix"></div><br/>
+
+            <div class="col-md-12 text-right">
+                @Html.exibirBotoesFormulario(Url.Action("listar", "LancamentoDespesas"), "N")
+            </div>
+        }
+    </div>
+    <div class="clearfix"></div>
+
+</div>

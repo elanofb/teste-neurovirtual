@@ -1,0 +1,19 @@
+﻿@model WEB.Areas.Notificacoes.ViewModels.TemplateMensagemForm
+    
+@{ 
+    Layout = "~/views/shared/associatec/masterpage-modal.cshtml";
+
+    if (IsPost) {
+
+        Layout = null;
+
+    }
+
+    ViewBag.modalTitle = "Pré-Visualização do Template " + Model.TemplateMensagem.titulo;
+}
+
+<div id="boxPreVisualizacao">
+    
+    @Html.Raw(Model.TemplateMensagem.corpoHTML)
+
+</div>

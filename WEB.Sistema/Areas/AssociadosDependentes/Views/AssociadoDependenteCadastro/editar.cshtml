@@ -1,0 +1,118 @@
+﻿@model WEB.Areas.AssociadosDependentes.ViewModels.AssociadoDependenteCadastroForm
+@using BLL.ConfiguracoesTextos.Extensions
+@using DAL.Permissao.Security.Extensions
+@using WEB.Areas.Arquivos.Helpers
+
+@{
+    ViewBag.titlePage = Model.Associado.id == 0? "Novo "+ @Html.labelTexto(User.idOrganizacao(), "lbldependente", "Dependente") : $"Editar "+ @Html.labelTexto(User.idOrganizacao(), "lbldependente", "Dependente")  +" - " + Model.Associado.Pessoa.nome;
+}
+
+@section styles{
+    @Html.includeCSSModuloArquivos()
+    @Html.includeBootstrapEditable()
+
+    @*  Datatable da listagem de historico da pessoa  *@
+	<link href="@UtilConfig.linkResourses()Areas/Pessoas/js/plugins/datatables/media/css/jquery.dataTables.bootstrap.css" rel="stylesheet" />
+
+	@* CSS de módulos do cadastro associado *@
+    <link href="@UtilConfig.linkResourses()Areas/Associados/js/plugins/bootstrap-responsive-tabs/dist/main.css" rel="stylesheet" />
+    <link href="@UtilConfig.linkResourses()Areas/Associados/css/associado.css" rel="stylesheet"/>
+    <link href="@UtilConfig.linkResourses()css/associatec/list-custom.css?v=1" rel="stylesheet" />
+    <link href="@UtilConfig.linkResourses()Areas/AssociadosDependentes/css/jquery-ui-autocomplete.css" rel="stylesheet" />
+}
+
+@section scripts{
+    @Html.includeJSModuloArquivos()
+	@Html.includeLocalizacaoJS()
+    @Html.includeDatePicker()
+    
+    @Html.includeJqueryLoading()
+    @Html.includeFileApiJS()
+	
+	@* JS para cookies e salvar dados voláteis  *@
+	<script type="text/javascript" src="@UtilConfig.linkResourses()Areas/Associados/js/plugins/jquery.cookie/jquery.cookie.js"></script>
+
+	@* File API para carregamento de foto do associado  *@
+    <script type="text/javascript" src="@UtilConfig.linkResourses()Areas/Associados/js/associado-foto.js"></script>
+
+	@* JS do módulo de associados *@
+    <script type="text/javascript" src="@UtilConfig.linkResourses()Areas/AssociadosDependentes/js/jquery-ui-autocomplete.js"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses()Areas/AssociadosDependentes/js/associado-dependente-cadastro.js"></script>
+    
+    @*
+    <script type="text/javascript" src="@UtilConfig.linkResourses()Areas/Associados/js/associadoacao.js?v=1"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses()Areas/Associados/js/associadocargo.js?v=1"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses()Areas/Associados/js/associadoareaatuacao.js?v=1"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses()Areas/Associados/js/associadotitulo.js?v=1"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses()Areas/Associados/js/associadoevento.js?v=1"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses()Areas/AssociadosCarteirinha/js/associadocarteirinha.js?v=1"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses()Areas/AssociadosContribuicoes/js/associado-contribuicao.js?v=1"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses()Areas/AssociadosContribuicoes/js/associado-contribuicao-email.js?v=1"></script>
+    *@
+    <script type="text/javascript" src="@UtilConfig.linkResourses()Areas/Associados/js/plugins/bootstrap-responsive-tabs/dist/bootstrap-responsive-tabs.js"></script>
+
+    @* Utilizacao no modulo de historico da pessoa
+    <script type="text/javascript" src="@UtilConfig.linkResourses()Areas/Pessoas/js/plugins/datatables/media/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses()Areas/Pessoas/js/plugins/datatables/media/js/jquery.dataTables.bootstrap.js"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses()Areas/Pessoas/js/plugins/datatables/jquery.dataTables.custom.js"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses()Areas/Pessoas/js/pessoarelacionamento.js?v=1"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses()Areas/Pessoas/js/pessoacontato.js?v=1"></script>
+    *@
+
+    <script src="@UtilConfig.linkResourses()areas/associados/js/jquery.datatables.min.js"></script>
+}
+
+@section breadcrump{
+    <ol class="breadcrumb">
+        <li><a class="active fs-14" href="@Url.Action("listar", "AssociadoDependente", new {area = "AssociadosDependentes"})"><i class="fa fa-arrow-left"></i> Voltar</a></li>
+    </ol>
+}
+
+<div class="@(Model.Associado.id > 0? "box box-primary": "")">
+
+    @exibirBlocoCabecalho()
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="nav-tabs-custom">
+                <ul class="nav nav-tabs" id="tabs">
+                    @{ Html.RenderPartial("partial-lista-tabs", Model);}
+                </ul>
+                <div class="clearfix"></div>
+                <div class="tab-content">
+                    @{ Html.RenderPartial("partial-conteudo-tabs", Model);}
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@helper exibirBlocoCabecalho() {
+
+    if (Model.Associado.id == 0) {
+        return;
+    }
+
+    <div class="col-sm-2 padding-top-10 bordered-black-right">
+        <div id="boxFoto">
+            @{Html.RenderAction("partial-foto", "associadofoto", new {area = "Associados"});}
+        </div>
+    </div>
+    
+    <div class="col-sm-8 padding-top-10">
+        @{ Html.RenderPartial("partial/box-dados-cabecalho");}
+    </div>
+    
+    <div class="col-sm-2 padding-top-10">
+        @if (Model.Associado.ativo == "S") {
+            @Html.boxInfo("ATIVO", "bg-green text-center")
+        } else if (Model.Associado.ativo == "E") {
+            @Html.boxInfo("EM ADMISSÃO", "bg-yellow text-center")
+        } else {
+            @Html.boxInfo("DESATIVADO", "bg-red text-center")
+        }
+    </div>
+    <div class="clearfix"></div>
+}
+

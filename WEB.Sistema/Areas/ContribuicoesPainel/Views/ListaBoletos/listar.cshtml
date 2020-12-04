@@ -1,0 +1,155 @@
+﻿@model WEB.Areas.ContribuicoesPainel.ViewModels.PainelCobrancaVM
+@using PagedList.Mvc
+@using WEB.Areas.Associados.Helpers
+@using WEB.Areas.Contribuicoes.Helpers
+@using WEB.Helpers
+
+@{
+    ViewBag.titlePage = "Relação de boletos gerados";
+}
+
+@section scripts{
+    <script src="@UtilConfig.linkResourses("areas/contribuicoespainel/js/lista-boletos.js?v=1.0")"></script>
+    <script src="@UtilConfig.linkResourses("areas/contribuicoespainel/js/contribuicao-painel-cobranca.js")"></script>
+}
+
+@section styles{
+    <link rel="stylesheet" type="text/css" href="@UtilConfig.linkResourses()css/associatec/list-custom.css" />
+}
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="box box-primary">
+            <div class="box-header with-border">
+                <h3 class="box-title">
+                    <i class="fa fa-search"></i> Filtros de Pesquisa <small class="fs-11">(Informe abaixo os dados da contribuição que deseja pesquisar)</small>
+                </h3>
+            </div>
+            <div class="box-body">
+                <div class="row">
+                    @using (Html.BeginForm(null, null, FormMethod.Get, new { @class = "no-margin", id = "formFiltro" })) {
+                        @Html.Hidden("flagAcao", "", new { id = "flagAcao" })
+                        <div class="col-xs-6 col-sm-4 col-md-3 col-lg-4">
+                            <label>Plano/Contribuição</label>
+                            @Html.DropDownList("idContribuicao", ContribuicaoHelper.getInstance.selectList(UtilRequest.getInt32("idContribuicao")), "Todos", new { @class = "form-control input-sm" })
+                        </div>
+                        <div class="col-xs-6 col-sm-4 col-md-2 col-lg-1">
+                            <label>Ano</label>
+                            @Html.TextBox("ano", UtilRequest.getString("ano"), new { @class = "form-control input-sm", alt = "number_4" })
+                        </div>
+                        <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 boxVencimento">
+                            <label>Vencimento</label>
+                            @Html.DropDownList("mesDiaVencimento", new SelectList(new List<object>()), "Todos", new { @class = "form-control input-sm", id = "dtVencimento", data_selected = UtilRequest.getString("mesDiaVencimento") })
+                        </div>
+
+                        <div class="col-xs-6 col-sm-4 col-md-2 col-lg-2" id="boxVencimentoVariado">
+                            <label>Mês</label><br />
+                            @Html.DropDownList("mes", ComboHelper.selectListMeses(UtilRequest.getString("mes")), "", new { @class = "form-control input-sm" })
+                        </div>
+
+                        <div class="col-xs-6 col-sm-4 col-md-4 col-lg-2">
+                            <label>Status Cobrança</label>
+                            @Html.DropDownList("flagSituacao", ContribuicaoHelper.getInstance.selectListSituacao(UtilRequest.getString("flagSituacao")), "Todos", new { @class = "form-control input-sm" })
+                        </div>
+
+                        <div class="clearfix visible-lg"></div>
+
+                        <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2">
+                            <label>Situação Financeira</label>
+                            @Html.DropDownList("flagSituacaoContribuicao", SituacaoContribuicaoHelper.getSituacao(UtilRequest.getString("flagSituacaoContribuicao")), "Todas", new { @class = "form-control input-sm" })
+                        </div>
+                        <div class="col-xs-6 col-sm-4 col-md-2 col-lg-2">
+                            <label>Status Associado</label>
+                            @Html.DropDownList("ativo", AssociadoHelper.selectListAtivo(UtilRequest.getString("ativo")), "Todos", new { @class = "form-control input-sm" })
+                        </div>
+                        <div class="col-xs-6 col-sm-8 col-md-3 col-lg-3">
+                            <label>Buscar</label>
+                            @Html.buttonSearch(UtilRequest.getString("valorBusca"))
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="clearfix"></div><br />
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="box box-primary">
+    <div class="box-header with-border">
+        <div class="box-title">
+            <i class="far fa-chart-bar"></i> Resultados para @(Model.Contribuicao?.descricao) (@Model.dtVencimento.exibirData())
+        </div>
+        <div class="box-tools pull-right">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">Ações <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0)" onclick="ListaBoletos.gerarZip();"><i class="far fa-file-archive"></i> Exportar Boletos</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0)" onclick="ListaBoletos.excluirBoletoLote(this)" data-url="@Url.Action("modal-excluir-boleto", "ListaBoletos")"><i class="far fa-trash-alt"></i> Excluir em lote</a></li>
+            </ul>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <input data-toggle="tooltip" data-original-title="Selecionar todos" class="margin-right-15" type="checkbox" name="marcarTodos" data-childs="checkRegistro[]" id="checkMarcarTodos" />
+        </div>
+    </div>
+
+    <div class="box-body">
+
+        <ul class="products-list product-list-in-box listagem-padrao">
+
+            @if (Model.listaBoletos.Count > 0) {
+                
+                foreach (var item in Model.listaBoletos) {
+
+                    string cssClass = item.dtPagamento.HasValue ? "green" : "black";
+
+                    string cssClassDelete = item.dtExclusaoParcela.HasValue ? "item-list-disabled" : "";
+
+                    <li class="item bordered-destaque border-@cssClass @cssClassDelete">
+                        <div class="col-sm-10">
+                            <div class="row">
+                                <div class="col-sm-12"><span><i class="fa fa-hashtag"></i> @item.id - @item.descricaoTituloReceita</span></div>
+                            </div>
+                            <div class="row">
+                                
+                                <div class="col-md-2 col-sm-3">
+                                    <span class="fs-12" data-toggle="tooltip" title="Data de vencimento"><i class="fa fa-calendar"></i> @item.dtVencimentoParcela.exibirData()</span>
+                                </div>
+                                
+                                <div class="col-md-2 col-sm-3">
+                                    <span class="fs-12" data-toggle="tooltip" title="Valor original do boleto"><i class="far fa-money-bill"></i> @item.valorOriginalBoleto.exibirValor()</span>
+                                </div>
+                                
+                                @if (item.dtPagamento.HasValue) {
+                                
+                                    <div class="col-md-2 col-sm-3">
+                                        <span class="fs-12" data-toggle="tooltip" title="Valor recebido"><i class="far fa-money-bill"></i> @item.valorRecebidoBoleto.exibirValor()</span>
+                                    </div>
+                                    
+                                }
+                                
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <div class="text-right">
+                                @(item.dtPagamento.HasValue ? $"Pago em {item.dtPagamento.exibirData()}" : "Não Pago")<br />
+                                <a href="@(item.boletoUrl.StartsWith("http") ? item.boletoUrl : "~/" + item.boletoUrl  )" target="_blank"><i class="fa fa-file-pdf-o text-black fs-14"></i></a>&nbsp;&nbsp;
+                                <input type="checkbox" name="checkRegistro[]" data-id="@item.idTituloReceitaPagamento" class="v-align-top" />
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </li>
+                }
+            } else {
+                <li class="item">
+                    <div class="col-sm-12">
+                        <p class="alert-warning text-center">
+                            Nenhum registro encontrado.
+                        </p>
+                    </div>
+                </li>
+            }
+        </ul>
+        @(Html.paginarRegistros(Model.listaBoletos, Html.PagedListPager(Model.listaBoletos, nroPagina => UtilRequest.linkPaginacao(nroPagina, "listar"), PagedListRenderOptions.OnlyShowFivePagesAtATime)))
+    </div>
+</div>

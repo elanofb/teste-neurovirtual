@@ -1,0 +1,38 @@
+﻿@using DAL.Arquivos.Extensions
+@model IList<DAL.Associados.Associado>
+
+
+@if (!Model.Any()) {
+    <div class="alert alert-info">
+        Nenhum associado foi cadastrado recentemente.
+    </div>
+}
+
+<ul class="products-list product-list-in-box">
+
+    @foreach (var OAssociado in Model) {
+
+        <li class="item">
+            <div class="product-img">
+                <img src="@OAssociado.Foto.linkImagem()" alt="@OAssociado.Pessoa.nome.ToUpper()">
+            </div>
+            <div class="product-info">
+                <a href="@Url.Action("editar", "associadocadastro", new {area = "Associados", OAssociado.id})" class="product-title">
+                    <span>#@(OAssociado.nroAssociado ?? OAssociado.id) - @OAssociado.Pessoa.nome.ToUpper()</span>
+                </a>
+
+                <span class="label @OAssociado.exibirClasseStatus() pull-right">@OAssociado.exibirStatus()</span>
+
+                @{ var subTitulo = String.Concat(OAssociado.TipoAssociado.nomeDisplay, " | ", UtilString.formatCPFCNPJ(OAssociado.Pessoa.nroDocumento), " | ", OAssociado.dtCadastro.exibirData()); }
+
+                <span class="product-description">
+                    @subTitulo
+                </span>
+            </div>
+        </li>
+
+    }
+</ul>
+
+<div class="clearfix"></div>
+   

@@ -1,0 +1,52 @@
+﻿@model IList<TarefaSistema>
+@using BLL.Tarefas
+@using DAL.Tarefas
+
+@{
+    Layout = null;
+}
+
+<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+    <i class="far fa-flag"></i>
+    <span class="label label-danger">@Model.Count</span>
+</a>
+
+<ul class="dropdown-menu">
+    <li class="header">Você tem @Model.Count tarefas</li><li>
+
+        <ul class="menu">
+            @foreach (TarefaSistema Item in Model){
+                <li>
+                    <a href="@linkDetalhe(Item)">
+                        <p class="fs-12" style="white-space:normal">
+                            <i class="fa fa-chevron-circle-right"></i> @Item.titulo <br/>
+                            <span data-toggle="tooltip" title="Tarefa iniciada em:"><i class="far fa-clock"></i> @Item.dtCadastro.exibirData(true)</span>
+                            <small class="pull-right fs-14">@($"{Item.percentualCompletado:0.##}")%</small>
+                        </p>
+                        <div class="progress xs">
+                            <div class="progress-bar progress-bar-aqua" style="width: @Math.Round(Item.percentualCompletado, 0)%" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
+                                <span class="sr-only">@Item.observacoes</span> 
+                            </div>
+                        </div>
+                    </a>
+                </li>
+            }
+        </ul>
+    </li>
+    <li class="footer">
+        <a href="@Url.Action("index", "painelcontrole", new {area = "tarefas"})">Ver todas as tarefas.</a>
+    </li>
+</ul>
+
+@functions{
+
+    private string linkDetalhe(TarefaSistema OTarefa) {
+
+        if (OTarefa.nome == TarefaGerarBoletosContribuicao.getInstance.nomeTarefa){
+            return Url.Action("detalhes", "BoletosTarefa", new {area = "AssociadosContribuicoesBoletos", OTarefa.id});
+        }
+
+        return "javascript:void(0);";
+    }
+
+} 

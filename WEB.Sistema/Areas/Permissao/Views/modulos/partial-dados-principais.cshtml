@@ -1,0 +1,74 @@
+﻿@using System.Web.Mvc.Html
+@model WEB.Areas.Permissao.ViewModels.RecursoGrupoForm
+
+
+@using (Html.BeginForm("editar", null, FormMethod.Post, new { role = "form", @class = "default" })){
+	
+	@Html.HiddenFor(m => m.AcessoRecursoGrupo.id)
+
+	@Html.ValidationSummary(false)
+
+	<div class="form-horizontal">
+
+		<div class="col-md-6">
+			<label>Descrição</label>
+			@Html.TextBoxFor(m => m.AcessoRecursoGrupo.descricao, new { @class = "form-control input-sm", maxlength="100"})
+			@Html.ValidationMessageFor(m => m.AcessoRecursoGrupo.descricao)
+		</div>
+	    <div class="clearfix"></div>
+
+        <div class="col-sm-2 col-md-2 col-lg-2 ">
+            <label>Area</label>
+            @Html.TextBoxFor(m => m.AcessoRecursoGrupo.area, new { @class = "form-control input-sm", maxlength = "50" })
+            @Html.ValidationMessageFor(m => m.AcessoRecursoGrupo.area)
+        </div>
+        <div class="col-sm-2 col-md-2 col-lg-2 ">
+            <label>Controller</label>
+            @Html.TextBoxFor(m => m.AcessoRecursoGrupo.controller, new { @class = "form-control input-sm", maxlength = "50" })
+            @Html.ValidationMessageFor(m => m.AcessoRecursoGrupo.controller)
+        </div>
+        <div class="col-sm-2 col-md-2 col-lg-2 ">
+            <label>Action</label>
+            @Html.TextBoxFor(m => m.AcessoRecursoGrupo.action, new { @class = "form-control input-sm", maxlength = "50" })
+            @Html.ValidationMessageFor(m => m.AcessoRecursoGrupo.action)
+        </div>
+	    <div class="clearfix"></div>
+
+        <div class="col-sm-2 col-md-2 col-lg-2 ">
+            <label>Ícone</label>
+            @Html.TextBoxFor(m => m.AcessoRecursoGrupo.iconeClasse, new { @class = "form-control input-sm", maxlength = "50" })
+            @Html.ValidationMessageFor(m => m.AcessoRecursoGrupo.iconeClasse)
+        </div>
+        <div class="col-sm-2 col-md-2 col-lg-2 ">
+            <label>Ordem</label>
+            @Html.TextBoxFor(m => m.AcessoRecursoGrupo.ordem, new { @class = "form-control input-sm", maxlength = "2", type="number" })
+            @Html.ValidationMessageFor(m => m.AcessoRecursoGrupo.ordem)
+        </div>
+	    <div class="col-sm-2 col-md-2 col-lg-2">
+			<label>Menu Lateral</label>
+			@Html.DropDownListFor(m => m.AcessoRecursoGrupo.flagMenuLateral, ComboHelper.selectListTrueFalse(Model.AcessoRecursoGrupo.flagMenuLateral), "...", new { @class = "form-control input-sm" })
+			@Html.ValidationMessageFor(m => m.AcessoRecursoGrupo.flagMenuLateral)
+		</div>
+	    <div class="col-sm-2 col-md-2 col-lg-2">
+			<label>Menu Topo</label>
+			@Html.DropDownListFor(m => m.AcessoRecursoGrupo.flagMenuTopo, ComboHelper.selectListTrueFalse(Model.AcessoRecursoGrupo.flagMenuTopo), "...", new { @class = "form-control input-sm" })
+			@Html.ValidationMessageFor(m => m.AcessoRecursoGrupo.flagMenuTopo)
+		</div>
+	    <div class="col-sm-2 col-md-2 col-lg-2">
+			<label>Status</label>
+			@Html.DropDownListFor(m => m.AcessoRecursoGrupo.ativo, ComboHelper.selectListStatus(Model.AcessoRecursoGrupo.ativo), "...", new { @class = "form-control input-sm" })
+			@Html.ValidationMessageFor(m => m.AcessoRecursoGrupo.ativo)
+		</div>
+		<div class="clearfix"></div>
+
+	</div>
+	<div class="clearfix"></div>
+    <br/>
+
+    <div class="col-sm-12">
+        <p class="text-right">
+            @Html.exibirBotoesFormulario(Url.Action("listar"), "N")
+        </p>
+    </div>
+    <div class="clearfix"></div>
+}

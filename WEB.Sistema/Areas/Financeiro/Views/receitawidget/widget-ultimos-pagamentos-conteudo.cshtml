@@ -1,0 +1,32 @@
+﻿@using DAL.Financeiro
+@model List<TituloReceitaPagamento>
+ 
+@if (!Model.Any()) {
+    <div class="text-center">
+        <strong class="fs-18">NÃO EXISTEM PAGAMENTOS REGISTRADOS</strong>
+    </div>
+}
+
+<div>
+    @foreach (var Item in Model){
+        
+        <div class="bordered-gray-bottom-1 margin-bottom-10 padding-bottom-10">
+            <div class="col-sm-7">
+                <span><i class="fa fa-user"></i> @(Item.TituloReceita.nomePessoa.IsEmpty()? "Nenhum pagador vinculado": Item.TituloReceita.nomePessoa)</span>
+            </div>
+            <div class="col-sm-5 fs-12 abreviar">
+                <span><i class="fa fa-dollar-sign"></i> @Item.valorLiquido().ToString("C") - @Item.MeioPagamento.descricao</span>
+            </div>
+            <div class="clearfix"></div>
+            <div class="col-sm-12 fs-11 abreviar">
+                <span data-toggle="tooltip" title="Data do Pagamento e descrição"><i class="fa fa-calendar"></i> @Item.dtPagamento.exibirData() - @Item.TituloReceita.descricao @(Item.descricaoParcela.isEmpty() ? (Item.nroParcela > 0 ? "- Parcela " + Item.nroParcela : "") : "- " + Item.descricaoParcela)</span>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        
+    }
+
+</div>
+
+<div class="clearfix"></div>
+	

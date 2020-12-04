@@ -1,0 +1,91 @@
+﻿@model WEB.Areas.FinanceiroLancamentos.ViewModels.ConciliacaoVM
+@using DAL.Financeiro
+
+@{
+    Layout = null;
+}
+
+<div class="box-header with-border">
+    <div class="box-title">
+        <i class="far fa-chart-bar"></i> Conciliações realizadas para o dia <strong> @Model.dtConciliacao.exibirData()</strong>
+    </div>
+    <div class="box-tools pull-right">
+        <div class="col-sm-6 no-padding margin-top-5">
+            <label class="" data-toggle="tooltip" title="Selecionar Todos">
+                <input type="checkbox" name="marcarTodos" data-childs="checkRegistroConciliacao[]" class="checkMarcarTodos" style="margin-left: 2px;"/>
+            </label>
+        </div>
+        <div class="col-sm-6 no-padding">
+            <div class="btn-group margin-right-10">
+                <button type="button" class="btn btn-box-tool dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+                    <i class="fa fa-cog"></i>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                    <li>
+                        <a href="javascript:;" class="text-black" onclick="ConciliacaoAcao.excluirConciliacao()">
+                            <i class="far fa-check"></i> Excluir
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>    
+</div>
+
+<div class="box-body">
+
+    @if (!Model.listaConciliacao.Any()){
+        <div class="alert alert-info">
+            Nenhuma conciliação foi encontrada para a data informada.
+        </div>
+    }
+
+    @if (Model.listaConciliacao.Any()){
+        <div class="padding-right-10" style="max-height: 600px; overflow-y: scroll; overflow-x: hidden;">
+            @foreach (var OConciliacao in Model.listaConciliacao){
+                @boxItem(OConciliacao)
+            }
+        </div>
+
+        <div class="clearfix"></div><br/>
+    }
+</div>
+
+@helper boxItem(ConciliacaoFinanceira OConciliacao){
+    
+    <div class="box-info-item-dotted padding-5 margin-top-5 fs-12">
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="col-sm-7 abreviar">
+                    <a href="javascript: void(0)" onclick="ConciliacaoAcao.detalheConciliacao(@OConciliacao.id)">
+                        #@OConciliacao.id - @OConciliacao.descricao 
+                    </a>
+                </div>
+                <div class="col-sm-4">
+                    <div class="row">
+                        <div class="col-sm-12 text-right">
+                            @if (OConciliacao.valorTotal  > 0){
+                                
+                                <strong class="text-green">
+                                    <i class="fa fa-caret-up"></i> @OConciliacao.valorTotal.ToString("C")
+                                </strong>
+                                
+                            }else{
+                                <strong class="text-red">
+                                    <i class="fa fa-caret-down"></i> @OConciliacao.valorTotal.ToString("C")
+                                </strong>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-1">
+                    <label class="">
+                        <input type="checkbox" name="checkRegistroConciliacao[]" value="@OConciliacao.id" />
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+

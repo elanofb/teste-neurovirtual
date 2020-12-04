@@ -1,0 +1,52 @@
+﻿@model WEB.Areas.Financeiro.ViewModels.ResultadoFinanceiroVM
+
+@{ 
+    var corTipoTitulo = UtilRequest.getString("flagTipoTitulo").Equals("D") ? "red" : "green";
+}
+
+<table class="table table-fixed fs-11">
+    <thead>
+        <tr>
+            <th class="col-xs-9">Descrição</th>
+            <th class="col-xs-3" width="150">Valor</th>
+        </tr>
+    </thead>
+    <tbody>
+    
+        @if (!Model.listaPagamentos.Any()) {
+            <tr>
+                <td colspan="2">Nenhum pagamento foi encontrado</td>
+            </tr>
+        }
+        
+        @foreach (var OReceita in Model.listaPagamentos) {
+
+            <tr>
+                <td class="col-xs-9">
+                    <span><i class="fa fa-align-justify"></i> @OReceita.descricaoTitulo</span><br />
+                    <span><i class="fa fa-user"></i> @OReceita.nomePessoa</span>
+                </td>
+                <td class="text-right col-xs-3">
+                    @OReceita.valor.ToString("C")
+                </td>
+            </tr>
+
+        }
+        
+    </tbody>
+
+    <thead>
+        <tr>
+            
+            <th class="col-xs-9 bg-@corTipoTitulo">
+                @Model.listaPagamentos.Count() encontrados
+            </th>
+            
+            <th class="col-xs-3 text-right bg-@corTipoTitulo">
+                @Model.listaPagamentos.Sum(x => x.valor).ToString("C")
+            </th>
+        
+        </tr>
+    </thead>
+
+</table>

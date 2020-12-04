@@ -1,0 +1,96 @@
+﻿@model WEB.Areas.Associados.Models.ViewModels.PreAtualizacaoConsultaVM
+
+@{
+    ViewBag.titlePage = "Pré-Atualização de Cadastro";
+}
+
+@section styles {
+	<link href="@UtilConfig.linkResourses("css/associatec/list-custom.css")" rel="stylesheet" />
+	@Html.includeToastCSS()
+	
+}
+
+@section scripts {
+	@Html.includeBootstrapMultiselect()
+	@Html.includeToastJS()	
+	@Html.includeDatePicker()
+	
+	<script type="text/javascript" src="@UtilConfig.linkResourses("Areas/Associados/js/associado-preatualizacao-cadastro.js")"></script>
+}
+
+@section breadcrump{
+	<ol class="breadcrumb">
+		<li><a href="javascript:;" onclick="$('.box-filtros').toggle('slow')" class="fs-16"><i class="fa fa-filter"></i></a></li>
+	</ol>
+}
+
+<div class="row">
+	<div class="col-sm-12 nao-exibir box-filtros">
+        
+		<div class="card-gray margin-bottom-15">
+
+			<h4 class="separator-form-icon no-margin"><i class="far fa-filter"></i> Filtros de Busca</h4>
+			
+			@using (Html.BeginForm(null, null, FormMethod.Get, new { @class = "" })) {
+				
+				<div class="col-md-3">
+					<label>Tipo de Associado</label><br/>
+					@Html.ListBoxFor(m => m.idsTipoAssociado, TipoAssociadoHelper.getInstance.multiSelectList(Model.idsTipoAssociado), new {@class = "form-control input-sm input-multiselect", multiple = "multiple"})
+				</div>
+                
+				<div class="col-md-3">
+					<label>Data de Atualização</label><br/>
+					<div class="input-group">
+						@Html.TextBoxFor(m => m.dtAtualizacaoInicial, new {@class = "form-control input-sm input-datepicker", alt = "date"})
+						<span class="input-group-addon">-</span>
+						@Html.TextBoxFor(m => m.dtAtualizacaoFinal, new {@class = "form-control input-sm input-datepicker", alt = "date"})
+					</div>
+				</div>				
+				
+				<div class="col-md-3 col-sm-6">
+					<label>Pessoa</label>
+					@Html.TextBoxFor(m => m.valorBusca, new { @class = "form-control input-sm" })
+				</div>
+                
+				<div class="col-md-2">
+					<label>Tipo de Saída</label>
+					@Html.buttonFlagTipoSaida(Model.flagTipoSaida)
+				</div>					                                                                				
+			}
+            
+			<div class="clearfix"></div>
+		</div>
+	</div>
+	<div class="clearfix"></div>
+</div>
+
+<div class="row">
+	
+	<div class="col-lg-12">
+
+		<ul class="nav nav-tabs" id="tabs">
+			<li class="active"><a data-toggle="tab" href="#pendentes" class="text-black"> Análises Pendentes <span class="badge bg-blue">@Model.listaPendentes.Count</span></a></li>
+			<li class=""><a data-toggle="tab" href="#avaliados" class="text-black"> Atualizações Analisadas <span class="badge bg-green">@Model.listaAvaliados.Count</span></a></li>
+		</ul>
+
+	</div>
+	
+	<div class="clearfix"></div>
+	
+	<div class="col-lg-12">
+
+		<div class="tab-content padding-10" style="background-color: white">
+
+			<div id="pendentes" class="tab-pane active">
+				@{Html.RenderPartial("partial-atualizacoes-pendentes", Model.listaPendentes);}
+			</div>
+
+			<div id="avaliados" class="tab-pane">
+				@{Html.RenderPartial("partial-atualizacoes-avaliadas", Model.listaAvaliados);}
+			</div>
+
+		</div>
+
+	</div>
+	<div class="clearfix"></div>
+</div>

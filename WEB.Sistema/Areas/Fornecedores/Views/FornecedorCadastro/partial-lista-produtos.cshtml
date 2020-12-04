@@ -1,0 +1,46 @@
+﻿@model WEB.Areas.Fornecedores.ViewModels.FornecedorForm
+
+<h4 class="separator-form-icon"><i class="far fa-list"></i> Produtos e/ou serviços desse fornecedor</h4>
+
+<table class="table table-bordered table-striped dataTable">
+                
+    <thead>
+        <tr role="row">
+            <th>Nome</th>
+            <th width="150">Descrição</th>
+            <th width="150">Valor</th>
+            <th width="100">Status</th>
+            <th width="125">Cadastro</th>
+            <th width="70">&nbsp;</th>
+        </tr>
+    </thead>
+    <tbody>
+    
+        @if(!Model.listaProdutos.Any()) {
+            <tr>
+                <td class="text-center" colspan="6">Nenhum registro cadastrado</td>
+            </tr>
+        }
+
+        @foreach (var Item in Model.listaProdutos) {
+
+            <tr>
+                <td>@Item.nome</td>
+                <td>@Item.descricaoResumida</td>
+                <td>@Item.valor.ToString("C")</td>
+                <td class="text-center">
+                    @Html.badgeStatus(Item.ativo)
+                </td>
+                <td class="text-center">@Item.dtCadastro.exibirData(true)</td>
+                <td class="text-center">
+                    <a href="@Url.Action("editar", "Produto", new {Area = "Produtos", Item.id})"
+                       target="_blank" data-toggle="tooltip" title="Editar Registro">
+                        
+                        <i class="fa fa-edit"></i>
+                    </a>
+                </td>
+            </tr>
+        }
+        
+    </tbody>
+</table>

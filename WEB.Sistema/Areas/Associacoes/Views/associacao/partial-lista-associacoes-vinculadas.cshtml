@@ -1,0 +1,51 @@
+﻿@model List<Organizacao>
+@using DAL.Organizacoes
+@using WEB.Helpers
+
+@{
+    Layout = null;
+}
+
+<div class="btn btn-warning">
+    <i class="glyphicon glyphicon-check"></i> <span id="countFaixaCep">@Model.Count()</span> Associações vinculadas.
+</div>
+
+<div class="clearfix"></div><br/>
+
+<table class="table table-bordered table-striped dataTable">
+    <thead>
+    <tr role="row">
+        <th class="width-75">ID</th>
+        <th>Associacao</th>
+        <th class="width-200">CNPJ</th>
+        <th class="width-75">Cadastro</th>
+        <th class="width-100">Status</th>
+        <th class="width-50">&nbsp;</th>
+    </tr>
+    </thead>
+    <tbody>
+    @if (Model.Count > 0) {
+        foreach (var Item in Model) {
+            <tr>
+                <td class="text-center">@Item.id</td>
+                <td>@Item.Pessoa.nome</td>
+                <td class="text-center">@UtilString.formatCPFCNPJ(Item.Pessoa.nroDocumento)</td>
+                <td class="text-center">@Item.dtCadastro.exibirData()</td>
+                <td class="text-center">@Html.linkStatusDefault(Item.id, Item.ativo)</td>
+                <td class="text-center box-acoes">
+                    <a href="@Url.Action("editar", new {id = Item.id})" title="Editar Associação" data-toggle="tooltip">
+                        <i class="fa fa-edit"></i>
+                    </a> &nbsp;
+                </td>
+            </tr>
+        }
+    } else {
+        <tr>
+            <td class="text-center" colspan="9">Nenhum registro localizado</td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+
+<div class="clearfix"></div>

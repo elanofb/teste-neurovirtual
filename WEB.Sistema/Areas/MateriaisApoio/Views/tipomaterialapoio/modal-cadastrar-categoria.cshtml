@@ -1,0 +1,50 @@
+﻿@using MvcFlashMessages
+@model WEB.Areas.MateriaisApoio.ViewModels.TipoMaterialApoioForm
+@{
+    Layout = IsPost ? null : "~/views/shared/associatec/masterpage-modal.cshtml";
+    ViewBag.modalTitle = "Tipo de Material de Apoio";
+}
+
+
+<div id="@(IsPost ? "" : "boxFormCategoria")">
+
+    @Html.RenderFlash()
+
+    <div class="col-xs-12">
+        <div class="row">
+            @using (Ajax.BeginForm("salvar-modal-categoria", null, new AjaxOptions { UpdateTargetId = "boxFormCategoria", HttpMethod = "POST", OnSuccess = "TipoMaterialApoio.onSuccess" }, new { role = "form", @class = "default" })) {
+			    @Html.legendaRequired()<br />
+			    @Html.HiddenFor(m => m.TipoMaterialApoio.id)
+			    @Html.ValidationSummary(true, "Confira os erros do formulário.")
+
+			    <div class="form-horizontal">
+
+				    <div class="col-md-8">
+					    @Html.labelRequired("Descrição")
+					    @Html.TextBoxFor(m => m.TipoMaterialApoio.descricao, new { @class = "form-control input-sm", maxlength = "100" })
+					    @Html.ValidationMessageFor(m => m.TipoMaterialApoio.descricao)
+				    </div>
+
+				    <div class="col-md-4">
+					    <label>Status</label>
+					    @Html.DropDownListFor(m => m.TipoMaterialApoio.ativo, ComboHelper.selectListStatus(Model.TipoMaterialApoio.ativo), new { @class = "form-control input-sm" })
+					    @Html.ValidationMessageFor(m => m.TipoMaterialApoio.ativo)
+				    </div>
+				    <div class="clearfix"></div>
+
+			    </div>
+			    <div class="clearfix"></div>
+			    <br /><br />
+
+			    <div class="col-md-12">
+				    <div class="text-right">
+					    @Html.botaoSalvar()
+				    </div>
+			    </div>
+
+		    }
+        </div>
+    </div>
+</div>
+<div class="clearfix"></div><br />
+

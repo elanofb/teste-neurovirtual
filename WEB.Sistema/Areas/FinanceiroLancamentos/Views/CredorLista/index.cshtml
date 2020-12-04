@@ -1,0 +1,147 @@
+﻿@model PagedList.IPagedList<Credor>
+
+@using DAL.FinanceiroLancamentos
+@using DAL.Pessoas
+@using PagedList.Mvc
+@using WEB.Helpers
+
+@{
+	ViewBag.titlePage = "Credores Cadastrados";
+}
+
+@section styles {
+    <link href="@UtilConfig.linkResourses()css/associatec/list-custom.css" rel="stylesheet" />
+}
+
+<div class="box box-primary">
+
+    @Html.headerBox("Filtros de Busca", "fa fa-filter")
+
+    <div class="box-body">
+
+        @using (Html.BeginForm(null, null, FormMethod.Get, new {id = "fmFiltro"})) {
+
+            <div class="form-group col-md-7"></div>
+
+            <div class="form-group col-md-2 col-sm-6">
+                <label>Status</label>
+                @Html.DropDownList("flagAtivo", ComboHelper.selectListStatus(UtilRequest.getBool("flagAtivo")), "Todos", new {@class = "form-control input-sm"})
+            </div>
+
+            <div class="form-group col-md-3 col-sm-6">
+                <label>Buscar</label>
+                @Html.buttonSearch(UtilRequest.getString("valorBusca"))
+            </div>
+            <div class="clearfix"></div>
+
+        }
+
+    </div>
+
+</div>
+
+<div class="box box-primary">
+
+    <div class="box-header with-border">
+
+        <h3 class="box-title">
+            <i class="far fa-chart-bar"></i> Resultados
+        </h3>
+
+        <div class="box-tools pull-right">
+            <div class="btn-group">
+                
+
+                <button type="button" class="btn btn-box-tool dropdown-toggle text-black fs-16" data-toggle="dropdown">
+                    <i class="fa fa-cog"></i> 
+                </button>
+                <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                    <li>
+                        <a href="@Url.Action("index", "CredorCadastro", new {urlRetorno = Request.Url.AbsoluteUri})" class=""><i class="fa fa-cog"></i> Novo Registro</a>
+                    </li>
+                    <li class="divider"></li>
+                    <li>
+                        <a href="javascript:;" data-url="@Url.Action("excluir", "CredorOperacao")" onclick="DefaultAction.removeAll(this);">
+                            <i class="far fa-trash-alt"></i> Excluir selecionados
+                        </a>
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+
+    </div>
+    
+    <div class="box-body">
+
+        @if(!Model.Any()) {
+            <div class="col-sm-12">
+                <div class="alert alert-info">
+                    Nenhum associado foi encontrado.
+                </div>
+            </div>
+        }
+
+        @foreach(var OCredor in Model) {
+
+            <div class="box-info-item-dotted">
+
+                <div class="row fs-12">
+                    <div class="col-lg-4 col-sm-4 col-xs-6">
+                        <a href="@Url.Action("index", "CredorCadastro", new {OCredor.id})" class="text-black" target="_blank">
+                            <strong><i class="fa @(OCredor.Pessoa.flagTipoPessoa == "F" ? "fa-user" : "fa-building")"></i> @OCredor.Pessoa.nome.abreviar(30, "").ToUpper()</strong>
+                        </a><br/>
+                        <span>
+                            <i class="fa fa-id-card"></i> @UtilString.formatCPFCNPJ(OCredor.Pessoa.nroDocumento)
+                        </span>
+                    </div>
+
+                    <div class="col-lg-4 col-sm-4 col-xs-6 abreviar">
+                        <span>
+                            <i class="fa fa-envelope"></i> E-mail: @OCredor.Pessoa.emailPrincipal
+                        </span><br />
+                        <span>
+                            <i class="fa fa-phone"></i> Telefone: @OCredor.Pessoa.formatarTelPrincipal()
+                        </span>
+                    </div>
+
+                    <div class="col-lg-3 col-sm-2 col-xs-6 text-left abreviar">
+                        <span>
+                            <i class="fa fa-calendar"></i> @OCredor.dtCadastro.exibirData()
+                        </span><br />
+                        @Html.linkStatusDefault(OCredor.id, OCredor.ativo, "CredorOperacao")
+                    </div>
+
+                    <div class="col-lg-1 col-sm-2 col-xs-6 text-right">
+                        <div class="row">
+                            <div class="col-sm-6 no-padding-right">
+                                <div class="dropdown">
+                                    <a href="javascript:;" class="dropdown-toggle text-black fs-14" data-toggle="dropdown">
+                                        <span class="fa fa-cog"></span>
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-right">
+                                        <li>@Html.linkTexto("<i class=\"fa fa-edit\"></i> Editar Cadastro", Url.Action("index", "CredorCadastro", new { OCredor.id }))</li>
+                                        <li class="divider"></li>
+                                        <li>@Html.linkAjaxExcluir(OCredor.id, "N", Url.Action("excluir", "CredorOperacao"), "", "", "Excluir")</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div>
+                                    <input type="checkbox" name="checkRegistro[]" value="@OCredor.id" data-id="@OCredor.id" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        }
+
+        @(Html.paginarRegistros(Model, Html.PagedListPager(Model, nroPagina => UtilRequest.linkPaginacao(nroPagina, "index"), PagedListRenderOptions.OnlyShowFivePagesAtATime)))
+
+    </div>
+
+</div>

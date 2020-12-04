@@ -1,0 +1,12 @@
+.qtde-estoque {
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.sem-estoque {
+    color: #FF0000;
+}
+
+.com-estoque {
+    color: #0026ff;
+}

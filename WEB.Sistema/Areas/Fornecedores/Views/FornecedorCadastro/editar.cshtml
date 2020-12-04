@@ -1,0 +1,185 @@
+﻿@model WEB.Areas.Fornecedores.ViewModels.FornecedorForm
+
+@using DAL.Permissao.Security.Extensions
+@using MvcFlashMessages
+@using WEB.Areas.Associacoes.Helpers
+@using WEB.Areas.Pessoas.Helpers
+
+@{
+    ViewBag.titlePage = "Fornecedor";
+    ViewBag.subTitlePage = Model.Fornecedor.Pessoa.nome;
+
+    Layout = "~/views/shared/associatec/masterpage-edit.cshtml";
+}
+
+@section scripts{
+
+	@* Autocomplete para busca de cidades *@
+	
+    @Html.includeLocalizacaoJS()
+    <script type="text/javascript" src="@UtilConfig.linkResourses("Areas/Fornecedores/js/fornecedores.js")"></script>    
+    <script type="text/javascript" src="@UtilConfig.linkResourses("Areas/DadosBancarios/js/dados-bancarios-cadastro.js")"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses("Areas/DadosBancarios/js/dados-bancarios-exclusao.js")"></script>
+}
+
+@section styles{
+    <link href="@UtilConfig.linkResourses("css/associatec/list-custom.css")" rel="stylesheet" />
+}
+
+@section navTabs{
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#tab-1" data-toggle="tab">Principal</a></li>
+        @if (Model.Fornecedor.id > 0) {
+            <li class=""><a href="#tab-2" data-toggle="tab">Produtos</a></li>
+            <li class=""><a href="#tab-3" data-toggle="tab">Dados Bancários</a></li>
+        }
+    </ul>
+}
+
+@section tabContent{
+    <div id="tab-1" class="tab-pane active">
+        
+        @Html.RenderFlash()
+
+        @Html.infoCadastro(Model.Fornecedor.id, Model.Fornecedor.dtCadastro, Model.Fornecedor.dtAlteracao)
+
+        @using (Html.BeginForm("editar", null, FormMethod.Post, new {enctype = "multipart/form-data"})) {
+
+            @Html.HiddenFor(m => m.Fornecedor.id)
+
+            @Html.ValidationSummary(false)
+
+            <h4 class="separator-form-icon"><i class="far fa-edit"></i> Dados Principais do Fornecedor</h4>
+
+            if (User.idOrganizacao() == 0) {
+                <div class="col-sm-4 col-md-3">
+                    <label>Organização</label>
+                    @Html.DropDownListFor(m => m.Fornecedor.idOrganizacao, AssociacaoHelper.getInstance.selectList(Model.Fornecedor.idOrganizacao), "Padrão", new {@class = "form-control input-sm"})
+                </div>
+                <div class="clearfix"></div>
+            }
+
+            <div class="col-md-2">
+                <label>Pessoa Física ou Jurídica?</label>
+                @Html.DropDownListFor(m => m.Fornecedor.Pessoa.flagTipoPessoa, TipoPessoaHelper.selectList(Model.Fornecedor.Pessoa.flagTipoPessoa), new {@class = "form-control input-sm", id = "tipoPessoa", onchange = "Fornecedor.exibirDadosPessoa();"})
+            </div>
+            <div class="col-md-2">
+                <label>Status</label>
+                @Html.DropDownListFor(m => m.Fornecedor.ativo, ComboHelper.selectListStatus(Model.Fornecedor.ativo), new {@class = "form-control input-sm"})
+            </div>
+            <div class="clearfix"></div>
+
+            <div class="col-md-4 dado-pj">
+                @Html.labelRequired("Razão Social")
+                @Html.TextBoxFor(x => x.Fornecedor.Pessoa.razaoSocial, new {@class = "form-control input-sm", maxlength = "100"})
+                @Html.ValidationMessageFor(x => x.Fornecedor.Pessoa.razaoSocial)
+            </div>
+
+            <div class="col-md-4">
+                @Html.labelRequired("Nome")
+                @Html.TextBoxFor(x => x.Fornecedor.Pessoa.nome, new {@class = "form-control input-sm", maxlength = "100"})
+                @Html.ValidationMessageFor(x => x.Fornecedor.Pessoa.nome)
+            </div>
+            <div class="clearfix"></div>
+
+            <div class="col-md-2">
+                @Html.labelRequired("CNPJ", "info-documento")
+                @Html.TextBoxFor(x => x.Fornecedor.Pessoa.nroDocumento, new {@class = "form-control input-sm", maxlength = "18", alt = "cnpj"})
+                @Html.ValidationMessageFor(x => x.Fornecedor.Pessoa.nroDocumento)
+            </div>
+
+            <div class="col-md-2 dado-pf">
+                @Html.Label("RG")
+                @Html.TextBoxFor(x => x.Fornecedor.Pessoa.rg, new {@class = "form-control input-sm", maxlength = "20"})
+                @Html.ValidationMessageFor(x => x.Fornecedor.Pessoa.rg)
+            </div>
+
+            <div class="col-md-2 dado-pj">
+                @Html.Label("Inscrição Estadual")
+                @Html.TextBoxFor(x => x.Fornecedor.Pessoa.inscricaoEstadual, new {@class = "form-control input-sm", maxlength = "20"})
+                @Html.ValidationMessageFor(x => x.Fornecedor.Pessoa.inscricaoEstadual)
+            </div>
+
+            <div class="col-md-2 dado-pj">
+                @Html.Label("Inscrição Municipal")
+                @Html.TextBoxFor(x => x.Fornecedor.Pessoa.inscricaoMunicipal, new {@class = "form-control input-sm", maxlength = "20"})
+                @Html.ValidationMessageFor(x => x.Fornecedor.Pessoa.inscricaoMunicipal)
+            </div>
+            <div class="clearfix"></div>
+
+            <h4 class="separator-form-icon"><i class="far fa-edit"></i> Dados de contato</h4>
+            <div class="col-md-3">
+                @Html.Label("E-mail principal")
+                @Html.TextBoxFor(x => x.Fornecedor.Pessoa.emailPrincipal, new {@class = "form-control input-sm", maxlength = "100"})
+                @Html.ValidationMessageFor(x => x.Fornecedor.Pessoa.emailPrincipal)
+            </div>
+
+            <div class="col-md-3">
+                @Html.Label("E-mail secundário")
+                @Html.TextBoxFor(x => x.Fornecedor.Pessoa.emailSecundario, new {@class = "form-control input-sm", maxlength = "100"})
+                @Html.ValidationMessageFor(x => x.Fornecedor.Pessoa.emailSecundario)
+            </div>
+            <div class="clearfix"></div>
+
+            <div class="col-md-3 no-padding">
+                
+                <div class="col-md-12">
+                    <label>1º Telefone</label>
+                </div>
+
+                <div class="col-md-12">
+                    @Html.TextBoxFor(x => x.Fornecedor.Pessoa.nroTelPrincipal, new {@class = "form-control input-sm", alt = "phone"})
+                    @Html.ValidationMessageFor(x => x.Fornecedor.Pessoa.nroTelPrincipal)
+                </div>
+            </div>
+
+            <div class="col-md-3 no-padding">
+                <div class="col-md-12">
+                    <label>2º Telefone</label>
+                </div>
+
+                <div class="col-md-12">
+                    @Html.TextBoxFor(x => x.Fornecedor.Pessoa.nroTelSecundario, new {@class = "form-control input-sm", alt = "phone"})
+                </div>
+            </div>
+
+            <div class="col-md-3 no-padding">
+                <div class="col-md-12">
+                    <label>3º Telefone</label>
+                </div>
+                
+                <div class="col-md-12">
+                    @Html.TextBoxFor(x => x.Fornecedor.Pessoa.nroTelTerciario, new {@class = "form-control input-sm", alt = "phone"})
+                </div>
+            </div>
+            <div class="clearfix"></div>
+
+            <h4 class="separator-form-icon"><i class="far fa-edit"></i> Endereço</h4>
+            { Html.RenderPartial("partial-form-endereco", Model); }
+            <div class="clearfix"></div><br/>
+
+            <div class="text-right">
+                @Html.exibirBotoesFormulario(Url.Action("listar", "FornecedorConsulta"), "N")
+            </div>
+        }
+
+        <div class="clearfix"></div>
+    </div>
+
+    @if (Model.Fornecedor.id > 0) {
+
+        <div id="tab-2" class="tab-pane">
+              
+            @{ Html.RenderPartial("partial-lista-produtos", Model); }
+            
+        </div>
+        
+        <div id="tab-3" class="tab-pane">
+                                  
+            <div class="carregando content-load" data-url="@Url.Action("partial-listar", "DadosBancariosConsulta", new{ Area = "DadosBancarios", idPessoa = Model.Fornecedor.idPessoa })"></div>
+            
+        </div>
+
+    }
+
+}

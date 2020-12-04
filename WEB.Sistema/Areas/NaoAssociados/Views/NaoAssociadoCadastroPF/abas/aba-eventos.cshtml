@@ -1,0 +1,12 @@
+﻿@model DAL.Associados.Associado
+
+<div class="tab-pane" id="tab-eventos">
+
+    <h4 class="separator-form">
+        Histórico de participação em eventos
+    </h4>
+
+    <div id="boxLoadHistoricoEventos" class="carregando content-load" data-url="@Url.Action("partial-lista-participacoes", "HistoricoParticipacao", new { Area = "EventoInscricoes", Model.idPessoa })"></div>
+
+</div>
+

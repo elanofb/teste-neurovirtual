@@ -1,0 +1,88 @@
+﻿@model WEB.Areas.ConfiguracoesAssociados.ViewModels.AssociadoCampoClonagemForm
+@using BLL.ConfiguracoesAssociados.Extensions
+@using DAL.ConfiguracoesAssociados
+@using DAL.Permissao.Security.Extensions
+@using MvcFlashMessages
+@using WEB.Areas.Associados.Helpers
+
+@{
+    Layout = "~/views/shared/associatec/masterpage-modal.cshtml";
+    ViewBag.modalWidthClass = "lg";
+    ViewBag.modalTitle = "Replicar Configurações de Campos";
+
+    if (IsPost) {
+        Layout = null;
+    }
+
+    string idBox = IsPost ? "" : "boxFormCampo";
+    
+    var idOrganizacao = User.idOrganizacao() == 0 ? UtilRequest.getInt32("idOrganizacao") : User.idOrganizacao();
+
+    var flagNaoAssociado = Model.tipoCadastro == TipoCampoCadastroConst.NA_PJ || Model.tipoCadastro == TipoCampoCadastroConst.NA_PF;
+    var tipoPessoa = Model.tipoCadastro == TipoCampoCadastroConst.PJ || Model.tipoCadastro == TipoCampoCadastroConst.NA_PJ ? "J" : "F";
+
+}
+
+<div id="@idBox">
+    
+@Html.RenderFlash()
+
+@using (Ajax.BeginForm("clonar-campos", null, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = idBox, OnSuccess = "ClonarConfiguracao.onSuccessForm", InsertionMode = InsertionMode.Replace }, new { })) {
+    
+    @Html.showFlashMessage()
+    
+    @Html.HiddenFor(m => m.tipoCadastro)
+    
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="alert alert-warning">
+                <p>
+                    <strong>Atenção!</strong> Essa ação irá substituir todas as configurações atuais dos tipos de associado selecionados. Não há como desfazer essa ação.
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-5">
+            <div class="row">
+                <div class="col-sm-12">
+                    @Html.Label("Tipo de "+Html.descricaoTipoCadastro(Model.tipoCadastro))
+                    @Html.DropDownListFor(m => m.idTipoAssociadoOrigem, TipoAssociadoHelper.getInstance.selectList(Model.idTipoAssociadoOrigem, tipoPessoa, flagNaoAssociado, false), "...", new {@class = "form-control input-sm"})
+                    @Html.ValidationMessageFor(m => m.idTipoAssociadoOrigem)
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-sm-2 text-center">
+            @Html.Label("PARA")<br/>
+            <i class="fa fa-long-arrow-right fs-26"></i>
+        </div>
+        
+        <div class="col-sm-4">
+            <div class="row">
+                <div class="col-sm-12">
+                    @Html.Label("Tipo de "+Html.descricaoTipoCadastro(Model.tipoCadastro))
+                    @if (Model.tipoCadastro == TipoCampoCadastroConst.DP) {
+                        @Html.ListBoxFor(m => m.idsTiposAssociadoDestinos, TipoAssociadoHelper.getInstance.multiSelectListDependente(Model.idsTiposAssociadoDestinos, idOrganizacao), new {@class = "multiSelectViewCamposTipoAssociado", data_id_tipo_campo_cadastro = Model.tipoCadastro, data_id = idOrganizacao})
+                    }
+                    else {
+                        @Html.ListBoxFor(m => m.idsTiposAssociadoDestinos, TipoAssociadoHelper.getInstance.multiSelectList(Model.idsTiposAssociadoDestinos, tipoPessoa, flagNaoAssociado, false, null, idOrganizacao), new {@class = "multiSelectViewCamposTipoAssociado", data_id_tipo_campo_cadastro = Model.tipoCadastro, data_id = idOrganizacao})
+                    }
+                    @Html.ValidationMessageFor(m => m.idsTiposAssociadoDestinos)
+                </div>
+            </div>
+        </div>
+    </div>
+    <br/><br/>
+        
+    <div class="col-sm-12 padtop22 text-right">
+        <button type="submit" class="btn btn-primary btn-submit link-loading" title="Clonar"><i class="fa fa-clone"></i> Replicar</button>
+    </div>
+
+    <div class="clearfix"></div>
+    <br />
+    
+}
+
+</div>
+

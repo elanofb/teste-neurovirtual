@@ -1,0 +1,129 @@
+﻿@model ContaBancariaVM
+@using DAL.ContasBancarias
+@using WEB.Areas.ContasBancarias.ViewModels
+@using WEB.Helpers
+
+@section styles{
+    
+    <link type="text/css" rel="stylesheet" href="@UtilConfig.linkResourses()areas/ContasBancarias/css/conta.css" />
+    <link type="text/css" href="@UtilConfig.linkResourses()css/associatec/ionicons/ionicons.css" rel="stylesheet" />
+    <link type="text/css" href="@UtilConfig.linkResourses()css/associatec/list-custom.css" rel="stylesheet" />
+}
+
+@section scripts{
+    
+    @Html.includeDatePicker()
+
+    <script type="text/javascript" src="@UtilConfig.linkResourses()areas/ContasBancarias/js/conta.js?V=1"></script>
+    
+    <script type="text/javascript" src="@UtilConfig.linkResourses()Areas/ContasBancarias/js/conta-bancaria-transferencia.js"></script>
+}
+
+@{
+    ViewBag.titlePage = "Contas Bancárias";
+    ViewBag.subTitlePage = "";
+}
+
+<div class="col-xs-12 box box-primary">
+
+    <div class="box-header with-border">
+        <div class="box-title">
+            <i class="far fa-chart-bar"></i> Resultados <small> Existem @Model.listaContaBancaria.TotalItemCount contas cadastradas.</small>
+        </div>
+        <div class="box-tools pull-right">
+            <a href="@Url.Action("editar")" class="btn btn-box-tool"><i class="far fa-plus-circle"></i> Cadastrar conta</a>
+        </div>
+    </div>
+    <div class="clearfix"></div><br />
+
+    @if (Model.listaContaBancaria.PageCount > 0) {
+
+        foreach (ContaBancaria Item in Model.listaContaBancaria) {
+
+            <div id="conta-@Item.id" class="col-sm-3">
+                <div class="row">
+                    @boxConta(Item)
+                </div>
+            </div>
+            
+        }
+
+    } else {
+        <div class="alert alert-warning">
+            Não existem contas bancárias cadastradas no momento.
+        </div>
+    }
+</div>
+
+@helper botoesAcao(ContaBancaria Item) {
+
+    <div class="col-sm-6 no-padding">
+        
+        <div class="links-table">
+            
+            <div class="btn-group pull-right" style="height: 28px;">
+                
+                <a href="javascript:;" class="text-black margin-5 link-loading-min" data-toggle="tooltip" title="Realizar transferência" onclick="DefaultSistema.showModal('@Url.Action("modal-realizar-transferencia", "ContaBancariaTransferencia", new { idContaBancaria = Item.id })')">
+                    <i class="fa fa-exchange"></i>
+                </a>
+
+                <a href="@Url.Action("editar", new {Item.id})" class="text-black margin-5" data-toggle="tooltip" title="Detalhes da conta">
+                    <i class="fa fa-search"></i>
+                </a>
+
+                <a href="javascript:void(0);" class="excluir-conta text-black margin-5" data-id="@Item.id" data-url="@Url.Action("excluir")" alt="Remover Registro" title="Remover Registro">
+                    <i class="fa fa-trash"></i>
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+}
+
+@helper boxConta(ContaBancaria Item) {
+
+    <div class="col-sm-12 col-xs-8">
+        
+        <div class="small-box border-1-solid border-grey">
+            
+            <div class="inner" style="min-height: 110px">
+                
+                <h3 class="fs-14">
+                    
+                    <span class="glyphicons glyphicons-bank"></span>
+                    @Item.descricao.abreviar(28)
+                </h3>
+                <div class="fs-12">
+                    
+                    @if (!Item.tipoConta.isEmpty() && !Item.nroConta.isEmpty()) {
+                        <label data-toggle="tooltip" title="Número de conta e agência"><span class="glyphicons glyphicons-credit-card"></span> @Item.descricaoTipoConta(): @Item.nroConta/@Item.nroAgencia</label><br />
+                    }
+
+                    <h3 data-toggle="tooltip" title="Saldo da conta" class="inline @Model.listaSaldos.FirstOrDefault(x => x.id == Item.id).exibirColorSaldo() fs-14"><i class="far fa-money-bill"></i> R$@Model.listaSaldos.FirstOrDefault(x => x.id == Item.id).saldoAtual</h3>
+
+                </div><br/>
+
+                <div class="col-sm-6 no-padding fs-11">
+                    @Html.linkStatusDefault(Item.id, Item.ativo)
+                </div>
+
+                @botoesAcao(Item)
+
+            </div>
+
+            @*<div class="row">
+                <div class="col-sm-12 text-center">
+                    <a href="@Url.Action("listar", "contamovimentacao", new {id = 0, idContaBancariaOrigem = Item.id, idTipoOperacao = ContaTipoOperacaoConst.TRANSFERENCIA})" class="small-box-footer-2">Transferência <i class="fa fa-arrow-circle-right"></i></a><span>&nbsp;</span>
+                </div>
+            </div>*@
+
+            <div class="clearfix"></div>
+
+        </div>
+
+    </div>
+
+}

@@ -1,0 +1,17 @@
+﻿@{
+	Layout = "~/views/shared/associatec/masterpage-edit.cshtml";
+	ViewBag.titlePage = "Configurações do Sistema";
+}
+
+@section navTabs{
+	<ul class="nav nav-tabs">
+		<li class="active"><a href="#tab-1" data-toggle="tab">Principal</a></li>
+	</ul>
+}
+
+@section tabContent{
+	<div id="tab-1" class="tab-pane active">
+		@{Html.RenderPartial("partialDadosPrincipais");}
+	</div><div class="clearfix"></div>
+}
+

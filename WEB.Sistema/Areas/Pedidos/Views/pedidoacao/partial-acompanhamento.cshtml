@@ -1,0 +1,45 @@
+﻿@model WEB.Areas.Pedidos.ViewModels.PedidoOcorrenciaVM
+@using DAL.Pedidos
+
+<div id="boxAcompanhamentoPedido">
+    <h4 class="separator-form">Sequência do Pedido</h4>
+    
+    @*ReSharper disable once Mvc.ActionNotResolved*@
+    @using (Ajax.BeginForm("salvar-dados-acompanhamento", null, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "boxAcompanhamentoPedido", OnSuccess = "PedidoAcoes.onSuccessAcompanhamento", InsertionMode = InsertionMode.Replace }, new { role = "form", @class = "default" })) {
+        @Html.HiddenFor(m => m.id)
+        @Html.HiddenFor(m => m.idPedido)
+        @Html.HiddenFor(m => m.idStatusAtual, new { id = "idStatusAtual" })
+        <div class="col-md-12">
+            @Html.ValidationSummary(false)
+        </div>
+        <div class="clearfix"></div><br />
+
+        <div class="col-md-12">
+            <div class="btn bg-yellow btn">
+                @Html.RadioButtonFor(m => m.idStatusPedido, Convert.ToInt32(StatusPedidoConst.ATENDIDO))
+                Atender Pedido
+            </div>
+            <div class="btn bg-green btn">
+                @Html.RadioButtonFor(m => m.idStatusPedido, Convert.ToInt32(StatusPedidoConst.EXPEDIDO))
+                Registrar Expedição
+            </div>
+            <div class="btn btn-danger btn">
+                @Html.RadioButtonFor(m => m.idStatusPedido, Convert.ToInt32(StatusPedidoConst.CANCELADO))
+                Cancelar Pedido
+            </div>
+        </div>
+        <div class="clearfix"></div><br />
+
+        <div class="col-md-6">
+            <label>Observações</label>
+            @Html.TextAreaFor(m => m.observacoes, new { @class = "form-control input-sm", rows = "4" })
+            @Html.ValidationMessageFor(m => m.observacoes)
+        </div>
+        <div class="col-md-1" style="padding-top:70px;">
+            <input type="submit" name="enviar" value="Salvar Ocorrência" class="btn btn-primary link-loading" />
+        </div>
+        <div class="clearfix"></div>
+        <br />
+    }
+
+</div>

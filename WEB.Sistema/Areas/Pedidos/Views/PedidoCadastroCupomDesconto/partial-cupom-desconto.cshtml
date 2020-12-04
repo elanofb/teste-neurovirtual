@@ -1,0 +1,18 @@
+﻿@model WEB.Areas.Pedidos.ViewModels.PedidoCadastroForm
+
+<table class="table table-bordered table-default">
+	<thead>
+		<tr role="row">
+			<th class="width-75">Cód.Item</th>
+            <th class="text-left">Cupom</th>
+			<th class="width-200 text-center">Valor Desconto</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>@Model.Pedido.idCupomDesconto</td>
+            <td>@Model.Pedido.CupomDesconto.codigo</td>
+			<td class="text-center"> @Model.Pedido.CupomDesconto.valorDesconto.ToString("C")</td>
+		</tr>
+	</tbody>
+</table>

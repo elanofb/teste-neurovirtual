@@ -1,0 +1,165 @@
+﻿@model WEB.Areas.Financeiro.ViewModels.BaixaPagamentoAbstract
+@using DAL.Financeiro
+@using WEB.Helpers
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="row">
+            <div class="col-sm-8">
+                @Html.spanFieldForm("Informe o valor do pagamento (sem juros)")<br />
+            </div>
+            <div class="col-sm-4">
+                @Html.TextBoxFor(m => m.TituloReceitaPagamento.valorRecebido, new {@class = "form-control input-sm", alt="decimal"})
+                @Html.ValidationMessageFor(m => m.TituloReceitaPagamento.valorRecebido)
+            </div>
+        </div>
+
+        @*<hr class="no-margin-bottom margin-top-5" />
+        
+        <div class="row margin-top-10">
+            <div class="col-sm-8">
+                @Html.spanFieldForm("Juros/multa por atraso (se houver)")<br />
+                @Html.instrucao("Este valor será somado ao valor do pagamento")
+            </div>
+            <div class="col-sm-4">
+                @Html.TextBoxFor(m => m.TituloReceitaPagamento.valorJuros, new { @class = "form-control input-sm", alt = "decimal" })
+                @Html.ValidationMessageFor(m => m.TituloReceitaPagamento.valorJuros)
+            </div>
+        </div>*@
+        
+        @*<hr class="no-margin-bottom margin-top-5" />
+        <div class="row margin-top-10">
+            <div class="col-sm-8">
+                @Html.spanFieldForm("Tarifas bancárias")<br />
+                @Html.instrucao("Taxas cobradas por banco/adquirente")
+            </div>
+            <div class="col-sm-4">
+                @Html.TextBoxFor(m => m.TituloReceitaPagamento.valorTarifasBancarias, new {@class = "form-control input-sm", alt = "decimal"})
+                @Html.ValidationMessageFor(m => m.TituloReceitaPagamento.valorTarifasBancarias)
+            </div>
+        </div>*@
+        
+        <hr class="no-margin-bottom margin-top-5" />
+        <div class="row margin-top-10">
+            <div class="col-sm-8">
+                @Html.spanFieldForm("Data do Pagamento")
+            </div>
+            <div class="col-sm-4">
+                @Html.TextBoxFor(m => m.TituloReceitaPagamento.dtPagamento, new{ @class="form-control input-sm input-datepicker", autocomplete="off", alt="date"})
+                @Html.ValidationMessageFor(m => m.TituloReceitaPagamento.dtPagamento)
+            </div>
+        </div>		
+        
+        @*<hr class="no-margin-bottom margin-top-5" />
+        <div class="row margin-top-10">
+            <div class="col-sm-8">
+                @Html.spanFieldForm("Data do Crédito")<br />
+                @Html.instrucao("Data em que o recurso ficará disponível para a entidade")
+            </div>
+            <div class="col-sm-4">
+                @Html.TextBoxFor(m => m.TituloReceitaPagamento.dtCredito, new { @class = "form-control input-sm input-datepicker", autocomplete="off", alt = "date" })
+                @Html.ValidationMessageFor(m => m.TituloReceitaPagamento.dtCredito)
+            </div>
+        </div>			 *@       
+    </div>
+    <div class="col-sm-6">
+        <div class="row">
+            <div class="col-sm-6">
+                @Html.spanFieldForm("Informe o meio de pagamento")
+            </div>
+            <div class="col-sm-6">
+                @Html.DropDownListFor(m => m.TituloReceitaPagamento.idMeioPagamento, MeioPagamentoHelper.getInstance.selectList(Model.TituloReceitaPagamento.idMeioPagamento, true, new int[]{MeioPagamentoConst.DESCONTO_INTEGRAL}), "...", new { @class = "form-control input-sm", id = "idMeioPagamento", onchange = "ReceitaRegistrarPagamento.showCamposAdicionais(this)" })
+                @Html.ValidationMessageFor(m => m.TituloReceitaPagamento.idMeioPagamento)
+            </div>
+        </div>
+        
+        @*<hr class="no-margin-bottom margin-top-5 dados-cartao nao-exibir" />
+        <div class="row margin-top-10 dados-cartao nao-exibir margin-top-10">
+            <div class="col-sm-6">
+                @Html.spanFieldForm("Bandeira do cartão")
+            </div>
+            <div class="col-sm-6">
+                @Html.DropDownListFor(m => m.TituloReceitaPagamento.idFormaPagamento, FormaPagamentoHelper.selectList(Model.TituloReceitaPagamento.idFormaPagamento), "...", new {@class = "form-control input-sm"})
+                @Html.ValidationMessageFor(m => m.TituloReceitaPagamento.idFormaPagamento)
+            </div>
+        </div>
+        
+        <hr class="no-margin-bottom margin-top-5 dados-cartao nao-exibir" />
+        <div class="row margin-top-10 dados-cartao nao-exibir margin-top-10">
+            <div class="col-sm-6">
+                @Html.spanFieldForm("Código de autorização")
+            </div>
+            <div class="col-sm-6">
+                @Html.TextBoxFor(m => m.TituloReceitaPagamento.codigoAutorizacao, new {@class = "form-control input-sm", maxlength = "20"})
+                @Html.ValidationMessageFor(m => m.TituloReceitaPagamento.codigoAutorizacao)
+            </div>
+        </div>*@
+        
+        <div class="row margin-top-10 dados-cheque nao-exibir">
+            <div class="col-sm-12">
+                <hr class="no-margin-bottom margin-top-5" />
+                <div class="row margin-top-10">
+                    <div class="col-sm-8">
+                        @Html.spanFieldForm("Número do Banco")
+                    </div>
+                    <div class="col-sm-4">
+                        @Html.TextBoxFor(m => m.TituloReceitaPagamento.nroBanco, new {@class = "form-control input-sm"})
+                        @Html.ValidationMessageFor(m => m.TituloReceitaPagamento.nroBanco)
+                    </div>
+                </div>
+                <hr class="no-margin-bottom margin-top-5" />
+                <div class="row margin-top-10">
+                    <div class="col-sm-8">
+                        @Html.spanFieldForm("Número da Agência")
+                    </div>
+                    <div class="col-sm-4">
+                        @Html.TextBoxFor(m => m.TituloReceitaPagamento.nroAgencia, new {@class = "form-control input-sm", maxlength = "10"})
+                        @Html.ValidationMessageFor(m => m.TituloReceitaPagamento.nroAgencia)
+                    </div>
+                </div>
+                <hr class="no-margin-bottom margin-top-5" />
+                <div class="row margin-top-10">
+                    <div class="col-sm-8">
+                        @Html.spanFieldForm("Dígito da Agência (se houver)")
+                    </div>
+                    <div class="col-sm-4">
+                        @Html.TextBoxFor(m => m.TituloReceitaPagamento.nroDigitoAgencia, new {@class = "form-control input-sm", maxlength = "5"})
+                        @Html.ValidationMessageFor(m => m.TituloReceitaPagamento.nroDigitoAgencia)
+                    </div>
+                </div>
+                <hr class="no-margin-bottom margin-top-5" />
+                <div class="row margin-top-10">
+                    <div class="col-sm-8">
+                        @Html.spanFieldForm("Número da Conta")
+                    </div>
+                    <div class="col-sm-4">
+                        @Html.TextBoxFor(m => m.TituloReceitaPagamento.nroConta, new {@class = "form-control input-sm", maxlength = "20"})
+                        @Html.ValidationMessageFor(m => m.TituloReceitaPagamento.nroConta)
+                    </div>
+                </div>
+                <hr class="no-margin-bottom margin-top-5" />
+                <div class="row margin-top-10">
+                    <div class="col-sm-8">
+                        @Html.spanFieldForm("Dígito da Conta")
+                    </div>
+                    <div class="col-sm-4">
+                        @Html.TextBoxFor(m => m.TituloReceitaPagamento.nroDigitoConta, new {@class = "form-control input-sm", maxlength = "5"})
+                        @Html.ValidationMessageFor(m => m.TituloReceitaPagamento.nroDigitoConta)
+                    </div>
+                </div>
+            </div>
+        </div>			        
+        
+        <hr class="no-margin-bottom margin-top-5 dados-documento nao-exibir" />
+        <div class="row margin-top-10 dados-documento nao-exibir">
+            <div class="col-sm-6">
+                @Html.spanFieldForm("Documento", "label-documento fs-12")
+            </div>
+            <div class="col-sm-6">
+                @Html.TextBoxFor(m => m.TituloReceitaPagamento.nroDocumento, new {@class = "form-control input-sm", maxlength = "20"})
+                @Html.ValidationMessageFor(m => m.TituloReceitaPagamento.nroDocumento)
+            </div>
+        </div>
+        <hr class="no-margin-bottom margin-top-5" />
+    </div>
+</div>

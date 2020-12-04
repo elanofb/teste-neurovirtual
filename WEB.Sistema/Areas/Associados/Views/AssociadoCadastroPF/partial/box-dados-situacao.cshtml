@@ -1,0 +1,90 @@
+﻿@model Associado
+@using DAL.Associados
+
+@{ var urlAprovarDocumentos = Url.Action("aprovacao-documentos", "AssociadoAprovacaoDocumentos", new {area = "Associados", idAssociado = Model.id}); }
+<div>
+    @exibirLabelStatus()
+</div>
+<div>
+    @exibirLabelAprovacaoDocumentos()
+</div>
+<div>
+
+    <button aria-expanded="false" aria-haspopup="true" class="btn btn-default btn-white-sm dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" type="button">
+        Ações
+        <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu">
+        @*<li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0)" onclick="DefaultSistema.showModal('@Url.Action("modal-envio-cadastro-por-email", "associadoacao", new {idAssociado = Model.id})');"><i class="fa fa-envelope"></i> Enviar Cadastro</a></li>*@
+        
+        <li role="presentation">
+            <a role="menuitem" tabindex="-1" href="javascript:void(0)" onclick="AssociadoEnvioLinkRecuperacaoSenha.enviarParaSelecionados('@Model.id');">
+                <i class="fa fa-key"></i> Reenviar Senha
+            </a>
+        </li>
+
+        <li role="presentation">
+            <a role="menuitem" tabindex="-1" href="javascript:void(0)" onclick="AssociadoEnvioLinkRecuperacaoSenhaTransacao.enviarParaSelecionados('@Model.id');">
+                <i class="fa fa-key"></i> Reenviar Senha de Transação
+            </a>
+        </li>
+
+        @if (Model.ativo == "N"
+             || Model.ativo == null) {
+            <li role="presentation">
+                <a role="menuitem" tabindex="-1" href="javascript:void(0)" onclick="AssociadoReativacao.reativarAssociado('@Model.id')">
+                    <i class="fa fa-check"></i>
+                    Reativar Membro
+                </a>
+            </li>
+        }
+        else {
+            <li role="presentation">
+                <a role="menuitem" tabindex="-1" href="javascript:void(0)" onclick="AssociadoDesativacao.desativarAssociado('@Model.id');">
+                    <i class="fa fa-times"></i>
+                    Desativar Membro
+                </a>
+            </li>
+        }
+        <li role="presentation">
+            <a role="menuitem" tabindex="-1" href="javascript:void(0)" onclick="AssociadoExclusao.excluirAssociado('@Model.id');">
+                <i class="fa fa-user-times"></i>
+                Desligar Membro
+            </a>
+        </li>
+
+        <li role="presentation">
+            <a role="menuitem" tabindex="-1" href="javascript:void(0)" onclick="AssociadoAprovacaoDocumentos.aprovarDocumentos(this)" data-url="@urlAprovarDocumentos">
+                <i class="fa-file-alt far"></i>
+                @if (Model.dtAprovacaoDocumento.isEmpty()) {
+                    <span>Aprovar documentos</span>
+                }
+                else {
+                    <span>Desfazer Aprovação</span>
+                }
+            </a>
+        </li>
+
+    </ul>
+</div>
+
+@helper exibirLabelStatus() {
+    if (Model.ativo == "S") {
+        @Html.boxInfo("ATIVO", "bg-blue text-center")
+    }
+    else if (Model.ativo == "E") {
+        @Html.boxInfo("EM ADMISSÃO", "bg-yellow text-center")
+    }
+    else {
+        @Html.boxInfo("DESATIVADO", "bg-red text-center")
+    }
+}
+
+@helper exibirLabelAprovacaoDocumentos() {
+    if (Model.dtAprovacaoDocumento.isEmpty()) {
+        @Html.boxInfo("Documentos não avaliados", "bg-red text-center")
+    }
+    else {
+        @Html.boxInfo("Documentos Aprovados", "bg-blue text-center")
+    }
+}

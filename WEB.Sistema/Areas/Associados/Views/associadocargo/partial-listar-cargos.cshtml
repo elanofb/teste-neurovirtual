@@ -1,0 +1,41 @@
+﻿@model List<DAL.Associados.AssociadoCargo>
+@using DAL.Associados;
+
+<br />
+<div class="text-left">
+	<button class="btn bg-yellow">
+		<i class="far fa-chart-bar"></i> <strong>@Model.Count</strong> cargos(s) cadatrado(s) para o associado
+	</button>
+</div><br />
+<table border="0" cellpadding="0" cellspacing="0" class="table table-bordered table-striped">
+    <tr>
+        <th class="text-center">Associado</th>
+        <th class="text-center">Cargo</th>
+        <th class="text-center width-120">Início Gestão</th>
+        <th class="text-center width-120">Fim Gestão</th>
+        <th class="text-center width-125">Cadastro</th>
+        <th>&nbsp;</th>
+    </tr>
+    @if(Model.Count > 0) {
+        foreach(AssociadoCargo OCargo in Model) {
+            <tr>
+                <td>@OCargo.Associado.Pessoa.nome</td>
+                <td class="text-center">@OCargo.Cargo.descricao</td>
+                <td class="text-center">@OCargo.inicioGestao</td>
+				<td class="text-center">@OCargo.fimGestao</td>
+                <td class="text-center">@OCargo.dtCadastro</td>
+                <td class="text-center">
+                    <a href="javascript:void(0);" onclick="DefaultSistema.carregarConteudo(this);" data-url="@Url.Action("editar", "associadocargo", new{area="associados", id=OCargo.id})" data-target="boxFormAssociadoCargo" title="Editar Cargo" data-toggle="tooltip">
+                        <i class="fa fa-edit"></i>
+                    </a> &nbsp;
+					@Html.linkAjaxExcluir(OCargo.id, "N", Url.Action("excluir", "associadocargo", new { area = "associados" }))
+                </td>
+            </tr>
+        }
+
+    } else {
+        <tr>
+            <td class="text-center" colspan="6">Nenhum cargo cadastrado para esse associado.</td>
+        </tr>
+    }
+</table>

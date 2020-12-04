@@ -1,0 +1,60 @@
+﻿@model WEB.Areas.Permissao.ViewModels.LoginVM
+
+@using BLL.Configuracoes
+@using MvcFlashMessages
+
+@{
+    ViewBag.Title = "index";
+
+    if (IsPost) {
+        Layout = null;
+    } else {
+        Layout = "~/Areas/Permissao/Views/shared/_masterpage-login.cshtml";
+    }
+
+    string idBox = "boxLogin";
+}
+
+@section styles {
+
+    @if (Model.OConfigSistema.flagBgLoginCustomizado == true) {
+        <style type="text/css">
+            .bg_body { background-image: url(@ConfiguracaoImagemBL.linkImagemOrganizacao(0, ConfiguracaoImagemBL.IMAGEM_BG_LOGIN)) !important; }
+        </style>
+    }
+
+    <style type="text/css">
+        @Model.OConfigSistema.cssCustomizadoLogin
+    </style>
+
+}
+
+<div id="@(IsPost ? "" : idBox)">
+
+    @using (Ajax.BeginForm("index", "login", new AjaxOptions { HttpMethod = "POST", InsertionMode = InsertionMode.Replace, UpdateTargetId = idBox, OnBegin = "Login.onBeginForm", OnSuccess = "Login.onSuccessForm" }, new { @class = "cadastro" })) {
+        { Html.EnableClientValidation(false); }
+        @Html.HiddenFor(x => x.returnUrl)
+        @Html.HiddenFor(x => x.LogUsuariosistemaAcesso.latitude, new { id = "latitude" })
+        @Html.HiddenFor(x => x.LogUsuariosistemaAcesso.longitude, new { id = "longitude" })
+
+        @Html.RenderFlash()
+
+        <div class="form-group">
+            <label class="control-label">Login</label>
+            @Html.TextBoxFor(m => m.login, new { @class = "form-control", autocomplete = "off", placeholder = "Login" })
+            @Html.ValidationMessageFor(m => m.login)
+        </div>
+
+        <div class="form-group">
+            <label class="control-label">Senha</label>
+            @Html.PasswordFor(m => m.senha, new { @class = "form-control", autocomplete = "off", placeholder = "Senha" })
+            @Html.ValidationMessageFor(m => m.senha)
+        </div><br />
+
+        <a href="@Url.Action("recuperar-senha", "login")">Esqueci minha senha!</a>
+
+        <br /><br />
+        <button type="submit" class="btn btn-block btn-primary link-loading">ENTRAR</button>
+        <br />
+    }
+</div>

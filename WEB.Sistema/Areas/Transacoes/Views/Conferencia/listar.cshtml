@@ -1,0 +1,74 @@
+﻿@model PagedList.IPagedList<DAL.Transacoes.ConferenciaSaldoVW>
+@using MvcFlashMessages
+@using PagedList.Mvc
+
+@{
+    ViewBag.titlePage = "Conferência entre saldo atual e histórico de movimentações";
+}
+
+@section scripts {
+}
+
+@Html.RenderFlash()
+
+<div class="box box-primary">
+
+    @Html.headerBox("Resultados", "fa fa-list")
+
+    <div class="box-body" id="box-usuarios">
+        
+        <p class="text-right">
+            <a href="@Url.Action("atualizar-tudo")" class="btn btn-sm btn-primary">Sincronizar tudo <em>(máximo 1.000)</em></a>
+        </p>
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr role="row">
+                    <th>Usuário</th>
+                    <th>Débitos</th>
+                    <th>Créditos</th>
+                    <th>Saldo Atual</th>
+                    <th>Diferença</th>
+                    <th class="width-100">-</th>
+                </tr>
+            </thead>
+            <tbody>
+            
+            @if (!Model.Any()){
+                <tr>
+                    <td class="text-center" colspan="5">Nenhum registro inconsistente encontrado</td>
+                </tr>
+            }
+            
+            @foreach (var Item in Model){
+                <tr>
+                    <td>
+                        <a href="@Url.Action("editar", "AssociadoCadastro", new {area = "Associados", id = Item.idMembro})" target="_blank"><i class="far fa-hashtag"></i> @Item.nroMembro</a>
+                    </td>
+                    <td>
+                        <span>@Item.valorDebitos.ToString("N4")</span>
+                    </td>
+                    <td>
+                        <span>@Item.valorCreditos.ToString("N4")</span>
+                    </td>
+                    <td>
+                        <span>@Item.valorSaldoAtual.ToString("N4")</span>
+                    </td>
+                    <td>
+                        <span>@(decimal.Subtract(Item.valorSaldoMovimento, Item.valorSaldoAtual).ToString("N4"))</span>
+                    </td>
+                    <td>
+                        <a href="@Url.Action("atualizar", new{ Item.idMembro })">
+                            <i class="fa fa-sync"></i> 
+                        </a>
+                    </td>
+                </tr>
+            }
+            
+            </tbody>
+        </table>
+
+        @(Html.paginarRegistros(Model, Html.PagedListPager(Model, nroPagina => UtilRequest.linkPaginacao(nroPagina, "listar"), PagedListRenderOptions.OnlyShowFivePagesAtATime)))
+
+    </div>
+
+</div>

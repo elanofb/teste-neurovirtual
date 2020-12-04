@@ -1,0 +1,137 @@
+﻿@model WEB.Areas.Pedidos.ViewModels.PedidoProducaoVM
+
+@{
+	ViewBag.titlePage = "Produção de Pedidos";
+}
+
+@section scripts {
+
+	@Html.includeDatePicker()
+	@Html.includeBootstrapMultiselect()
+
+    <script src="@UtilConfig.linkResourses("js/associatec/plugins/knob/jquery.knob.js")"></script>
+	<script src="@UtilConfig.linkResourses("Areas/Pedidos/js/pedido-producao.js")"></script>
+	<script src="@UtilConfig.linkResourses("Areas/Pedidos/js/pedido-movimentacao.js")"></script>    
+}
+
+@section styles{
+    <link href="@UtilConfig.linkResourses("css/associatec/list-custom.css")" rel="stylesheet" />
+}
+
+<span class="badge bg-aqua"><i class="fa fa-info-circle"></i> Você está visualizando somente pedidos com pagamentos confirmados ou cujo pagamento será na entrega.</span>
+<div class="box box-primary">
+
+	<div class="box-header with-border">
+		<h3 class="box-title fs-14 text-bold"><i class="fa fa-filter"></i> Filtros de Busca</h3>
+		<div class="box-tools pull-right">
+			<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="far fa-minus"></i></button>
+			<div class="clearfix"></div>
+		</div>
+	</div>
+
+	<div class="box-body">
+
+		<div class="row">
+
+			@using (Html.BeginForm(null, null, FormMethod.Get, new { id = "formFiltros" })) {
+
+				<div class="col-md-4 col-sm-6">
+					<label>Prazo de Entrega</label>
+					<div class="input-group">
+						@Html.TextBox("dtPrazoInicio", UtilRequest.getString("dtPrazoInicio"), new { @class = "form-control input-sm input-datepicker", alt = "date" })
+						<span class="input-group-addon">-</span>
+						@Html.TextBox("dtPrazoFim", UtilRequest.getString("dtPrazoFim"), new { @class = "form-control input-sm input-datepicker", alt = "date" })
+					</div>
+				</div>
+
+				<div class="col-md-3 col-sm-6">
+					<label>Status</label>
+					@Html.ListBox("idsStatusPedido", StatusPedidoHelper.getInstance.selectMultiListProducao(UtilRequest.getListInt("idsStatusPedido")), new { @class = "form-control input-sm input-multiselect" })
+				</div>
+
+				<div class="form-group col-md-4">
+					<label>Buscar</label>
+					@Html.buttonSearch(UtilRequest.getString("valorBusca"), "", "link-loading")
+				</div>
+			}
+		</div>
+	</div>
+</div>
+
+<div class="box box-primary">
+	<div class="box-header with-border">
+		<h3 class="box-title fs-14 text-bold"><i class="far fa-chart-bar"></i> Resumo dos Pedidos</h3>
+		<div class="box-tools pull-right">
+			<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="far fa-minus"></i></button>
+			<div class="clearfix"></div>
+		</div>
+	</div>
+
+	<div class="box-body margin-bottom-10 margin-top-10" id="boxResumoPedidos">
+		@{Html.RenderPartial("partial-resumo-pedidos", Model);}
+	</div>
+</div>
+
+<div class="box box-primary">
+	<div class="box-header with-border">
+		<h3 class="box-title fs-14 text-bold"><i class="far fa-chart-bar"></i> Demanda de Produtos</h3>
+		<div class="box-tools pull-right">
+			<div class="dropdown pull-left margin-right-15 margin-top-5">
+				<a href="javascript:;" class="dropdown-toggle text-black" type="button" data-toggle="dropdown">
+					<i class="fa fa-cog"></i>
+				</a>
+				<ul class="dropdown-menu dropdown-menu-right">
+					
+					<li>
+						<a href="javascript:;" onclick="PedidoProducao.imprimir(this)" data-url="@Url.Action("imprimir-produtos", "PedidoProducao")"><i class="fa fa-print"></i> Imprimir Relação de Produtos</a>
+					</li>
+					
+					<li>
+						<a href="javascript:;" onclick="PedidoProducao.imprimir(this)" data-url="@Url.Action("Index", "EtiquetaProduto", new { Area = "Etiquetas" })"><i class="fa fa-print"></i> Imprimir Etiquetas</a>
+					</li>
+					
+				</ul>
+			</div>
+			<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="far fa-minus"></i></button>
+			<div class="clearfix"></div>
+		</div>
+	</div>
+
+	<div class="box-body" id="boxResumoProdutos">
+		@{Html.RenderPartial("partial-resumo-produtos", Model);}
+	</div>
+</div>
+
+<div class="box box-primary">
+	<div class="box-header with-border">
+		<h3 class="box-title fs-14 text-bold"><i class="fa fa-list"></i> Relação de Pedidos: <small>@Model.listaPedidos.TotalItemCount pedidos encontrados.</small></h3>
+		<div class="box-tools pull-right">
+			<div class="dropdown pull-left margin-right-15 margin-top-5">
+				<a href="javascript:;" class="dropdown-toggle text-black" type="button" data-toggle="dropdown">
+					<i class="fa fa-cog"></i>
+				</a>
+				<ul class="dropdown-menu dropdown-menu-right">
+					<li>
+						<a href="javascript:;" onclick="PedidoProducao.imprimir(this)" data-url="@Url.Action("imprimir", "PedidoProducao")" class=""><i class="fa fa-print"></i> Imprimir Pedidos</a>
+					</li>
+					<li>
+						<a href="javascript:;" onclick="PedidoMovimentacao.showModalMovimentacao(this)" data-url="@Url.Action("modal-selecionar-pedidos", "MovimentacaoPedido")" class=""><i class="fas fa-arrows-alt"></i> Movimentar Pedidos</a>
+					</li>
+					<li>
+						<a href="javascript:;" onclick="PedidoMovimentacao.showModalMovimentacao(this)" data-url="@Url.Action("modal-selecionar-pedidos", "MovimentacaoPedido", new { flagTodos = true })" class=""><i class="fas fa-arrows-alt"></i> Movimentar Todos</a>
+					</li>
+				</ul>
+			</div>
+			<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="far fa-minus"></i></button>
+			<div class="clearfix"></div>
+		</div>
+	</div>
+	
+	<div class="box-body">
+		<div class="col-lg-12 col-sm-12 no-padding">
+			<div id="boxListaPedidosTodos">
+				@{ Html.RenderPartial("partial-lista", Model); }
+			</div>
+		</div>
+	</div>
+</div>

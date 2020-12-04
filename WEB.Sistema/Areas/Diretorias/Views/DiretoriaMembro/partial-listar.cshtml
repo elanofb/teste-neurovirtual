@@ -1,0 +1,71 @@
+﻿@model List<DiretoriaMembro>
+@using DAL.Diretorias
+@using WEB.Areas.Arquivos.Extensions
+@using WEB.Helpers
+
+@if (!Model.Any()) {
+    <div class="col-sm-12">
+        <div class="alert alert-info">
+            Nenhum membro foi encontrado.
+        </div>
+    </div>
+}
+
+@foreach (var ODiretoriaMembro in Model) {
+
+    <div class="box-info-item">
+
+        <div class="row">
+
+            <div class="col-md-1">
+                <img src="~/@ODiretoriaMembro.Arquivo.srcImg()" class="img-responsive center-block"/>
+            </div>
+
+            <div class="col-md-4 col-sm-3 col-xs-4">
+
+                <span data-toggle="tooltip" title="Nome"><i class="fa fa-user"></i> @ODiretoriaMembro.nomeMembro.abreviar(30, "").ToUpper()<br /></span>
+
+                <span data-toggle="tooltip" title="Cargo">@(ODiretoriaMembro.Cargo?.descricao)</span>
+
+            </div>
+
+            <div class="col-md-2 col-sm-3 col-xs-3">
+                <span data-toggle="tooltip" title="Documento">
+                    <i class="fa fa-id-card"></i> @UtilString.formatCPFCNPJ(ODiretoriaMembro.nroDocumentoMembro)
+                </span>
+
+                <span data-toggle="tooltip" title="Data de Cadastro" class="visible-sm visible-xs">
+                    <i class="fa fa-calendar"></i> @ODiretoriaMembro.dtCadastro.exibirData(true)
+                </span>
+            </div>
+
+            <div class="col-md-2 hidden-sm hidden-xs">
+                <span data-toggle="tooltip" title="Data de Cadastro">
+                    <i class="fa fa-calendar"></i> @ODiretoriaMembro.dtCadastro.exibirData(true)
+                </span>
+            </div>
+
+            <div class="col-md-3 col-sm-3 text-right">
+
+                <div class="dropdown">
+                    <a href="javascript:;" class="dropdown-toggle" type="button" data-toggle="dropdown">
+                        Ações
+                        <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-right">
+                        <li><a href="javascript:void(0);" onclick="DiretoriaMembro.modalMembro(this)" data-url="@Url.Action("modal-editar", "DiretoriaMembro", new {area = "Diretorias", id = ODiretoriaMembro.id, idDiretoria = ODiretoriaMembro.idDiretoria})" data-toggle="tooltip"><i class="fa fa-edit"></i> Editar Membro</a></li>
+                        <li><a href="javascript:void(0);" onclick="DiretoriaMembro.delete(this)" data-id="@ODiretoriaMembro.id" data-url="@Url.Action("excluir", "DiretoriaMembro", new {area = "Diretorias", id = ODiretoriaMembro.id})" title="Excluir Registro"><i class="fa fa-trash"></i> Excluir Membro</a></li>
+                    </ul>
+                </div>
+
+
+            </div>
+
+            <div class="clearfix"></div>
+
+
+        </div>
+
+    </div>
+
+}

@@ -1,0 +1,118 @@
+﻿@model WEB.Areas.Associacoes.ViewModels.AssociacaoForm
+@using DAL.Entities
+@using WEB.Areas.Associacoes.Helpers
+@using WEB.Helpers
+
+@using (Html.BeginForm("editar", null, FormMethod.Post, new { enctype = "multipart/form-data", role = "form", @class = "default", })) {
+
+    @Html.ValidationSummary(true, "Erro. Não foi possível concluir a operação, verifique os campos.")
+        
+    @Html.HiddenFor(m => m.Associacao.id)
+
+    <div class="form-horizontal">
+
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <h4 class="separator-form-icon"><i class="far fa-edit"></i> Dados Principais</h4>
+
+            <div class="col-sm-4">
+                @Html.labelRequired("CNPJ")
+                @Html.TextBoxFor(m => m.Associacao.Pessoa.nroDocumento, new {@class = "form-control input-sm", alt = "cnpj"})
+                @Html.ValidationMessageFor(m => m.Associacao.Pessoa.nroDocumento)
+            </div>
+
+            <div class="col-sm-4">
+                <label>Organização Gestora</label>
+                @Html.DropDownListFor(m => m.Associacao.idOrganizacaoGestora, AssociacaoHelper.getInstance.selectListOrganizacaoGestora(Model.Associacao.idOrganizacaoGestora, null, Model.Associacao.id), "...", new { @class = "form-control input-sm select2" })
+                @Html.ValidationMessageFor(m => m.Associacao.idOrganizacaoGestora)
+            </div>
+            
+            <div class="col-sm-2">
+                <label>Status</label>
+                @Html.DropDownListFor(m => m.Associacao.idStatusOrganizacao, StatusAssociacaoHelper.getInstance.selectList(Model.Associacao.idStatusOrganizacao), "...", new { @class = "form-control input-sm"})
+                @Html.ValidationMessageFor(m => m.Associacao.idStatusOrganizacao)
+            </div>
+
+            <div class="clearfix"></div>
+
+            <div class="col-sm-4">
+                @Html.labelRequired("Nome Fantasia")
+                @Html.TextBoxFor(m => m.Associacao.Pessoa.nome, new {@class = "form-control input-sm", alt = ""})
+                @Html.ValidationMessageFor(m => m.Associacao.Pessoa.nome)
+            </div>
+            <div class="col-sm-4">
+                <label>Razão Social</label>
+                @Html.TextBoxFor(m => m.Associacao.Pessoa.razaoSocial, new {@class = "form-control input-sm", alt = ""})
+                @Html.ValidationMessageFor(m => m.Associacao.Pessoa.razaoSocial)
+            </div>
+
+            <div class="col-sm-2">
+                <label>Inscrição Estadual</label>
+                @Html.TextBoxFor(m => m.Associacao.Pessoa.inscricaoEstadual, new {@class = "form-control input-sm", alt = ""})
+                @Html.ValidationMessageFor(m => m.Associacao.Pessoa.inscricaoEstadual)
+            </div>
+            <div class="col-sm-2">
+                <label>Inscrição Municipal</label>
+                @Html.TextBoxFor(m => m.Associacao.Pessoa.inscricaoMunicipal, new {@class = "form-control input-sm", alt = ""})
+                @Html.ValidationMessageFor(m => m.Associacao.Pessoa.inscricaoMunicipal)
+            </div>
+
+            <div class="clearfix"></div>
+
+            <div class="col-sm-4">
+                <label>E-mail</label>
+                @Html.TextBoxFor(m => m.Associacao.Pessoa.emailPrincipal, new { @class = "form-control input-sm", alt = "" })
+                @Html.ValidationMessageFor(m => m.Associacao.Pessoa.emailPrincipal)
+            </div>
+            <div class="col-sm-4">
+                <label>Site</label>
+                @Html.TextBoxFor(m => m.Associacao.Pessoa.enderecoWeb, new { @class = "form-control input-sm", alt = "" })
+                @Html.ValidationMessageFor(m => m.Associacao.Pessoa.enderecoWeb)
+            </div>
+
+            <div class="clear"></div>
+
+        </div>
+
+        <div class="clearfix"></div>
+
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <h4 class="separator-form-icon"><i class="far fa-edit"></i> Informações de Contato</h4>
+            <div class="col-md-3">
+                <label>Fone Principal</label>
+                @Html.TextBoxFor(m => m.Associacao.Pessoa.nroTelPrincipal, new { @class = "form-control input-sm", placeholder = "Fone", maxlength = "20" })
+                @Html.ValidationMessageFor(m => m.Associacao.Pessoa.nroTelPrincipal)
+            </div>
+            <div class="col-md-3">
+                <label>Fone Secundário</label>
+                @Html.TextBoxFor(m => m.Associacao.Pessoa.nroTelSecundario, new { @class = "form-control input-sm", placeholder = "Fone", maxlength = "20" })
+                @Html.ValidationMessageFor(m => m.Associacao.Pessoa.nroTelSecundario)
+            </div>
+        </div>
+        
+        <div class="clearfix"></div>
+
+        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+            <h4 class="separator-form-icon"><i class="far fa-edit"></i> Endereço</h4>
+            @{ Html.RenderPartial("partial-form-endereco", Model); }
+        </div>
+
+        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+            <h4 class="separator-form-icon"><i class="far fa-edit"></i> Logotipo</h4>
+            <div class="col-md-12">
+                <div class="content-load carregando" id="boxArquivosListar" data-url="@Url.Action("partial-lista-fotos", "ArquivoFoto",new { Area = "Arquivos",  entidade = EntityTypes.ORGANIZACAO, idReferencia = Model.Associacao.id } )"></div>
+            </div>
+
+            <div class="col-md-12">
+                @Html.inputFileSimples("Logotipo")
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <br />
+
+    <div class="col-sm-12">
+        <p class="text-right bt-form">
+            @Html.exibirBotoesFormulario(Url.Action("listar"), "N")
+        </p>
+    </div>
+    }

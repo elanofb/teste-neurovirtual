@@ -1,0 +1,82 @@
+﻿@model WEB.Areas.Contribuicoes.ViewModels.ContribuicaoTabelaPrecoLista
+
+
+<div class="col-sm-12">
+    <div class="text-right">
+        <a class="btn btn-primary" href="javascript:void(0)" onclick="DefaultSistema.showModal('@Url.Action("modal-form-cadastro", "ContribuicaoTabelaPreco", new {idContribuicao = Model.Contribuicao.id})')" data-toggle="tooltip" title="Criar nova tabela de preços"><i class="fa fa-plus"></i> Nova Tabela</a>
+    </div>
+</div>
+<div class="clearfix"></div>
+
+<section class="margin-top-20">
+    <div class="col-lg-6 col-sm-12 col-xs-12">
+        @if (Model.TabelaPrecoVigente.id == 0) {
+            @exibirBoxNaoExisteTabela(true)
+        }
+
+        @if (Model.TabelaPrecoVigente.id > 0) {
+            <div id="boxTabelaPreco" data-url="@Url.Action("partial-detalhe-tabela", new {idTabelaPreco = Model.TabelaPrecoVigente.id})">
+                @{ Html.RenderPartial("partial-detalhe-tabela", Model.TabelaPrecoVigente); }
+            </div>
+        }
+    </div>
+    <div class="col-lg-6 col-sm-12">
+        <h4 class="separator-form no-margin-top">Outras Tabelas de Preço</h4>
+        <div class="col-sm-12">
+            <table class="table dataTable table-striped">
+                <thead>
+                <tr>
+                    <th width="70">ID</th>
+                    <th>Tabela</th>
+                    <th>Início Vigência</th>
+                    <th>Qtde. Tipos</th>
+                    <th width="90">&nbsp;</th>
+                </tr>
+                </thead>
+                <tbody>
+                @if (!Model.listaTabelasAnteriores.Any()) {
+                    <tr>
+                        <td colspan="5" class="text-center">Nenhuma tabela adicional está configurada.</td>
+                    </tr>
+                }
+
+                @foreach (var Item in Model.listaTabelasAnteriores) {
+                    <tr class="@(Item.dtInicioVigencia > DateTime.Today ? "green" : "red")">
+                        <td>@Item.id</td>
+                        <td>@Item.descricao</td>
+                        <td class="text-center">@Item.dtInicioVigencia.exibirData()</td>
+                        <td class="text-center">@Item.listaPrecos.Count(x => x.flagExcluido == "N")</td>
+                        <td class="box-acoes">
+                            <a href="javascript:void(0)" onclick="DefaultSistema.showModal('@Url.Action("modal-tabela-preco-detalhe", new {idTabelaPreco = Item.id})')" data-toggle="tooltip" title="Ver os detalhes da tabela"><i class="fa fa-search"></i></a>
+                            <a href="javascript:void(0)" onclick="DefaultSistema.showModal('@Url.Action("modal-form-cadastro", new {Item.id})')" data-toggle="tooltip" title="Editar dados da tabela de preços"><i class="fa fa-edit"></i></a>
+                            <a href="javascript:void(0)" onclick="ContribuicaoTabelaPreco.removerTabela(this)" data-id="@Item.id" data-toggle="tooltip" title="Ver os detalhes da tabela"><i class="fa fa-trash"></i></a>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table><br/>
+            <p class="text-right">
+                <button class="btn btn-sm bg-green">Programada</button>
+                <button class="btn btn-sm bg-red">Vencida</button>
+            </p>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="clearfix"></div>
+
+
+</section>
+<div class="clearfix"></div>
+
+@helper exibirBoxNaoExisteTabela(bool flagVigente) {
+    <div class="flash-messages">
+        <div class="flash-message flash-message-danger">
+            <strong>Atenção!</strong><br/>
+            @if (flagVigente) {
+                <span>Não há tabela de preços vigente para a contribuição / plano.</span>
+            } else {
+                <span>Não há tabela de preços vigente para a contribuição / plano.</span>
+            }
+        </div>
+    </div>
+}

@@ -1,0 +1,47 @@
+﻿@model WEB.Areas.Associados.ViewModels.TipoAssociadoForm
+
+@{
+	Layout = "~/views/shared/associatec/masterpage-edit.cshtml";
+	ViewBag.titlePage = "Tipo Associado";
+	ViewBag.subTitlePage = (Model.TipoAssociado.id == 0 ? " - Novo Registro" : Model.TipoAssociado.descricao);	
+}
+
+@section scripts {
+    @Html.includeFroalaEditorJS()
+    @Html.includeJqueryLoading()
+
+}
+
+@section styles{
+    @Html.Raw(Html.scripts().scriptFroala)
+    @Html.includeFroalaEditorCSS()
+}
+
+@section breadcrump{
+    <ol class="breadcrumb">
+        <li><a class="active fs-14" href="@(Url.Action("listar", new {Model.TipoAssociado.idOrganizacao}))"><i class="fa fa-arrow-left"></i> Voltar</a></li>
+    </ol>
+}
+
+@section navTabs{
+    <ul class="nav nav-tabs">
+        
+        <li class="active"><a href="#tab-1" data-toggle="tab">Principal</a></li>
+
+
+    </ul>
+}
+
+@section tabContent {
+
+    <div id="tab-1" class="tab-pane active">
+
+        @Html.infoCadastro(Model.TipoAssociado.id, Model.TipoAssociado.dtCadastro, Model.TipoAssociado.dtAlteracao)
+
+        @{Html.RenderPartial("partial-dados-principais");}
+
+    </div>
+    
+
+}
+

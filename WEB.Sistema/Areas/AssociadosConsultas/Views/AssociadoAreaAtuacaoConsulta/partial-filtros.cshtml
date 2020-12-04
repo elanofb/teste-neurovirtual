@@ -1,0 +1,49 @@
+﻿@model AssociadoAreaAtuacaoConsultaForm
+
+@using WEB.Areas.AssociadosConsultas.ViewModels
+@using WEB.Areas.Associados.Helpers
+
+@using (Html.BeginForm("consultar", null, FormMethod.Post, new { id = "fmFiltro" })) {
+
+    @Html.Hidden("nroPagina", "", new { id = "nroPagina" })
+    
+    <div class="col-md-3 col-xs-4">
+        <label>Tipo de Cadastro</label>
+        @Html.DropDownListFor(m => m.idTipoCadastro, AssociadoTipoCadastroHelper.getInstance.selectList(Model.idTipoCadastro), "Todos", new { @class = "form-control input-sm" })
+    </div>
+
+    <div class="col-md-3 col-xs-4">
+        <label>Tipo de Associado</label><br/>
+        @Html.ListBoxFor(m => m.idsTipoAssociado, TipoAssociadoHelper.getInstance.multiSelectList(Model.idsTipoAssociado), new {@class = "form-control input-sm input-multiselect", multiple = "multiple"})
+    </div>
+
+    <div class="col-md-3 col-xs-4">
+        <label>Áreas de Atuação</label><br/>
+        @Html.ListBoxFor(m => m.idsAreaAtuacao, AreaAtuacaoHelper.multiSelectList(Model.idsAreaAtuacao), new {@class = "form-control input-sm input-multiselect", multiple = "multiple"})
+    </div>
+    <div class="clearfix"></div>
+    
+    <div class="col-md-2 col-xs-6">
+        <label>Situação Financeira</label>
+        @Html.DropDownListFor(m => m.flagSituacaoContribuicao, SituacaoContribuicaoHelper.getSituacao(Model.flagSituacaoContribuicao), "Todas", new {@class = "form-control input-sm"})
+    </div>
+    
+    <div class="col-md-2 col-xs-6">
+        <label>Status</label>
+        @Html.DropDownListFor(m => m.ativo, AssociadoHelper.selectListAtivo(Model.ativo), "Todos", new {@class = "form-control input-sm"})
+    </div>
+    
+    <div class="col-md-2 col-xs-6">
+        <label>Tipo de Saída</label>
+        @Html.DropDownListFor(m => m.flagTipoSaida, TipoSaidaHelper.selectListTipoSaida(Model.flagTipoSaida), new {@class = "form-control input-sm"})
+    </div>
+    
+    <div class="col-md-3 col-xs-6">
+        <label>Buscar</label>
+        @Html.buttonSearch(UtilRequest.getString("valorBusca"))
+    </div>
+
+    <div class="clearfix"></div>
+            
+            
+}

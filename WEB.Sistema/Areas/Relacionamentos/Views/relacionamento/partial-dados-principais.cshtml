@@ -1,0 +1,33 @@
+﻿@model WEB.Areas.Relacionamentos.ViewModels.OcorrenciaRelacionamentoForm
+
+
+@using (Html.BeginForm("editar", null, FormMethod.Post, new { role = "form", @class = "default" })){
+	@Html.legendaRequired()<br />
+    @Html.ValidationSummary(false)
+	@Html.HiddenFor(m => m.OcorrenciaRelacionamento.id)
+    @Html.HiddenFor(m => m.OcorrenciaRelacionamento.dtCadastro)
+    @Html.HiddenFor(m => m.OcorrenciaRelacionamento.dtAlteracao)
+
+	<div class="form-horizontal">
+
+		<div class="col-md-6">
+            @Html.labelRequired("Título da Ocorrência")
+			@Html.TextBoxFor(m => m.OcorrenciaRelacionamento.descricao, new { @class = "form-control input-sm", maxlength = "100" })
+			@Html.ValidationMessageFor(m => m.OcorrenciaRelacionamento.descricao)
+		</div>
+
+		<div class="col-md-2">
+			<label>Status</label>
+			@Html.DropDownListFor(m => m.OcorrenciaRelacionamento.ativo, WEB.Helpers.ComboHelper.selectListStatus(Model.OcorrenciaRelacionamento.ativo), "...", new { @class = "form-control input-sm" })
+			@Html.ValidationMessageFor(m => m.OcorrenciaRelacionamento.ativo)
+		</div>
+		<div class="clearfix"></div>
+
+	</div>
+	<div class="clearfix"></div>
+	<br />
+	<div class="text-right">
+		@Html.exibirBotoesFormulario(Url.Action("listar"), Model.OcorrenciaRelacionamento.flagSistema)
+	</div>
+
+}

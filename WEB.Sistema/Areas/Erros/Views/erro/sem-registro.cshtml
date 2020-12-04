@@ -1,0 +1,19 @@
+﻿@model string
+@{
+    ViewBag.Title = "Ops, ocorreu um problema.";
+
+    if (Request.IsAjaxRequest()) {
+
+        Layout = "~/views/shared/associatec/masterpage-modal.cshtml";
+
+    }
+
+}
+
+<div>
+    <div class="alert text-center box">
+        <h4 class="fs-24"><i class="fa fa-frown-o"></i> Problemas ao processar</h4>
+        @Model
+    </div>
+</div>
+<div class="clearfix"></div>

@@ -1,0 +1,91 @@
+﻿@using MvcFlashMessages
+@using WEB.Areas.Pessoas.Helpers
+@model WEB.Areas.FinanceiroLancamentos.ViewModels.CredorCadastroForm
+
+@{
+    Layout = IsPost ? null : "~/views/shared/associatec/masterpage-modal.cshtml";
+
+    ViewBag.modalTitle = "Cadastrar Credor";
+}
+
+
+<div id="@(IsPost ? "" : "boxFormCredor")">
+
+    @Html.RenderFlash()
+
+    <div class="col-xs-12">
+        <div class="row">
+            @using (Ajax.BeginForm("salvar-modal-credor", null, new AjaxOptions { UpdateTargetId = "boxFormCredor", HttpMethod = "POST", OnSuccess = "Credor.onSuccess" }, new { role = "form", @class = "default" })) {
+                @Html.legendaRequired()
+                @Html.ValidationSummary(false)
+
+                @Html.HiddenFor(m => m.group)
+
+                <h4 class="separator-form-icon"><i class="far fa-edit"></i> Dados Principais do Credor</h4>
+                <div class="col-xs-4">
+                    <label>Pessoa Física ou Jurídica?</label>
+                    @Html.DropDownListFor(m => m.Credor.Pessoa.flagTipoPessoa, TipoPessoaHelper.selectList(Model.Credor.Pessoa.flagTipoPessoa), new { @class = "form-control input-sm", id = "tipoPessoa", onchange = "Credor.exibirDadosPessoa();" })
+                </div>
+                <div class="clearfix"></div>
+                
+                <div class="col-xs-6">
+                    @Html.labelRequired("Nome")
+                    @Html.TextBoxFor(x => x.Credor.Pessoa.nome, new { @class = "form-control input-sm", maxlength = "100" })
+                    @Html.ValidationMessageFor(x => x.Credor.Pessoa.nome)
+                </div>
+
+                <div class="col-xs-6 dado-pj">
+                    @Html.Label("Razão Social")
+                    @Html.TextBoxFor(x => x.Credor.Pessoa.razaoSocial, new { @class = "form-control input-sm", maxlength = "100" })
+                    @Html.ValidationMessageFor(x => x.Credor.Pessoa.razaoSocial)
+                </div>
+
+                <div class="col-xs-4">
+                    @Html.labelRequired("CNPJ", "info-documento")
+                    @Html.TextBoxFor(x => x.Credor.Pessoa.nroDocumento, new { @class = "form-control input-sm", maxlength = "18", alt = "cnpj" })
+                    @Html.ValidationMessageFor(x => x.Credor.Pessoa.nroDocumento)
+                </div>
+
+                <div class="col-xs-4 dado-pf">
+                    @Html.Label("RG")
+                    @Html.TextBoxFor(x => x.Credor.Pessoa.rg, new { @class = "form-control input-sm", maxlength = "20" })
+                    @Html.ValidationMessageFor(x => x.Credor.Pessoa.rg)
+                </div>
+
+                <div class="col-xs-4 dado-pj">
+                    @Html.Label("Inscrição Estadual")
+                    @Html.TextBoxFor(x => x.Credor.Pessoa.inscricaoEstadual, new { @class = "form-control input-sm", maxlength = "20" })
+                    @Html.ValidationMessageFor(x => x.Credor.Pessoa.inscricaoEstadual)
+                </div>
+
+                <div class="col-xs-4 dado-pj">
+                    @Html.Label("Inscrição Municipal")
+                    @Html.TextBoxFor(x => x.Credor.Pessoa.inscricaoMunicipal, new { @class = "form-control input-sm", maxlength = "20" })
+                    @Html.ValidationMessageFor(x => x.Credor.Pessoa.inscricaoMunicipal)
+                </div>
+                <div class="clearfix"></div>
+
+                <h4 class="separator-form-icon"><i class="far fa-edit"></i> Dados de contato</h4>
+                <div class="col-xs-6">
+                    @Html.Label("E-mail principal")
+                    @Html.TextBoxFor(x => x.Credor.Pessoa.emailPrincipal, new { @class = "form-control input-sm", maxlength = "100" })
+                    @Html.ValidationMessageFor(x => x.Credor.Pessoa.emailPrincipal)
+                </div>
+
+                <div class="col-xs-6">
+                    <label>1º Telefone</label>
+                    @Html.TextBoxFor(x => x.Credor.Pessoa.nroTelPrincipal, new { @class = "form-control input-sm", maxlength = "16", alt = "phone", placeholder = "Telefone" })
+                    @Html.ValidationMessageFor(x => x.Credor.Pessoa.nroTelPrincipal)
+                </div>
+                <div class="clearfix"></div><br />
+
+                <div class="text-right">
+                    <input type="submit" class="btn btn-primary link-loading" value="Salvar" />
+                </div>
+            }
+        </div>
+    </div>
+
+</div>
+<div class="clearfix"></div><br />
+

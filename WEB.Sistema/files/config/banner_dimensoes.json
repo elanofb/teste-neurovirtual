@@ -1,0 +1,15 @@
+﻿[
+  {
+    "posicao": "PRINCIPAL",
+    "flagValidar": "true",
+    "altura": 310,
+    "largura": 980
+  },
+  {
+    "posicao": "LATERAL",
+    "flagValidar": "false",
+    "altura": 310,
+    "largura": 980
+  }
+
+]

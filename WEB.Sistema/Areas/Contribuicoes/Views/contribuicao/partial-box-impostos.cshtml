@@ -1,0 +1,46 @@
+﻿@model WEB.Areas.Contribuicoes.ViewModels.ContribuicaoPadraoForm
+
+<div class="panel panel-info">
+    <div class="panel-heading">
+        <h3 class="panel-title fs-14">Configurações de Impostos</h3>
+    </div>
+    <div class="panel-body">
+        <div class="row">
+
+            <div class="col-md-6">
+                <label>Inserir Impostos?</label>
+                @Html.DropDownListFor(m => m.Contribuicao.flagConfigurarImpostos, ComboHelper.selectListTrueFalse(Model.Contribuicao.flagConfigurarImpostos), "...", new { @class = "form-control input-sm", id = "flagConfigurarImpostos", onChange = "ContribuicaoCadastro.listenFlagInserirImpostos()" })
+            </div>
+            <div class="clearfix"></div>
+
+            <div id="boxImpostos" class="@(Model.Contribuicao.flagConfigurarImpostos ?? false ? "" : "hide")">
+
+                <div class="col-md-3 col-sm-6">
+                    <label>% ICMS</label>
+                    @Html.TextBoxFor(m => m.Contribuicao.icms, new {@class = "form-control input-sm", @alt = "decimal"})
+                    @Html.ValidationMessageFor(m => m.Contribuicao.icms)
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <label>% PIS</label>
+                    @Html.TextBoxFor(m => m.Contribuicao.pis, new {@class = "form-control input-sm", @alt = "decimal"})
+                    @Html.ValidationMessageFor(m => m.Contribuicao.pis)
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <label>% COFINS</label>
+                    @Html.TextBoxFor(m => m.Contribuicao.cofins, new {@class = "form-control input-sm", @alt = "decimal"})
+                    @Html.ValidationMessageFor(m => m.Contribuicao.cofins)
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <label>% ISS</label>
+                    @Html.TextBoxFor(m => m.Contribuicao.iss, new {@class = "form-control input-sm", @alt = "decimal"})
+                    @Html.ValidationMessageFor(m => m.Contribuicao.iss)
+                </div>
+                <div class="clearfix"></div>
+
+            </div>
+            <div class="clearfix"></div>
+
+        </div>
+        <div class="clearfix"></div>
+    </div>
+</div>

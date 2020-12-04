@@ -1,0 +1,35 @@
+﻿@model WEB.Areas.Localizacao.ViewModels.PaisVM
+
+
+@using (Html.BeginForm("editar", null, FormMethod.Post, new { role = "form", @class = "default" })){
+
+	if (!string.IsNullOrEmpty(Model.Pais.id)) {
+		@Html.HiddenFor(m => m.Pais.id)
+	}	
+
+	@Html.ValidationSummary(false)
+
+	<div class="form-horizontal">
+		<div class="col-md-1">
+			<label>ID</label>
+			@Html.TextBoxFor(m => m.Pais.id, new { @class = "form-control input-sm", maxlength = "3" }.isReadOnly(!String.IsNullOrEmpty(Model.Pais.id)))
+			@Html.ValidationMessageFor(m => m.Pais.id)
+		</div>
+		<div class="col-md-6">
+			<label>País</label>
+			@Html.TextBoxFor(m => m.Pais.nome, new { @class = "form-control input-sm", maxlength="100" })
+			@Html.ValidationMessageFor(m => m.Pais.nome)
+		</div>
+
+		<div class="clearfix"></div>
+
+	</div>
+	<div class="clearfix"></div>
+	<br />
+	<div class="text-right">
+		<a href="@Url.Action("listar")" class=" btn btn-default">Voltar</a>&nbsp;
+		<input type="button" name="voltar" value="Limpar" class="btn btn-default bg-gray" onclick="document.forms[0].reset();" />&nbsp;
+		<input type="submit" name="enviar" value="Salvar" class="btn btn-primary" />
+	</div>
+
+}

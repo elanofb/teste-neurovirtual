@@ -1,0 +1,169 @@
+﻿@model WEB.Areas.ConfiguracoesEcommerce.ViewModels.ConfiguracaoEcommerceForm
+
+@using DAL.Permissao.Security.Extensions
+@using WEB.Areas.Associacoes.Helpers
+@using MvcFlashMessages
+@using WEB.Areas.ContasBancarias.Helpers
+@using WEB.Areas.Financeiro.Helpers
+
+@{
+    ViewBag.titlePage = "Configurações de Ecommerce";
+}
+
+@section breadcrump{
+    <ol class="breadcrumb">
+        <li><a href="@Url.Action("listar")" class="active fs-14"><i class="fa fa-arrow-left"></i> Voltar</a></li>
+    </ol>
+}
+
+<div class="row">
+    
+    <div class="col-sm-12 box-primary">
+        <div class="nav-tabs-custom">
+
+            <ul class="nav nav-tabs" role="tablist">
+                <li class="active"><a href="#tab-associado-pf" data-toggle="tab">Principal</a></li>
+            </ul>
+            @using (Html.BeginForm("editar", null, FormMethod.Post, new {role = "form", @class = "tab-content", enctype = "multipart/form-data"})) {
+
+                @Html.RenderFlash()
+                @Html.ValidationSummary(false)
+
+                <div id="tab-associado-pf" role="tabpanel" class="tab-pane active">
+
+                    <div class="col-sm-12">
+
+                        <div class="row">
+                            
+                            @Html.infoCadastro(Model.ConfiguracaoEcommerce.id, Model.ConfiguracaoEcommerce.dtCadastro, null)
+
+                            
+                            @if (User.idOrganizacao() == 0) {
+
+                                <div class="col-sm-4 col-md-3">
+                                    <label>Organização</label>
+                                    @Html.DropDownListFor(m => m.ConfiguracaoEcommerce.idOrganizacao, AssociacaoHelper.getInstance.selectList(Model.ConfiguracaoEcommerce.idOrganizacao), "Padrão", new {@class = "form-control input-sm", type = "number"})
+                                </div>
+                                <div class="clearfix"></div>
+
+                            }
+
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+
+                    <div class="col-sm-12">
+                        <div class="row">
+                            <h4 class="separator-form">Configurações do carrinho de compras</h4>
+                            <div class="col-xs-2">
+                                <label><br/>Habilitar e-commerce?</label>
+                                @Html.DropDownListFor(m => m.ConfiguracaoEcommerce.flagHabilitarCompraAreaAssociado, ComboHelper.selectListTrueFalse(Model.ConfiguracaoEcommerce.flagHabilitarCompraAreaAssociado), "...", new {@class = "form-control input-sm"})
+                                @Html.instrucao("Permite compras através da área do associado")
+                            </div>
+                            <div class="col-xs-2">
+                                <label>Somente membros podem comprar produtos?</label>
+                                @Html.DropDownListFor(m => m.ConfiguracaoEcommerce.flagSomenteAssociados, ComboHelper.selectListTrueFalse(Model.ConfiguracaoEcommerce.flagSomenteAssociados), "...", new {@class = "form-control input-sm"})
+                                @Html.instrucao("Somente membros poderão comprar produtos")
+                            </div>
+                            <div class="col-xs-2">
+                                <label>Direcionar para o carrinho após incluir um produto?</label>
+                                @Html.DropDownListFor(m => m.ConfiguracaoEcommerce.flagDirecionarAposIncluirProduto, ComboHelper.selectListTrueFalse(Model.ConfiguracaoEcommerce.flagDirecionarAposIncluirProduto), "...", new {@class = "form-control input-sm"})
+                            </div>
+                            <div class="col-xs-2">
+                                <label><br/>Habilitar cupom desconto?</label>
+                                @Html.DropDownListFor(m => m.ConfiguracaoEcommerce.flagHabilitarCupomDesconto, ComboHelper.selectListTrueFalse(Model.ConfiguracaoEcommerce.flagHabilitarCupomDesconto), "...", new {@class = "form-control input-sm"})
+                            </div>
+                            <div class="col-xs-2">
+                                <label><br/>Habilitar frete gratuito?</label>
+                                @Html.DropDownListFor(m => m.ConfiguracaoEcommerce.flagHabilitarFreteGratuito, ComboHelper.selectListTrueFalse(Model.ConfiguracaoEcommerce.flagHabilitarFreteGratuito), "...", new {@class = "form-control input-sm"})
+                            </div>
+                            <div class="col-xs-2">
+                                <label><br/>Frete gratuito a partir de</label>
+                                @Html.TextBoxFor(x => x.ConfiguracaoEcommerce.valorParaFreteGratuito, new {@class = "form-control input-sm", alt = "decimal"})
+                            </div>
+                            <div class="clearfix"></div><br/>
+
+                            
+
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="row">
+                            <h4 class="separator-form">Configurações de Frete</h4>
+
+                            <div class="col-sm-4">
+                                <label>CEP Origem</label>
+                                @Html.TextBoxFor(x => x.ConfiguracaoEcommerce.cepOrigemFrete, new { @class = "form-control input-sm", alt = "cep" })
+                                @Html.ValidationMessageFor(x => x.ConfiguracaoEcommerce.cepOrigemFrete)
+                            </div>
+                        </div>
+                        <div class="clearfix"></div><br/>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <h4 class="separator-form">Configurações Padrões para pedidos pela área do associado</h4>
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <label>Centro de Custo</label>
+                                @Html.DropDownListFor(m => m.ConfiguracaoEcommerce.idCentroCusto, CentroCustoHelper.getInstance.selectList(Model.ConfiguracaoEcommerce.idCentroCusto), "...", new {@class = "form-control input-sm"})
+                            </div>
+
+                            <div class="col-sm-4">
+                                <label>Macro Conta</label>
+                                @Html.DropDownListFor(m => m.ConfiguracaoEcommerce.idMacroConta, MacroContaHelper.getInstance.selectList(Model.ConfiguracaoEcommerce.idMacroConta), "...", new {@class = "form-control input-sm"})
+                            </div>
+
+                            <div class="col-sm-4">
+                                <label>Subconta</label>
+                                @Html.DropDownListFor(m => m.ConfiguracaoEcommerce.idCategoriaTitulo, CategoriaTituloHelper.getInstance.selectList(Model.ConfiguracaoEcommerce.idCategoriaTitulo, Model.ConfiguracaoEcommerce.idMacroConta), "...", new { @class = "form-control input-sm" })
+                            </div>
+
+                            <div class="col-sm-4">
+                                <label>Limite Parcelamento</label>
+                                @Html.TextBoxFor(x => x.ConfiguracaoEcommerce.qtdeLimiteParcelas, new { @class = "form-control input-sm", type="number", alt = "number_2" })
+                                @Html.ValidationMessageFor(x => x.ConfiguracaoEcommerce.qtdeLimiteParcelas)
+                            </div>
+
+                            <div class="col-sm-4">
+                                <label>Dias para vencimento</label>
+                                @Html.TextBoxFor(x => x.ConfiguracaoEcommerce.qtdeDiasVencimento, new {@class = "form-control input-sm", type = "number", alt = "number_2"})
+                                @Html.ValidationMessageFor(x => x.ConfiguracaoEcommerce.qtdeDiasVencimento)
+                                @Html.instrucao("A partir da data do pedido")
+                            </div>
+
+                            <div class="col-sm-4">
+                                <label>Conta Bancária</label>
+                                @Html.DropDownListFor(m => m.ConfiguracaoEcommerce.idContaBancaria, ContaBancariaHelper.getInstance.selectList(Model.ConfiguracaoEcommerce.idContaBancaria), "...", new { @class = "form-control input-sm" })
+                            </div>
+                        </div>
+                        <div class="row">
+                            <h4 class="separator-form">Meios de Pagamento Permitidos</h4>
+                            <div class="col-sm-4">
+                                <label>Cartão de Crédito</label>
+                                @Html.DropDownListFor(m => m.ConfiguracaoEcommerce.flagCartaoCreditoPermitido, ComboHelper.selectListTrueFalse(Model.ConfiguracaoEcommerce.flagCartaoCreditoPermitido), "...", new {@class = "form-control input-sm"})
+                            </div>
+                            <div class="col-sm-4">
+                                <label>Boleto Bancário</label>
+                                @Html.DropDownListFor(m => m.ConfiguracaoEcommerce.flagBoletoBancarioPermitido, ComboHelper.selectListTrueFalse(Model.ConfiguracaoEcommerce.flagBoletoBancarioPermitido), "...", new {@class = "form-control input-sm"})
+                            </div>
+                            <div class="col-sm-4">
+                                <label>Depósito Bancário</label>
+                                @Html.DropDownListFor(m => m.ConfiguracaoEcommerce.flagDepositoPermitido, ComboHelper.selectListTrueFalse(Model.ConfiguracaoEcommerce.flagDepositoPermitido), "...", new {@class = "form-control input-sm"})
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="clearfix"></div><br />
+
+                </div>
+
+                <div class="col-sm-12 text-right">
+                    @Html.botaoSalvar()
+                </div>
+                <div class="clearfix"></div><br/>
+
+            }
+        </div>
+    </div>
+</div>

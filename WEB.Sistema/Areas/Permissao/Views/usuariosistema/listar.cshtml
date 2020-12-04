@@ -1,0 +1,141 @@
+﻿@model PagedList.IPagedList<UsuarioSistema>
+
+@using PagedList.Mvc
+@using DAL.Permissao
+
+@{
+    ViewBag.titlePage = "Usuários Internos";
+    ViewBag.subTitlePage = "Listagem dos cadastros";
+
+}
+<div class="box box-primary">
+
+    @Html.headerBox("Filtros de Busca", "fa fa-filter")
+
+    <div class="box-body">
+
+        @using (Html.BeginForm(null, null, FormMethod.Get, new {@class = "filtros"})) {
+
+            <div class="form-group col-md-3 col-sm-2"></div>
+
+            <div class="form-group col-sm-2">
+                <label>Perfil</label>
+                @Html.DropDownList("idPerfilAcesso", WEB.Areas.Permissao.Helpers.PerfilAcessoHelper.getInstance.selectList(UtilRequest.getInt32("idOrganizacao"), UtilRequest.getInt32("idPerfilAcesso")), "Todos", new {@class = "form-control input-sm"})
+            </div>
+            <div class="form-group col-sm-2">
+                <label>Status</label>
+                @Html.DropDownList("flagAtivo", ComboHelper.selectListStatus(UtilRequest.getString("flagAtivo")), "Todos", new {@class = "form-control input-sm"})
+            </div>
+
+            <div class="col-md-2 col-sm-3">
+                <label>Tipo de Saída</label>
+                @Html.DropDownList("flagTipoSaida", TipoSaidaHelper.selectListTipoSaida(UtilRequest.getString("flagTipoSaida")), new { @class = "form-control input-sm" })
+            </div>
+
+            <div class="form-group col-sm-3">
+                <label>Buscar</label>
+                @Html.buttonSearch(UtilRequest.getString("valorBusca"))
+            </div>
+            <div class="clearfix"></div>
+        }
+    </div>
+</div>
+
+<div class="box box-primary">
+
+    @Html.headerBox("Resultados", "fa fa-list")
+
+    <div class="box-body">
+
+        <div class="btn-group">
+            <a href="javascript:void(0);" data-url="@Url.Action("excluir")" class="btn btn-default btn-flat" title="Remover itens selecionados" onclick="return DefaultAction.removeAll(this);">
+                <i class="fa fa-trash"></i>
+            </a>
+            <a href="@Url.Action("editar")" class="btn btn-default btn-flat" title="Adicionar novo registro">
+                <i class="far fa-plus-circle"></i>
+            </a>
+        </div>
+
+        <table class="table table-bordered table-striped dataTable">
+            <thead>
+            <tr role="row">
+                <th class="width-50 text-center"><input type="checkbox" name="marcarTodos" data-childs="checkRegistro[]" id="checkMarcarTodos"/></th>
+                <th>Nome</th>
+                <th>Login</th>
+                <th>Perfil</th>
+                <th width="125">Cadastro</th>
+                <th width="100">Status</th>
+                <th width="125">&nbsp;</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            @if (!Model.Any()) {
+                <tr>
+                    <td class="text-center" colspan="6">Nenhum registro cadastrado</td>
+                </tr>
+            }
+
+            @foreach (var Item in Model) {
+                <tr>
+                    <td class="text-center"><input type="checkbox" name="checkRegistro[]" value="@Item.id"/></td>
+                    <td>@Item.nome</td>
+                    <td>@Item.login</td>
+                    <td>@Item.PerfilAcesso.descricao</td>
+                    <td class="text-center">@Item.dtCadastro.exibirData(true)</td>
+                    <td class="text-center">
+                        @boxStatus(Item)
+                    </td>
+                    <td class="text-center box-acoes">
+                        @if (Item.flagSistema == "S") {
+                            <a href="@Url.Action("editar", new {id = Item.id})">Protegido</a>
+                        } else {
+                            <a href="@Url.Action("editar", new {id = Item.id})" title="Editar Registro" data-toggle="tooltip" class="text-black"><i class="far fa-edit"></i></a>
+                            <a href="javascript:void(0);" class="delete-default text-black" data-id="@Item.id" data-url="@Url.Action("excluir")" title="Excluir Registro" data-toggle="tooltip"><i class="far fa-trash-alt"></i></a>
+                        }
+                    </td>
+                </tr>
+            }
+
+            </tbody>
+        </table>
+
+        @(Html.paginarRegistros(Model, Html.PagedListPager(Model, nroPagina => Url.Action("listar", new {nroPagina}), PagedListRenderOptions.OnlyShowFivePagesAtATime)))
+
+    </div>
+
+</div>
+    
+@helper boxStatus(UsuarioSistema OUsuario) {
+
+if(OUsuario.isDegustacao()) {
+
+    var bgClass = "bg-green";
+    var mensagem = $"Período de degustação ativo: <br /> De { OUsuario.dtInicioDegustacao.exibirData() } até { OUsuario.dtFimDegustacao.exibirData() }";
+
+    if (!OUsuario.periodoDegustacaoAtivo()) {
+
+        if (OUsuario.dtInicioDegustacao > DateTime.Today) {
+            bgClass = "bg-yellow";
+            mensagem = $"Período de degustação a iniciar. (Período: De { OUsuario.dtInicioDegustacao.exibirData() } até { OUsuario.dtFimDegustacao.exibirData() })";
+        }
+
+        if(OUsuario.dtFimDegustacao < DateTime.Today) {
+            bgClass = "bg-red";
+            mensagem = $"Período de degustação expirado. (Período degustado: De { OUsuario.dtInicioDegustacao.exibirData() } até { OUsuario.dtFimDegustacao.exibirData() })";
+        }
+
+    }
+
+    <span data-toggle="tooltip" title="@mensagem" data-html="true" 
+          class="badge @bgClass">
+        <i class="far fa-clock"></i>
+    </span>
+
+    }
+
+    if(!OUsuario.isDegustacao()) {
+        @Html.linkStatusDefault(OUsuario.id, OUsuario.ativo)
+    }
+
+}

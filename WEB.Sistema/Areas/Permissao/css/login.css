@@ -1,0 +1,55 @@
+@import url('https://fonts.googleapis.com/css?family=Lato|Lato');
+.bg_body {
+  background-image: url(../../../img/bg_login.png);
+  background-color: #29607D;
+  background-size: cover;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-position: top;
+  background-origin: 0px 105px;
+}
+
+.nao-exibir {
+    display:none;
+}
+
+#barra_navega {
+  background-color: #29607D;
+  border-bottom-color: #58A6CD;
+  border-bottom-style: solid;
+  border-bottom-width: 4px;
+}
+.section_rodape {
+  background-color: #29607D;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  z-index: 1030;
+  padding: 5px;
+}
+#logo_rodape {
+  width: 120px;
+  height: auto;
+}
+#box_login {
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 15px;
+  border-bottom-color: #58A6CD;
+  border-bottom-style: solid;
+  border-bottom-width: 4px;
+}
+
+#logo-cliente {
+  padding-top: 5px;
+}
+
+#logo-cliente img{
+    max-height: 150px;
+    max-width: 300px;
+}
+
+h4.login-titulo {
+    text-align: center;
+    font-size: 1.5em;
+}

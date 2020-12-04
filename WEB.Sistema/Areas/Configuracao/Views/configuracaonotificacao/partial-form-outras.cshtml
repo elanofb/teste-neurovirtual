@@ -1,0 +1,84 @@
+﻿@model WEB.Areas.Configuracao.ViewModels.ConfiguracaoNotificacaoForm
+
+<div class="row">
+    <div class="col-sm-12">
+        <h4 class="separator-form">E-mails para outras Mensagens:</h4>
+    </div>
+
+    <div class="col-sm-6">
+        <div class="col-sm-12 no-padding">
+            <label>Título do e-mail de cobrança financeira padrão</label>
+            @Html.TextBoxFor(m => m.ConfiguracaoNotificacao.tituloEmailCobranca, new { @class = "form-control input-sm" })
+            @Html.ValidationMessageFor(m => m.ConfiguracaoNotificacao.tituloEmailCobranca)
+        </div>
+        <div class="clearfix"></div>
+
+        <div class="col-sm-12 no-padding">
+            <label>Cobrança financeira padrão</label>
+            @Html.TextAreaFor(m => m.ConfiguracaoNotificacao.corpoEmailCobranca, new {@class = "form-control input-sm froala-editor", rows = "7"})
+            @Html.instrucao("Limite de 3.000 caracteres.")<br/>
+            <a href="javascript:void(0)" class="fs-11 for-popover" data-placement="top" data-trigger="focus" data-url="#hashtags-cobranca" data-title="Hash Tags"><i class="fa fa-question-circle"></i> Hash tags do sistema</a>
+            @Html.ValidationMessageFor(m => m.ConfiguracaoNotificacao.corpoEmailCobranca)
+        </div>
+    </div>
+
+    <div class="col-sm-6">
+        <div class="col-sm-12 no-padding">
+            <label>Nova Notificação</label>
+            @Html.TextAreaFor(m => m.ConfiguracaoNotificacao.corpoEmailNovaNotificacao, new {@class = "form-control input-sm froala-editor", rows = "7"})
+            @Html.instrucao("Limite de 3.000 caracteres.")<br/>
+            @Html.ValidationMessageFor(m => m.ConfiguracaoNotificacao.corpoEmailNovaNotificacao)
+        </div>
+    </div>
+    <div class="clearfix"></div><br/>
+
+</div>
+
+
+<div class="row">
+    <div class="col-sm-12">
+        <h4 class="separator-form">E-mails para pagamentos:</h4>
+    </div>
+
+    <div class="col-sm-6">
+        <div class="row">
+            <div class="col-sm-12">
+                <label>Assunto do e-mail de pagamento recusado</label>
+                @Html.TextBoxFor(m => m.ConfiguracaoNotificacao.assuntoEmailRecusaPagamento, new {@class = "form-control input-sm", maxlength = "255"})
+                @Html.ValidationMessageFor(m => m.ConfiguracaoNotificacao.assuntoEmailRecusaPagamento)
+            </div>
+            <div class="clearfix"></div>
+
+            <div class="col-sm-12">
+                <label>Mensagem para pagamento recusado</label>
+                @Html.TextAreaFor(m => m.ConfiguracaoNotificacao.corpoEmailRecusaPagamento, new {@class = "form-control input-sm froala-editor", rows = "10"})
+                @Html.instrucao("Limite de 3.000 caracteres.")<br/>
+                <a href="javascript:void(0)" class="fs-11 for-popover" data-placement="top" data-trigger="focus" data-url="#hashtags-cobranca" data-title="Hash Tags"><i class="fa fa-question-circle"></i> Hash tags do sistema</a>
+                @Html.ValidationMessageFor(m => m.ConfiguracaoNotificacao.corpoEmailRecusaPagamento)
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+
+    <div class="col-sm-6">
+        <div class="row">
+            <div class="col-sm-12">
+                <label>Assunto do e-mail de pagamento recebido</label>
+                @Html.TextBoxFor(m => m.ConfiguracaoNotificacao.tituloEmailPagamentoRecebido, new { @class = "form-control input-sm", maxlength = "255" })
+                @Html.ValidationMessageFor(m => m.ConfiguracaoNotificacao.tituloEmailPagamentoRecebido)
+            </div>
+            <div class="clearfix"></div>
+            <div class="col-sm-12">
+                <label>Mensagem para pagamento recebido</label>
+                @Html.TextAreaFor(m => m.ConfiguracaoNotificacao.corpoEmailPagamentoRecebido, new { @class = "form-control input-sm froala-editor", rows = "10" })
+                @Html.instrucao("Limite de 3.000 caracteres.")<br/>
+                <a href="javascript:void(0)" class="fs-11 for-popover" data-placement="top" data-trigger="focus" data-url="#hashtags-cobranca" data-title="Hash Tags"><i class="fa fa-question-circle"></i> Hash tags do sistema</a>
+                @Html.ValidationMessageFor(m => m.ConfiguracaoNotificacao.corpoEmailPagamentoRecebido)
+            </div>
+            <div class="clearfix"></div>
+
+        </div>
+    </div>
+    <div class="clearfix"></div>
+
+</div>

@@ -1,0 +1,67 @@
+﻿@model WEB.Areas.Associados.ViewModels.AssociadoForm
+@using BLL.ConfiguracoesTextos.Extensions
+@using DAL.Permissao.Security.Extensions
+@using WEB.Areas.Localizacao.Helpers
+
+<h4 class="separator-form">@Html.labelTexto(User.idOrganizacao(), "enderecoSecundario")</h4>
+<div class="row">
+    @Html.HiddenFor(m => m.Associado.Pessoa.listaEnderecos[1].id)
+    @Html.HiddenFor(m => m.Associado.Pessoa.listaEnderecos[1].idPessoa)
+    @Html.HiddenFor(m => m.Associado.Pessoa.listaEnderecos[1].idTipoEndereco)
+    <div class="col-xs-4 col-md-6 col-lg-5">
+        <label>País</label>
+        @Html.DropDownListFor(m => m.Associado.Pessoa.listaEnderecos[1].idPais, PaisHelper.selectList(Model.Associado.Pessoa.listaEnderecos[1].idPais), "...", new { @class = "form-control input-sm", id = "idPaisEnderecoSecundario", onchange = "Associado.configurarPais();" })
+        @Html.ValidationMessageFor(m => m.Associado.Pessoa.listaEnderecos[1].idPais)
+    </div>
+    <div class="col-xs-4 col-md-6 col-lg-4">
+        <label>CEP</label>
+        <div class="input-group">
+            @Html.TextBoxFor(m => m.Associado.Pessoa.listaEnderecos[1].cep, new { @class = "form-control input-sm", alt = "cep", rel = "cepEnderecoSecundario", onkeyup = "Localizacao.carregarEndereco('EnderecoSecundario');" })
+            <span class="input-group-addon">
+                <a href="javascript:void(Localizacao.carregarEndereco('EnderecoSecundario'));"><i id="buscarEnderecoSecundario" class="fa fa-search"></i></a>
+            </span>
+        </div>
+        @Html.ValidationMessageFor(m => m.Associado.Pessoa.listaEnderecos[1].cep)
+    </div>
+    <div class="clearfix"></div>
+
+    <div class="col-xs-6 col-md-12 col-lg-7">
+        <label>Endereço</label>
+        @Html.TextBoxFor(m => m.Associado.Pessoa.listaEnderecos[1].logradouro, new { @class = "form-control input-sm", maxlength = "100", rel = "logradouroEnderecoSecundario" })
+        @Html.ValidationMessageFor(m => m.Associado.Pessoa.listaEnderecos[1].logradouro)
+    </div>
+    <div class="col-xs-2 col-md-4 col-lg-2 ">
+        <label>Número</label>
+        @Html.TextBoxFor(m => m.Associado.Pessoa.listaEnderecos[1].numero, new { @class = "form-control input-sm", maxlength = "20" })
+        @Html.ValidationMessageFor(m => m.Associado.Pessoa.listaEnderecos[1].numero)
+    </div>
+    <div class="col-xs-3 col-md-8 col-lg-3">
+        <label>Complemento</label>
+        @Html.TextBoxFor(m => m.Associado.Pessoa.listaEnderecos[1].complemento, new { @class = "form-control input-sm", maxlength = "50" })
+        @Html.ValidationMessageFor(m => m.Associado.Pessoa.listaEnderecos[1].complemento)
+    </div>
+    <div class="clearfix"></div>
+
+    <div class="col-xs-6 col-md-12 col-lg-9">
+        <label>Bairro</label>
+        @Html.TextBoxFor(m => m.Associado.Pessoa.listaEnderecos[1].bairro, new { @class = "form-control input-sm", maxlength = "80", rel = "bairroEnderecoSecundario" })
+        @Html.ValidationMessageFor(m => m.Associado.Pessoa.listaEnderecos[1].bairro)
+    </div>
+
+    <div class="col-sm-3 enderecoSecundarioBrasil">
+        <label>UF</label>
+        @Html.DropDownListFor(m => m.Associado.Pessoa.listaEnderecos[1].idEstado, EstadoHelper.selectList(Model.Associado.Pessoa.listaEnderecos[1].idEstado), "...", new { @class = "form-control input-sm", id = "idEstadoEnderecoSecundario", rel = "idEstadoEnderecoSecundario", onchange = "Localizacao.carregarCidades('EnderecoSecundario', '');" })
+        @Html.ValidationMessageFor(m => m.Associado.Pessoa.listaEnderecos[1].idEstado)
+    </div>
+    <div class="col-sm-9 enderecoSecundarioBrasil">
+        <label>Cidade</label>
+        @Html.DropDownListFor(m => m.Associado.Pessoa.listaEnderecos[1].idCidade, CidadeHelper.selectList(Model.Associado.Pessoa.listaEnderecos[1].idEstado, Model.Associado.Pessoa.listaEnderecos[1].idCidade), "...", new Dictionary<string, Object> { { "class", "form-control input-sm no-padding" }, { "rel", "idCidadeEnderecoSecundario" }, { "data-toogle", "select2" }, { "style", "width:100%" } })
+        @Html.ValidationMessageFor(m => m.Associado.Pessoa.listaEnderecos[1].idCidade)
+    </div>
+    <div class="col-sm-12 enderecoSecundarioExterior">
+        @Html.TextBoxFor(m => m.Associado.Pessoa.listaEnderecos[1].nomeCidade, new { @class = "form-control input-sm" })
+        @Html.ValidationMessageFor(m => m.Associado.Pessoa.listaEnderecos[1].nomeCidade)
+    </div>
+    <div class="clearfix"></div>
+
+</div>

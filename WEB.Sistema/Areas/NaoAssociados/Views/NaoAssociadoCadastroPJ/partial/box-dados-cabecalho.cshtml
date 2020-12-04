@@ -1,0 +1,61 @@
+﻿@model WEB.Areas.NaoAssociados.ViewModels.NaoAssociadoCadastroPJForm
+@using System.Web.Script.Serialization
+
+
+<div class="row">
+    <div class="col-sm-12">
+        <strong>#@Model.Associado.id</strong>
+
+        @if (!Model.Associado.nroAssociado.isEmpty()) {
+
+            <strong>Nº @Model.Associado.nroAssociado</strong>
+        }
+    </div>
+
+    <div class="col-sm-12">
+        <div class="row">
+            <div class="col-sm-8">
+                <span><i class="fa fa-building-o"></i> @Model.Associado.Pessoa.nome.ToUpper()</span><br/>
+                <span><i class="fa fa-building-o"></i> @Model.Associado.Pessoa.razaoSocial.ToUpper()</span>
+            </div>
+            <div class="col-sm-4">
+                PESSOA JURÍDICA<br/>
+                Fundação: @Model.Associado.Pessoa.dtNascimento.exibirData()
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12">
+        <div class="row">
+            <div class="col-sm-8">
+                <span><i class="fa fa-id-card"></i> @UtilString.formatCPFCNPJ(Model.Associado.Pessoa.nroDocumento)</span>
+            </div>
+            <div class="col-sm-4">
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12">
+        @{ var listaTipoAssociado = TipoAssociadoHelper.getInstance.selectList(0, Model.Associado.Pessoa.flagTipoPessoa, true);}
+        @Html.Hidden("sourceTipoAssociado", new JavaScriptSerializer().Serialize(listaTipoAssociado.Select(x => new { value = x.Value, text = x.Text }).ToList()))
+
+        <span>
+            <i class="fa fa-users"></i>
+            <a href="#" data-pk="@(Model.Associado.id)"
+               data-name="valor"
+               data-title="Plano de Comissão"
+               data-url="@Url.Action("alterar-tipo-associado", "AssociadoAcao", new {area = "Associados"})"
+               data-type="select"
+               data-value="@Model.Associado.TipoAssociado.id"
+               class="id-tipo-associado text-black editable editable-click">
+                @Model.Associado.TipoAssociado.descricao
+            </a>
+        </span>
+    </div>
+    <div class="col-sm-12">
+        <div class="row">
+            <div class="col-sm-6">
+                <em class="fs-10">Indicado por <strong>@(Model.Associado.Indicador?.Pessoa?.nome)</strong></em><br />
+                <em class="fs-10">Cadastro em @Model.Associado.dtCadastro.exibirData() por: @(Model.Associado.UsuarioCadastro == null ? "O Próprio" : Model.Associado.UsuarioCadastro.nome)</em><br/>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,135 @@
+﻿@model WEB.Areas.Associados.ViewModels.AssociadoCadastroPFForm
+@using BLL.ConfiguracoesTextos.Extensions
+@using DAL.Permissao.Security.Extensions
+@using WEB.Areas.Arquivos.Helpers
+
+@{
+    string labelAssociado = Html.labelTexto(User.idOrganizacao(), "lblassociado", "Associado").ToString();
+    
+    ViewBag.titlePage = Model.Associado.id == 0 ? $"Novo {labelAssociado}" : $"Editar {labelAssociado}";
+    ViewBag.SubtitlePage = Model.Associado.id == 0 ? "" : Model.Associado.Pessoa.nome;
+    ViewBag.flagHabilitaCarteirinha = Model.ConfiguracaoCarteirinha.flagHabilitado;
+}
+
+@section styles {
+    
+    @Html.includeCSSModuloArquivos()
+     
+    @Html.includeFroalaEditorCSS()
+
+    <link rel="stylesheet" href="@UtilConfig.linkResourses("Areas/AssociadosDependentes/css/jquery-ui-autocomplete.css")" />
+
+    @*  Datatable da listagem de historico da pessoa  *@
+    <link rel="stylesheet" href="@UtilConfig.linkResourses("Areas/Pessoas/js/plugins/datatables/media/css/jquery.dataTables.bootstrap.css")" />
+
+    @* CSS de módulos do cadastro associado *@
+    <link rel="stylesheet" href="@UtilConfig.linkResourses("Areas/Associados/js/plugins/bootstrap-responsive-tabs/dist/main.css")" />
+    <link rel="stylesheet" href="@UtilConfig.linkResourses("Areas/Associados/css/associado.css")" />
+    <link rel="stylesheet" href="@UtilConfig.linkResourses("css/associatec/list-custom.css?v=1")" />
+    
+    @* CSS para customização das abas *@
+    <link rel="stylesheet" href="@UtilConfig.linkResourses("css/associatec/tab-custom-responsive.css")" />
+    <link rel="stylesheet" href="@UtilConfig.linkResourses("Areas/TarefasPessoais/css/tarefa-pessoal.css")" />
+    <link rel="stylesheet" href="@UtilConfig.linkResourses("css/associatec/material-design-colors/material-design-color-palette.css?v=1")" />
+}
+
+@section scripts{
+    @Html.includeJSModuloArquivos()
+    @Html.includeLocalizacaoJS()
+    @Html.includeDatePicker()
+    
+    @Html.includeJqueryLoading()
+    @Html.includeFileApiJS()
+    @Html.includeBootstrapEditable()
+    @Html.includeFroalaEditorJS()
+
+    <script type="text/javascript" src="@UtilConfig.linkResourses("Areas/AssociadosDependentes/js/jquery-ui-autocomplete.js")"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses("Areas/Associados/js/plugins/bootstrap-responsive-tabs/dist/bootstrap-responsive-tabs.js")"></script>      
+
+    @* JS para cookies e salvar dados voláteis  *@
+	<script type="text/javascript" src="@UtilConfig.linkResourses("Areas/Associados/js/plugins/jquery.cookie/jquery.cookie.js")"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses("Areas/Arquivos/js/arquivo-documento.js")"></script>
+
+    @* File API para carregamento de foto do associado  *@
+    <script type="text/javascript" src="@UtilConfig.linkResourses("Areas/Associados/js/associado-foto.js")"></script>
+
+	@* JS do módulo de associados *@
+    <script type="text/javascript" src="@UtilConfig.linkResourses("Areas/Associados/js/associado-cadastro.js?v=1.13")"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses("Areas/AssociadosDependentes/js/associado-dependente-cadastro-modal.js")"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses("Areas/Associados/js/associado-acao.js?v=1.4")"></script>
+
+    @* JS do módulo para envio de cobranças *@
+    <script type="text/javascript" src="@UtilConfig.linkResourses("Areas/AssociadosNotificacoes/js/associado-contribuicao-cobranca.js")"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses("areas/associados/js/jquery.datatables.min.js")"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses("Areas/AssociadosOperacoes/js/associado-situacao-contribuicao.js")"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses("Areas/AssociadosOperacoes/js/associado-reativacao.js")"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses("Areas/AssociadosOperacoes/js/associado-desativacao.js")"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses("Areas/AssociadosOperacoes/js/associado-exclusao.js")"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses("Areas/Contatos/js/tipo-contato-cadastro.js")"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses("Areas/Pessoas/js/pessoa-relacionamento.js")"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses("Areas/Relacionamentos/js/ocorrencia-relacionamento-cadastro.js")"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses("Areas/TarefasPessoais/js/tarefa-pessoal.js")"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses("Areas/AssociadosOperacoes/js/associado-envio-link-recuperacao-senha.js")"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses("Areas/AssociadosOperacoes/js/associado-envio-link-recuperacao-senha-transacao.js")"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses("Areas/Pessoas/js/pessoa-conta-bancaria-cadastro.js")"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses("Areas/Associados/js/associado-aprovacao-documentos.js")"></script>
+}
+
+@section breadcrump {
+    <ol class="breadcrumb">
+        <li>
+            <a class="active fs-14" href="@Url.Action("listar", "Associado", new {area = "Associados"})">
+                <i class="fa fa-arrow-left"></i> 
+                Voltar
+            </a>
+        </li>
+    </ol>
+}
+
+<div class="@(Model.Associado.id > 0 ? "box box-default" : "")">
+    
+    @exibirBlocoCabecalho()
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="nav-tabs-custom no-margin-bottom">
+                <ul class="nav nav-tabs nav-justified" id="tabs">
+                    @{ Html.RenderPartial("partial-lista-tabs", Model);}
+                </ul>
+                <div class="clearfix"></div>
+                <div class="tab-content">
+                    @{ Html.RenderPartial("partial-conteudo-tabs", Model);}
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@helper exibirBlocoCabecalho() {
+    
+    if (Model.Associado.id == 0) {
+        return;
+    }
+
+    <div class="col-sm-2 padding-top-10 bordered-black-right">
+        <div id="boxFoto">
+            @{Html.RenderAction("partial-foto", "associadofoto");}
+        </div>
+    </div>
+    
+    <div class="col-sm-8 padding-top-10">
+        @{ Html.RenderPartial("partial/box-dados-cabecalho");}
+    </div>
+    
+    <div class="col-sm-2 padding-top-10">
+        <div class="row">
+            <div class="col-sm-12">
+                @Html.boxInfo($"{Model.Saldo.saldoAtual:F2} BTK", "bg-green text-center text-bold fs-16")
+            </div>
+        </div>
+        @{ Html.RenderPartial("partial/box-dados-situacao", Model.Associado);}
+    </div>
+    <div class="clearfix"></div><br />
+}
+

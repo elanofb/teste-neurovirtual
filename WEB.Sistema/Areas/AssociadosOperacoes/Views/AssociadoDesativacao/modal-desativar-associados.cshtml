@@ -1,0 +1,110 @@
+﻿@model WEB.Areas.AssociadosOperacoes.ViewModels.AssociadoDesativacaoForm
+
+@{
+	ViewBag.modalTitle = "Desativação de Associado(s)";
+	ViewBag.modalWidthClass = "lg";
+
+    if (UtilRequest.getBool("IsPost") == true) {
+		Layout = null;
+	} else {
+		Layout = "~/views/shared/associatec/masterpage-modal.cshtml";
+	}
+}
+
+<div id="boxFormDesativacao">
+    
+    @using (Ajax.BeginForm("desativar-associados", null, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "boxFormDesativacao", InsertionMode = InsertionMode.Replace, OnSuccess = "AssociadoDesativacao.onSuccessFormDesativacao" }, new { id = "formDesativacao" })) {
+
+        { Html.EnableClientValidation(false); }
+
+        @Html.Hidden("IsPost", true)
+
+        <div class="field" style="display:none">
+            @Html.EditorFor(m => m.idsAssociados)
+        </div>
+
+        <div class="row">
+
+            <div class="col-sm-6">
+
+                <div class="row">
+                    
+                    <div class="col-md-12">
+                        @Html.labelRequired("Motivo da desativação")
+                        @Html.DropDownListFor(m => m.idMotivoDesativacao, MotivoDesativacaoHelper.getInstance.selectList(Model.idMotivoDesativacao), "...", new { @class = "form-control input-sm" })
+                        @Html.ValidationMessageFor(m => m.idMotivoDesativacao)
+                    </div>
+                    <div class="clearfix"></div>
+
+                    <div class="col-md-12">
+                        @Html.labelRequired("Descreva o motivo da desativação")
+                        @Html.TextAreaFor(m => m.motivoDesativacao, new {@class = "form-control input-sm", rows = "9"})
+                        @Html.ValidationMessageFor(m => m.motivoDesativacao)
+                    </div>
+                    <div class="clearfix"></div>
+
+                </div>
+
+            </div>
+
+            <div class="col-sm-6">
+
+                <label>@Model.listaAssociados.Count() membros selecionados</label>
+
+                <div id="boxAssociadosSelecionados" class="hide">
+                    
+                    @if (Model.listaAssociados.Count() > 1000) {
+
+                        <div class="alert alert-info">
+	                        
+                            Você selecionou mais de 1000 membros para realizar a desativação e, por motivo de desempenho,
+                            a lista com o detalhe dos membros não será exibida, porém todos os membros selecionados
+                            serão desativados.
+
+                        </div>
+
+                    }
+                    
+                    @if (Model.listaAssociados.Count() <= 1000) {
+
+                        foreach (var OAssociado in Model.listaAssociados) {
+
+                            <div class="box-info-item">
+
+                                <div class="row">
+
+                                    <div class="col-md-12">
+
+                                        <span class="titulo">
+                                            <i class="fa fa-user"></i> @OAssociado.nome
+                                        </span><br>
+
+                                        <span># @(OAssociado.nroAssociado ?? OAssociado.id)</span> <em>(@OAssociado.descricaoTipoAssociado)</em>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        }
+
+                    }
+
+                </div>
+
+            </div>
+
+            <div class="clearfix"></div>
+
+        </div>
+
+    }
+</div>
+
+@section modalFooter{
+	<div class="text-right">
+		<input type="button" value="Cancelar" class="btn btn-default" data-dismiss="modal"  aria-hidden="true" />
+		<input type="button" value="Confirmar Desativação" class="btn btn-primary link-loading" onclick="$('#formDesativacao').submit();" />
+	</div>
+}

@@ -1,0 +1,33 @@
+﻿@model WEB.Areas.Financeiro.ViewModels.ExtratoDocumentoVM
+
+@{
+    ViewBag.modalTitle = "Documentos";
+    ViewBag.modalWidthClass = "lg";
+    Layout = "~/views/shared/associatec/masterpage-modal.cshtml";
+}
+
+@if (Model.listaArquivoTitulo.Any()) { 
+    <div class="col-md-6">
+        <h4 class="separator-form">Documentos do Título</h4>
+
+        @{Html.RenderPartial("partial-itens", Model.listaArquivoTitulo);}
+    </div>
+}
+
+@if (Model.listaArquivoPagamento.Any()) {
+    <div class="col-md-6">
+        <h4 class="separator-form">Documentos do Pagamento</h4>
+
+        @{ Html.RenderPartial("partial-itens", Model.listaArquivoPagamento); }
+    </div>
+}
+
+@if (Model.listaArquivoTransferencia.Any()) {
+    <div class="col-md-6">
+        <h4 class="separator-form">Documentos da Transferência</h4>
+
+        @{ Html.RenderPartial("partial-itens", Model.listaArquivoTransferencia); }
+    </div>
+}
+
+<div class="clearfix"></div>

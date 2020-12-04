@@ -1,0 +1,130 @@
+﻿@model WEB.Areas.Institucionais.ViewModels.ConvenioForm
+
+@using WEB.Areas.Associacoes.Helpers
+@using WEB.Areas.Arquivos.Helpers
+@using WEB.Areas.Institucionais.Helpers
+@using DAL.Permissao.Security.Extensions
+
+@{
+    Layout = "~/views/shared/associatec/masterpage-edit.cshtml";
+    ViewBag.titlePage = "Editar Convênio";
+    ViewBag.ativarMenuTabelas = "active";
+}
+
+@section styles{
+	
+	@Html.includeCSSModuloArquivos()
+
+	@Html.includeFroalaEditorCSS()
+
+}
+
+@section scripts{
+
+    @Html.includeDatePicker()
+
+	@Html.includeJSModuloArquivosFotos()
+
+	@Html.includeFroalaEditorJS()
+
+    <script src="@UtilConfig.linkResourses()Areas/Institucionais/js/convenio.js?v=1"></script>
+    <script src="@UtilConfig.linkResourses()Areas/Institucionais/js/tipo-convenio.js?v=1"></script>
+
+}
+
+@section navTabs{
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#tab-1" data-toggle="tab">Principal</a></li>
+    </ul>
+}
+
+@section tabContent{
+    <div id="tab-1" class="tab-pane active">
+        
+        @{Html.RenderPartial("partial-info-cadastro");}
+
+        @using (Html.BeginForm("editar", "convenio", FormMethod.Post, new {enctype = "multipart/form-data"})) {
+
+            @Html.HiddenFor(m => m.Convenio.id)
+
+            <div id="tab-1" class="tab-pane active">
+                <div class="col-md-12 no-padding">
+                    <h4 class="separator-form">Informações Cadastrais</h4>
+
+                    <div class="col-md-6 no-padding">
+                        @if (User.idOrganizacao() == 0) {
+
+                            <div class="col-sm-6">
+                                <label>Organização</label>
+                                @Html.DropDownListFor(m => m.Convenio.idOrganizacao, AssociacaoHelper.getInstance.selectList(Model.Convenio.idOrganizacao), "Padrão", new {@class = "form-control input-sm"})
+                            </div>
+                            <div class="clearfix"></div>
+
+                        }
+
+                        <div class="col-md-12">
+                            @Html.labelRequired("Tipo de Convênio")
+                            <div class="input-group">
+                                @Html.DropDownListFor(x => x.Convenio.idTipoConvenio, TipoConvenioHelper.getInstance.selectList(Model.Convenio.idTipoConvenio), "Selecione...", new {@class = "form-control input-sm"})
+                                <span class="input-group-addon"><a href="javascript:void(0);" onclick="TipoConvenio.modalTipo(this)" data-url="@Url.Action("modal-editar", "TipoConvenio", new {area = "Institucionais"})" class="fs-14" title="Cadastrar novo tipo" data-toggle="tooltip"><i class="fa fa-plus-circle"></i> </a></span>
+                                @Html.ValidationMessageFor(x => x.Convenio.idTipoConvenio)
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            @Html.labelRequired("Título")
+                            @Html.TextBoxFor(x => x.Convenio.titulo, new {@class = "form-control input-sm", maxlength = "255"})
+                            @Html.ValidationMessageFor(x => x.Convenio.titulo)
+                        </div>
+
+                        <div class="clearfix"></div>
+
+                        <div class="col-md-12">
+                            <label>Chamada</label><br/>
+                            @Html.TextBoxFor(x => x.Convenio.chamada, new {@class = "form-control input-sm", maxlength = "400"})
+                            @Html.ValidationMessageFor(x => x.Convenio.chamada)
+                        </div>
+
+                        <div class="clearfix"></div>
+
+                        <div class="col-md-4">
+                            @Html.labelRequired("Status")
+                            @Html.DropDownListFor(m => m.Convenio.ativo, ComboHelper.selectListStatus(Model.Convenio.ativo), "...", new {@class = "form-control input-sm"})
+                            @Html.ValidationMessageFor(m => m.Convenio.ativo)
+                        </div>
+
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="col-md-6">
+                        <h4 class="separator-form">Fotos</h4>
+                        <div class="col-md-12 no-padding-left">
+                            @Html.inputFileSimples("OArquivo")
+                            @Html.ValidationMessageFor(m => m.OArquivo)
+
+                            <div class="clearfix"></div>
+                            @if (Model.Convenio.id > 0) {
+                                <h4 class="separator-form">Fotos Cadastradas</h4>
+                                <div class="carregando" id="boxArquivosListar" data-target="boxArquivosListar" data-url="@Url.Action("partial-lista-fotos", "ArquivoFoto", new {Area = "Arquivos", entidade = DAL.Entities.EntityTypes.CONVENIO, idReferencia = Model.Convenio.id})"></div>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    @Html.labelRequired("Detalhes do Convênio")
+                    @Html.TextAreaFor(x => x.Convenio.descricao, new {@id = "editor", @class = "form-control input-sm", rows = "4"})
+                    @Html.ValidationMessageFor(x => x.Convenio.descricao)
+                </div>
+
+                <div class="clearfix"></div><br/>
+
+                <div class="text-right">
+                    @Html.exibirBotoesFormulario(Url.Action("listar"), "N", Url.Action("editar", new {id = 0}))
+                </div>
+
+                <div class="clearfix"></div>
+
+            </div>
+        }
+    </div>
+}

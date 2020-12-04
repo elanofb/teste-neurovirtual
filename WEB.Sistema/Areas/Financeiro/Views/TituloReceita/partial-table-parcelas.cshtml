@@ -1,0 +1,53 @@
+﻿@model WEB.Areas.Financeiro.ViewModels.ModalDetalhePagamento
+@using DAL.Financeiro
+@using WEB.Helpers
+
+<table class="table table-striped margin-top-10">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Forma de Pagamento</th>
+            <th>Status</th>
+            <th>Valor</th>
+            <th>Desconto</th>
+            <th>Vencimento</th>
+            <th>Tarifas</th>
+            <th>Pagamento</th>
+            <th width="130">&nbsp;</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var OItem in Model.listaPagamentos) {
+            <tr class="@(OItem.dtExclusao.HasValue ? "row-disabled" : "")">
+                <td class="text-center">@OItem.id</td>
+                <td>@OItem.descricaoFormaPagamento()</td>
+                <td>@(OItem.StatusPagamento == null ? "-" : OItem.StatusPagamento.descricao)</td>
+                <td class="text-right">@OItem.valorOriginal.ToString("C")</td>
+                <td class="text-right">@OItem.valorDesconto.exibirValor()</td>
+                <td class="text-center">@OItem.dtVencimento.exibirData()</td>
+                <td class="text-right">@OItem.valorTotalTarifas().ToString("C")</td>
+                <td class="text-center">@OItem.dtPagamento.exibirData()</td>
+                <td class="text-left box-acoes">@exibirAcoes(OItem)</td>
+            </tr>
+
+        }
+    </tbody>
+</table>
+
+@helper exibirAcoes(TituloReceitaPagamento OPagamento) {
+
+    if (!OPagamento.dtPagamento.HasValue) {
+
+        @*<a href="javascript:;" data-toggle="tooltip" title="Registrar pagamento da parcela" onclick="TituloReceitaPagamento.modalRegistrarPagamento(this);" data-url="@Url.Action("modal-registrar-pagamento", "TituloReceitaPagamento", new { area = "Financeiro", OPagamento.id })"><i class="fa fa-check-circle-o"></i></a>*@
+
+        <a href="@String.Format(UtilConfig.linkPgto, UtilCrypt.toBase64Encode(OPagamento.id))" data-toggle="tooltip" title="Ir para tela de pagamento" target="_blank"><i class="fa fa-credit-card "></i> </a>
+
+        <a href="javascript:void(0);" onclick="TituloReceitaPagamento.enviarEmailCobranca('@OPagamento.id')" data-toggle="tooltip" title="Enviar por e-mail"> <i class="fa fa-envelope"></i> </a>
+
+        @*<a href="javascript:void(0);" onclick="DefaultSistema.showModal('@Url.Action(null, "TituloReceitaPagamento", new { area = "Financeiro", OPagamento.id })')" data-toggle="tooltip" title="Remover parcela de pagamento." target="_blank"> <i class="fa fa-trash"></i> </a>*@
+
+        return;
+    }
+
+    <a href="@Url.Action("exibir-recibo", "Recibo", new {area = "Recibos", r = UtilCrypt.toBase64Encode(OPagamento.id)})" data-toggle="tooltip" title="Visualizar recibo de pagamento" target="_blank"> <i class="far fa-file"></i> </a>
+}

@@ -1,0 +1,68 @@
+﻿@using MvcFlashMessages
+@using WEB.Areas.FinanceiroLancamentos.Helpers
+@model WEB.Areas.FinanceiroLancamentos.ViewModels.ReceitaCloneForm
+
+@{
+    Layout = IsPost ? null : "~/views/shared/associatec/masterpage-modal.cshtml";
+
+    ViewBag.modalTitle =  "Clonar Receita";
+}
+
+<div id="@(IsPost ? "" : "boxClonarReceitaForm")">
+
+    @Html.RenderFlash()
+        
+    @using (Ajax.BeginForm("clonar-receita", null, new AjaxOptions { UpdateTargetId = "boxClonarReceitaForm", HttpMethod = "POST", OnSuccess = "ReceitaClone.onSuccessForm" }, new { @class = "default" })) {
+        
+        @Html.legendaRequired()
+
+        @Html.ValidationSummary(false)
+
+        @Html.HiddenFor(m => m.TituloReceita.id)
+        
+        <div class="row">
+            
+            <div class="col-md-12">
+                @Html.labelRequired("Titulo")
+                @Html.TextBoxFor(m => m.TituloReceita.descricao, new { @class = "form-control input-sm" })
+                @Html.ValidationMessageFor(m => m.TituloReceita.descricao)
+            </div>
+            <div class="clearfix"></div>
+            
+            <div class="col-md-12">
+                @Html.labelRequired("Devedor")
+                @Html.DropDownListFor(m => m.idReferenciaPessoa, DevedorHelper.getInstance.selectList(Model.idReferenciaPessoa), "...", new { @class = "form-control input-sm idDevedor" })
+                @Html.ValidationMessageFor(m => m.idReferenciaPessoa)
+            </div>
+            <div class="clearfix"></div>
+            
+            <div class="col-md-4">
+                @Html.labelRequired("Data de Competência")
+                @Html.TextBoxFor(m => m.TituloReceita.dtCompetencia, new { @class = "form-control input-sm input-datepicker", alt = "date" })
+                @Html.ValidationMessageFor(m => m.TituloReceita.dtCompetencia)
+            </div>
+            
+            <div class="col-md-4">
+                @Html.labelRequired("Data de Vencimento")
+                @Html.TextBoxFor(m => m.TituloReceita.dtVencimento, new { @class = "form-control input-sm input-datepicker", alt = "date" })
+                @Html.ValidationMessageFor(m => m.TituloReceita.dtVencimento)
+            </div>
+            
+            <div class="col-md-4">
+                @Html.labelRequired("Replicar por quantas vezes?")
+                @Html.TextBoxFor(m => m.qtdeReplicacoes, new { @class = "form-control input-sm", alt = "number_2" })
+                @Html.ValidationMessageFor(m => m.qtdeReplicacoes)
+                @Html.instrucao("Limitado em 36 replicações")
+            </div>
+            <div class="clearfix"></div><br />
+            
+        </div>
+        
+        <div class="text-right">
+            <input type="submit" class="btn btn-primary link-loading" value="Salvar" />
+        </div>
+    }
+    
+</div>
+<div class="clearfix"></div><br />
+

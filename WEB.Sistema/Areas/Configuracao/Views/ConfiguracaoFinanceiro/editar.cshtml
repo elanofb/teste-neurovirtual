@@ -1,0 +1,39 @@
+﻿@model WEB.Areas.Configuracao.ViewModels.ConfiguracaoFinanceiroForm
+@{
+    ViewBag.titlePage = "Configurações Financeiras";
+}
+
+@section scripts{
+    ;
+}
+
+@section breadcrump{
+    <ol class="breadcrumb">
+        <li><a href="@Url.Action("listar")" class="active fs-14"><i class="fa fa-arrow-left"></i> Voltar</a></li>
+    </ol>
+}
+
+
+<div class="row">
+    <div class="col-sm-12 box-primary">
+
+        <div class="nav-tabs-custom">
+
+            <ul class="nav nav-tabs" role="tablist">
+                <li class="active"><a href="#tab-emails" data-toggle="tab">Dados Principais</a></li>
+            </ul>
+            @using (Html.BeginForm("editar", null, FormMethod.Post, new { role = "form", @class = "tab-content", enctype = "multipart/form-data" })) {
+
+                @Html.ValidationSummary(false)
+                @Html.HiddenFor(x => x.ConfiguracaoFinanceiro.id)
+
+                <div id="tab-emails" role="tabpanel" class="tab-pane active">
+                    @{ Html.RenderPartial("partial-form", Model); }
+                </div>
+                <div class="text-right">
+                    <input type="submit" name="enviar" value="Salvar Configurações" class="btn btn-primary" />
+                </div>
+            }
+        </div>
+    </div>
+</div>

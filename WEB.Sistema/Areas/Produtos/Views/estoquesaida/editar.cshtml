@@ -1,0 +1,87 @@
+﻿@model WEB.Areas.Produtos.ViewModels.EstoqueSaidaForm
+@using WEB.Areas.Produtos.Helpers
+@{
+	Layout = "~/views/shared/associatec/masterpage-edit.cshtml";
+	ViewBag.tituloPagina = "Cadastro e Edição de Entradas no Estoque";
+}
+
+@section styles{
+}
+
+@section scripts{
+    <script src="@UtilConfig.linkResourses()Areas/Produtos/js/estoquesaida.js" type="text/javascript"></script>
+    @Html.includeDatePicker()
+}
+
+@section navTabs{
+	<ul class="nav nav-tabs">
+		<li class="active"><a href="#tab-1" data-toggle="tab">Principal</a></li>
+	</ul>
+}
+
+@section tabContent{
+	<div id="tab-1" class="tab-pane active">
+		@{ Html.RenderPartial("partial-info-cadastro", Model); }
+
+		@using (Html.BeginForm("editar", null, FormMethod.Post, new { role = "form", enctype = "multipart/form-data" })) {
+            { Html.EnableClientValidation(false); }
+            @Html.legendaRequired()<br />
+			@Html.HiddenFor(m => m.EstoqueSaida.id)
+            @Html.ValidationSummary(true, "Algumas informações precisam ser corrigidas abaixo.") <br />
+
+			<h4 class="separator-form margin-left-15">Informações para entradas no estoque</h4>
+
+            <div class="col-md-2">
+                @Html.labelRequired("Data de Entrada ")
+                @Html.TextBoxFor(m => m.EstoqueSaida.ProdutoEstoque.dtMovimentacao, new { @class = "form-control input-sm input-datepicker", alt = "date" })
+                @Html.ValidationMessageFor(m => m.EstoqueSaida.ProdutoEstoque.dtMovimentacao)
+            </div>
+                        
+            <div class="col-md-2">
+                @Html.labelRequired("Tipo de Sáida")
+                @Html.DropDownListFor(m => m.EstoqueSaida.idTipoReferenciaSaida, WEB.Areas.Produtos.Helpers.TipoReferenciaSaidaHelper.selectList(Model.EstoqueSaida.idTipoReferenciaSaida), "...", new { @class = "form-control input-sm", onchange = "EstoqueSaida.carregarReferencias();" })
+                @Html.ValidationMessageFor(m => m.EstoqueSaida.idTipoReferenciaSaida)
+            </div>
+                        
+            <div class="col-md-2">
+                @Html.labelRequired("Saída Para")
+                @Html.DropDownListFor(m => m.EstoqueSaida.idReferencia, WEB.Areas.Produtos.Helpers.TipoReferenciaSaidaHelper.selectListReferencias(Model.EstoqueSaida.idReferencia, Model.EstoqueSaida.idTipoReferenciaSaida), "...", new { @class = "form-control input-sm" })
+                @Html.ValidationMessageFor(m => m.EstoqueSaida.idReferencia)
+            </div>
+            
+            int idProdutoEstoque = (Model.EstoqueSaida.ProdutoEstoque == null) ? 0 : Model.EstoqueSaida.ProdutoEstoque.idProduto;
+            if (Model.EstoqueSaida.id > 0)
+            {
+                @Html.HiddenFor(x => x.EstoqueSaida.ProdutoEstoque.idProduto);
+                @Html.HiddenFor(x => x.EstoqueSaida.ProdutoEstoque.qtdMovimentada);
+            }
+ 
+            <div class="col-md-2">
+                @Html.labelRequired("Produto")
+                @Html.DropDownListFor(m => m.EstoqueSaida.ProdutoEstoque.idProduto, ProdutoHelper.getInstance.selectList(0, idProdutoEstoque), "...", new { @class = "form-control input-sm" }.isDisabled(Model.EstoqueSaida.id > 0))
+                @Html.ValidationMessageFor(m => m.EstoqueSaida.ProdutoEstoque.idProduto)            
+            </div>
+            <div class="col-md-2">
+                @Html.labelRequired("Quantidade")
+                @Html.TextBoxFor(m => m.EstoqueSaida.ProdutoEstoque.qtdMovimentada, new { @class = "form-control input-sm width-75" }.isDisabled(Model.EstoqueSaida.id > 0))
+                @Html.ValidationMessageFor(m => m.EstoqueSaida.ProdutoEstoque.qtdMovimentada)
+            </div>
+			<div class="clearfix"></div><br />
+
+			<div class="col-md-9">
+				<label>Descrição</label>
+				@Html.TextAreaFor(m => m.EstoqueSaida.ProdutoEstoque.descricao, new { @class = "form-control input-sm", rows = "4" })
+				@Html.ValidationMessageFor(m => m.EstoqueSaida.ProdutoEstoque.descricao)
+			</div>
+			<div class="clearfix"></div><br /><br />
+
+			<div class="col-md-12">
+                <div class="text-right">
+                    @Html.exibirBotoesFormulario(Url.Action("listar"), "N")
+                </div>
+			</div>
+			<div class="clearfix"></div><br /><br />
+		}
+	</div>
+}
+

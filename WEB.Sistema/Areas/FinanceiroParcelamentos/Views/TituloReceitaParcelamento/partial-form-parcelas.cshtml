@@ -1,0 +1,54 @@
+﻿@model WEB.Areas.FinanceiroParcelamentos.ViewModels.TituloReceitaParcelamentoForm
+@using MvcFlashMessages
+@using WEB.Helpers
+
+
+@Html.RenderFlash()
+
+@using (Ajax.BeginForm("salvar-parcelas", null, new AjaxOptions { HttpMethod = "POST", InsertionMode = InsertionMode.Replace, UpdateTargetId = "box-form-parcelas", OnSuccess = "TituloReceitaParcelamento.onSuccessParcelamento" }, new { })) {
+    @Html.HiddenFor(x => x.TituloReceita.id)
+    <div class="row">
+        <div class="col-md-6 col-sm-8 pull-right">
+            <div class="input-group">
+                @Html.DropDownListFor(m => m.qtdeParcelas, ComboHelper.selectListParcelamento(Model.qtdeParcelas, Model.TituloReceita.limiteParcelamento.toInt(), 2), "Quantidade de parcelas...", new { @class = "form-control input-sm", id = "qtdeParcelas" })
+                <span class="input-group-btn bg-blue"><a href="javascript:void(0)" class="btn btn-sm btn-primary" data-url="@Url.Action("partial-carregar-parcelas", "TituloReceitaParcelamento", new { area="FinanceiroParcelamentos", Model.TituloReceita.id })" onclick="TituloReceitaParcelamento.carregarParcelas(this);">Parcelar</a></span>
+            </div>
+        </div>
+    </div>
+    <div class="row margin-top-20">
+        <div class="col-md-6 col-sm-8 pull-right">
+            @if (Model.qtdeParcelas > 1 && Model.listaPagamentos.Any()) {
+
+                if (Model.listaPagamentos.Count > 0) {
+                int cont = 0;
+                    foreach (var OPagamento in Model.listaPagamentos) {
+                        <div class="list-item-dotted">
+                            <div class="row">
+                                <div class="col-sm-4 text-right">
+                                    @OPagamento.valorOriginal.ToString("C")
+                                </div>
+                                <div class="col-sm-8">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                        @Html.TextBoxFor(m => m.listaPagamentos[cont].dtVencimento, new { @class = "form-control input-sm text-center input-datepicker", alt = "date" })
+                                    </div>
+                                    @Html.ValidationMessageFor(m => m.listaPagamentos[cont].dtVencimento)
+                                </div>
+                            </div>
+                        </div>
+                        cont++;
+                    }
+                }
+            }
+
+            @if (Model.listaPagamentos.Count > 0) {
+                <p class="text-right margin-top-20">
+                    <button type="submit" name="salvar" class="btn btn-primary link-loading"><i class="fa fa-check"></i> Confirmar Parcelamento</button>
+                </p>
+            }
+        </div>        
+    </div>
+
+}
+<div class="clearfix"></div>
+

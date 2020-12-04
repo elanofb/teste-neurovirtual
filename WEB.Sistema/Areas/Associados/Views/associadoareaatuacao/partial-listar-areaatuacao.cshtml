@@ -1,0 +1,43 @@
+﻿@model List<DAL.Associados.AssociadoAreaAtuacao>
+@using BLL.ConfiguracoesTextos.Extensions
+@using DAL.Associados;
+@using DAL.Permissao.Security.Extensions
+@{
+    var idTipoAssociado = ViewBag.idTipoAssociado;
+}
+
+
+<br />
+<div class="text-left">
+	<button class="btn bg-yellow">
+		<i class="far fa-chart-bar"></i> <strong>@Model.Count</strong> @Html.labelTexto(User.idOrganizacao(), "lblareaatuacaoplural", "áreas de atuação") cadatrada(s)
+	</button>
+</div><br />
+<table class="table table-bordered table-striped">
+    <tr>
+        <th class="text-center">@Html.labelTexto(User.idOrganizacao(), "lblareaatuacao", "Área de Atuação")</th>
+        <th class="text-center width-250">Cadastro</th>
+        <th class="text-center width-125">&nbsp;</th>
+    </tr>
+    @if(Model.Count > 0) {
+        foreach(AssociadoAreaAtuacao OAreaAtuacao in Model) {
+            <tr>
+                <td>
+                    <span><i class="fa fa-check"></i> @OAreaAtuacao.AreaAtuacao.descricao</span>
+                </td>
+                <td class="text-left">
+                    <span><i class="fa fa-calendar"></i> @OAreaAtuacao.dtCadastro</span><br/>
+                    <span data-toggle="tooltip" title="Usuário Cadastro"><i class="fa fa-user"></i> @(!OAreaAtuacao.UsuarioCadastro.nome.isEmpty()? OAreaAtuacao.UsuarioCadastro.nome: "O associado")</span>
+                </td>
+                <td class="text-center box-acoes">
+					@Html.linkAjaxExcluir(OAreaAtuacao.id, "N", Url.Action("excluir", "associadoAreaAtuacao", new { area = "associados" }))
+                </td>
+            </tr>
+        }
+
+    } else {
+        <tr>
+            <td class="text-center" colspan="6">Nenhuma @Html.labelTexto(User.idOrganizacao(), "lblareaatuacao", "área de atuação") cadastrada.</td>
+        </tr>
+    }
+</table>

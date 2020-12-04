@@ -1,0 +1,74 @@
+﻿@model WEB.Areas.NaoAssociados.ViewModels.NaoAssociadoCadastroPFForm
+
+@{ Html.RenderPartial("aba-dados-cadastrais");}
+
+@if (Model.Associado.id > 0) {
+
+    if (Model.ConfiguracaoAssociadoPF.flagAbaContato == true) {
+        { Html.RenderPartial("abas/aba-contatos", Model.Associado.idPessoa); }
+    }
+
+    { Html.RenderPartial("abas/aba-documentos", Model.Associado); }
+
+    { Html.RenderPartial("abas/aba-historico", Model.Associado); }
+    
+    { Html.RenderPartial("~/Areas/Associados/Views/associado/aba-movimentacao.cshtml", Model.Associado.id); }
+
+    if (Model.ConfiguracaoAssociadoPF.flagAbaPedidos == true) {
+        { Html.RenderPartial("~/Areas/Associados/Views/AssociadoCadastroPF/abas/aba-pedidos.cshtml", Model.Associado); }
+    }
+
+
+    if (Model.ConfiguracaoAssociadoPF.flagAbaVeiculos == true) {
+        { Html.RenderPartial("abas/aba-veiculos", Model.Associado); }
+    }
+    
+    if (Model.ConfiguracaoAssociadoPF.flagDadosOutrasOrganizacoes == true) {
+        { Html.RenderPartial("~/Areas/Associados/Views/AssociadoCadastroPF/abas/aba-outras-organizacoes.cshtml", Model.Associado); }
+    }
+    
+    { Html.RenderPartial("abas/aba-conta-bancaria", Model.Associado); }
+
+    //if (Model.ConfiguracaoAssociadoPF.flagAbaContribuicoes == true) {
+    //    { Html.RenderPartial("abas/aba-cobrancas", Model.Associado); }
+    //}
+
+    //if (Model.ConfiguracaoGeral.flagAbaAreaAtuacoes == true) {
+    //    { Html.RenderPartial("aba-area-atuacao"); }
+    //}
+
+    //if (Model.ConfiguracaoGeral.flagAbaTitulo == true) {
+    //    { Html.RenderPartial("aba-titulos"); }
+    //}
+
+    //if (Model.ConfiguracaoGeral.flagAbaCargos == true) {
+    //    { Html.RenderPartial("aba-cargos"); }
+    //}
+
+
+
+    //if (Model.ConfiguracaoGeral.flagAbaAnuidades == true) {
+    //    { Html.RenderPartial("aba-anuidades"); }
+    //}
+
+    //if (Model.ConfiguracaoGeral.flagAbaMensalidades == true) {
+    //    { Html.RenderPartial("aba-mensalidades"); }
+    //}
+
+    //if (Model.ConfiguracaoGeral.flagAbaPedidos == true) {
+    //    { Html.RenderPartial("aba-pedidos"); }
+    //}
+
+    //if (Model.ConfiguracaoGeral.flagAbaEventos == true) {
+    //    { Html.RenderPartial("aba-eventos"); }
+    //}
+
+    //if (Model.ConfiguracaoGeral.flagAbaAnuncios == true) {
+    //    { Html.RenderPartial("aba-anuncios"); }
+    //}
+
+    //if (Model.ConfiguracaoGeral.flagAbaCarteirinha == true) {
+    //    { Html.RenderPartial("aba-carteirinha"); }
+    //}
+
+}

@@ -1,0 +1,162 @@
+﻿@model PagedList.IPagedList<DAL.Transacoes.MovimentoResumoVW>
+@using System.Web.Mvc.Html
+@using DAL.Transacoes
+@using PagedList.Mvc
+@using WEB.Areas.Transacoes.Helpers
+@{
+    ViewBag.titlePage = "Consulta de Movimentações";
+}
+@section styles {
+	<link href="@UtilConfig.linkResourses("css/associatec/material-design-colors/material-design-color-palette.css?v=1")" rel="stylesheet"/>
+}
+
+<div class="box box-primary">
+
+    @Html.headerBox("Filtros de Busca", "fa fa-filter")
+
+    <div class="box-body">
+		
+        @using (Html.BeginForm(null, null, FormMethod.Get, new { @class = "filtros" })) {
+			
+	        <div class="row">
+		        		        				
+		        <div class="col-sm-4 col-md-4 col-lg-3">
+			        <label>Tipo de Transação</label>
+			        @Html.DropDownList("idTipoTransacao", TipoTransacaoHelper.getInstance.selectList(UtilRequest.getByte("idTipoTransacao")), "Todos", new{@class = "form-control input-sm"})
+		        </div>
+		        <div class="clearfix visible-sm"></div>
+		        <div class="col-sm-3 col-md-2 col-lg-2">
+			        <label>Data Início</label>
+			        @Html.TextBox("dtInicio", UtilRequest.getString("dtInicio"), new{@class = "form-control input-sm input-datepicker", alt = "date", autocomplete = "off"})
+		        </div>
+		        <div class="col-sm-2 col-lg-1">
+			        <label>Hora Início</label>
+			        @Html.TextBox("hrInicio", UtilRequest.getString("hrInicio"), new{@class = "form-control input-sm", alt = "time", autocomplete = "off"})
+		        </div>
+				
+		        <div class="col-sm-3 col-md-2 col-lg-2">
+			        <label>Data Fim</label>
+			        @Html.TextBox("dtFim", UtilRequest.getString("dtFim"), new{@class = "form-control input-sm input-datepicker", alt = "date", autocomplete = "off"})
+		        </div>
+		        
+		        <div class="col-sm-2 col-lg-1">
+			        <label>Hora Fim</label>
+			        @Html.TextBox("hrFim", UtilRequest.getString("hrFim"), new{@class = "form-control input-sm input-datepicker", alt = "time", autocomplete = "off"})
+		        </div>
+		        <div class="clearfix visible-lg"></div>
+		        <div class="col-xs-4 col-md-4 col-lg-3">
+			        <label>Busca Livre</label>			        
+			        @Html.TextBox("valorBusca", UtilRequest.getString("valorBusca"), new { @class = "form-control input-sm" })
+		        </div>
+		        
+		        <div class="col-sm-4 col-md-4 col-lg-2">
+			        <label>Nro de registros por página</label>
+			        @Html.DropDownList("nroRegistros", ComboHelper.selectListNroRegistros(UtilRequest.getString("nroRegistros")), new { @class = "form-control input-sm" })
+		        </div>		        
+		        
+		        <div class="form-group col-sm-4 col-md-4 col-lg-3">
+			        <label>Tipo de Saída</label>
+			        @Html.buttonFlagTipoSaida(UtilRequest.getString("flagTipoSaida"))
+		        </div>
+                
+	        </div>
+        }
+    </div>
+</div>
+
+
+<div class="box box-primary">
+
+	@Html.headerBox($"{Model.TotalItemCount} resultados encontrados", "far fa-list")
+
+	<div class="box-body">
+		@if (!Model.Any()) {
+			<div class="callout callout-warning">
+				Nenhum registro foi localizado.
+			</div>					
+		}
+
+		<div class="row">
+			<div class="col-sm-12">
+				
+				@if (Model.Any()) {
+					int idMovimentoAnterior = 0;
+					bool flagFirst = true;
+					<table class="table table-bordered">
+						<thead>
+						<tr>
+							<th width="160">Movimento</th>
+							<th>Membro</th>
+							<th width="200">Valor</th>
+						</tr>
+						</thead>
+						<tbody>
+						@foreach (var Item in Model) {
+							string cellCor = Item.flagDebito ? "mdc-bg-red-50" : "mdc-bg-green-50";
+
+							if (!flagFirst && 
+								(idMovimentoAnterior != Item.idMovimentoPrincipal && idMovimentoAnterior != Item.idMovimento)) {
+								
+								<tr style="height:1px">
+									<td colspan="3" class="bg-gray" style="height:1px"></td>
+								</tr>
+							}
+							
+							<tr>
+								<td class="@cellCor">
+									<span><i class="far fa-hashtag"></i> @Item.idMovimento @*- @Item.idMovimentoPrincipal.toInt()*@</span><br />
+									<span><i class="far fa-calendar-alt"></i> @Item.dtCadastro.exibirData(true)</span>
+								</td>
+								<td class="@cellCor">
+									<span><i class="far fa-user"></i> @Item.nomeMembroDestino.defaultIfEmpty("-") <em>(@Item.nroMembroDestino)</em></span> 
+									<span>@boxDescricaoTransacao(Item)</span><br/>
+									<span class="fs-11 text-italic">@Item.observacao</span>
+								</td>
+								<td class="@cellCor">
+									<span class="@Html.textGreenOrRed(Item.flagCredito)"> <i class="far @(Item.flagCredito? "fa-plus": "fa-minus")"></i> @Item.valorOperacao.toDecimal().ToString("F4") BTK</span><br />
+									<span><i class="far @Html.iconCheckOrBan(Item.dtIntegracaoSaldo.HasValue)"></i> @(Item.dtIntegracaoSaldo.HasValue? "Saldo atualizado": "à sincronizar")</span>
+								</td>
+							</tr>
+							@*
+							<tr>
+								<td colspan="3" class="bg-black">
+									@idMovimentoAnterior - @Item.idMovimento - @Item.idMovimentoPrincipal
+								</td>
+							</tr>
+							*@
+
+							flagFirst = false;
+							idMovimentoAnterior = Item.idMovimentoPrincipal.toInt();
+						}
+						
+						</tbody>
+					</table>
+				}
+				
+			</div>
+		</div>
+		@(Html.paginarRegistros(Model, Html.PagedListPager(Model, nroPagina => Url.Action("index", new {nroPagina}), PagedListRenderOptions.OnlyShowFivePagesAtATime)))
+
+	</div>
+
+</div>
+
+@helper boxDescricaoTransacao(MovimentoResumoVW Item) {
+
+	if (Item.flagDebito) {
+		<span><strong>@Item.descricaoTipoTransacao</strong> realizado para <em>@Item.nomeMembroOrigem (@Item.nroMembroOrigem)</em></span>
+		return;
+	}
+
+	if (Item.idTipoTransacao == (byte) TipoTransacaoEnum.PAGAMENTO) {
+		<span><strong>@Item.descricaoTipoTransacao</strong> @Item.idMovimentoPrincipal, recebido de: @Item.nomeMembroOrigem.abreviar(10) (@Item.nroMembroOrigem)</span>
+		return;
+	}
+
+	if (Item.idTipoTransacao == (byte) TipoTransacaoEnum.CASHBACK) {
+		<span><strong>@Item.descricaoTipoTransacao</strong> do pagamento @Item.idMovimentoPrincipal, feito à @Item.nomeMembroOrigem.abreviar(10)</span>
+		return;
+	}
+
+	<span><strong>@Item.descricaoTipoTransacao</strong> origem de: @Item.nomeMembroOrigem</span>
+}

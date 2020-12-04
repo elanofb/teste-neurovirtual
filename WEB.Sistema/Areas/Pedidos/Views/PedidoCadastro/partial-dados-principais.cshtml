@@ -1,0 +1,134 @@
+﻿@model WEB.Areas.Pedidos.ViewModels.PedidoCadastroForm
+
+@using BLL.ConfiguracoesTextos.Extensions
+@using DAL.Permissao.Security.Extensions
+@using WEB.Areas.Pedidos.Helpers
+
+@{
+    var actionForm = Model.Pedido.idPessoa.toInt() == 0 ? "salvar-comprador" : "salvar-pedido";
+}
+
+<div class="text-right">
+    
+    <button type="button" class="btn btn-default" onclick="PedidoCadastroOperacao.novoPedido();">
+        <i class="fa fa-plus-circle"></i> Novo Pedido
+    </button>
+
+</div>
+
+@using (Html.BeginForm(actionForm, null, FormMethod.Post, new { id = "formPedido", role = "form", @class = "default" })) {
+
+    @Html.legendaRequired()
+    
+    @Html.ValidationSummary(false)
+
+    <div class="form-horizontal">
+        
+        <h4 class="separator-form">Dados do Comprador</h4>
+        
+        <div id="boxDadosComprador" class="@(Model.Pedido.idPessoa > 0 ? "box-no-editable" : "") padding-bottom-10">
+
+            <div class="col-xs-8">
+                @Html.labelRequired("Comprador")
+                @Html.DropDownListFor(m => m.Pedido.idPessoa, CompradorHelper.getInstance.selectListAssociadoNaoAssociado(Model.Pedido.idPessoa), "Digite o nome...", new {@class = "form-control input-sm", id = "idPessoa", onchange = "PedidoCadastro.carregarPessoa(this.value)" })
+                @Html.ValidationMessageFor(m => m.Pedido.idPessoa)
+            </div>
+
+            <div class="col-xs-4">
+                <label> CPF/CNPJ</label>
+                @Html.TextBox("nroDocumento", null, new { @class = "form-control input-sm", id = "cpfCliente", alt = "cpf" }.isReadOnly(true))
+            </div>
+            <div class="clearfix"></div>
+
+            <div class="col-xs-4">
+                <label> Telefone Principal </label>
+                @Html.TextBox("telPrincipal", null, new { @class = "form-control input-sm", id = "telPrincipal"}.isReadOnly(true))
+            </div>
+            <div class="col-xs-4">
+                <label> Telefone Secundário </label>
+                @Html.TextBox("telSecundario", null, new { @class = "form-control input-sm", id = "telSecundario"}.isReadOnly(true))
+            </div>
+            <div class="col-xs-2">
+                <label>Status</label>
+                @Html.TextBox("statusAssociado", null, new { @class = "form-control input-sm", id = "statusAssociado" }.isReadOnly(true))
+            </div>
+            <div class="col-xs-2 nao-exibir dado-associado">
+                <label>Situação</label>
+                @Html.TextBox("situacao", null, new {@class = "form-control input-sm", id = "situacaoAssociado"}.isReadOnly(true))
+            </div>
+
+            <div class="clearfix"></div>
+
+            <div class="col-md-4">
+                <label>@Html.labelTexto(User.idOrganizacao(), "emailPrincipal", "E-mail Principal")</label>
+                @Html.TextBox("emailPrincipal", null, new { @class = "form-control input-sm", id = "emailPrincipal" }.isReadOnly(true))
+            </div>
+
+            <div class="col-md-4">
+                <label>@Html.labelTexto(User.idOrganizacao(), "emailSecundario", "E-mail Alternativo")</label>
+                @Html.TextBox("emailSecundario", null, new { @class = "form-control input-sm", id = "emailSecundario" }.isReadOnly(true))
+            </div>
+            <div class="col-xs-2">
+                <label>Perfil</label>
+                @Html.TextBox("perfil", null, new { @class = "form-control input-sm", id = "descricaoPerfil"}.isReadOnly(true))
+            </div>
+        
+            @if (Model.Pedido.idPessoa.toInt() == 0) {
+
+                <div class="col-xs-2 padtop22 text-right">
+                    <button class="btn btn-primary btn-sm link-loading">Continuar <i class="fa fa-arrow-right"></i></button>
+                </div>
+
+            }
+
+            <div class="clearfix"></div>
+
+        </div>
+        
+        @if (Model.Pedido.idPessoa > 0) {
+
+            <h4 class="separator-form">Itens do Pedido</h4>
+            <div class="col-md-12">
+                @{Html.RenderPartial("~/Areas/Pedidos/Views/PedidoCadastroProduto/partial-produtos.cshtml", Model);}
+            </div>
+            <div class="clearfix"></div>
+            
+            <div class="row">
+
+                <div class="col-md-7">
+            
+                    <h4 class="separator-form">Dados de Entrega</h4>
+
+                    @{Html.RenderPartial("partial-entrega", Model);}
+
+                </div>
+
+                <div class="col-md-5">
+            
+                    <h4 class="separator-form">Forma de Pagamento</h4>
+            
+                    <div id="boxCondicoesPagamento">
+                        @{ Html.RenderPartial("partial-box-valores", Model); }
+                    </div>
+
+                </div>
+                <div class="clearfix"></div>
+
+            </div>
+
+        }
+
+    </div>
+    <div class="clearfix"></div><hr />
+	
+}
+
+<div class="text-right">
+        
+    @if (Model.Pedido.idPessoa > 0) {
+        <button type="button" name="enviar" class="btn btn-primary link-loading" onclick="$('#formPedido').submit();">
+            <i class="fa fa-shopping-cart"></i> Gerar
+        </button>
+    }
+
+</div>

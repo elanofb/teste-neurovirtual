@@ -1,0 +1,234 @@
+﻿@model AssociadoConsultaForm
+@using BLL.ConfiguracoesTextos.Extensions
+@using DAL.Permissao.Security.Extensions
+@using WEB.Areas.AssociadosConsultas.ViewModels
+@using PagedList.Mvc
+@using WEB.Areas.AssociadosConsultas.Extensions
+
+@{
+    string labelAssociados = Html.labelTexto(User.idOrganizacao(), "lblAssociados", "Membros").ToString();
+    
+    ViewBag.titlePage = labelAssociados; 
+
+    ViewBag.subTituloPagina = Html.texto(User.idOrganizacao(), "subTituloConsultaAssociados", "Realize abaixo, a busca dos membros desejados.");
+    
+}
+
+@section scripts {
+    @Html.includeBootstrapMultiselect()
+
+    @Html.includeDatePicker()
+
+    @Html.includeFroalaEditorJS()
+
+    <script type="text/javascript" src="@UtilConfig.linkResourses("Areas/AssociadosConsultas/js/associado-consulta.js")"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses("Areas/AssociadosOperacoes/js/associado-reativacao.js")"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses("Areas/AssociadosOperacoes/js/associado-desativacao.js")"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses("Areas/AssociadosOperacoes/js/associado-exclusao.js?v=1")"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses("Areas/AssociadosOperacoes/js/associado-tipo-alteracao.js")"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses("Areas/AssociadosOperacoes/js/associado-envio-link-recuperacao-senha.js")"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses("Areas/AssociadosOperacoes/js/associado-envio-nova-senha.js")"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses("Areas/AssociadosOperacoes/js/envio-senha-transacao.js?v=1.0")"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses("Areas/AssociadosOperacoes/js/associado-atualizacao-cadastral.js")"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses("Areas/AssociadosOperacoes/js/alterar-tipo-cadastro.js")"></script>
+
+}
+
+@section styles {
+
+    @Html.includeFroalaEditorCSS()
+
+    <link href="@UtilConfig.linkResourses("css/associatec/list-custom.css")" rel="stylesheet" />
+
+}
+
+<div class="box box-primary">
+
+    @Html.headerBox("Filtros de Busca", "fa fa-filter")
+
+    <div class="box-body">
+
+        @{ Html.RenderPartial("partial-filtros"); }
+
+    </div>
+    @Model.flagComissao
+</div>
+
+
+<div class="box box-primary">
+
+    <div class="box-header with-border">
+        <div class="box-title">
+            <i class="far fa-chart-bar"></i> Resultados
+        </div>
+        <div class="box-tools pull-right">
+            
+            <div class="btn-group">
+                
+                <button type="button" class="btn btn-box-tool dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+                    Ações <span class="caret"></span>
+                </button>
+
+                <ul class="dropdown-menu" role="menu">
+
+                    @*<li>
+                        <a href="javascript:;" class="text-blue" onclick="AssociadoNotificacao.enviarNotificacaoSelecionados()">
+                            <i class="fa fa-envelope"></i> Enviar mensagem para os membros selecionados
+                        </a>
+                    </li>*@
+
+                    <li>
+                        <a href="javascript:;" class="text-red" onclick="AssociadoDesativacao.desativarSelecionados()">
+                            <i class="fa fa-times"></i> Desativar Membros
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:;" class="text-red" onclick="AssociadoExclusao.excluirSelecionados()">
+                            <i class="fa fa-user-times"></i> Desligar membros
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="javascript:;" onclick="AssociadoEnvioLinkRecuperacaoSenha.enviarParaSelecionados()">
+                            <i class="fa fa-key"></i> Enviar recuperação de senha de acesso
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="javascript:;" onclick="AssociadoEnvioNovaSenha.enviarParaSelecionados()">
+                            <i class="fa fa-key"></i> Enviar nova senha de acesso
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="javascript:;" onclick="EnvioSenhaTransacao.enviarParaSelecionados()">
+                            <i class="fa fa-key"></i> Enviar nova senha de transação
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="javascript:;" onclick="AlterarTipoCadastro.enviarParaSelecionados()">
+                            <i class="fa fa-user"></i> Alterar tipo de cadastro
+                        </a>
+                    </li>
+
+                    @*
+                    <li>
+                        <a href="javascript:;" onclick="AssociadoAtualizacaoCadastral.enviarLinkSelecionados()">
+                            <i class="fa fa fa-users"></i> Enviar link de atualização cadastral para os membros selecionados
+                        </a>
+                    </li>
+                    *@
+                    
+                </ul>
+
+            </div>
+            
+        </div>
+
+	</div>
+    
+    <div class="box-body">
+
+        <div class="btn-group pull-right">
+
+            <label class="btn btn-default" data-toggle="tooltip" title="Selecionar Todos">
+                <input type="checkbox" name="marcarTodos" data-childs="checkRegistro[]" id="checkMarcarTodos"/>
+            </label>
+
+        </div>
+
+        <div class="clearfix"></div>
+
+        @if(!Model.listaAssociados.Any()) {
+            <div class="alert alert-info">
+                Nenhum registro foi encontrado.
+            </div>
+        }
+
+        @foreach(var OAssociado in Model.listaAssociados) {
+
+            <div class="box-info-item-dotted">
+
+                <div class="row">
+
+                    <div class="col-md-4 col-sm-4 col-xs-4">
+
+                        <label class="titulo">
+                            <i class="fa fa-user"></i> @OAssociado.nome.abreviar(30, "").ToUpper()
+                        </label><br />
+
+                        <span># @(OAssociado.nroAssociado ?? OAssociado.id)</span> <em>(@(OAssociado.descricaoTipoAssociado))</em>
+                        
+                    </div>
+
+                    <div class="col-md-2 col-sm-3 col-xs-3">
+                        <div class="col-md-12 margin-bottom-5">
+                            <i class="fa fa-id-card"></i> @UtilString.formatCPFCNPJ(OAssociado.nroDocumento)
+                        </div>
+                        <div class="clearfix"></div>
+                        
+                        @if(!UtilString.formatPhone(OAssociado.nroTelefone).isEmpty()) {
+                            <div class="col-md-12">
+                                <i class="fa fa-phone"></i> @UtilString.formatPhone(OAssociado.nroTelefone)
+                            </div>
+                            <div class="clearfix"></div>
+                        }
+                    </div>
+
+                    <div class="col-md-3 hidden-sm hidden-xs">
+                        <div class="col-md-12 margin-bottom-5">
+                            <i class="fa fa-calendar"></i> @OAssociado.dtCadastro.exibirData(true)
+                        </div>
+                        <div class="clearfix"></div>
+                        
+                        @if(!OAssociado.email.isEmpty()) {
+                            <div class="col-md-12 abreviar">
+                                <i class="fa fa-envelope"></i> @OAssociado.email
+                            </div>
+                            <div class="clearfix"></div>
+                        }
+                    </div>
+
+                    <div class="col-md-2 col-sm-3 col-xs-3">
+                        <div class="row">
+                            <div class="col-md-12 margin-bottom-5">
+                                <span class="@OAssociado.exibirClasseStatus()"><i class="fa @OAssociado.exibirIconeStatus()"></i> @OAssociado.exibirStatus()</span> 
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-1 col-sm-2 text-right">
+
+                        <div class="dropdown">
+                            <a href="javascript:;" class="dropdown-toggle" type="button" data-toggle="dropdown">
+                                Ações
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-right">
+                                <li>@Html.linkTexto("<i class=\"fa fa-edit\"></i> Editar Cadastro", Url.Action("editar", "AssociadoCadastro", new {Area = "Associados", id = OAssociado.id}))</li>
+                                @*
+                                <li>@Html.linkTexto("<i class=\"fa fa-print\"></i> Imprimir Informações", Url.Action("imprimir-admissao", "associadoimpressao", new {Area = "Associados", id = OAssociado.id}))</li>
+                            *@
+                            </ul>
+                        </div>
+
+                        <input type="checkbox" name="checkRegistro[]" value="@OAssociado.id" class="margin-right-5" />
+
+                    </div>
+
+                    <div class="clearfix"></div>
+
+
+                </div>
+
+            </div>
+
+        }
+
+        @(Html.paginarRegistros(Model.listaAssociados, Html.PagedListPager(Model.listaAssociados, nroPagina => UtilRequest.linkPaginacao(nroPagina, "consultar"), PagedListRenderOptions.OnlyShowFivePagesAtATime)))
+
+    </div>
+</div>

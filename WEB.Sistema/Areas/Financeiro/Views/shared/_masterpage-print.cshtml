@@ -1,0 +1,43 @@
+﻿@using BLL.Configuracoes
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>@ViewBag.Title  @Html.sistema().tituloSistema</title>
+	<meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
+	<link href="@UtilConfig.linkResourses()css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+	<link href="@UtilConfig.linkResourses()css/associatec/modulos/print-form.css" rel="stylesheet" type="text/css" />	
+    <link href="@UtilConfig.linkResourses()css/associatec/modulos/custom-print.css" rel="stylesheet" />
+</head>
+<body class="print">
+	<div class="container">
+		<header>
+			<table>
+				<tr>
+					<td valign="middle"><img src="@ConfiguracaoImagemBL.urlSistemaPrint" width="250" alt="@Html.sistema().nomeEmpresaResumo" /></td>
+					<td style="width:473px;"></td>
+					<td>
+						<p class="text-right">
+							<strong>@Html.sistema().tituloSistema</strong><br />
+						</p>
+					</td>
+				</tr>
+			</table>
+			<div class="clearfix"></div>
+		</header>
+		<div class="content">
+			<div class="col-md-12">
+				<h4>@ViewBag.tituloPagina</h4>
+			</div>
+			@RenderBody()
+		</div>
+        <footer>
+            <div class="col-md-12 text-right">
+                <a href="javascript:void(0);" class="btn btn-primary no-print" onclick="window.print();"><i class="fa fa-print"></i> Imprimir</a>
+            </div>
+            <div class="clearfix"></div>
+            <hr />
+        </footer>
+	</div>
+</body>
+</html>

@@ -1,0 +1,123 @@
+﻿@model List<TemplateMensagem>
+@using DAL.Notificacoes
+@using WEB.Helpers
+
+@{
+    Layout = "";
+}
+
+<div class="bordered-gray-bottom-1 white margin-bottom-20 margin-top-20">
+    <div class="row">
+
+        <div class="col-sm-10">
+            <strong><i class="fa fa-users"></i> @Model.Count registros encontrados </strong>
+        </div>
+
+        <div class="col-sm-2 text-right">
+            <div class="dropdown">
+                <a href="javascript:;" class="dropdown-toggle text-black" type="button" data-toggle="dropdown">
+                    <i class="fa fa-cog"></i>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-right">
+
+                    <li>
+                        <a href="@Url.Action("editar", "TemplateMensagemCadastro")">
+                            <i class="fa fa-plus"></i> Novo Template
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@if (!Model.Any()) {
+    <div class="col-md-12 alert alert-info">
+        <p>Nenhum template encontrado!</p>
+    </div>
+    <div class="clearfix"></div>
+}
+
+@foreach (var OItem in Model) {
+
+    @boxItem(OItem)
+
+}
+
+@helper boxItem(TemplateMensagem OTemplateMensagem) {
+
+    <div class="box-info-item-dotted bordered-destaque @(OTemplateMensagem.ativo == false ? "border-red" : "border-blue")">
+        
+        <div class="row">
+
+            <div class="col-md-3 abreviar">
+                
+                <span data-toggle="tooltip" title="Título">
+                    
+                    <i class="fa fa-browser"></i> # <span>@OTemplateMensagem.id</span> - @OTemplateMensagem.titulo
+                    
+                </span>
+                
+            </div>
+            
+            <div class="col-md-3 abreviar">
+                
+                <span data-toggle="tooltip" title="Status" class="@(OTemplateMensagem.ativo == true ? "text-green" : "text-red")">
+                    
+                    <i class="fa @Html.iconCheckOrBan(OTemplateMensagem.ativo)"></i> @(OTemplateMensagem.ativo == true ? "Ativo" : "Desativado")
+                    
+                </span>
+
+            </div>
+            
+            <div class="col-md-3 abreviar">
+                
+                <span data-toggle="tooltip" title="Data de Cadastro">
+                    
+                    <i class="fa fa-calendar"></i> @OTemplateMensagem.dtCadastro.exibirData()
+                    
+                </span>
+
+            </div>
+            
+            <div class="col-md-3 text-right">
+                
+                <div class="dropdown">
+                    
+                    <a href="javascript:;" class="dropdown-toggle text-black" type="button" data-toggle="dropdown">
+                        <i class="fa fa-cog"></i>
+                    </a>
+                    
+                    <ul class="dropdown-menu dropdown-menu-right">
+                        
+                        <li>
+                            <a href="@Url.Action("editar", "TemplateMensagemCadastro", new { OTemplateMensagem.id })">
+                                <i class="fa fa-edit"></i> Editar
+                            </a>
+                        </li>
+                        
+                        <li>
+                            <a href="javascript:;" onclick="Templates.alterarStatus('@Url.Action("alterar-status", "TemplateMensagemCadastro", new {OTemplateMensagem.id})', '@(OTemplateMensagem.ativo == true ? "D" : "A")');">
+                                @Html.Raw(OTemplateMensagem.ativo == true ? "<i class=\"fa fa-ban\"></i> Desativar" : "<i class=\"fa fa-check\"></i> Ativar")
+                            </a>
+                        </li>
+                        
+                        <li>
+                            <a href="javascript:void(0);" class="delete-default" data-id="@OTemplateMensagem.id" data-url="@Url.Action("excluir", "TemplateMensagemExclusao")" data-fncallback="location.reload();">
+                                <i class="far fa-trash-alt"></i> Excluir
+                            </a>
+                        </li>
+
+                    </ul>
+                </div>
+                
+            </div>
+            
+            <div class="clearfix"></div>
+
+        </div>
+
+    </div>
+}

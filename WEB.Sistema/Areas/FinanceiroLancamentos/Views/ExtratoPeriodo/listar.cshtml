@@ -1,0 +1,119 @@
+﻿@model WEB.Areas.FinanceiroLancamentos.ViewModels.ExtratoPorPeriodoVM
+
+@using WEB.Areas.ContasBancarias.Helpers
+@using WEB.Areas.Financeiro.Helpers
+@using WEB.Helpers
+
+@{
+    ViewBag.titlePage = "Extrato por Período";
+}
+
+@section styles {
+    <link href="@UtilConfig.linkResourses("css/associatec/list-custom.css")" rel="stylesheet"/>
+    <link href="@UtilConfig.linkResourses("css/associatec/modulos/widgets.css")" rel="stylesheet"/>
+}
+
+@section scripts{
+    @Html.includeDatePicker()
+    @Html.includeDateRangePicker()
+    @Html.includeJqueryLoading()
+    @Html.includeBootstrapMultiselect()
+    
+    <script src="@UtilConfig.linkResourses("areas/financeiro/js/auxiliares.js")"></script>
+    <script src="@UtilConfig.linkResourses("areas/financeiro/js/despesa-registrar-pagamento.js")"></script>
+    <script src="@UtilConfig.linkResourses("areas/FinanceiroLancamentos/js/lancamentos-despesas.js?v=1.3")"></script>
+    <script src="@UtilConfig.linkResourses("Areas/FinanceiroLancamentos/js/extrato-periodo.js")"></script>
+}
+
+@section breadcrump{
+    <ol class="breadcrumb">
+        <li>
+            <a href="javascript:;" onclick="$('.box-filtros').toggle('slow')" class="fs-16">
+                <i class="fa fa-filter"></i>
+            </a>
+        </li>
+    </ol>
+}
+
+<span class="badge bg-info"><i class="far fa-exclamation-triangle"></i> Por padrão o sistema exibe os informações do mês atual.</span><br />
+<span class="badge bg-info"><i class="far fa-exclamation-triangle"></i> Não é possível realizar uma busca com período superior a 31 dias.</span>
+
+<div class="row">
+    <div class="col-sm-12 nao-exibir box-filtros">
+        
+        <div class="card-gray margin-bottom-15">
+
+            <h4 class="separator-form-icon no-margin"><i class="far fa-filter"></i> Filtros de Busca</h4>
+
+            @using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "filtros", id = "formFiltro" })) {
+
+                <div class="row margin-top-10">
+
+                    <div class="col-md-3 col-lg-3">
+
+                        <label>Data de Movimentação</label>
+                        @Html.HiddenFor(m => m.dtVencimentoInicio, new { @class = "form-control input-sm", alt = "date" }.isReadOnly(true))
+                        @Html.HiddenFor(m => m.dtVencimentoFim, new { @class = "form-control input-sm", alt = "date" }.isReadOnly(true))
+
+                        <div class="input-group">
+
+                            <div id="dtVencimentoLabel" class="form-control input-sm fs-12 text-center">
+                                @Model.dtVencimentoInicio.Value.ToShortDateString() - @Model.dtVencimentoFim.Value.ToShortDateString()
+                            </div>
+
+                            <span id="dtVencimentoRange" class="input-group-addon padding-5">
+                                <i class="fa fa-caret-down"></i>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3 col-lg-3">
+                        <label>Conta Bancária</label>
+                        @Html.DropDownListFor(m => m.idContaBancaria, ContaBancariaHelper.getInstance.selectList(Model.idContaBancaria), "Todas", new { @class = "form-control input-sm" })
+                    </div>
+                    
+                    <div class="col-md-3 col-lg-3">
+                        <label>Macro Conta</label>
+                        @Html.ListBoxFor(m => m.idsMacroContas, MacroContaHelper.getInstance.selectMultList(Model.idsMacroContas), new { @class = "form-control input-sm input-multiselect" })
+                    </div>
+                    
+                    <div class="col-md-3 col-lg-3">
+                        <label>Sub Conta</label>
+                        @Html.ListBoxFor(m => m.idsSubContas, CategoriaTituloHelper.getInstance.selectMultList(Model.idsSubContas, null), new { @class = "form-control input-sm input-multiselect" })
+                    </div>
+                    <div class="clearfix"></div>
+                    
+                    <div class="col-md-3 col-lg-3">
+                        <label>Centro de Custo</label>
+                        @Html.ListBoxFor(m => m.idsCentrosCusto, CentroCustoHelper.getInstance.selectMultList(Model.idsCentrosCusto, true), new { @class = "form-control input-sm input-multiselect" })
+                    </div>
+                    
+                    <div class="col-md-2 col-lg-2">
+                        <label>Somente Pagos?</label>
+                        @Html.DropDownListFor(m => m.flagSomentePagos, ComboHelper.selectListTrueFalse(Model.flagSomentePagos), "Todas", new { @class = "form-control input-sm" })
+                    </div>
+                    
+                    <div class="col-md-2 col-lg-2">
+                        <label>Receita/Despesa</label>
+                        @Html.DropDownListFor(m => m.flagTipoTitulo, TipoTituloHelper.getInstance.selectList(Model.flagTipoTitulo), "Todos", new { @class = "form-control input-sm" })
+                    </div>
+                    
+                    <div class="col-md-2 col-lg-2">
+                        <label>Busca</label>
+                        @Html.TextBoxFor(m => m.valorBusca, new { @class = "form-control input-sm" })
+                    </div>
+                    
+                    <div class="col-md-3 col-lg-3">
+                        <label>Tipo de Saída</label>
+                        @Html.buttonFlagTipoSaida(Model.flagTipoSaida)
+                    </div>
+                    <div class="clearfix"></div><br/>
+                </div>
+            }
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    
+</div>
+
+@{ Html.RenderPartial("partial-lista-itens", Model); }

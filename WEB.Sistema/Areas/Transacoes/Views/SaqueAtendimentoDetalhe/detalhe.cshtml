@@ -1,0 +1,61 @@
+﻿@model WEB.Areas.Atendimentos.ViewModels.AtendimentoForm
+
+@{
+    ViewBag.titlePage = "Soliciação de Saque Nº " + Model.Atendimento.id;
+}
+
+@section scripts {
+    <script src="@UtilConfig.linkResourses("Areas/Atendimentos/js/atendimento.js")"></script>
+    <script src="@UtilConfig.linkResourses("Areas/Atendimentos/js/atendimento-acao.js")"></script>
+}
+
+@section styles {
+    <link href="@UtilConfig.linkResourses("Areas/Atendimentos/css/atendimento.css")" rel="stylesheet" />
+}
+
+<div class="row">
+    
+    <div class="col-md-7">
+                
+        <div class="row">
+            
+            <div class="col-xs-12">
+                @{ Html.RenderPartial("partial-box-informacoes", Model); }        
+            </div>
+            <div class="clearfix"></div>
+            
+            @*if (Model.AssociadoVinculado != null) {
+
+                <div class="col-xs-12">
+                    @{ Html.RenderPartial("partial-box-associado-vinculado", Model); }        
+                </div>
+                <div class="clearfix"></div>
+
+            }*@
+
+        </div>
+        
+    </div>
+    
+    <div class="col-md-5">
+                
+        <div class="box box-primary direct-chat direct-chat-primary">
+                    
+            <div class="box-header with-border">
+                        
+                <h3 class="box-title"><i class="fa fa-history"></i> Histórico de Atendimento</h3>
+
+            </div>
+                    
+            <div class="box-body">
+                        
+                <div id="boxHistoricoAtendimento" class="content-load carregando" data-url="@Url.Action("partial-historico-atendimento", "AtendimentoHistorico", new { Area = "Atendimentos", idAtendimento = Model.Atendimento.id })"></div>
+                        
+            </div>
+               
+        </div>
+
+    </div>
+    <div class="clearfix"></div>
+
+</div>

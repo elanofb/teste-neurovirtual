@@ -1,0 +1,37 @@
+﻿@model WEB.Areas.Pedidos.ViewModels.PedidoMontagemImpressaoVM
+
+@{
+    Layout = "~/Areas/Associados/Views/shared/_masterpage-print.cshtml";
+    ViewBag.Title = "Relação de Pedidos para Impressão";
+}
+
+@section styles {
+    <link href="@UtilConfig.linkResourses("Areas/Pedidos/css/pedido-producao-impressao.css")" rel="stylesheet" />
+    <link href="@UtilConfig.linkResourses("css/barcode/barcode.css")" rel="stylesheet" />
+}
+
+<table width="100%" cellpadding="7" cellspacing="0" style="border: #000000 1px solid; margin: 0 auto;">
+    
+    @{ Html.RenderPartial("partial-impressao-cabecalho", Model); }
+    
+    @if (Model.listaTodosPedidos.Any()) {
+
+        <tbody>
+            <tr>
+                <td colspan="3" bgcolor="#EEEEEE" align="center">
+                    <strong class="fs-10">Total de pedidos (@Model.listaTodosPedidos.Count)</strong>
+                </td>
+            </tr>
+        </tbody>
+        
+        { Html.RenderPartial("partial-impressao-pedidos", Model.listaTodosPedidos); }
+    }
+
+    <tbody>
+        <tr>
+            <td colspan="3" align="center" class="padding-10">
+                <strong>Copyright &copy; 2013-@DateTime.Today.Year - Associatec - Gestão de Entidades. Direitos reservados Sinctec Sistemas.</strong>
+            </td>
+        </tr>
+    </tbody>
+</table>

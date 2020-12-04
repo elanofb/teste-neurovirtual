@@ -1,0 +1,165 @@
+﻿@model WEB.Areas.Produtos.ViewModels.ProdutoForm
+@using WEB.Areas.Arquivos.Helpers
+@using DAL.Entities
+@{
+    Layout = "~/views/shared/associatec/masterpage-edit.cshtml";
+    ViewBag.titlePage = "Produto";
+    ViewBag.subTitlePage = (Model.Produto.id > 0 ? Model.Produto.nome : "Novo Produto");
+}
+@section breadcrump{
+    <ol class="breadcrumb">
+        <li><a href="@Url.Action("listar")" class="active fs-14"><i class="fa fa-arrow-left"></i> Voltar</a></li>
+    </ol>
+}
+@section styles{
+    @Html.includeToastCSS()
+
+    @*  Utilizado na aba de documentos e arquivos  *@
+    @Html.includeCSSModuloArquivos()
+    <link href="@UtilConfig.linkResourses("Areas/Arquivos/js/plugins/bootstrap-editable/bootstrap3-editable/css/bootstrap-editable.css")" rel="stylesheet" />
+
+    <link href="@UtilConfig.linkResourses("areas/produtos/css/produto.css")" rel="stylesheet" />
+    <link href="@UtilConfig.linkResourses("css/associatec/animate/animate.css")" rel="stylesheet" />
+    <link href="@UtilConfig.linkResourses("css/associatec/list-custom.css")" rel="stylesheet" />
+}
+
+@section scripts{
+    @Html.includeSelect2()
+    @Html.includeJSModuloArquivosFotos()
+    @Html.includeBootstrapMultiselect()
+    @Html.includeToastJS()
+    
+    <script type="text/javascript" src="@UtilConfig.linkResourses("Areas/Arquivos/js/plugins/bootstrap-editable/bootstrap3-editable/js/bootstrap-editable.min.js")"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses("Areas/Arquivos/js/arquivo-documento.js")"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses("Areas/Produtos/js/produto.js?v=1.2")"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses("Areas/Produtos/js/tipoproduto.js")"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses("Areas/Produtos/js/tipoproduto.js")"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses("Areas/Produtos/js/produto-rede-configuracao.js?v=1.0")"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses("Areas/Produtos/js/produto-rede-exclusao.js?v=1.1")"></script>
+    <script src="~/areas/produtos/js/composicao.js"></script>
+}
+
+@section navTabs{
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#tab-1" data-toggle="tab">Principal</a></li>
+        @if (Model.Produto.id > 0) {
+            <li><a href="#tab-2" data-toggle="tab">Participação para Rede</a></li>
+        }
+    </ul>
+}
+
+@section tabContent{
+    <div id="tab-1" class="tab-pane active">
+        @Html.infoCadastro(Model.Produto.id, Model.Produto.dtCadastro, Model.Produto.dtAlteracao)
+        @using (Html.BeginForm("editar", null, FormMethod.Post, new { role = "form", enctype = "multipart/form-data" })) {
+            @Html.HiddenFor(m => m.Produto.id)
+            @Html.HiddenFor(m => m.Produto.qtde)
+            @Html.ValidationSummary(false)
+            <div class="row">
+                <div class="col-sm-6">
+                    <h4 class="separator-form-icon">
+                        <i class="far fa-edit"></i>
+                        Informações do Produto
+                    </h4>
+                    <div class="row">
+                        <div class="col-md-6 col-xs-12">
+                            @Html.labelRequired("Tipo de Produto")
+                            @Html.DropDownListFor(m => m.Produto.idTipoProduto, TipoProdutoHelper.getInstance.selectList(Model.Produto.idTipoProduto), "...", new { @class = "form-control input-sm" })
+                            @Html.ValidationMessageFor(m => m.Produto.idTipoProduto)
+                        </div>
+                        <div class="col-md-3 col-xs-12">
+                            <label>Status</label>
+                            @Html.DropDownListFor(m => m.Produto.ativo, ComboHelper.selectListStatus(Model.Produto.ativo), new { @class = "form-control input-sm" })
+                        </div>
+                        <div class="col-md-3 col-xs-12">
+                            <label>Situação</label>
+                            @Html.DropDownListFor(m => m.idSituacao2, ComboHelper.selectListSituacoes(Model.idSituacao2.ToString()), new { @class = "form-control input-sm" })                            
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="col-xs-12">
+                            @Html.labelRequired("Nome do Produto")
+                            @Html.TextBoxFor(m => m.Produto.nome, new { @class = "form-control input-sm" })
+                            @Html.ValidationMessageFor(m => m.Produto.nome)
+                        </div>
+                        <div class="col-md-12">
+                            @Html.labelRequired("Descrição")
+                            @Html.TextAreaFor(m => m.Produto.descricaoResumida, new { @class = "form-control input-sm" })
+                            @Html.ValidationMessageFor(m => m.Produto.descricaoResumida)
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <h4 class="separator-form-icon">
+                        <i class="far fa-edit"></i>
+                        Imagens do produto
+                    </h4>
+                    <div class="row margin-top-20">
+                        <div class="col-md-12 col-xs-12">
+                            @Html.inputFileSimples("OImagem")<br />
+                            @Html.ValidationMessageFor(m => m.OImagem)
+                        </div>
+                        <div class="col-md-12 col-xs-12">
+                            @if (Model.Produto.id > 0) {
+                                <div class="content-load carregando" id="boxArquivosListar" data-target="boxArquivosListar" data-url="@Url.Action("partial-lista-fotos", "ArquivoFoto", new { Area = "Arquivos", entidade = EntityTypes.PRODUTO, idReferencia = Model.Produto.id})"></div>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <h4 class="separator-form-icon">
+                        <i class="far fa-edit"></i>
+                        Configurações
+                    </h4>
+                    <div class="row">
+                        <div class="col-md-6 col-xs-12">
+                            @Html.labelRequired("Valor de Venda")
+                            @Html.TextBoxFor(m => m.Produto.valor, new{@class = "form-control input-sm", alt = "decimal"})
+                            @Html.ValidationMessageFor(m => m.Produto.valor)
+                        </div>
+                        <div class="col-md-6 col-xs-12">
+                            <label>Pontos para plano de carreira da rede</label>                                
+                            @Html.TextBoxFor(m => m.Produto.qtdePontosPlanoCarreira, new{@class = "form-control input-sm", alt = "decimal"})
+                            @Html.ValidationMessageFor(m => m.Produto.qtdePontosPlanoCarreira)
+                            @Html.instrucao("Este campo não poderá ser alterado posteriormente")
+                        </div>
+                        <div class="col-md-6 col-xs-12">
+                            <label>Ganhos Diários</label>
+                            @Html.TextBoxFor(m => m.Produto.valorGanhoDiario, new{@class = "form-control input-sm", alt = "decimal"})
+                            @Html.ValidationMessageFor(m => m.Produto.valorGanhoDiario)
+                            @Html.instrucao("Informe em BTK")
+                            @Html.instrucao("Este campo não poderá ser alterado posteriormente")
+                        </div>
+                        <div class="col-md-6 col-xs-12">
+                            <label>Pagar durante quantos dias?</label>
+                            @Html.TextBoxFor(m => m.Produto.qtdeDiasDuracao, new{@class = "form-control input-sm", alt = "number_3"})
+                            @Html.ValidationMessageFor(m => m.Produto.qtdeDiasDuracao)
+                            @Html.instrucao("O pagamento será feito mesmo em finais de semana e feriados")
+                            @Html.instrucao("Este campo não poderá ser alterado posteriormente")
+                        </div>
+                    </div>
+                </div>
+             </div>
+            <div class="text-right margin-top-15">
+                @Html.exibirBotoesFormulario(Url.Action("listar"), "", Url.Action("editar", new { id = 0 }))
+            </div>
+        }
+    </div>
+    @if (Model.Produto.id > 0) {
+        @blocoParticipacaoRede()
+    }
+}
+@helper blocoParticipacaoRede() {
+    <div id="tab-2" class="tab-pane">
+        <div class="row">
+            <div class="col-sm-12">
+                <h4 class="separator-form-icon"><i class="far fa-edit"></i> Formulário de configuração</h4>
+                <div id="boxFormRede" class="carregando content-load" data-url="@Url.Action("partial-form-configuracao", "ProdutoRedeConfiguracao", new {idProduto = Model.Produto.id})"></div>
+            </div>
+        </div>
+        <div class="row margin-top-30">
+            <div class="col-sm-12">
+                <h4 class="separator-form-icon"><i class="far fa-list"></i> Configurações cadastradas</h4>
+                <div id="boxListaRede" class="carregando content-load" data-url="@Url.Action("partial-lista-configuracao", "ProdutoRedeConsulta", new {idProduto = Model.Produto.id})"></div>
+            </div>
+        </div>
+    </div>
+}

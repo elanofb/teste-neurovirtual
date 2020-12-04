@@ -1,0 +1,64 @@
+﻿@model WEB.Areas.NaoAssociados.ViewModels.TornarAssociadoForm
+@{
+	ViewBag.modalTitle = String.Format("Tornar {0} um associado", Model.NaoAssociado.Pessoa.nome);
+	ViewBag.modalWidthClass = "md";
+	if (IsPost) {
+		Layout = null;
+	} else {
+		Layout = "~/views/shared/associatec/masterpage-modal.cshtml";
+	}
+}
+
+<div id="boxFormTornarAssociado">
+    <div class="alert alert-warning"><strong>Atenção! </strong> Ao tornar um associado, todas as informações pertinentes ao seu cadastro serão migradas.</div>
+    @Html.showFlashMessage()
+    @using (Ajax.BeginForm("tornar-associado", null, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "boxFormTornarAssociado", InsertionMode = InsertionMode.Replace, OnSuccess = "NaoAssociadoAcao.onSuccessFormTornarAssociado" }, new { id = "formTornarAssociado", @class = "default col-md-12" }))
+    {
+        @Html.legendaRequired()<br />
+        { Html.EnableClientValidation(false); }
+        @Html.ValidationSummary(false)
+        @Html.HiddenFor(m => m.NaoAssociado.id)
+        @Html.HiddenFor(m => m.NaoAssociado.Pessoa.nome)
+
+        <div class="col-md-6 col-lg-6">
+            @Html.labelRequired("Deseja Admitir o Associado?") 
+            @Html.DropDownListFor(m => m.flagDesejaAdmitir, ComboHelper.selectListYesNo(Model.flagDesejaAdmitir), null, new {@class = "form-control input-sm"})
+        </div>
+
+        <div class="col-md-5 col-lg-6 info-admissao">
+            @Html.labelRequired("Data de Admissão")
+            @Html.TextBoxFor(m => m.NaoAssociado.dtAdmissao, new {@class = "form-control input-sm", alt = "date"})
+            @Html.ValidationMessageFor(m => m.NaoAssociado.dtAdmissao)
+        </div>
+
+        <div class="clearfix"></div>
+
+        <div class="col-md-4 col-lg-4">
+            @Html.labelRequired("Tipo de Associado")
+            @Html.DropDownListFor(m => m.NaoAssociado.idTipoAssociado, TipoAssociadoHelper.getInstance.selectList(Model.NaoAssociado.idTipoAssociado, Model.NaoAssociado.Pessoa.flagTipoPessoa, false), "...", new {@class = "form-control input-sm"})
+            @Html.ValidationMessageFor(m => m.NaoAssociado.idTipoAssociado)
+        </div>
+
+        <div class="clearfix"></div>
+
+        <div class="col-md-8 no-padding-bottom">
+            <label>Observações</label>
+        </div>
+        
+        <div class="clearfix"></div>
+
+        <div class="col-md-12 no-padding-top">
+            @Html.TextAreaFor(m => m.observacoes, new { @class = "form-control input-sm", rows = 4 })
+            @Html.ValidationMessage("observacoes")
+        </div>
+        <div class="clearfix"></div><br />
+
+    }
+</div>
+
+@section modalFooter{
+	<div class="text-right">
+		<input type="button" value="Cancelar" class="btn btn-default" data-dismiss="modal"  aria-hidden="true" />
+		<input type="button" value="Confirmar Tornar um Associado" class="btn btn-success link-loading" onclick="$('#formTornarAssociado').submit();" />
+	</div>
+}

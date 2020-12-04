@@ -1,0 +1,78 @@
+﻿@model WEB.Areas.Associados.ViewModels.AssociadoForm
+
+
+<div class="row">
+    <div class="col-sm-12">
+        <strong>#@Model.Associado.id</strong>
+
+        @if (!Model.Associado.nroAssociado.isEmpty()) {
+
+            <strong>Nº @Model.Associado.nroAssociado</strong>
+        }
+    </div>
+
+    <div class="col-sm-12">
+        <div class="row">
+            <div class="col-sm-8">
+                <span><i class="fa @(Model.Associado.Pessoa.flagTipoPessoa == "J" ? "fa-building-o" : "fa-user")"></i>@Model.Associado.Pessoa.nome.ToUpper()</span>
+            </div>
+            <div class="col-sm-4">
+                @(Model.Associado.Pessoa.flagTipoPessoa == "J" ? "Pessoa Jurídica" : "Pessoa Física")
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12">
+        <div class="row">
+            <div class="col-sm-8">
+                <span><i class="fa fa-id-card"></i> @UtilString.formatCPFCNPJ(Model.Associado.Pessoa.nroDocumento)</span>
+            </div>
+            <div class="col-sm-4">
+                @UtilDate.calcularIdade(Model.Associado.Pessoa.dtNascimento)
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12">
+        <span><i class="fa fa-users"></i> <a href="#" class="text-black">@Model.Associado.TipoAssociado.descricao</a></span>
+    </div>
+    <div class="col-sm-12">
+        <div class="row">
+            <div class="col-sm-6">
+                <em class="fs-10">Cadastro em @Model.Associado.dtCadastro.exibirData() por: @(Model.Associado.UsuarioCadastro == null ? "O Próprio" : Model.Associado.UsuarioCadastro.nome)</em><br />
+            </div>
+            <div class="col-sm-6">
+                @if (Model.Associado.dtAdmissao.HasValue) {
+                    <em class="fs-10"><i class="fa fa-check"></i> Admitido em @Model.Associado.dtAdmissao.exibirData() por @(Model.Associado.UsuarioAdmissao == null ? "-" : Model.Associado.UsuarioAdmissao.nome)</em><br />
+                }
+            </div>
+        </div>
+        
+
+
+
+        <em class="fs-10">Último pagamento registrado em @Model.Associado.dtUltimoPagamentoContribuicao.exibirData()</em>
+
+    </div>
+</div>
+
+
+
+
+
+@helper exibirLabelStatus() {
+
+if (Model.Associado.ativo == "S") {
+        @Html.boxInfo("ATIVO", "bg-green text-center")
+} else if (Model.Associado.ativo == "E") {
+        @Html.boxInfo("EM ADMISSÃO", "bg-yellow text-center")
+
+} else {
+        @Html.boxInfo("DESATIVADO", "bg-red text-center")
+}
+
+}
+
+@helper exibirSituacaoFinanceira() {
+
+
+
+}

@@ -1,0 +1,51 @@
+﻿@using MvcFlashMessages
+@model WEB.Areas.Publicacoes.ViewModels.TipoGaleriaFotoForm
+
+@{
+    if(IsPost) {
+        Layout = null;
+		
+    } else { 
+        Layout = "~/views/shared/associatec/masterpage-modal.cshtml";
+    }
+    
+    ViewBag.modalTitle = "Cadastrar uma Nova Categoria";
+}
+
+
+<div id="@(IsPost ? "" : "boxFormTipoGaleria")">
+
+	@Html.RenderFlash()
+
+	<div class="col-md-12">
+
+		@using (Ajax.BeginForm("salvar-modal-editar", null, new AjaxOptions {UpdateTargetId = "boxFormTipoGaleria", HttpMethod = "POST", OnSuccess = "TipoGaleriaFoto.onSuccess" }, new {role = "form", @class = "default"})) {
+            @Html.legendaRequired()<br/>
+            @Html.HiddenFor(m => m.TipoGaleriaFoto.id)
+            @Html.ValidationSummary(false)
+
+		    <div class="col-md-12">
+		        @Html.labelRequired("Descrição")
+		        @Html.TextBoxFor(m => m.TipoGaleriaFoto.descricao, new {@class = "form-control input-sm", maxlength = "100"})
+		        @Html.ValidationMessageFor(m => m.TipoGaleriaFoto.descricao)
+		    </div>
+
+            <div class="col-md-4">
+                <label>Portal</label>
+                @Html.DropDownListFor(m => m.TipoGaleriaFoto.idPortal, WEB.Areas.Portais.Helpers.PortalHelper.getInstance.selectList(Model.TipoGaleriaFoto.idPortal), "...", new { @class = "form-control input-sm" })
+                @Html.ValidationMessageFor(m => m.TipoGaleriaFoto.idPortal)
+            </div>
+
+		    <div class="clearfix"></div><br/>
+
+            <div class="col-md-12">
+                <div class="text-right">
+                    <input type="submit" class="btn btn-primary link-loading" value="Salvar" />
+                </div>
+            </div>
+		}
+	</div>
+
+</div>
+<div class="clearfix"></div><br />
+

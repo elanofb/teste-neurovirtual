@@ -1,0 +1,73 @@
+﻿@using PagedList.Mvc
+@model PagedList.IPagedList<DAL.Permissao.AcessoRecursoGrupo>
+
+@{
+    ViewBag.titlePage = "Módulos do Sistema";
+}
+
+<div class="col-xs-12 box box-solid">
+    <div>
+        @using (Html.BeginForm(null, null, FormMethod.Get, new { @class = "" })) {
+            <div class="form-group col-xs-9">
+
+            </div>
+            <div class="form-group col-xs-3">
+                <label>Status</label>
+                @Html.DropDownList("flagAtivo", ComboHelper.selectListStatus(UtilRequest.getString("flagAtivo")), "Todos", new { @class = "form-control input-sm" })
+            </div>
+        }
+        <div class="clearfix"></div>
+    </div>
+
+
+    <div class="table-responsive">
+        <div class="dataTables_wrapper form-inline" role="grid">
+
+			<div class="links-table">
+				<div class="btn-group">
+					<a href="@Url.Action("editar")" class="btn btn-default btn-flat" title="Adicionar novo registro">
+						<i class="far fa-plus-circle"></i>
+					</a>
+				</div>
+			</div>
+            <table class="table table-bordered table-striped dataTable">
+                <thead>
+                    <tr role="row">
+                        <th>ID</th>
+                        <th>Módulo</th>
+                        <th class="width-100">Status</th>
+                        <th class="width-50">&nbsp;</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.PageCount > 0) {
+
+                        foreach (var Item in Model) {
+
+                            <tr class="@(Item.ativo == "N" ? "row-disabled": "")">
+                                <td class="text-center" width="75">@Item.id</td>
+                                <td>@Item.descricao</td>
+                                <td class="text-center @(Item.ativo=="S"? "bg-green": "bg-red")" width="100">@(Item.ativo == "S" ? "Sim" : "Não")</td>
+                                <td class="text-center box-acoes">
+                                    <a href="@Url.Action("editar", new {@Item.id})"><i class="fa fa-search"></i></a>
+                                </td>
+                            </tr>
+                        }
+
+                    } else {
+                        <tr>
+                            <td class="text-center" colspan="4">Nenhum registro cadastrado</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            @(Html.paginarRegistros(Model, Html.PagedListPager(Model, nroPagina => Url.Action("listar", new { nroPagina }), PagedListRenderOptions.OnlyShowFivePagesAtATime)))
+
+
+        </div>
+    </div>
+
+
+
+</div>
+<div class="clearfix"></div>

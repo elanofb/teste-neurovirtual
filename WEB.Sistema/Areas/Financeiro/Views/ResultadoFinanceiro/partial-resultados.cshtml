@@ -1,0 +1,85 @@
+﻿@model WEB.Areas.Financeiro.ViewModels.ResultadoFinanceiroTotalizadoresVM
+
+<div id="boxTotalizadores" class="row">
+    @{ Html.RenderPartial("partial-totalizadores", Model); }
+</div>
+
+<div class="row">
+
+    <div class="col-md-6">
+
+        <div class="box box-primary">
+
+            <div class="box-header with-border">
+
+                <h3 class="box-title"><i class="glyphicon glyphicon-stats"></i> Receitas</h3>
+
+                <div class="box-tools pull-right">
+
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-box-tool dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                            Alterar Exibição <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu">
+                            <li>
+                                <a href="javascript:;" onclick="ResultadoFinanceiro.carregarBoxReceitas('')">Detalhado</a>
+                                <a href="javascript:;" onclick="ResultadoFinanceiro.carregarBoxReceitas('tipo')">Agrupar por tipo</a>
+                                <a href="javascript:;" onclick="ResultadoFinanceiro.carregarBoxReceitas('cc')">Agrupar por centro de custo</a>
+                                <a href="javascript:;" onclick="ResultadoFinanceiro.carregarBoxReceitas('mc')">Agrupar por macro conta</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="box-body">
+
+                <div id="boxListaReceitas"></div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-6">
+
+        <div class="box box-primary">
+
+            <div class="box-header with-border">
+
+                <h3 class="box-title">
+                    <i class="glyphicon glyphicon-shopping-cart"></i> Depesas
+                </h3>
+
+                <div class="box-tools pull-right">
+
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-box-tool dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                            Alterar Exibição <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu">
+                            <li>
+                                <a href="javascript:;" onclick="ResultadoFinanceiro.carregarBoxDespesas('')">Detalhado</a>
+                                <a href="javascript:;" onclick="ResultadoFinanceiro.carregarBoxDespesas('cc')">Agrupar por centro de custo</a>
+                                <a href="javascript:;" onclick="ResultadoFinanceiro.carregarBoxDespesas('mc')">Agrupar por macro conta</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="box-body">
+
+                <div id="boxListaDespesas"></div>
+
+            </div>
+
+        </div>
+
+    </div>
+    <div class="clearfix"></div>
+
+</div>

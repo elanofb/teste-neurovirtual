@@ -1,0 +1,94 @@
+﻿@model WEB.Areas.AssociadosConsultas.ViewModels.AssociadoAreaAtuacaoConsultaForm
+@using PagedList.Mvc
+
+@{
+    ViewBag.titlePage = "Áreas de Atuação";
+}
+
+@section scripts {
+    @Html.includeBootstrapMultiselect()
+
+    <script src="@UtilConfig.linkResourses("Areas/AssociadosConsultas/js/associado-area-atuacao-consulta.js")"></script>
+}
+
+@section styles {
+    <link href="@UtilConfig.linkResourses("css/associatec/list-custom.css")" rel="stylesheet" />
+}
+
+<div class="box box-primary">
+
+    @Html.headerBox("Filtros de Busca", "fa fa-filter")
+
+    <div class="box-body">
+
+        @{ Html.RenderPartial("partial-filtros"); }
+
+    </div>
+
+</div>
+
+<div class="box box-primary">
+
+    @Html.headerBox("Resultados", "far fa-chart-bar")
+
+    <div class="box-body">
+        
+        @if(!Model.listaFiltrada.Any()) {
+            <div class="col-sm-12">
+                <div class="alert alert-info">
+                    Nenhum resultado foi encontrado.
+                </div>
+            </div>
+        }
+        
+        @foreach(var OAssociado in Model.listaFiltrada) {
+        
+            <div class="box-info-item">
+
+                <div class="row">
+                    
+                    <div class="col-md-4 col-sm-12 abreviar">
+                        <span>
+                            <i class="fa fa-user"></i> #@OAssociado.idAssociado - @OAssociado.nome.abreviar(30).ToUpper()<br>
+                            @OAssociado.tipoAssociado<br>                                                 
+                            <i class="fas fa-id-card"></i> @OAssociado.nroDocumento
+                        </span>
+                    </div>
+                    
+                    <div class="col-md-2 col-sm-3">
+                        @foreach (string telefone in OAssociado.listaTelefones){
+                            <span>
+                                <i class="fa fa-phone"></i> @UtilString.formatPhone(telefone)
+                            </span><br>    
+                        }                        
+                    </div>
+                    
+                    <div class="col-md-4 col-sm-3">                        
+                        @foreach (var OEmail in OAssociado.listaEmails){
+                            <span>
+                                <i class="fa fa-envelope"></i> @OEmail.email  - @OEmail.tipoEmail
+                            </span><br>    
+                        }
+                    </div>
+                    
+                    <div class="col-md-2 col-sm-3 abreviar">
+                        @foreach (string areaAtuacao in OAssociado.listaAreaAtuacao){
+                            <span>
+                                <i class="fa fa-tag"></i> @areaAtuacao
+                            </span><br>
+                        }                        
+                    </div>                    
+                    
+                    <div class="clearfix"></div>
+
+                </div>
+                
+            </div>
+
+        }
+            
+        @(Html.paginarRegistros(Model.listaFiltrada, Html.PagedListPager(Model.listaFiltrada, nroPagina => UtilRequest.linkPaginacao(nroPagina, "consultar"), PagedListRenderOptions.OnlyShowFivePagesAtATime)))
+
+    </div>
+
+</div>

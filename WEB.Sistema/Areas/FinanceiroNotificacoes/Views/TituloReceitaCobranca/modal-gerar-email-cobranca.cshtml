@@ -1,0 +1,53 @@
+﻿@model WEB.Areas.FinanceiroNotificacoes.ViewModels.TituloReceitaCobrancaForm
+
+@using MvcFlashMessages
+
+@{
+    Layout = "~/views/shared/associatec/masterpage-modal.cshtml";
+
+    if (!UtilRequest.getString("btConfirmar").isEmpty()) {
+        Layout = null;
+    }
+
+    ViewBag.modalTitle = "Gerar e-mail de cobrança";
+    ViewBag.modalWidthClass = "lg";
+}
+
+<div id="boxGeracaoNotificacaoCobranca">
+
+    @Html.RenderFlash()
+
+    @using (Ajax.BeginForm("gerar-email-cobranca", null, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "boxGeracaoNotificacaoCobranca", OnSuccess = "TituloReceitaCobranca.onSucess", InsertionMode = InsertionMode.Replace }, new { })) {
+        
+        <div style="display: none;">
+            @Html.EditorFor(m => m.idsTitulosReceita)
+        </div>
+
+        <div class="col-md-6">
+            <label>Título do E-mail de Cobrança</label>
+            @Html.TextBoxFor(x => x.emailCobrancaTitulo, new { @class = "form-control input-sm", maxlength = 255 })
+            @Html.ValidationMessageFor(x => x.emailCobrancaTitulo)
+        </div>
+        <div class="clearfix"></div>
+
+        <div class="col-md-12">
+            <label>Corpo do E-mail de Cobrança</label>
+            @Html.TextAreaFor(x => x.emailCobrancaHtml, new { id = "emailCobrancaHtml", @class = "form-control input-sm", maxlength = 3000 })
+            @Html.ValidationMessageFor(x => x.emailCobrancaHtml)
+        </div>
+        <div class="clearfix"></div><br />
+
+        <div class="col-md-12 text-right">
+
+            <button type="button" class="btn btn-default">
+                <strong>@Model.idsTitulosReceita.Count()</strong> e-mail(s) de cobrança será(ão) gerados
+            </button>
+
+            <input type="submit" name="btConfirmar" class="btn btn-primary link-loading" value="Confirmar"/>
+
+        </div>
+        <div class="clearfix"></div>
+
+    }
+
+</div>

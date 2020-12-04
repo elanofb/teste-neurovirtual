@@ -1,0 +1,75 @@
+﻿@model  WEB.Areas.Associados.ViewModels.AssociadoRepresentanteForm
+@{
+	Layout = null;				
+}
+
+<div id="boxFormAssociadoRepresentante" >
+	@Html.showFlashMessage()
+	@using (Ajax.BeginForm("editar", "associadorepresentante", new{area="associados"}, new AjaxOptions { HttpMethod = "POST", InsertionMode = InsertionMode.Replace, UpdateTargetId = "boxFormAssociadoRepresentante", OnSuccess = "AssociadoRepresentante.onSuccessForm" }, new { @class = "" })) {
+
+		{ Html.EnableClientValidation(false); }
+		@Html.legendaRequired()<br />
+		@Html.HiddenFor(m => m.AssociadoRepresentante.id)
+		@Html.HiddenFor(m => m.AssociadoRepresentante.idAssociado, new { @class = "nao-limpar" })
+		
+		@Html.ValidationSummary(true, "Algumas informações precisam ser corrigidas abaixo.")
+
+        <div class="col-md-2">
+            @Html.labelRequired("Tipo Representante")
+            @Html.DropDownListFor(m => m.AssociadoRepresentante.idTipoAssociadoRepresentante, TipoAssociadoRepresentanteHelper.selectList(Model.AssociadoRepresentante.idTipoAssociadoRepresentante), "...", new { @class = "form-control input-sm" })
+            @Html.ValidationMessageFor(m => m.AssociadoRepresentante.idTipoAssociadoRepresentante)
+        </div>
+
+        <div class="col-md-4">
+            @Html.labelRequired("Representante Junto a Associação")
+            @Html.DropDownListFor(m => m.AssociadoRepresentante.flagRepresentantaAssociacao, ComboHelper.selectListYesNo(Model.AssociadoRepresentante.flagRepresentantaAssociacao), "...", new { @class = "form-control input-sm" })
+            @Html.ValidationMessageFor(m => m.AssociadoRepresentante.flagRepresentantaAssociacao)
+        </div>
+
+        <div class="col-md-3">
+            @Html.labelRequired("Nome")
+            @Html.TextBoxFor(m => m.AssociadoRepresentante.nome, new { @class = "form-control input-sm", maxlength = "100" })
+            @Html.ValidationMessageFor(m => m.AssociadoRepresentante.nome)
+        </div>
+
+        <div class="col-md-2">
+            @Html.labelRequired("CPF")
+            @Html.TextBoxFor(m => m.AssociadoRepresentante.cpf, new { @class = "form-control input-sm", maxlength = "11", alt = "cpf" })
+            @Html.ValidationMessageFor(m => m.AssociadoRepresentante.cpf)
+        </div>
+        <div class="clearfix"></div><br />
+
+        <div class="col-md-2">
+            @Html.Label("RG")
+            @Html.TextBoxFor(m => m.AssociadoRepresentante.rg, new { @class = "form-control input-sm", maxlength = "30" })
+            @Html.ValidationMessageFor(m => m.AssociadoRepresentante.rg)
+        </div>
+
+	    <div class="col-md-4 clear-right">
+	        @Html.labelRequired("Telefone")
+	        <div class="form-inline">
+	            @Html.TextBoxFor(m => m.AssociadoRepresentante.ddiTelPrincipal, new {@class = "form-control input-sm width-35", placeholder = "DDI", alt = "number_3"})
+	            @Html.TextBoxFor(m => m.AssociadoRepresentante.dddTelPrincipal, new {@class = "form-control input-sm width-35", placeholder = "DDD", alt = "number_3"})
+	            @Html.TextBoxFor(m => m.AssociadoRepresentante.nroTelPrincipal, new {@class = "form-control input-sm width-150", placeholder = "Fone", alt = "number_10"})
+	            <div class="clearfix"></div>
+	            @Html.ValidationMessageFor(m => m.AssociadoRepresentante.ddiTelPrincipal)
+	            @Html.ValidationMessageFor(m => m.AssociadoRepresentante.dddTelPrincipal)
+	            @Html.ValidationMessageFor(m => m.AssociadoRepresentante.nroTelPrincipal)
+
+	        </div>
+	    </div>
+
+        <div class="col-md-3">
+            @Html.Label("E-mail")
+            @Html.TextBoxFor(m => m.AssociadoRepresentante.emailPrincipal, new { @class = "form-control input-sm", maxlength = "150" })
+            @Html.ValidationMessageFor(m => m.AssociadoRepresentante.emailPrincipal)
+        </div>
+        <div class="clearfix"></div><br />
+
+		<div class="text-right">
+			<input type="button" name="limpar" value="Limpar" class="btn btn-default link-loading" onclick="DefaultSistema.limparForm(this.form)" />
+			<input type="submit" name="salvar" value="Salvar" class="btn btn-primary" />
+		</div>
+	}
+</div>
+<div class="clearfix"></div>

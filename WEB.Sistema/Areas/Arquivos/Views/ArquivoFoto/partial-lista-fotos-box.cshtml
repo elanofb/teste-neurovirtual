@@ -1,0 +1,81 @@
+﻿@model  List<ArquivoUpload>
+
+@using DAL.Arquivos
+
+<div class="boxListaFotosTipoBox">
+
+    <div class="row">
+    
+        @if(!Model.Any()) {
+
+            <div class="col-xs-12">
+
+                <div class="alert alert-info">
+                    Nenhuma imagem disponível no momento.
+                </div>
+
+            </div>
+        }
+    
+        @{ int cont = 1; }
+    
+        @foreach(var OArquivo in Model) {
+
+            <div class="col-md-3 col-sm-4 itemListaFotosTipoBox itemListaFotos" data-id="@OArquivo.id">
+            
+                <div class="box @(OArquivo.flagPrincipal == "S" ? "box-success" : "box-default")">
+            
+                    <div class="box-body">
+                    
+                        <p class="text-right">
+                        
+                            @if (OArquivo.flagPrincipal != "S") {
+                                <a href="javascript:;" class="btn btn-box-tool" data-toggle="tooltip" title="Escolher como imagem principal" onclick="ArquivoFoto.registrarPrincipal('@OArquivo.id')">
+                                    <i class="fa fa-check-circle"></i>
+                                </a>        
+                            }
+
+                            @if (OArquivo.flagPrincipal == "S") {
+                                <span class="btn btn-box-tool text-green" data-toggle="tooltip" title="Principal">
+                                    <i class="fa fa-check-circle"></i>
+                                </span>
+                            }
+
+                            <a href="javascript:;" class="btn btn-box-tool" data-toggle="tooltip" onclick="ArquivoFoto.excluir('@OArquivo.id')">
+                                <i class="fa fa-trash"></i>
+                            </a>
+
+                        </p>
+
+                        <a href="~/@OArquivo.srcImg()" class="itemFotoListaFotos" data-fancybox-group="gallery" title="@OArquivo.legenda">
+                            <img src="~/@OArquivo.srcImg()" class="img-responsive center-block" title="@OArquivo.legenda"/>
+                        </a>
+
+                    </div>
+                
+                    <div class="box-footer">
+                    
+                        <div class="text-center">
+                        
+                            @OArquivo.ordem - <a href="#" data-type="text" data-pk="@OArquivo.id" data-name="legenda"
+                                       data-url="@Url.Action("alterar-dados")" data-value="@OArquivo.legenda"
+                                       data-title="Editar Legenda" class="txtEditable">
+                            
+                                @(OArquivo.legenda ?? "Sem Legenda")
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        
+            cont++;
+
+        }
+
+    </div>
+
+</div>

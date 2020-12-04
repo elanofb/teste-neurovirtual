@@ -1,0 +1,19 @@
+﻿@model WEB.Areas.Contratos.ViewModels.ContratoForm
+@if (Model.Contrato.id > 0) {
+    <div class="form-horizontal">
+        <div class="col-md-6">
+            <a class="btn btn-default bg-gray"><strong>ID:</strong> @Model.Contrato.id</a> &nbsp;
+            <a class="btn btn-default bg-gray"><strong>Cadastro:</strong> @Model.Contrato.dtCadastro.ToShortDateString()</a> &nbsp;
+            <a class="btn btn-default bg-gray"><strong>Alterado em:</strong> @Model.Contrato.dtAlteracao.ToShortDateString()</a> &nbsp;
+            <a class="btn btn-default bg-gray"><strong>Situação:</strong> @Model.Contrato.StatusContrato.descricao</a>
+        </div>
+        <div class="col-md-6 text-right no-padding-right">
+            <a class="btn btn-primary"><i class="far fa-sync">&nbsp;</i> Renovar</a> &nbsp;
+            <a class="btn btn-success"><i class="fa fa-copy">&nbsp;</i> Duplicar</a> &nbsp;
+            <a class="btn btn-warning"><i class="fa fa-ban">&nbsp;</i> Revogar</a> &nbsp;
+            <a class="btn btn-default"><i class="fa fa-print">&nbsp;</i> Imprimir</a> &nbsp;
+            <a class="btn btn-danger"><i class="fa fa-times-circle">&nbsp;</i> Cancelar</a> 
+        </div>
+    </div>
+    <div class="clearfix"></div>
+}

@@ -1,0 +1,111 @@
+﻿@model WEB.Areas.Publicacoes.ViewModels.ConteudoForm
+
+@using DAL.Permissao.Security.Extensions
+@using WEB.Areas.Arquivos.Helpers
+@using WEB.Areas.Associacoes.Helpers
+
+@{
+    Layout = "~/views/shared/associatec/masterpage-edit.cshtml";
+
+    ViewBag.titlePage = "Cadastro e Edições de Páginas";
+    
+    ViewBag.subTituloPagina = Model.Conteudo.titulo;
+}
+
+@section styles{
+    @Html.includeCSSModuloArquivos()
+    
+    @Html.includeFroalaEditorCSS()
+}
+
+@section scripts{
+    @Html.includeDatePicker()
+
+    @Html.includeJSModuloArquivosFotos()
+
+    @Html.includeFroalaEditorJS()
+
+    <script src="@UtilConfig.linkResourses("Areas/Publicacoes/js/conteudo.js")"></script>    
+}
+
+@section breadcrump {
+    <ol class="breadcrumb">
+        <li><a href="@Url.Action("listar", "ConteudoConsulta", new{ area="Publicacoes" })"><i class="far fa-arrow-left"></i> Voltar</a></li>
+    </ol>
+}
+
+@section navTabs{
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#tab-1" data-toggle="tab">Principal</a></li>
+    </ul>
+}
+
+@section tabContent{
+
+    <div id="tab-1" class="tab-pane active">
+
+        @Html.infoCadastro(Model.Conteudo.id, Model.Conteudo.dtCadastro, Model.Conteudo.dtAlteracao)
+
+        @using (Html.BeginForm("editar", "ConteudoCadastro", FormMethod.Post, new { enctype = "multipart/form-data" })) {
+            
+            @Html.HiddenFor(m => m.Conteudo.id)            
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <h4 class="separator-form-icon"><i class="far fa-edit"></i> Dados Principais da Página</h4>
+                </div>
+            </div>
+            <div class="row">
+                @if (User.idOrganizacao() == 0) {
+                    <div class="col-sm-4 col-md-4">
+                        <label>Organização</label>
+                        @Html.DropDownListFor(m => m.Conteudo.idOrganizacao, AssociacaoHelper.getInstance.selectList(Model.Conteudo.idOrganizacao), "Padrão", new {@class = "form-control input-sm"})
+                    </div>
+                }                                        
+                <div class="clearfix"></div>
+                    
+                <div class="col-md-6">
+                    <label>Título</label><br />
+                    @Html.TextBoxFor(x => x.Conteudo.titulo, new { @class = "form-control input-sm", maxlength = "255" })
+                    @Html.ValidationMessageFor(x => x.Conteudo.titulo)
+                </div>
+                    
+                <div class="col-md-2">
+                    <label>ID Interno</label><br />
+                    @Html.TextBoxFor(x => x.Conteudo.idInterno, new { @class = "form-control input-sm", maxlength = "50" })
+                    @Html.ValidationMessageFor(x => x.Conteudo.idInterno)
+                    @Html.instrucao("Ex: PAGINA_INTERNA_TESTE")
+                </div>
+                    
+                <div class="col-sm-4 col-md-2">
+                    <label>Status</label>
+                    @Html.DropDownListFor(m => m.Conteudo.ativo, ComboHelper.selectListStatus(Model.Conteudo.ativo), "...", new {@class = "form-control input-sm"})
+                    @Html.ValidationMessageFor(m => m.Conteudo.ativo)
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <h4 class="separator-form-icon"><i class="far fa-edit"></i> Conteúdo da Página</h4>
+                </div>
+                <div class="col-md-12">
+                    <div class='box-header'>
+                        <div class="pull-right box-tools">
+                        </div>
+                    </div>
+                    <div class='box-body pad'>
+                        @Html.TextAreaFor(x => x.Conteudo.conteudo, new {@id = "editor", @class = "form-control input-sm textarea"})
+                        @Html.ValidationMessageFor(x => x.Conteudo.conteudo)
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row margin-top-20">
+                <div class="text-right col-sm-12">
+                    @Html.exibirBotoesFormulario(Url.Action("listar", "ConteudoConsulta"), "N")
+                </div>
+            </div>
+            
+        }
+
+    </div>
+}

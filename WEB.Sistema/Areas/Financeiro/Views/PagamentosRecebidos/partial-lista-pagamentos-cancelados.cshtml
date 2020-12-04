@@ -1,0 +1,39 @@
+﻿@model IList<TituloReceitaPagamento>
+@using DAL.Financeiro
+
+<br/>
+<table class="table table-bordered table-striped">
+	<thead>
+		<tr role="row">
+			<th>ID</th>
+			<th>Forma de Pagamento</th>
+			<th>Status</th>
+			<th>Valor Original</th>
+			<th>Vencimento</th>
+			<th>ID transação</th>
+			<th>Data Exclusão</th>
+			<th>Motivo</th>
+		</tr>
+	</thead>
+	<tbody>
+	@if (Model.Count > 0) {
+		foreach (var Item in Model) {
+			<tr>
+				<td class="text-center">@Item.id</td>
+				<td>@Item.descricaoFormaPagamento()</td>
+				<td>@(Item.StatusPagamento == null ? "-" : Item.StatusPagamento.descricao)</td>
+				<td class="text-right">@Item.valorOriginal.ToString("C")</td>
+				<td class="text-center">@Item.dtVencimento.exibirData()</td>
+				<td class="text-center">@Item.tokenTransacao</td>
+				<td class="text-right">@Item.dtExclusao.exibirData(true)</td>
+				<td class="text-center">@Item.motivoExclusao</td>
+			</tr>
+		}
+	} else {
+		<tr>
+			<td class="text-center" colspan="8">Nenhum registro localizado</td>
+		</tr>
+	}
+	</tbody>
+</table>
+<div class="clearfix"></div><br/>

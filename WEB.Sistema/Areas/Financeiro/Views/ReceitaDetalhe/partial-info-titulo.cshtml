@@ -1,0 +1,260 @@
+﻿@model WEB.Areas.Financeiro.ViewModels.ReceitaForm
+@using System.Web.Script.Serialization
+@using DAL.Financeiro
+
+@{
+    Layout = "";
+
+    var listaTrueFalse = new List<object>();
+    listaTrueFalse.Add(new { value = "True", text = "Sim" });
+    listaTrueFalse.Add(new {value = "False", text = "Não"});
+
+    var listaGateways = new List<object>();
+    listaGateways.Add(new { value = GatewayPagamentoConst.PAGARME, text = "Pagar.me" });
+    listaGateways.Add(new {value = GatewayPagamentoConst.SINCTEC, text = "Integração Direta (só boletos)"});
+    
+    var sourceEditableTrueFalse = new JavaScriptSerializer().Serialize(listaTrueFalse);
+    
+    var sourceEditableGateway = new JavaScriptSerializer().Serialize(listaGateways);
+}
+
+<div class="row">
+
+<div class="col-lg-6 col-md-8 padding-bottom-10 fs-12">
+
+    @if (Model.TituloReceita.idTituloReceitaOrigem > 0) {
+            
+        <div class="alert alert-info no-margin fs-14">
+            Esse título foi replicado do título: <a href="@Url.Action("editar", "ReceitaDetalhe", new { id = Model.TituloReceita.idTituloReceitaOrigem })">@Model.TituloReceita.TituloReceitaOrigem.descricao</a>
+        </div>
+    }
+        
+    <div class="row">
+
+        <div class="col-lg-4 col-md-4 col-sm-6 margin-top-10 margin-bottom-5">
+            <p class="campo-info"><label><i class="fa fa-hashtag"/> Ref.: </label> @Model.TituloReceita.idReceita.ToString()</p>
+
+            <p class="campo-info">
+                <label><i class="fa fa-tag"></i> Tipo: </label> @(Model.TituloReceita.TipoReceita?.descricao)
+            </p>
+
+            <p class="campo-info">
+                <label>Nota Fiscal: </label>
+                <a href="#" class="info-editavel editable editable-click" data-type="text" data-source="#" data-pk="@Model.TituloReceita.id" data-name="nroNotaFiscal" data-value="@Model.TituloReceita.nroNotaFiscal" data-title="Nota Fiscal">
+                    @Model.TituloReceita.nroNotaFiscal
+                </a>
+            </p>
+
+            <p class="campo-info">
+                <label>Nº Doc: </label>
+                <a href="#" class="info-editavel editable editable-click" data-type="text" data-source="#" data-pk="@Model.TituloReceita.id" data-name="nroDocumento" data-value="@Model.TituloReceita.nroDocumento" data-title="Nº Documento">
+                    @Model.TituloReceita.nroDocumento
+                </a>
+            </p>
+            <p class="campo-info">
+                <label>Nº Contrato: </label>
+                <a href="#" class="info-editavel editable editable-click" data-type="text" data-source="#" data-pk="@Model.TituloReceita.id" data-name="nroContrato" data-value="@Model.TituloReceita.nroContrato" data-title="Nº Contrato">
+                    @Model.TituloReceita.nroContrato
+                </a>
+            </p>
+        </div>
+
+        <div class="col-lg-4 col-md-4 col-sm-6 margin-top-10 margin-bottom-5">
+            <div class="row">
+                <p class="campo-info abreviar" data-toggle="tooltip" title="Pagador: @(Model.TituloReceita.nomePessoa)">
+                    <i class="fa fa-user-circle"></i> @(Model.TituloReceita.nomePessoa)
+                </p>
+                <p class="campo-info abreviar" data-toggle="tooltip" title="Nro. Documento do Pagador: @(UtilString.formatCPFCNPJ(Model.TituloReceita.documentoPessoa))">
+                    <i class="fa fa-id-card"></i> @(!Model.TituloReceita.documentoPessoa.isEmpty() ? UtilString.formatCPFCNPJ(Model.TituloReceita.documentoPessoa) : " Não Informado")
+                </p>
+                <p class="campo-info abreviar" data-toggle="tooltip" title="Telefone do Pagador: @(UtilString.formatPhone(Model.TituloReceita.nroTelPrincipal))">
+                    <i class="fa fa-phone"></i> @(!Model.TituloReceita.nroTelPrincipal.isEmpty() ? UtilString.formatPhone(Model.TituloReceita.nroTelPrincipal) : " Não Informado")
+                </p>
+                <p class="campo-info abreviar" data-toggle="tooltip" title="E-mail do Pagador: @(UtilString.formatPhone(Model.TituloReceita.emailPrincipal))">
+                    <i class="fa fa-envelope"></i>
+                    <a href="#" class="info-editavel editable editable-click" data-type="text" data-source="#" data-pk="@Model.TituloReceita.id" data-name="emailPrincipal" data-value="@Model.TituloReceita.emailPrincipal" data-title="E-mail para cobrança">
+                        @Model.TituloReceita.emailPrincipal
+                    </a>
+                </p>
+                <p class="campo-info abreviar" data-toggle="tooltip" title="Data Limite de Pagamento: @(Model.TituloReceita.dtLimitePagamento.exibirData())">
+                    <i class="fa fa-calendar"></i>
+                    <a href="#" class="info-editavel editable editable-click" data-alt="date" data-type="text" data-source="#" data-pk="@Model.TituloReceita.id" data-name="dtLimitePagamento" data-value="@Model.TituloReceita.dtLimitePagamento.exibirData()" data-title="Data Limite de Pagamento">
+                        @Model.TituloReceita.dtLimitePagamento.exibirData()
+                    </a>
+                </p>
+
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-md-4 margin-top-10 margin-bottom-5">
+            <div class="row">
+                <p class="campo-info" data-toggle="tooltip" title="Usuário do Cadastro: @Model.TituloReceita.UsuarioCadastro.nome">
+                    <label><i class="fa fa-user"></i></label>
+                    @(Model.TituloReceita.UsuarioCadastro== null? "Sistema": Model.TituloReceita.UsuarioCadastro.nome)
+                </p>
+                <p class="campo-info" data-toggle="tooltip" title="Data do Cadastro: @Model.TituloReceita.dtCadastro.exibirData()">
+                    <label><i class="fa fa-calendar"></i></label>
+                    @Model.TituloReceita.dtCadastro.exibirData()
+                </p>
+                <p class="campo-info" data-toggle="tooltip" title="Permite pagamento com boleto bancário?">
+                    <i class="fa fa-chevron-right"></i>Boleto: 
+                    <a href="#" class="info-editavel editable editable-click icon-before" data-type="select" data-source="@sourceEditableTrueFalse"
+                       data-pk="@Model.TituloReceita.id" data-name="flagBoletoBancarioPermitido" data-value="@(Model.TituloReceita.flagBoletoBancarioPermitido == true)" data-title="Permitir pagamento via boleto bancário?">
+                        @(Model.TituloReceita.flagBoletoBancarioPermitido == true ? "Sim" : "Não")
+                    </a>
+                </p>
+                <p class="campo-info" data-toggle="tooltip" title="Permite pagamento com depósito bancário?">
+                    <i class="fa fa-chevron-right"></i>Depósito:
+                    <a href="#" class="info-editavel editable editable-click icon-before" data-type="select" data-source="@sourceEditableTrueFalse"
+                       data-pk="@Model.TituloReceita.id" data-name="flagDepositoPermitido" data-value="@(Model.TituloReceita.flagDepositoPermitido == true)" data-title="Permitir pagamento via depósito bancário?">
+                        @(Model.TituloReceita.flagDepositoPermitido == true ? "Sim" : "Não")
+                    </a>
+
+                </p>
+                <p class="campo-info" data-toggle="tooltip" title="Permite pagamento com cartão de crédito?">
+                    <i class="fa fa-chevron-right"></i>Cartão:
+                    <a href="#" class="info-editavel editable editable-click icon-before" data-type="select" data-source="@sourceEditableTrueFalse"
+                       data-pk="@Model.TituloReceita.id" data-name="flagCartaoCreditoPermitido" data-value="@Model.TituloReceita.flagCartaoCreditoPermitido" data-title="Permitir pagamento via cartão?">
+                        @(Model.TituloReceita.flagCartaoCreditoPermitido == true ? "Sim" : "Não")
+                    </a>
+                </p>
+                    
+                <p class="campo-info" data-toggle="tooltip" title="Gateway de pagamento">
+                    <i class="fa fa-chevron-right"></i>Gateway:
+                    <a href="#" class="info-editavel editable editable-click icon-before" data-type="select" data-source="@sourceEditableGateway"
+                       data-pk="@Model.TituloReceita.id" data-name="idGatewayPermitido" data-value="@Model.TituloReceita.idGatewayPermitido" data-title="Gateway de pagamento">
+                        @(Model.TituloReceita.GatewayPermitido == null ? "-" : Model.TituloReceita.GatewayPermitido.descricao)
+                    </a>
+                </p>
+                    
+                <p class="campo-info" data-toggle="tooltip" title="Limite de parcelamento">
+                    <i class="fa fa-chevron-right"></i>Limite Parcelas:
+                    <a href="#" class="info-editavel editable editable-click icon-before" data-type="text" data-pk="@Model.TituloReceita.id" data-name="limiteParcelamento" data-alt="number_2" data-value="@Model.TituloReceita.limiteParcelamento.toInt()" data-title="Limite de parcelamento">
+                        @Model.TituloReceita.limiteParcelamento.toInt()
+                    </a>
+                </p>
+            </div>
+        </div>            
+        <div class="clearfix"></div>
+
+        <div class="col-sm-12">
+            <p class="campo-info">
+                <label>
+                    <i class="far fa-file"></i> DESCRIÇÃO RECEITA:
+                </label>
+                @Model.TituloReceita.descricao
+            </p>
+        </div>
+        <div class="clearfix"></div>
+        
+        @*<div class="col-sm-12">
+            <p class="campo-info">
+                <h4 class="separator-form-icon"> <i class="far fa-percent"></i> Tributos: </h4>
+                @if (Model.TituloImposto != null) {
+                    <table class="table table-striped">
+                        <tr>
+                            <th>COFINS</th>
+                            <th>ISS:</th>
+                            <th>PIS:</th>
+                            <th>ICMS:</th>
+                        </tr>
+                        <tr>
+                            <td>@Model.TituloImposto.percentualCOFINS.ToString("n2")%</td>
+                            <td>@Model.TituloImposto.percentualISS.ToString("n2")%</td>
+                            <td>@Model.TituloImposto.percentualPIS.ToString("n2")%</td>
+                            <td>@Model.TituloImposto.percentualICMS.ToString("n2")%</td>
+                        </tr>
+                        <tr>
+                            <td>@Model.TituloImposto.valorCOFINS.ToString("C")</td>
+                            <td>@Model.TituloImposto.valorISS.ToString("C")</td>
+                            <td>@Model.TituloImposto.valorPIS.ToString("C")</td>
+                            <td>@Model.TituloImposto.valorICMS.ToString("C")</td>
+                        </tr>
+                    </table>
+                }
+                else {
+                    <a href="javascript:;" onclick="DefaultSistema.showModal('@Url.Action("modal-cadastrar-titulo-imposto", "TituloImpostoCadastro", new { area = "Financeiro", idTituloReceita = Model.TituloReceita.id })')">Nenhum imposto configurado</a>
+                }
+            </p>
+        </div>*@
+
+        <div class="clearfix"></div>
+
+        @if (Model.TituloReceita.dtExclusao.HasValue) {
+            <div class="col-sm-4">
+                <p class="campo-info">
+                    <span data-toggle="tooltip" title="Dt. Exclusão"><strong><i class="fa fa-calendar-times-o"></i> </strong>@(Model.TituloReceita.dtExclusao.exibirData(true))</span>
+                </p>
+            </div>
+
+            <div class="col-sm-4">
+                <p class="campo-info">
+                    <span data-toggle="tooltip" title="Usuário Exclusão"><strong><i class="fa fa-user-times"></i> </strong>@(Model.TituloReceita.UsuarioExclusao.nome)</span>
+                </p>                    
+            </div>
+
+            <div class="clearfix"></div>
+
+            <div class="col-sm-12 abreviar">
+                <p class="campo-info">
+                    <span><strong><i class="fa fa-comment-o"></i> Motivo Exclusão: </strong>@(Model.TituloReceita.motivoExclusao)</span>
+                </p>                                        
+            </div>
+            <div class="clearfix"></div>
+        }
+
+    </div>
+</div>
+
+<div class="col-lg-6 col-md-4 padding-bottom-10 fs-12">
+
+    <div class="row">
+
+        <div class="col-lg-6 col-md-12 padding-bottom-10 bordered-gray-left-1">
+
+            @{ Html.RenderPartial("partial-classificacao-bancaria"); }
+
+        </div>
+
+        <div class="col-lg-6 col-md-12 padding-bottom-10 bordered-gray-left-1">
+
+            @{ Html.RenderPartial("partial-valores"); }
+        
+        </div>
+        <div class="clearfix"></div>
+
+    </div>
+
+</div>
+
+</div>
+<div class="row">
+    @if (!Model.TituloReceita.nomeRecibo.isEmpty()) {
+        <div class="col-sm-12 margin-bottom-10">
+            <h4 class="separator-form-icon"><i class="far fa-file"></i> Dados do Recibo: </h4>
+            <div class="row">
+                <div class="col-sm-2">
+                    Nome: @Model.TituloReceita.nomeRecibo
+                </div>
+                <div class="col-sm-2">
+                    Documento: @Model.TituloReceita.documentoRecibo.defaultIfEmpty("-")
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <h4 class="separator-form-icon">
+            <i class="fas fa-exclamation"></i> Observações:
+            <a href="javascript:;" class="editable-texteditor fs-11 text-italic " data-target="#observacaoTituloReceita">
+                <i class="fa fa-edit"></i>
+                Editar
+            </a>
+        </h4>
+        <div class="text-justify padding-5" id="observacaoTituloReceita" data-pk="@Model.TituloReceita.id.toInt()" data-name="observacao" data-value="@Model.TituloReceita.observacao" data-url="@Url.Action("modal-alterar-texteditor","TituloReceitaAlteracaoDados", new { area = "Financeiro"})" data-title="Observações">
+            @Html.Raw(Model.TituloReceita.observacao)
+        </div>
+    </div>
+</div>

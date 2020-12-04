@@ -1,0 +1,69 @@
+﻿@model WEB.Areas.Associados.ViewModels.AssociadoCadastroPJForm
+@using DAL.Associados
+@using System.Web.Script.Serialization
+
+<div class="row cabecario-associado">
+    <div class="col-sm-12">
+        @*<strong>#@Model.Associado.id </strong>&nbsp;&nbsp;*@
+        @if (!Model.Associado.nroAssociado.isEmpty()) {
+            <strong>Nº @Model.Associado.nroAssociado</strong>
+        }
+    </div>
+
+    <div class="col-sm-12">
+        <div class="row">
+            <div class="col-sm-6">
+                <span><i class="fa fa-building"></i> @Model.Associado.Pessoa.nome.ToUpper()</span><br/>
+                <span><i class="fa fa-building"></i> @Model.Associado.Pessoa.razaoSocial.ToUpper()</span>
+                @if (Model.ConfiguracaoMembro.idChaveBinaria > 0) {
+                    <br/><span data-toggle="tooltip" title="Posição na Rede"><i class="fa fa-sitemap"></i> @ConfiguracaoMembroExtensions.descricaoChveBinaria(Model.ConfiguracaoMembro.idChaveBinaria.toByte())</span>
+                }
+            </div>
+            <div class="col-sm-6">
+                PESSOA JURÍDICA<br/>
+                Fundação: @Model.Associado.Pessoa.dtNascimento.exibirData()
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12">
+        <div class="row">
+            <div class="col-sm-6">
+                <span><i class="fa fa-id-card"></i> @UtilString.formatCPFCNPJ(Model.Associado.Pessoa.nroDocumento)</span><br/>
+                
+                @{var listaTipoAssociado = TipoAssociadoHelper.getInstance.selectList(0, Model.Associado.Pessoa.flagTipoPessoa);}
+                @Html.Hidden("sourceTipoAssociado", new JavaScriptSerializer().Serialize(listaTipoAssociado.Select(x => new { value = x.Value, text = x.Text }).ToList()))
+
+                <span>
+                    <i class="fa fa-users"></i>
+                    <a href="#" data-pk="@(Model.Associado.id)"
+                       data-name="valor"
+                       data-title="Plano de Comissão"
+                       data-url="@Url.Action("alterar-tipo-associado", "AssociadoAcao")"
+                       data-type="select"
+                       data-value="@Model.Associado.TipoAssociado.id"
+                       class="id-tipo-associado text-black editable editable-click">
+                        @Model.Associado.TipoAssociado.nomeDisplay
+                    </a>
+                </span><br/>
+
+                @if (Model.Associado.dtAdmissao.HasValue) {
+                    <em class="fs-10"><i class="fa fa-check"></i>Admitido em @Model.Associado.dtAdmissao.exibirData() por @(Model.Associado.UsuarioAdmissao == null ? "-" : Model.Associado.UsuarioAdmissao.nome)</em><br />
+                }
+
+                <em class="fs-10">Último pagamento registrado em @Model.Associado.dtUltimoPagamentoContribuicao.exibirData()</em><br />
+
+            </div>
+            <div class="col-sm-6">
+                <em class="fs-10">
+                    <i class="fa fa-check"></i>Indicado por <strong>@(Model.Associado.Indicador?.Pessoa?.nome)</strong><br/>
+                    <i class="fa fa-check"></i>Cadastro em @Model.Associado.dtCadastro.exibirData() por: @(Model.Associado.UsuarioCadastro == null ? "Responsável" : Model.Associado.UsuarioCadastro.nome)<br/>
+                    <i class="fa fa-check"></i>Cadastro originado em @Model.Associado.descricaoOrigemCadastro()
+                    @if (Model.Associado.Unidade != null){
+                        <br/><i class="fa fa-check"></i><span>Cadastrado na unidade @Model.Associado.Unidade.Pessoa.nome</span>
+                    }
+
+                </em>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,64 @@
+﻿@using System.Web.Script.Serialization
+@using DAL.Financeiro
+@using WEB.Areas.ContasBancarias.Helpers
+@model WEB.Areas.Financeiro.ViewModels.DespesaForm
+
+@{
+
+    var urlEdicaoTitulo = Url.Action("alterar-dados", "DespesaDetalheOperacao", new { area = "Financeiro" });
+
+    var listaCentroCusto = CentroCustoHelper.getInstance.selectList(null).Select(y => new {value = y.Value, text = y.Text}).ToList();
+    listaCentroCusto.Add(new { value = "", text = "" });
+
+    var listaMacroConta = MacroContaHelper.getInstance.selectListPorTipo(null, "D").Select(y => new {value = y.Value, text = y.Text}).ToList();
+    listaMacroConta.Add(new { value = "", text = "" });
+
+    var listaSubConta = CategoriaTituloHelper.getInstance.selectList(null, Model.TituloDespesa.idMacroConta, false).Select(y => new {value = y.Value, text = y.Text}).ToList();
+    listaSubConta.Add(new { value = "", text = "" });
+
+    var listaContaBancaria = ContaBancariaHelper.getInstance.selectList(null).Select(y => new {value = y.Value, text = y.Text}).ToList();
+    listaContaBancaria.Add(new { value = "", text = "" });
+
+
+    var sourceCentroCusto = new JavaScriptSerializer().Serialize(listaCentroCusto);
+    var sourceMacroConta = new JavaScriptSerializer().Serialize(listaMacroConta);
+    var sourceSubConta = new JavaScriptSerializer().Serialize(listaSubConta);
+    var sourceContaBancaria = new JavaScriptSerializer().Serialize(listaContaBancaria);
+}
+
+<div class="btn btn-block btn-primary abreviar" data-toggle="tooltip" title="Classificação Bancária"><i class="fa fa-bank"></i> Classificação de Contas</div>
+
+<div class="row">
+    <div class="col-sm-12 margin-top-10 margin-left-10 abreviar">
+        <p class="campo-info">
+            <label><i class="fa fa-chevron-right"></i> Conta Bancária: </label>
+            @Html.linkEditable(Model.TituloDespesa.id, "idContaBancaria", Model.TituloDespesa.idContaBancaria, "Conta Bancária", urlEdicaoTitulo, "select", sourceContaBancaria, Model.TituloDespesa.ContaBancaria?.descricao)
+        </p>
+    </div>
+    <div class="clearfix"></div>
+
+    <div class="col-sm-12 margin-left-10 abreviar">
+        <p class="campo-info">
+            <label><i class="fa fa-chevron-right"></i> Centro de Custo: </label>
+            @Html.linkEditable(Model.TituloDespesa.id, "idCentroCusto", Model.TituloDespesa.idCentroCusto, "Centro de Custo", urlEdicaoTitulo, "select", sourceCentroCusto, Model.TituloDespesa.CentroCusto?.descricaoCentroCusto())
+        </p>
+    </div>
+    <div class="clearfix"></div>
+
+    <div class="col-sm-12 margin-left-10 abreviar">
+        <p class="campo-info">
+            <label><i class="fa fa-chevron-right"></i> Macro Conta: </label>
+            @Html.linkEditable(Model.TituloDespesa.id, "idMacroConta", Model.TituloDespesa.idMacroConta, "Macro Conta", urlEdicaoTitulo, "select", sourceMacroConta, Model.TituloDespesa.MacroConta?.descricaoMacroConta())
+        </p>
+    </div>
+    <div class="clearfix"></div>
+
+    <div class="col-sm-12 margin-left-10 abreviar">
+        <p class="campo-info">
+            <label><i class="fa fa-chevron-right"></i> Sub-conta: </label>
+            @Html.linkEditable(Model.TituloDespesa.id, "idCategoria", Model.TituloDespesa.idCategoria, "Categoria", urlEdicaoTitulo, "select", sourceSubConta, Model.TituloDespesa.Categoria?.descricaoSubConta())
+        </p>
+    </div>
+    <div class="clearfix"></div>
+
+</div>

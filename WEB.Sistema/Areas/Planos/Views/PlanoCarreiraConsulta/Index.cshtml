@@ -1,0 +1,142 @@
+﻿@model PagedList.IPagedList<DAL.Planos.PlanoCarreira>
+@using PagedList.Mvc
+@using WEB.Areas.Arquivos.Helpers
+
+@{
+    ViewBag.titlePage = "Planos Cadastrados";
+}
+
+@section styles {
+	
+	@Html.includeFroalaEditorCSS()
+	@Html.includeCSSModuloArquivos()
+	
+	<link href="@UtilConfig.linkResourses("css/associatec/list-custom.css")" rel="stylesheet" />
+}
+
+@section scripts{
+    
+	@Html.includeFroalaEditorJS()
+	@Html.includeJSModuloArquivosFotos()    	
+}
+
+
+<div class="box box-primary">
+	
+	@Html.headerBox("Filtros de Busca", "fa fa-filter")
+	
+	<div class="box-body">
+		
+		@using (Html.BeginForm(null, null, FormMethod.Get, new { @class = "" })) {
+			
+		    <div class="row">
+				
+                <div class="form-group col-xs-5">
+                </div>
+				
+			    <div class="form-group col-xs-2">
+				    <label>Status</label>
+				    @Html.DropDownList("ativo", ComboHelper.selectListTrueFalse(UtilRequest.getBool("ativo")), "Todos", new { @class = "form-control input-sm" })
+			    </div>			   			    
+				
+			    <div class="form-group col-xs-3">
+		            <label>Buscar</label>
+		            @Html.buttonSearch(UtilRequest.getString("valorBusca"))
+		        </div>
+		        <div class="clearfix"></div>
+
+            </div>
+        }
+
+	</div>
+
+</div>
+
+<div class="box box-primary">
+
+	<div class="box-header with-border">
+		
+		<div class="box-title">
+			<i class="far fa-chart-bar"></i> Resultados <small class="fs-10">@Model.TotalItemCount encontrado(s). </small>
+		</div>
+
+		<div class="box-tools pull-right">
+			<div class="dropdown">
+				<a href="javascript:;" class="dropdown-toggle text-black fs-16" type="button" data-toggle="dropdown">
+					<i class="fa fa-cog"></i>
+				</a>
+				<ul class="dropdown-menu dropdown-menu-right">
+					<li>
+						<a href="@Url.Action("index", "PlanoCarreiraCadastro")"><i class="far fa-plus-circle"></i> Novo Plano</a>
+					</li>
+				</ul>
+			</div>			
+			
+		</div>
+		
+	</div>
+	
+	<div class="box-body">
+
+		@if (!Model.Any()) {
+			
+			<div class="col-md-12 alert alert-info">
+				<p>Nenhum plano cadastrado</p>
+			</div>
+			<div class="clearfix"></div>
+			
+		}
+		
+		@foreach (var OPlanoCarreira in Model) {
+			
+			<div class="box-info-item-dotted bordered-destaque">
+				
+				<div class="row">
+					
+					<div class="col-sm-7">
+						<span title="Descrição" data-toggle="tooltip">
+							<strong># @OPlanoCarreira.id - @OPlanoCarreira.descricao </strong>
+						</span>
+					</div>
+							
+					<div class="col-sm-4">
+						<span title="Pontuação" data-toggle="tooltip">
+							<i class="fas fa-list-ol"></i> @OPlanoCarreira.pontuacao
+						</span>
+					</div>
+							
+					<div class="col-sm-1 pull-right text-right">
+
+						<div class="dropdown">
+
+							<a href="javascript:;" class="dropdown-toggle text-black" type="button" data-toggle="dropdown">
+								<i class="fa fa-cog"></i>
+							</a>
+
+							<ul class="dropdown-menu dropdown-menu-right">
+
+								<li>
+									<a href="@Url.Action("index", "PlanoCarreiraCadastro", new{OPlanoCarreira.id})">
+										<i class="fa fa-search"></i> Detalhes
+									</a>
+								</li>
+
+								<li class="divider"></li>
+
+								<li>
+									@Html.linkAjaxExcluir(OPlanoCarreira.id, "N", Url.Action("excluir", "PlanoCarreiraExclusao"), "", "", "Excluir")
+								</li>
+
+							</ul>
+						</div>
+					</div>
+					
+				</div>
+			</div>
+		}
+		
+		@(Html.paginarRegistros(Model, Html.PagedListPager(Model, nroPagina => UtilRequest.linkPaginacao(nroPagina, "index"), PagedListRenderOptions.OnlyShowFivePagesAtATime)))
+
+	</div>
+
+</div>

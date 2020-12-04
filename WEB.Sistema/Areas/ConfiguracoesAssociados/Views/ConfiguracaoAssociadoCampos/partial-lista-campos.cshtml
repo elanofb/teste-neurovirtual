@@ -1,0 +1,116 @@
+﻿@model WEB.Areas.ConfiguracoesAssociados.Models.ViewModels.ConfiguracaoCamposVM
+@using DAL.Configuracoes.Const
+@using DAL.ConfiguracoesAssociados
+@using MvcFlashMessages
+@using WEB.Areas.ConfiguracoesAssociados.Helpers 
+
+@Html.RenderFlash()
+
+<style>
+    .dropdown-submenu {position: relative;}
+    .dropdown-submenu .dropdown-menu {top: 0;left: 100%;margin-top: -1px;}
+</style>
+
+<div class="row">
+    @using (Html.BeginForm(null, null)) {
+
+        if (Model.listaGrupos.Any()) {
+            foreach (var OGrupo in Model.listaGrupos) {
+                @boxGrupoCampos(OGrupo)
+            }
+        } else {
+            <div class="col-sm-12">
+                <a href="javascript:void(0)" onclick="AssociadoCampo.importarDefaultSistema(this)" data-url="@Url.Action("clonar-padrao-sistema", new { Model.idOrganizacao, Model.idTipoCampoCadastro})">
+                    <i class="far fa-plus-circle"></i> Importar campos padrões do sistema</a>&nbsp;&nbsp;&nbsp;
+
+                <div class="alert alert-warning">
+                    <div class="text-center">Não existem configurações de cadastro disponíveis.</div>
+                </div>
+            </div>
+        }
+    }
+</div>
+
+@helper boxGrupoCampos(ConfiguracaoAssociadoCampoGrupo OGrupo) {
+
+    var listaCampos = Model.listaCampos.Where(x => x.idAssociadoCampoGrupo == OGrupo.id).ToList();
+
+    <div class="box-grupo @(OGrupo.cssBoxGrupo.isEmpty() ? "col-sm-12" : OGrupo.cssBoxGrupo)">
+        <h4 class="separator-form">@OGrupo.descricao</h4>
+
+        <div class="row">
+            @foreach (var OCampo in listaCampos){
+                @boxCampo(OCampo)
+            }
+        </div>
+    </div>
+    @Html.Raw(OGrupo.htmlAposBox)
+}
+
+@helper boxCampo(ConfiguracaoAssociadoCampo OCampo) {
+
+    var classes = "";
+
+    if (OCampo.idTipoCampo == ConfiguracaoTipoCampoConst.HIDDEN) { classes += " box-hidden"; }
+
+    if (OCampo.flagAreaAssociado == true) { classes += " box-area-associado"; }
+
+    if (OCampo.flagAreaAdm == true) { classes += " box-adm"; }
+
+    if (OCampo.flagCadastro == true){ classes += " box-add"; }
+
+    if (OCampo.flagEdicao == true){ classes += " box-edit"; }
+
+    if (OCampo.ativo == false){ classes += " box-disabled"; }
+
+    if (!OCampo.isEmpty()) { classes = "box-view" + classes; }
+
+    <div class="@OCampo.cssClassBox @classes">
+        <div class="dropdown">
+            <a href="" class="dropdown-toggle @(OCampo.ativo == true? "text-black": "text-red")" id="menu1" data-toggle="dropdown">@(OCampo.flagObrigatorio == true ? Html.labelRequired(OCampo.label) : Html.Label(OCampo.label)) <span class="caret"></span></a>
+            @linksEdicao(OCampo)
+        </div>
+        
+        @Html.buildField(OCampo, true)
+
+        @if (!OCampo.textoInstrucoes.isEmpty()){
+            @Html.instrucao(OCampo.textoInstrucoes)
+        }
+    </div>
+    @Html.Raw(OCampo.htmlAfterBox)
+}
+
+@helper linksEdicao(ConfiguracaoAssociadoCampo OCampo) {
+
+    <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
+        
+        @if (OCampo.idTipoCampo == ConfiguracaoTipoCampoConst.SELECT_FIXO) {
+            <li><a href="javascript:void(0);" role="menuitem" onclick="AssociadoCampoOpcao.modalCampoOpcao(this)" data-id-tipo-campo-cadastro="@OCampo.idTipoCampoCadastro" data-url="@Url.Action("modal-campo-opcao", "ConfiguracaoAssociadoCampoOpcao", new {idCampo = OCampo.id, OCampo.idOrganizacao})"><i class="fa fa-list text-black"></i> Opções</a></li>
+        }
+
+        <li><a href="javascript:void(0);" onclick="AssociadoCampoPropriedade.modalCampoPropriedade(this)" data-id-tipo-campo-cadastro="@OCampo.idTipoCampoCadastro" data-url="@Url.Action("modal-campo-propriedade", "ConfiguracaoAssociadoCampoPropriedade", new {idCampo = OCampo.id, OCampo.idOrganizacao})"><i class="fa fa-tag text-black"></i> Atributos</a></li>
+
+        <li><a href="javascript:void(0);" onclick="DefaultSistema.showModal('@Url.Action("modal-form-campo", new {OCampo.id, Model.idTipoCampoCadastro, idOrganizacao = OCampo.idOrganizacao})', AssociadoCampo.initModal)"><i class="fa fa-edit text-black"></i> Editar</a></li>
+        
+        <li class="dropdown-submenu">
+            <a tabindex="-1" href="#"><i class="fa fa-clone text-black"></i>Clonar Campo<span class="caret"></span></a>
+            <ul class="dropdown-menu">
+                <li class="@(Model.idTipoCampoCadastro == TipoCampoCadastroConst.PF ? "bg-gray" : "")"><a href="javascript:void(0);" onclick="DefaultSistema.showModal('@Url.Action("modal-form-campo", new {OCampo.id, idTipoCampoCadastro = TipoCampoCadastroConst.PF, idCampoClone = OCampo.id, OCampo.idOrganizacao})', AssociadoCampo.changeTipoCampo)">Associado PF</a></li>
+                <li class="@(Model.idTipoCampoCadastro == TipoCampoCadastroConst.PJ ? "bg-gray" : "")"><a href="javascript:void(0);" onclick="DefaultSistema.showModal('@Url.Action("modal-form-campo", new {OCampo.id, idTipoCampoCadastro = TipoCampoCadastroConst.PJ, idCampoClone = OCampo.id, OCampo.idOrganizacao})', AssociadoCampo.changeTipoCampo)">Associado PJ</a></li>
+                @*
+                <li class="@(Model.idTipoCampoCadastro == TipoCampoCadastroConst.DP ? "bg-gray" : "")"><a href="javascript:void(0);" onclick="DefaultSistema.showModal('@Url.Action("modal-form-campo", new {OCampo.id, idTipoCampoCadastro = TipoCampoCadastroConst.DP, idCampoClone = OCampo.id, OCampo.idOrganizacao})', AssociadoCampo.changeTipoCampo)">Dependente</a></li>
+                *@
+                
+                <li class="@(Model.idTipoCampoCadastro == TipoCampoCadastroConst.NA_PF ? "bg-gray" : "")"><a href="javascript:void(0);" onclick="DefaultSistema.showModal('@Url.Action("modal-form-campo", new {OCampo.id, idTipoCampoCadastro = TipoCampoCadastroConst.NA_PF, idCampoClone = OCampo.id, OCampo.idOrganizacao})', AssociadoCampo.changeTipoCampo)">Comerciante PF</a></li>
+                <li class="@(Model.idTipoCampoCadastro == TipoCampoCadastroConst.NA_PJ ? "bg-gray" : "")"><a href="javascript:void(0);" onclick="DefaultSistema.showModal('@Url.Action("modal-form-campo", new {OCampo.id, idTipoCampoCadastro = TipoCampoCadastroConst.NA_PJ, idCampoClone = OCampo.id, OCampo.idOrganizacao})', AssociadoCampo.changeTipoCampo)">Comerciante PJ</a></li>
+            </ul>
+        </li>
+
+        @* @if (!(User.idOrganizacao() > 0)) { *@
+            <li role="presentation" class="divider"></li>
+
+            <li><a href="javascript:void(0);" onclick="AssociadoCampo.excluir(this, '@OCampo.idTipoCampoCadastro')" data-url="@Url.Action("excluir", "ConfiguracaoAssociadoCamposExclusao")" data-id="@OCampo.id"><i class="fa fa-trash text-black"></i> Excluir</a></li>
+        @* } *@
+    </ul>
+}
+

@@ -1,0 +1,155 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2027
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BLL", "BLL\BLL.csproj", "{642EEA21-EAAC-4541-91DB-DCB59AF4DF38}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAL", "DAL\DAL.csproj", "{D0A8AF5A-37C8-477B-A2AE-80A3EE13262A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{ADA5729F-205A-4403-836D-140CB0A18FEB}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+		.nuget\packages.config = .nuget\packages.config
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WEB.Sistema", "WEB.Sistema\WEB.Sistema.csproj", "{F11935FC-28C3-42FF-9D87-09E8B3C392DF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UTIL", "UTIL\UTIL.csproj", "{D26B1E83-D874-437B-A9CC-3AF27BF8EB23}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{642EEA21-EAAC-4541-91DB-DCB59AF4DF38}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{642EEA21-EAAC-4541-91DB-DCB59AF4DF38}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{642EEA21-EAAC-4541-91DB-DCB59AF4DF38}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{642EEA21-EAAC-4541-91DB-DCB59AF4DF38}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D0A8AF5A-37C8-477B-A2AE-80A3EE13262A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0A8AF5A-37C8-477B-A2AE-80A3EE13262A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0A8AF5A-37C8-477B-A2AE-80A3EE13262A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0A8AF5A-37C8-477B-A2AE-80A3EE13262A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F11935FC-28C3-42FF-9D87-09E8B3C392DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F11935FC-28C3-42FF-9D87-09E8B3C392DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F11935FC-28C3-42FF-9D87-09E8B3C392DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F11935FC-28C3-42FF-9D87-09E8B3C392DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D26B1E83-D874-437B-A9CC-3AF27BF8EB23}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D26B1E83-D874-437B-A9CC-3AF27BF8EB23}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D26B1E83-D874-437B-A9CC-3AF27BF8EB23}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D26B1E83-D874-437B-A9CC-3AF27BF8EB23}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D46F706B-DFA1-4FD4-BC24-50792A5EB8EE}
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		Policies = $0
+		$0.DotNetNamingPolicy = $1
+		$1.DirectoryNamespaceAssociation = Hierarchical
+		$1.ResourceNamePolicy = FileFormatDefault
+		$0.VersionControlPolicy = $2
+		$2.inheritsSet = Mono
+		$0.TextStylePolicy = $3
+		$3.inheritsSet = VisualStudio
+		$3.scope = text/plain
+		$3.FileWidth = 120
+		$3.TabsToSpaces = False
+		$3.inheritsScope = text/plain
+		$0.CSharpFormattingPolicy = $4
+		$4.IndentSwitchSection = True
+		$4.NewLinesForBracesInProperties = True
+		$4.NewLinesForBracesInAccessors = True
+		$4.NewLinesForBracesInAnonymousMethods = True
+		$4.NewLinesForBracesInControlBlocks = True
+		$4.NewLinesForBracesInAnonymousTypes = True
+		$4.NewLinesForBracesInObjectCollectionArrayInitializers = True
+		$4.NewLinesForBracesInLambdaExpressionBody = True
+		$4.NewLineForElse = True
+		$4.NewLineForCatch = True
+		$4.NewLineForFinally = True
+		$4.NewLineForMembersInObjectInit = True
+		$4.NewLineForMembersInAnonymousTypes = True
+		$4.NewLineForClausesInQuery = True
+		$4.SpacingAfterMethodDeclarationName = False
+		$4.SpaceAfterMethodCallName = False
+		$4.SpaceBeforeOpenSquareBracket = False
+		$4.inheritsSet = Mono
+		$4.inheritsScope = text/x-csharp
+		$4.scope = text/x-csharp
+		$0.StandardHeader = $5
+		$5.Text = 
+		$5.IncludeInNewFiles = True
+		$0.NameConventionPolicy = $6
+		$6.Rules = $7
+		$7.NamingRule = $8
+		$8.Name = Type Parameters
+		$8.AffectedEntity = TypeParameter
+		$8.VisibilityMask = VisibilityMask
+		$8.NamingStyle = PascalCase
+		$8.IncludeInstanceMembers = True
+		$8.IncludeStaticEntities = True
+		$8.RequiredPrefixes = $9
+		$9.String = T
+		$8.RequiredSuffixes = $10
+		$10.String = Exception
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		Policies = $0
+		$0.DotNetNamingPolicy = $1
+		$1.DirectoryNamespaceAssociation = Hierarchical
+		$1.ResourceNamePolicy = FileFormatDefault
+		$0.VersionControlPolicy = $2
+		$2.inheritsSet = Mono
+		$0.TextStylePolicy = $3
+		$3.inheritsSet = VisualStudio
+		$3.scope = text/plain
+		$3.FileWidth = 120
+		$3.TabsToSpaces = False
+		$3.inheritsScope = text/plain
+		$0.CSharpFormattingPolicy = $4
+		$4.IndentSwitchSection = True
+		$4.NewLinesForBracesInProperties = True
+		$4.NewLinesForBracesInAccessors = True
+		$4.NewLinesForBracesInAnonymousMethods = True
+		$4.NewLinesForBracesInControlBlocks = True
+		$4.NewLinesForBracesInAnonymousTypes = True
+		$4.NewLinesForBracesInObjectCollectionArrayInitializers = True
+		$4.NewLinesForBracesInLambdaExpressionBody = True
+		$4.NewLineForElse = True
+		$4.NewLineForCatch = True
+		$4.NewLineForFinally = True
+		$4.NewLineForMembersInObjectInit = True
+		$4.NewLineForMembersInAnonymousTypes = True
+		$4.NewLineForClausesInQuery = True
+		$4.SpacingAfterMethodDeclarationName = False
+		$4.SpaceAfterMethodCallName = False
+		$4.SpaceBeforeOpenSquareBracket = False
+		$4.inheritsSet = Mono
+		$4.inheritsScope = text/x-csharp
+		$4.scope = text/x-csharp
+		$0.StandardHeader = $5
+		$5.Text = 
+		$5.IncludeInNewFiles = True
+		$0.NameConventionPolicy = $6
+		$6.Rules = $7
+		$7.NamingRule = $8
+		$8.Name = Type Parameters
+		$8.AffectedEntity = TypeParameter
+		$8.VisibilityMask = VisibilityMask
+		$8.NamingStyle = PascalCase
+		$8.IncludeInstanceMembers = True
+		$8.IncludeStaticEntities = True
+		$8.RequiredPrefixes = $9
+		$9.String = T
+		$8.RequiredSuffixes = $10
+		$10.String = Exception
+	EndGlobalSection
+EndGlobal

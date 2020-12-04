@@ -1,0 +1,13 @@
+﻿@model WEB.Areas.Localizacao.ViewModels.PaisVM
+
+<div class="form-horizontal">
+    <div class="col-md-2">
+        <label>Cadastrado em:</label>
+        <input type="text" class="form-control input-sm" readonly="readonly" value="@Model.Pais.dtCadastro.exibirData(true)" />
+    </div>
+    <div class="col-md-2">
+        <label>Alterado em:</label>
+        <input type="text" class="form-control input-sm" readonly="readonly" value="@Model.Pais.dtAlteracao.exibirData(true)" />
+    </div>
+    <div class="clearfix"></div>
+</div>

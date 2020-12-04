@@ -1,0 +1,202 @@
+﻿@model WEB.Areas.ConfiguracoesAssociados.ViewModels.ConfiguracaoAssociadoPJForm
+
+@using DAL.Permissao.Security.Extensions
+@using WEB.Areas.Associacoes.Helpers
+@using MvcFlashMessages
+
+@{
+    ViewBag.titlePage = "Configurações de Associado PJ";
+}
+
+@section breadcrump{
+    <ol class="breadcrumb">
+        <li><a href="@Url.Action("listar")" class="active fs-14"><i class="fa fa-arrow-left"></i> Voltar</a></li>
+    </ol>
+}
+
+@section scripts{
+    <script type="text/javascript" src="@UtilConfig.linkResourses()Areas/ConfiguracoesAssociados/js/regra-inadimplencia.js"></script>
+}
+
+<div class="row">
+    
+    <div class="col-sm-12 box-primary">
+        <div class="nav-tabs-custom">
+
+            <ul class="nav nav-tabs" role="tablist">
+                <li class="active"><a href="#tab-associado-pf" data-toggle="tab">Principal</a></li>
+            </ul>
+            @using (Html.BeginForm("editar", null, FormMethod.Post, new {role = "form", @class = "tab-content", enctype = "multipart/form-data"})) {
+
+                @Html.RenderFlash()
+                @Html.ValidationSummary(false)
+
+                <div id="tab-associado-pf" role="tabpanel" class="tab-pane active">
+
+                    <div class="col-sm-12">
+
+                        <div class="row">
+                            
+                            @{ Html.RenderPartial("partial-dados-cadastro", Model);}
+
+                            
+                            @if (User.idOrganizacao() == 0) {
+                                <div class="col-sm-4 col-md-3">
+                                    <label>Organização</label>
+                                    @Html.DropDownListFor(m => m.ConfiguracaoAssociadoPJ.idOrganizacao, AssociacaoHelper.getInstance.selectList(Model.ConfiguracaoAssociadoPJ.idOrganizacao), "Padrão", new {@class = "form-control input-sm", type = "number"})
+                                </div>
+                            }
+
+                            <div class="col-sm-4 col-md-3">
+                                <label class="fs-9">Habilitado?</label>
+                                @Html.DropDownListFor(m => m.ConfiguracaoAssociadoPJ.flagHabilitado, ComboHelper.selectListTrueFalse(Model.ConfiguracaoAssociadoPJ.flagHabilitado), "...", new {@class = "form-control input-sm"})
+                                @Html.ValidationMessageFor(m => m.ConfiguracaoAssociadoPJ.flagHabilitado)
+                            </div>
+                            <div class="clearfix"></div>
+
+
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+
+                    <div class="col-sm-12">
+
+                        <h4 class="separator-form-icon"><i class="far fa-edit"></i> Configurações de Abas</h4>
+
+                        <div class="row">
+
+                            <div class="col-sm-6 col-md-3">
+                                <label class="fs-9">Aba de Contatos?</label>
+                                @Html.DropDownListFor(m => m.ConfiguracaoAssociadoPJ.flagAbaContato, ComboHelper.selectListTrueFalse(Model.ConfiguracaoAssociadoPJ.flagAbaContato), "...", new {@class = "form-control input-sm"})
+                            </div>
+
+                            <div class="col-sm-6 col-md-3">
+                                <label class="fs-9">Aba de Títulos?</label>
+                                @Html.DropDownListFor(m => m.ConfiguracaoAssociadoPJ.flagAbaTitulos, ComboHelper.selectListTrueFalse(Model.ConfiguracaoAssociadoPJ.flagAbaTitulos), "...", new {@class = "form-control input-sm"})
+                            </div>
+
+                            <div class="col-sm-6 col-md-3">
+                                <label class="fs-9">Aba de Pedidos?</label>
+                                @Html.DropDownListFor(m => m.ConfiguracaoAssociadoPJ.flagAbaPedidos, ComboHelper.selectListTrueFalse(Model.ConfiguracaoAssociadoPJ.flagAbaPedidos), "...", new {@class = "form-control input-sm"})
+                            </div>
+
+                            <div class="col-sm-6 col-md-3">
+                                <label class="fs-9">Aba de Cobranças?</label>
+                                @Html.DropDownListFor(m => m.ConfiguracaoAssociadoPJ.flagAbaContribuicoes, ComboHelper.selectListTrueFalse(Model.ConfiguracaoAssociadoPJ.flagAbaContribuicoes), "...", new {@class = "form-control input-sm"})
+                            </div>
+                            <div class="cleatfix"></div>
+
+                            <div class="col-sm-6 col-md-3">
+                                <label class="fs-9">Aba de Eventos?</label>
+                                @Html.DropDownListFor(m => m.ConfiguracaoAssociadoPJ.flagAbaEventos, ComboHelper.selectListTrueFalse(Model.ConfiguracaoAssociadoPJ.flagAbaEventos), "...", new {@class = "form-control input-sm"})
+                            </div>
+
+                            <div class="col-sm-6 col-md-3">
+                                <label class="fs-9">Aba de Anúncios?</label>
+                                @Html.DropDownListFor(m => m.ConfiguracaoAssociadoPJ.flagAbaAnuncios, ComboHelper.selectListTrueFalse(Model.ConfiguracaoAssociadoPJ.flagAbaAnuncios), "...", new {@class = "form-control input-sm"})
+                            </div>
+
+                            <div class="col-sm-6 col-md-3">
+                                <label class="fs-9">Aba de Áreas de Atuação?</label>
+                                @Html.DropDownListFor(m => m.ConfiguracaoAssociadoPJ.flagAbaAreasAtuacao, ComboHelper.selectListTrueFalse(Model.ConfiguracaoAssociadoPJ.flagAbaAreasAtuacao), "...", new {@class = "form-control input-sm"})
+                            </div>
+
+                            <div class="col-sm-6 col-md-3">
+                                <label class="fs-9">Aba de Instituições?</label>
+                                @Html.DropDownListFor(m => m.ConfiguracaoAssociadoPJ.flagAbaInstituicoes, ComboHelper.selectListTrueFalse(Model.ConfiguracaoAssociadoPJ.flagAbaInstituicoes), "...", new {@class = "form-control input-sm"})
+                            </div>
+
+                            <div class="col-sm-6 col-md-3">
+                                <label class="fs-9">Aba de Representantes?</label>
+                                @Html.DropDownListFor(m => m.ConfiguracaoAssociadoPJ.flagAbaRepresentantes, ComboHelper.selectListTrueFalse(Model.ConfiguracaoAssociadoPJ.flagAbaRepresentantes), "...", new {@class = "form-control input-sm"})
+                            </div>
+                            <div class="cleatfix"></div>
+
+                            <div class="col-sm-6 col-md-3">
+                                <label class="fs-9">Aba de Lista de E-mails?</label>
+                                @Html.DropDownListFor(m => m.ConfiguracaoAssociadoPJ.flagAbaListaEmails, ComboHelper.selectListTrueFalse(Model.ConfiguracaoAssociadoPJ.flagAbaListaEmails), "...", new {@class = "form-control input-sm"})
+                            </div>
+
+                            <div class="col-sm-6 col-md-3">
+                                <label class="fs-9">Aba de Abrangência?</label>
+                                @Html.DropDownListFor(m => m.ConfiguracaoAssociadoPJ.flagAbaAbrangencia, ComboHelper.selectListTrueFalse(Model.ConfiguracaoAssociadoPJ.flagAbaAbrangencia), "...", new {@class = "form-control input-sm"})
+                            </div>
+
+                            <div class="col-sm-6 col-md-3">
+                                <label class="fs-9">Aba de Carteirinha?</label>
+                                @Html.DropDownListFor(m => m.ConfiguracaoAssociadoPJ.flagAbaCarteirinha, ComboHelper.selectListTrueFalse(Model.ConfiguracaoAssociadoPJ.flagAbaCarteirinha), "...", new {@class = "form-control input-sm"})
+                            </div>
+
+                            <div class="col-sm-6 col-md-3">
+                                <label class="fs-9">Aba de Veículos?</label>
+                                @Html.DropDownListFor(m => m.ConfiguracaoAssociadoPJ.flagAbaVeiculos, ComboHelper.selectListTrueFalse(Model.ConfiguracaoAssociadoPJ.flagAbaVeiculos), "...", new {@class = "form-control input-sm"})
+                            </div>
+
+                            <div class="col-sm-6 col-md-3">
+                                <label class="fs-9">Aba de Dependentes?</label>
+                                @Html.DropDownListFor(m => m.ConfiguracaoAssociadoPJ.flagAbaDependentes, ComboHelper.selectListTrueFalse(Model.ConfiguracaoAssociadoPJ.flagAbaDependentes), "...", new {@class = "form-control input-sm"})
+                            </div>
+awwa
+                            <div class="col-sm-6 col-md-3">
+                                <label class="fs-9">Aba de Outras Organizações?</label>
+                                @Html.DropDownListFor(m => m.ConfiguracaoAssociadoPJ.flagDadosOutrasOrganizacoes, ComboHelper.selectListTrueFalse(Model.ConfiguracaoAssociadoPJ.flagDadosOutrasOrganizacoes), "...", new {@class = "form-control input-sm"})
+                            </div>
+                            <div class="clearfix"></div>
+                            
+                        </div>
+
+                        <h4 class="separator-form-icon"><i class="far fa-edit"></i> Configurações de Cadastro</h4>
+
+                        <div class="row">
+
+                            <div class="col-sm-6 col-md-3">
+                                <label class="fs-9">Permitir CNPJ vazio?</label>
+                                @Html.DropDownListFor(m => m.ConfiguracaoAssociadoPJ.flagPermitirCNPJVazio, ComboHelper.selectListTrueFalse(Model.ConfiguracaoAssociadoPJ.flagPermitirCNPJVazio), "...", new {@class = "form-control input-sm"})
+                            </div>
+
+                            <div class="col-sm-6 col-md-3">
+                                <label class="fs-9">Permitir CNPJ duplicado?</label>
+                                @Html.DropDownListFor(m => m.ConfiguracaoAssociadoPJ.flagPermitirCNPJDuplicado, ComboHelper.selectListTrueFalse(Model.ConfiguracaoAssociadoPJ.flagPermitirCNPJDuplicado), "...", new {@class = "form-control input-sm"})
+                            </div>
+
+                            <div class="clearfix"></div>
+
+                        </div>
+
+                        <h4 class="separator-form-icon"><i class="far fa-edit"></i> Regras de Inadimplência</h4>
+                        @Html.instrucao("Ao habilitar a rotina de inadimplência, o sistema irá fazer uma checagem diária para alterar a situação dos associados de acordo com o histórico de pagamentos.")
+                        <div class="row">
+
+                            <div class="rotina-inadimplencia col-sm-6 col-md-3">
+                                <label class="fs-9">Rotina Inadimplencia?</label>
+                                @Html.DropDownListFor(m => m.ConfiguracaoAssociadoPJ.flagRotinaInadimplencia, ComboHelper.selectListTrueFalse(Model.ConfiguracaoAssociadoPJ.flagRotinaInadimplencia), "...", new { @class = "form-control input-sm" })
+                            </div>
+
+                            <div class="todos-pagamentos col-sm-6 col-md-3 @(!(Model.ConfiguracaoAssociadoPJ.flagRotinaInadimplencia ?? false) ? "hidden" : "")">
+                                <label class="fs-9">Considerar adimplente somente associados com todos pagamentos em dia?</label>
+                                @Html.DropDownListFor(m => m.ConfiguracaoAssociadoPJ.flagTodosPagamentosAdimplencia, ComboHelper.selectListTrueFalse(Model.ConfiguracaoAssociadoPJ.flagTodosPagamentosAdimplencia), "...", new { @class = "form-control input-sm" })
+                            </div>
+
+                            <div class="qtde-ultimos-pagamentos col-sm-6 col-md-3 @((Model.ConfiguracaoAssociadoPJ.flagTodosPagamentosAdimplencia ?? true) || !(Model.ConfiguracaoAssociadoPJ.flagRotinaInadimplencia ?? false) ? "hidden" : "")">
+                                <label class="fs-9">Qtde dos últimos pagamentos a verificar</label>
+                                @Html.TextBoxFor(m => m.ConfiguracaoAssociadoPJ.qtdeUltimosPagamentosAdimplencia, new { @class = "form-control input-sm", type = "number" })
+                            </div>
+
+                            <div class="clearfix"></div>
+
+                        </div>
+
+                    </div>
+                    <div class="clearfix"></div><br/>
+
+                </div>
+
+                <div class="col-sm-12 text-right">
+                    @Html.botaoSalvar()
+                </div>
+                <div class="clearfix"></div><br/>
+
+            }
+        </div>
+    </div>
+</div>

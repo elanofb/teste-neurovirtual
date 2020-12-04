@@ -1,0 +1,13 @@
+﻿.campo-info {
+    margin: 2px 0px 2px 0px;
+    padding: 0px 5px 0px 0px;
+}
+
+.campo-info i {
+    margin-right: 5px;
+}
+
+.campo-info label {
+    font-weight: 600;
+    margin: 0px;
+}

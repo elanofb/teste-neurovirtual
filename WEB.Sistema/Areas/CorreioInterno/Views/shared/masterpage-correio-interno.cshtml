@@ -1,0 +1,46 @@
+﻿@{
+	Layout = "~/views/shared/associatec/masterpage.cshtml";	
+	ViewBag.titlePage = "Correio Interno";
+}
+
+@section scripts{
+	@Html.includeFroalaEditorJS()
+	@Html.includeToastJS()
+	<script src="@UtilConfig.linkResourses("Areas/CorreioInterno/js/plugins/bootstrap-wysihtml5/wysihtml5x-toolbar.min.js")"></script>
+	<script src="@UtilConfig.linkResourses("Areas/CorreioInterno/js/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js")"></script>
+	<script src="@UtilConfig.linkResourses("Areas/CorreioInterno/js/correio-interno.js?v=1.0.0")"></script>
+
+	<script src="@UtilConfig.linkResourses("Areas/CorreioInterno/js/plugins/select2-4.0.0/dist/js/select2.full.min.js")"></script>
+	<script src="@UtilConfig.linkResourses("Areas/CorreioInterno/js/plugins/select2-4.0.0/dist/js/i18n/pt-BR.js")"></script>
+	
+	@Html.Raw(Html.scripts().scriptFroala)
+}
+
+@section styles {
+	@Html.includeFroalaEditorCSS()
+	@Html.includeToastCSS()
+	<link href="@UtilConfig.linkResourses("Areas/CorreioInterno/css/correio-sga.css")" rel="stylesheet" />
+	<link href="@UtilConfig.linkResourses("Areas/CorreioInterno/css/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.css")" rel="stylesheet" type="text/css" />
+	
+	<link href="@UtilConfig.linkResourses("Areas/CorreioInterno/js/plugins/select2-4.0.0/dist/css/select2.min.css")" rel="stylesheet" />
+	
+	<link href="@UtilConfig.linkResourses("Areas/CorreioInterno/css/menu-correio.css")" rel="stylesheet" />
+}
+
+<div class="row">
+	<div class="col-md-3">
+		<div class="box box-solid">
+			<div class="box-body no-padding">
+				@{Html.RenderPartial("partial-botao-novo-email");}
+				@{Html.RenderPartial("partial-diretorios-emails");}
+			</div>
+		</div>
+	</div>
+
+
+	<div class="col-md-9" id="boxAreaTrabalho">
+		@RenderSection("conteudoEmails", true)
+	</div>
+
+	<div class="clearfix"></div>
+</div>

@@ -1,0 +1,86 @@
+﻿@model WEB.Areas.Pedidos.ViewModels.PedidoPessoaLista
+@using WEB.Areas.Pedidos.Extensions
+
+<div class="row">
+    <div class="col-md-12">
+
+        <div class="text-right">
+            <button class="btn btn-info"><i class="far fa-chart-bar"></i> @Model.listaPedidos.Count registros encontrados</button>
+        </div>
+
+        @if (!Model.listaPedidos.Any()) {
+            <div class="alert alert-info margin-top-10">
+                Nenhum pedido foi encontrado.
+            </div>
+        }
+
+        @foreach (var OPedido in Model.listaPedidos) {
+
+            <div class="box-info-item bordered-destaque @OPedido.classeBordaPedido()">
+
+                <div class="row fs-11">
+
+                    <div class="col-md-4 col-sm-6 col-xs-12">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <a href="@Url.Action("index", "PedidoDetalhes", new {area = "Pedidos", OPedido.id})" class="text-black">
+                                    <strong><i class="fa fa-user"></i> (<span>@OPedido.id</span>) - @OPedido.nomePessoa.abreviar(30, "...").ToUpper()</strong>
+                                </a>
+                            </div>
+                            <div class="clearfix"></div>
+
+                            <div class="col-md-12">
+                                <i class="fa fa-id-card"></i> @UtilString.formatCPFCNPJ(OPedido.cpf)
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3 col-sm-6 hidden-sm hidden-xs">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <span data-toggle="tooltip" title="Iniciado em @OPedido.dtCadastro.exibirData(true)">
+                                    <i class="far fa-calendar-alt"></i> @OPedido.dtCadastro.exibirData(true)
+                                </span>
+                            </div>
+                            <div class="clearfix"></div>
+                            @if (OPedido.dtFinalizado.HasValue) {
+                                <div class="col-md-12">
+                                    <span data-toggle="tooltip" title="Finalizado em @OPedido.dtFinalizado.exibirData(true)">
+                                        <i class="fa fa-calendar-check"></i> @OPedido.dtFinalizado.exibirData(true)
+                                    </span>
+                                </div>
+                                <div class="clearfix"></div>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 col-sm-5 hidden-xs">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <span>
+                                    <strong><i class="fa fa-usd"></i>Total: </strong> @OPedido.getValorTotal().ToString("C")
+                                </span>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="col-md-12">
+                                <strong class="@OPedido.exibirCorTextoStatus()">@(OPedido.StatusPedido.descricao)</strong>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-1 col-xs-12 text-right box-acoes">
+                        <a href="@Url.Action("index", "PedidoDetalhes", new {area = "Pedidos", OPedido.id})" title="Visualizar Registro" data-toggle="tooltip" target="_blank">
+                            <i class="fa fa-search"></i>
+                        </a>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        }
+
+    </div>
+</div>
+
+<div class="clearfix"></div>

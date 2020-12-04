@@ -1,0 +1,124 @@
+﻿@model WEB.Areas.Pedidos.ViewModels.PedidoDetalhesVM
+
+@using DAL.Pedidos.Extensions
+@using WEB.Areas.Financeiro.Helpers
+
+
+<a href="@Url.Action("index", "PedidoCadastro", new {Area = "Pedidos"})" class="btn btn-box-tool">
+    <i class="far fa-plus-circle"></i> Novo Pedido
+</a>
+                
+<div class="btn-group">
+                
+    <button type="button" class="btn btn-box-tool dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+        <i class="fa fa-cog"></i>
+    </button>
+
+    <ul class="dropdown-menu" role="menu">
+                
+
+        @if (Model.Pedido.flagPagavel()) {
+
+            if (!Model.Pedido.flagPago() && !Model.Pedido.flagTemParcelamento()) {
+
+                <li>
+                    @Html.linkRegistrarPagamentoTitulo(Model.Pedido.TituloReceita.id, "Registrar Pagamento", "", "fa fa-check-circle")
+                </li>
+                @*<li>
+                    @Html.linkParcelarTitulo(Model.Pedido.TituloReceita.id, "Parcelar Pedido", "", "fa fa-clone")
+                </li>*@
+                <li>
+                    @Html.linkPagamentoTitulo(Model.Pedido.TituloReceita.id, "Link Pagamento", "", "fa fa-link")
+                </li>
+                
+            }
+            
+            @*<li>
+                @Html.linkDetalheTitulo(Model.Pedido.TituloReceita.id.toInt(), "Detalhes Cobrança", "", "fa fa-search")
+            </li>*@
+            
+            @*<li>
+                <a href="javascript:;" onclick="PedidoCobranca.enviarEmailCobranca('@Model.Pedido.id')">
+                    <i class="fa fa-envelope"></i> Enviar e-mail cobrança
+                </a>
+            </li>*@
+            <li class="divider"></li>
+        }
+
+        @if (Model.Pedido.flagFaturavel()) {
+
+            @*<li>
+                <a href="javascript:;" class="text-green"
+                   onclick="PedidoAcaoFaturamento.showModal('@Url.Action("modal-faturar-pedido", "PedidoAcaoFaturamento", new {id = Model.Pedido.id})')">
+
+                    <i class="far fa-money-bill"></i> Faturar Pedido
+
+                </a>
+            </li>*@
+
+        }
+        
+        
+        @*@if (Model.Pedido.flagProntoParaAtender()) {
+
+            <li>
+                <a href="javascript:;"
+                    onclick="PedidoAcaoFaturamento.showModal('@Url.Action("modal-atender-pedido", "PedidoAcaoAtendimento", new {id = Model.Pedido.id})')">
+                    
+                    <i class="fa fa-headphones"></i> Atender Pedido
+                </a>
+            </li>
+
+        }*@
+
+        @*@if (Model.Pedido.flagProntoParaPreparar()) {
+
+            <li>
+                <a href="javascript:;" 
+                    onclick="PedidoAcaoFaturamento.showModal('@Url.Action("modal-preparar-pedido", "PedidoAcaoPreparacao", new {id = Model.Pedido.id})')">
+                    
+                    <i class="fa fa-inbox"></i> Preparar Pedido
+                </a>
+            </li>
+
+        }
+
+        @if(Model.Pedido.flagProntoParaExpedir()) {
+
+            <li>
+                <a href="javascript:;" 
+                    onclick="PedidoAcaoFaturamento.showModal('@Url.Action("modal-expedir-pedido", "PedidoAcaoExpedicao", new {id = Model.Pedido.id})')">
+                    
+                    <i class="fa fa-truck"></i> Expedir Pedido
+                </a>
+            </li>
+
+        }
+
+        @if(Model.Pedido.flagFinalizavel()) {
+
+            <li>
+                <a href="javascript:;" class="text-green"
+                   onclick="PedidoAcaoFaturamento.showModal('@Url.Action("modal-finalizar-pedido", "PedidoAcaoFinalizacao", new {id = Model.Pedido.id})')">
+                    
+                    <i class="fa fa-flag-checkered"></i> Finalizar Pedido
+                </a>
+            </li>
+
+        }*@
+
+        @if (!Model.Pedido.dtCancelamento.HasValue) {
+
+            <li>
+                <a href="javascript:;" class="text-red"
+                    onclick="DefaultSistema.showModal('@Url.Action("modal-cancelar-pedido", "PedidoAcaoCancelamento", new { id = Model.Pedido.id })')">
+                            
+                    <i class="fa fa-times-circle"></i> Cancelar Pedido
+                </a>
+            </li>
+
+        }
+
+    </ul>
+            
+</div>

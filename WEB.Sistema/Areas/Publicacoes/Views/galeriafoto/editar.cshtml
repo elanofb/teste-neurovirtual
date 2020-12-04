@@ -1,0 +1,159 @@
+﻿@model WEB.Areas.Publicacoes.ViewModels.GaleriaFotoForm
+
+@using DAL.Permissao.Security.Extensions
+@using WEB.Areas.Arquivos.Helpers
+@using WEB.Areas.Associacoes.Helpers
+@using WEB.Areas.Portais.Helpers
+@using WEB.Areas.Publicacoes.Helpers
+
+@{
+    Layout = "~/views/shared/associatec/masterpage-edit.cshtml";
+
+    ViewBag.titlePage = "Galeria de Fotos";
+    ViewBag.subTituloPagina = Model.GaleriaFoto.titulo;
+}
+
+@section styles{
+    
+    @Html.includeCSSModuloArquivos()
+
+    @Html.includeFroalaEditorCSS()
+
+}
+
+@section scripts{
+
+    @Html.includeDatePicker()
+
+    @Html.includeJSModuloArquivosFotos()
+
+    @Html.includeFroalaEditorJS()
+
+    <script src="@UtilConfig.linkResourses()Areas/ConfiguracoesAssociados/js/jquery-ui.js"></script>
+    <script src="@UtilConfig.linkResourses()Areas/publicacoes/js/galeria-foto.js?v=1"></script>
+    <script src="@UtilConfig.linkResourses()Areas/publicacoes/js/tipo-galeria-foto.js?v=1"></script>
+}
+
+
+@section navTabs{
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#tab-1" data-toggle="tab">Principal</a></li>
+    </ul>
+}
+
+@section tabContent{
+    <div id="tab-1" class="tab-pane active">
+        @Html.infoCadastro(Model.GaleriaFoto.id, Model.GaleriaFoto.dtCadastro, Model.GaleriaFoto.dtAlteracao)
+
+        @using(Html.BeginForm("editar", "galeriafoto", FormMethod.Post, new { enctype = "multipart/form-data" })) {
+
+            { Html.EnableClientValidation(false); }
+
+            @Html.ValidationSummary(true, "Alguns campos não foram validados.")
+
+            @Html.HiddenFor(m => m.GaleriaFoto.id)
+
+            <h4 class="separator-form">Dados Principais da Galeria de Fotos</h4>
+
+            <div class="form-horizontal col-md-7">
+
+                <div class="row">
+
+                    @if (User.idOrganizacao() == 0) {
+	                    <div class="col-md-4">
+		                    <label>Organização</label>
+		                    @Html.DropDownListFor(m => m.GaleriaFoto.idOrganizacao, AssociacaoHelper.getInstance.selectList(Model.GaleriaFoto.idOrganizacao), "Padrão", new {@class = "form-control input-sm"})
+	                    </div>
+                    }
+                    
+                    <div class="col-md-4">
+                        @Html.Label("Portal")
+                        @Html.DropDownListFor(m => m.GaleriaFoto.idPortal, PortalHelper.getInstance.selectList(Model.GaleriaFoto.idPortal), "...", new { @class = "form-control input-sm" })
+                        @Html.ValidationMessageFor(x => x.GaleriaFoto.idPortal)
+                    </div>
+
+                    <div class="col-md-4">
+                        <label>Status</label>
+                        @Html.DropDownListFor(m => m.GaleriaFoto.ativo, ComboHelper.selectListStatus(Model.GaleriaFoto.ativo), "...", new {@class = "form-control input-sm"})
+                        @Html.ValidationMessageFor(m => m.GaleriaFoto.ativo)
+                    </div>
+                    <div class="col-md-4">
+                        <label>Somente para Associados?</label>
+                        @Html.DropDownListFor(m => m.GaleriaFoto.flagSomenteAssociado, ComboHelper.selectListTrueFalse(Model.GaleriaFoto.flagSomenteAssociado), "...", new { @class = "form-control input-sm" })
+                        @Html.ValidationMessageFor(m => m.GaleriaFoto.flagSomenteAssociado)
+                    </div>
+                    <div class="clearfix"></div>
+
+                    <div class="col-md-12">
+			            @Html.labelRequired("Categoria")
+                        <div class="input-group">
+                            @Html.DropDownListFor(m => m.GaleriaFoto.idTipoGaleria, TipoGaleriaFotoHelper.getInstance.selectList(Model.GaleriaFoto.idTipoGaleria), "...", new {@class = "form-control input-sm"})
+                            <span class="input-group-addon"><a href="javascript:void(0);" onclick="TipoGaleriaFoto.modalTipoGaleria(this)" data-url="@Url.Action("modal-editar", "TipoGaleriaFoto", new {area = "Publicacoes"})" class="fs-14" title="Cadastrar uma Nova Categoria" data-toggle="tooltip"><i class="fa fa-plus-circle"></i> </a></span>
+                        </div>
+                        @Html.ValidationMessageFor(x => x.GaleriaFoto.idTipoGaleria)
+                    </div>
+
+                    <div class="col-sm-12 col-lg-9">
+                        @Html.labelRequired("Título")
+                        @Html.TextBoxFor(x => x.GaleriaFoto.titulo, new {@class = "form-control input-sm", maxlength = "255"})
+                        @Html.ValidationMessageFor(x => x.GaleriaFoto.titulo)
+                    </div>
+
+                    <div class="col-sm-6 col-md-4 col-lg-3">
+                        @Html.labelRequired("Data")
+                        @Html.TextBoxFor(m => m.GaleriaFoto.dtGaleria, new { @class = "form-control input-sm input-datepicker", alt = "date" })
+                        @Html.ValidationMessageFor(m => m.GaleriaFoto.dtGaleria)
+                    </div>
+
+                    <div class="clearfix"></div>
+
+                    <div class="col-md-12">
+                        <label>Chamada</label><br />
+                        @Html.TextBoxFor(x => x.GaleriaFoto.chamada, new { @class = "form-control input-sm", maxlength = "400" })
+                        @Html.ValidationMessageFor(x => x.GaleriaFoto.chamada)
+                    </div>
+
+                    <div class="clearfix"></div>
+
+                    <div class="col-md-12">
+                        @Html.labelRequired("Descrição")
+                        @Html.TextAreaFor(x => x.GaleriaFoto.descricao, new {@id = "editor", @class = "form-control input-sm", rows = "10"})
+                        @Html.ValidationMessageFor(x => x.GaleriaFoto.descricao)
+                    </div>
+                    <div class="clearfix"></div>
+
+                </div>
+            </div>
+
+            <div class="col-md-5">
+                
+                <h4 class="separator-form">Fotos</h4>
+
+                <div class="row">
+
+                    <div class="col-md-12">
+                        @Html.inputFileSimples("OArquivo", "false")
+                        @Html.ValidationMessageFor(m => m.OArquivo)
+
+                        <div class="clearfix"></div>
+                        @if (Model.GaleriaFoto.id > 0) {
+                            <h4 class="separator-form">Fotos Cadastradas</h4>
+                            <div class="carregando" id="boxArquivosListar" data-target="boxArquivosListar" data-url="@Url.Action("partial-lista-fotos", "ArquivoFoto", new { Area = "Arquivos", entidade = DAL.Entities.EntityTypes.GALERIAFOTO, idReferencia = Model.GaleriaFoto.id})"></div>
+                        }
+                    </div>
+                    <div class="clearfix"></div>
+                
+                </div>
+            </div>
+            
+            <div class="clearfix"></div><br />
+
+            <div class="text-right">
+                @Html.exibirBotoesFormulario(Url.Action("listar"), "N")
+            </div>
+        }
+    </div>
+
+    <div class="clearfix"></div>
+}
+

@@ -1,0 +1,46 @@
+﻿@model DAL.AssociadosContribuicoes.AssociadoContribuicao
+
+@{
+    ViewBag.modalTitle = String.Format("Isenção - {0}", Model.Contribuicao.descricao);
+    ViewBag.modalWidthClass = "md";
+    Layout = IsPost ? null : "~/views/shared/associatec/masterpage-modal.cshtml";
+}
+
+<div id="boxFormIsencao">
+    @Html.showFlashMessage()
+
+    @using (Ajax.BeginForm("conceder-isencao", null, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "boxFormIsencao", InsertionMode = InsertionMode.Replace, OnSuccess = "AssociadoContribuicaoIsencao.onSuccessFormIsencao" }, new { id = "formIsencao", @class = "default col-md-12" })) {
+
+        @Html.legendaRequired()<br />
+
+        { Html.EnableClientValidation(false); }
+        
+        @Html.ValidationSummary(false)
+        
+        @Html.HiddenFor(m => m.id)
+        
+        @Html.HiddenFor(m => m.Contribuicao.descricao)
+
+        <div class="row">
+            <div class="col-md-8">
+                @Html.labelRequired("Informe o motivo para a isenção da cobrança")
+            </div>
+            <div class="clearfix"></div>
+            <div class="col-md-12 no-padding-top">
+                @Html.TextArea("observacoes", "", new { @class = "form-control input-sm", rows = "4" })
+                @Html.ValidationMessage("observacoes")
+            </div>
+        </div>
+        <div class="clearfix"></div><br />
+
+    }
+
+    <div class="clearfix"></div>
+</div>
+
+@section modalFooter{
+    <div class="text-right">
+        <input type="button" value="Cancelar" class="btn btn-default" data-dismiss="modal" aria-hidden="true" />
+        <input type="button" value="Confirmar Isenção" class="btn btn-primary link-loading" onclick="$('#formIsencao').submit();" />
+    </div>
+}

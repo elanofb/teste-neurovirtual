@@ -1,0 +1,27 @@
+﻿@model WEB.Areas.Permissao.ViewModels.RecursoGrupoForm
+
+@{
+    ViewBag.titlePage = "Módulos do Sistema";
+}
+@section breadcrump{
+    <ol class="breadcrumb">
+        <li><a href="@Url.Action("listar")" class="active fs-14"><i class="fa fa-arrow-left"></i> Voltar</a></li>
+    </ol>
+}
+
+
+<div class="row">
+    <div class="col-sm-12 box-primary">
+        <div class="nav-tabs-custom">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#tab-1" data-toggle="tab">Principal</a></li>
+            </ul>
+            <div id="tab-1" class="tab-pane active">
+                @{Html.RenderPartial("partial-info-cadastro");}
+                @{Html.RenderPartial("partial-dados-principais");}
+            </div><div class="clearfix"></div>
+        </div>
+    </div>
+</div>
+
+

@@ -1,0 +1,23 @@
+﻿@model WEB.Areas.Associados.ViewModels.AssociadoForm
+@using WEB.Areas.Localizacao.Helpers
+
+<div class="col-md-2 col-lg-2 info-pf">
+    <label>País de Origem</label>
+    @Html.DropDownListFor(m => m.Associado.Pessoa.idPaisOrigem, PaisHelper.selectList(Model.Associado.Pessoa.idPaisOrigem), new { @class = "form-control input-sm", id = "idPaisNascimento", onchange = "Associado.configurarPais();" })
+    @Html.ValidationMessageFor(m => m.Associado.Pessoa.idPaisOrigem)
+</div>
+<div class="col-md-2 col-lg-3 origem-brasil info-pf">
+    <label>UF Nacto</label>
+    @Html.DropDownListFor(m => m.Associado.Pessoa.CidadeOrigem.idEstado, EstadoHelper.selectList(Model.Associado.Pessoa.CidadeOrigem.idEstado), "...", new { @class = "form-control input-sm", id = "idEstadoOrigem", rel = "idEstadoOrigem", onchange = "Localizacao.carregarCidades('Origem', '');", style = "width:100%" })
+    @Html.ValidationMessageFor(m => m.Associado.Pessoa.CidadeOrigem.idEstado)
+</div>
+<div class="col-md-4 origem-brasil info-pf">
+    <label>Cidade Nacto</label>
+    @Html.DropDownListFor(m => m.Associado.Pessoa.idCidadeOrigem, CidadeHelper.selectList(Model.Associado.Pessoa.CidadeOrigem.idEstado, Model.Associado.Pessoa.idCidadeOrigem), "...", new Dictionary<string, Object> { { "class", "form-control input-sm no-padding" }, { "id", "idCidadeOrigem" }, { "rel", "idCidadeOrigem" }, { "data-toogle", "select2" }, { "style", "width:100%" } })
+    @Html.ValidationMessageFor(m => m.Associado.Pessoa.idCidadeOrigem)
+</div>
+<div class="col-md-6 origem-exterior info-pf">
+    <label>Local Nacto</label>
+    @Html.TextBoxFor(m => m.Associado.Pessoa.nomeCidadeOrigem, new { @class = "form-control input-sm", id = "nomeCidadeNascimento", style = "width:100%" })
+    @Html.ValidationMessageFor(m => m.Associado.Pessoa.nomeCidadeOrigem)
+</div>

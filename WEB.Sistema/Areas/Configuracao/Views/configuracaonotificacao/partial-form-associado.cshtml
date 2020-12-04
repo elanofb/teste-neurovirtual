@@ -1,0 +1,98 @@
+﻿@model WEB.Areas.Configuracao.ViewModels.ConfiguracaoNotificacaoForm
+
+<div class="row">
+    <div class="col-sm-6">
+        <h4 class="separator-form">E-mails para novos Associados:</h4>
+        <div class="col-sm-12 no-padding">
+            <label>Cadastro novo associado</label>
+            @Html.TextAreaFor(m => m.ConfiguracaoNotificacao.corpoEmailNovoAssociado, new {@class = "form-control input-sm froala-editor", rows = "10" })
+            @Html.instrucao("Limite de 3.000 caracteres.")<br/>
+            <a href="javascript:void(0)" class="fs-11 for-popover" data-placement="top" data-trigger="focus" data-url="#hashtags-email-associado" data-title="Hash Tags"><i class="fa fa-question-circle"></i> Hash tags do sistema</a>
+            @Html.ValidationMessageFor(m => m.ConfiguracaoNotificacao.corpoEmailNovoAssociado)
+        </div>
+        <div class="clearfix"></div><br/>
+
+        <div class="col-sm-12 no-padding">
+            <label>Assunto da ficha cadastral do associado</label>
+            @Html.TextBoxFor(m => m.ConfiguracaoNotificacao.assuntoEmailFichaAssociado, new { @class = "form-control input-sm", maxlength = "255", data_toggle = "tooltip" })
+            <div class="clearfix"></div>
+            <label>Ficha cadastral do associado</label>
+            @Html.TextAreaFor(m => m.ConfiguracaoNotificacao.corpoEmailFichaAssociado, new { @class = "form-control input-sm froala-editor", rows = "10" })
+            @Html.instrucao("Limite de 3.000 caracteres.")
+        </div>
+    </div>
+
+    <div class="col-sm-6">
+        <h4 class="separator-form">E-mails para novos não Associados:</h4>
+        <div class="col-sm-12 no-padding">
+            <label>Cadastro novo não associado</label>
+            @Html.TextAreaFor(m => m.ConfiguracaoNotificacao.corpoEmailNovoNaoAssociado, new {@class = "form-control input-sm froala-editor", rows = "10" })
+            @Html.instrucao("Limite de 3.000 caracteres.")<br/>
+            <a href="javascript:void(0)" class="fs-11 for-popover" data-placement="top" data-trigger="focus" data-url="#hashtags-email-associado" data-title="Hash Tags"><i class="fa fa-question-circle"></i> Hash tags do sistema</a>
+            @Html.ValidationMessageFor(m => m.ConfiguracaoNotificacao.corpoEmailNovoNaoAssociado)
+        </div>
+        <div class="clearfix"></div><br/>
+
+        <div class="col-sm-12 no-padding">
+            <label>Assunto da ficha cadastral do não associado</label>
+            @Html.TextBoxFor(m => m.ConfiguracaoNotificacao.assuntoEmailFichaNaoAssociado, new {@class = "form-control input-sm", maxlength = "255", data_toggle = "tooltip"})
+            <label>Ficha cadastral do não associado</label>
+            @Html.TextAreaFor(m => m.ConfiguracaoNotificacao.corpoEmailFichaNaoAssociado, new {@class = "form-control input-sm froala-editor", rows = "10" })
+            @Html.instrucao("Limite de 3.000 caracteres.")
+        </div>
+    </div>
+    <div class="clearfix"></div><br/>
+
+    <div class="col-sm-6">
+        <h4 class="separator-form">E-mails para o periodo de degustação:</h4>
+        <div class="col-sm-12 no-padding">
+            <label>Cadastro de período de degustação</label>
+            @Html.TextAreaFor(m => m.ConfiguracaoNotificacao.corpoEmailAssociadoDegustacao, new {@class = "form-control input-sm froala-editor", rows = "10"})
+            @Html.instrucao("Limite de 3.000 caracteres.")
+            <a href="javascript:void(0)" class="fs-11 for-popover" data-placement="top" data-trigger="focus" data-url="#hashtags-degustacao-associado" data-title="Hash Tags"><i class="fa fa-question-circle"></i> Hash tags da degustação</a>
+        </div>
+    </div>
+
+    <div class="col-sm-6">
+        <h4 class="separator-form">Reenvio de senha para associado:</h4>
+        <div class="col-sm-12 no-padding">
+            <label>Título</label>
+            @Html.TextBoxFor(m => m.ConfiguracaoNotificacao.reenvioSenhaAssociadoTitulo, new { @class = "form-control input-sm", maxlength = "255", data_toggle = "tooltip" })
+            <label>Corpo do E-mail</label>
+            @Html.TextAreaFor(m => m.ConfiguracaoNotificacao.reenvioSenhaAssociadoCorpo, new {@class = "form-control input-sm froala-editor", rows = "10"})
+            @Html.instrucao("Limite de 3.000 caracteres.")<br />
+        </div>
+    </div>
+    <div class="clearfix"></div><br/>
+
+    <div class="col-sm-6">
+        <h4 class="separator-form">Recuperação de senha para associado:</h4>
+        <div class="col-sm-12 no-padding">
+            <label>Título</label>
+            @Html.TextBoxFor(m => m.ConfiguracaoNotificacao.tituloEmailRecuperacaoSenhaAssociado, new { @class = "form-control input-sm", maxlength = "255", data_toggle = "tooltip" })
+            <label>Corpo do E-mail</label>
+            @Html.TextAreaFor(m => m.ConfiguracaoNotificacao.corpoEmailRecuperacaoSenhaAssociado, new {@class = "form-control input-sm froala-editor", rows = "10"})
+            @Html.instrucao("Limite de 3.000 caracteres.")<br />
+            @Html.instrucao("Para utilização de um link customizado (em caso de portais), seguir o modelo:<br /> [link do portal/site para recuperação]?a=#PARAMETRO_A#&acr=#PARAMETRO_ACR#&mlcr=#PARAMETRO_MLCR#")<br />
+            <a href="javascript:void(0)" class="fs-11 for-popover" data-placement="top" data-trigger="focus" data-url="#hashtags-recuperacao-senha-associado" data-title="Hash Tags"><i class="fa fa-question-circle"></i> Hash tags do sistema</a>
+        </div>
+    </div>
+    
+    <div class="col-sm-6">
+        <h4 class="separator-form">Recuperação de senha de transação para associado:</h4>
+        <div class="col-sm-12 no-padding">
+            <label>Título</label>
+            @Html.TextBoxFor(m => m.ConfiguracaoNotificacao.tituloEmailRecuperacaoSenhaTransacaoAssociado, new { @class = "form-control input-sm", maxlength = "255", data_toggle = "tooltip" })
+            <label>Corpo do E-mail</label>
+            @Html.TextAreaFor(m => m.ConfiguracaoNotificacao.corpoEmailRecuperacaoSenhaTransacaoAssociado, new {@class = "form-control input-sm froala-editor", rows = "10"})
+            @Html.instrucao("Limite de 3.000 caracteres.")<br />
+            @Html.instrucao("Para utilização de um link customizado (em caso de portais), seguir o modelo:<br /> [link do portal/site para recuperação]?a=#PARAMETRO_A#&acr=#PARAMETRO_ACR#&mlcr=#PARAMETRO_MLCR#")<br />
+            <a href="javascript:void(0)" class="fs-11 for-popover" data-placement="top" data-trigger="focus" data-url="#hashtags-recuperacao-senha-transacao-associado" data-title="Hash Tags"><i class="fa fa-question-circle"></i> Hash tags do sistema</a>
+        </div>
+    </div>
+
+    
+
+</div>
+
+<div class="clearfix"></div><br />

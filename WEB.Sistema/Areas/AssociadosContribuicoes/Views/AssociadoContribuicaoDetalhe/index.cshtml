@@ -1,0 +1,134 @@
+﻿@model DAL.AssociadosContribuicoes.AssociadoContribuicao
+
+@{
+    ViewBag.titlePage = "Associado Contribuição #" + Model.id;
+    ViewBag.subtitlePage = Model?.Contribuicao.descricao;
+}
+
+@section styles{
+    <link href="@UtilConfig.linkResourses()Areas/Pessoas/js/plugins/datatables/media/css/jquery.dataTables.bootstrap.css" rel="stylesheet" />
+    <link href="@UtilConfig.linkResourses()Areas/Associados/js/plugins/bootstrap-responsive-tabs/dist/main.css" rel="stylesheet" />
+    <link href="@UtilConfig.linkResourses()css/associatec/list-custom.css" rel="stylesheet" />
+}
+
+@section scripts{
+    <script type="text/javascript" src="@UtilConfig.linkResourses()Areas/Associados/js/plugins/bootstrap-responsive-tabs/dist/bootstrap-responsive-tabs.js"></script>
+}
+
+@section breadcrump{
+    @*<ol class="breadcrumb">
+        <li><a class="active fs-14" href="@Url.Action("index", "AssociadoConsulta")"><i class="fa fa-arrow-left"></i> Voltar</a></li>
+    </ol>*@
+}
+
+<div class="@(Model.Associado.id > 0? "box box-primary": "")">
+    <div class="margin-top-10">
+        @exibirBlocoCabecalho()
+    </div>
+    <div class="clearfix"></div><br />
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="nav-tabs-custom">
+                <ul class="nav nav-tabs" id="tabs">
+                    <li class="active"><a href="#tab-pagamentos" data-toggle="tab">Histórico Pagamentos</a></li>
+                    <li class=""><a href="#tab-emails" data-toggle="tab">Emails</a></li>
+                </ul>
+                <div class="clearfix"></div>
+
+                <div class="tab-content">
+
+                    <div class="tab-pane active" id="tab-pagamentos">
+                        <div id="boxLoadListaPagamentos" class="content-load carregando" data-url="@Url.Action("partial-lista-titulo-receita-pagamento", "AssociadoContribuicaoDetalhe", new {id = Model.id})"></div>
+                    </div>
+
+                    <div class="tab-pane" id="tab-emails">
+                        <div id="boxLoadListaEmails" class="content-load carregando" data-url="@Url.Action("partial-lista-email-associado-cobranca", "AssociadoContribuicaoDetalhe", new {id = Model.id})"></div>
+                    </div>
+
+                    <div class="clearfix"></div><br />
+
+                </div>
+
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</div>
+
+
+@helper exibirBlocoCabecalho() {
+
+    <div class="col-md-8">
+        <div class="row">
+            <div class="col-sm-7">
+                <span><i class="fa glyphicons glyphicons-user"></i> @(Model.Associado.Pessoa.nome)  (@(Model.Associado.nroAssociado > 0 ? "Nº " + Model.Associado.nroAssociado : "#" + Model.Associado.id))</span><br/>
+                <span><i class="fa fa-users"></i> @(Model.Associado.TipoAssociado.nomeDisplay)</span><br/>
+                <span><i class="fa fa-id-card"></i> @UtilString.formatCPFCNPJ(Model?.Associado?.Pessoa?.nroDocumento)</span><br/>
+                <div class="padding-top-10">Cadastro : <strong>@(Model.flagImportado ? "Importado" : Model.idUsuarioCadastro == 0 ? "Automático" : "Manual")</strong></div>
+            </div>
+            <div class="col-sm-5">
+                <span><i class="fa fa-hourglass-end"></i> Vigência: @Model.dtInicioVigencia.exibirData() - @Model.dtFimVigencia.exibirData()</span><br />
+                <span data-toggle="tooltip" title="Data vencimento original"><i class="fa fa-calendar-times-o"></i> Vencimento Original: @Model.dtVencimentoOriginal.exibirData()</span><br />
+                <span data-toggle="tooltip" title="Data vencimento atual"><i class="fa fa-calendar-times-o"></i> Vencimento Atual: @Model.dtVencimentoAtual.exibirData()</span><br />
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4 bordered-gray-left-1">
+        @if (Model.dtPagamento.HasValue) {
+            <div class="btn btn-block bg-green"><i class="fa fa-check"></i> Quitado em @Model.dtPagamento.exibirData()</div>
+        } else if (Model.flagIsento == true) {
+            <div class="btn btn-block bg-yellow">
+                <i class="fa fa-check"></i> Cobrança isenta
+            </div>
+        } else if (Model.dtVencimentoAtual < DateTime.Today) {
+            <div class="btn btn-block bg-red">
+                <i class="fa fa-check"></i> Cobrança vencida
+            </div>
+        } else {
+            <div class="btn btn-block bg-yellow">
+                <i class="fa fa-exclamation-triangle"></i> Pendente
+            </div>
+        }
+        <br/>
+        <div class="row">
+            <div class="col-sm-6 text-left">
+                <i class="far fa-money-bill"></i> Valor Cobrança
+            </div>
+            <div class="col-sm-6 text-right">
+                    @Model.valorAtual.ToString("C")
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6 text-left">
+                <i class="fa fa-calendar-check"></i> Data Pgto
+            </div>
+            <div class="col-sm-6 text-right">
+                @Model.dtPagamento.exibirData()
+            </div>
+        </div>
+        @if (Model.flagIsento == true) {
+            <div class="row">
+                <div class="col-sm-6 text-left">
+                    <i class="fa fa-calendar-check"></i> Data Isenção
+                </div>
+                <div class="col-sm-6 text-right">
+                    @Model.dtIsencao.exibirData()
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12 text-left">
+                    <i class="fa fa-search"></i> Motivo isenção: @Model.motivoIsencao
+                </div>
+                <div class="col-sm-6 text-right">
+                    @Model.dtPagamento.exibirData()
+                </div>
+            </div>
+
+        }
+    </div>
+    <div class="clearfix"></div>
+
+    <div class="clearfix"></div>
+}

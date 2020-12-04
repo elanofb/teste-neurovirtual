@@ -1,0 +1,45 @@
+﻿@model WEB.Areas.Atendimentos.ViewModels.AtendimentoAcaoMensagemForm
+    
+@{ 
+    Layout = "~/views/shared/associatec/masterpage-modal.cshtml";
+
+    if (IsPost) {
+
+        Layout = null;
+
+    }
+
+    ViewBag.modalTitle = "Enviar Mensagem";
+}
+
+<div id="boxEnviarMensagem">
+    
+    @using (Ajax.BeginForm("enviar-mensagem", new AjaxOptions { HttpMethod = "POST", InsertionMode = InsertionMode.Replace, UpdateTargetId = "boxEnviarMensagem", OnSuccess = "AtendimentoAcao.onSuccessForm" })) {
+
+        { Html.EnableClientValidation(false); }
+
+        @Html.HiddenFor(m => m.AtendimentoHistorico.idAtendimento)
+
+        @Html.HiddenFor(m => m.AtendimentoHistorico.idStatusAtendimento)
+
+        <div class="row">
+
+            <div class="col-xs-12">
+                @Html.labelRequired("Mensagem")
+                @Html.TextAreaFor(m => m.AtendimentoHistorico.mensagem, new { @class = "form-control input-sm", rows = 5 })
+                @Html.ValidationMessageFor(m => m.AtendimentoHistorico.mensagem)
+            </div>
+            <div class="clearfix"></div><br />
+
+            <div class="col-xs-12 text-right">
+                
+                <button class="btn btn-primary link-loading"><i class="fa fa-check"></i> Enviar</button>
+
+            </div>
+            <div class="clearfix"></div>
+
+        </div>
+
+    }
+
+</div>

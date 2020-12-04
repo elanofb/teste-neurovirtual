@@ -1,0 +1,113 @@
+﻿@model WEB.Areas.Configuracao.ViewModels.ConfiguracaoOperacaoCompraForm
+@using DAL.Permissao.Security.Extensions
+@using WEB.Areas.Associacoes.Helpers
+@using MvcFlashMessages
+
+@{ ViewBag.titlePage = "Configurações de Operações de Compra"; }
+
+@section breadcrump{
+    <ol class="breadcrumb">
+        <li>
+            <a href="@Url.Action("listar")" class="active fs-14">
+                <i class="fa fa-arrow-left"></i> 
+                Voltar
+            </a>
+        </li>
+    </ol>
+}
+
+<div class="row">
+    <div class="col-sm-12 box-primary">
+        <div class="nav-tabs-custom">
+
+            <ul class="nav nav-tabs" role="tablist">
+                <li class="active">
+                    <a href="#tab-notificacoes" data-toggle="tab">Principal</a>
+                </li>
+            </ul>
+            @using (Html.BeginForm("editar", null, FormMethod.Post, new{role = "form", @class = "tab-content", enctype = "multipart/form-data"})){
+                
+                @Html.RenderFlash()
+                @Html.ValidationSummary(false)
+
+                <div id="tab-notificacoes" role="tabpanel" class="tab-pane active">
+
+                    <div class="col-sm-12">
+
+                        <div class="row">
+
+                            @{ Html.RenderPartial("partial-dados-cadastro", Model); }
+
+                            <h4 class="separator-form-icon"><i class="far fa-edit"></i> Configurações Gerais</h4>
+                            
+                            <div class="col-sm-12">
+                                <span class="badge bg-blue"><i class="far fa-exclamation"></i> A distribuição em operações de compra deve ser igual à 100%</span>
+                            </div>
+                            
+                            @if (User.idOrganizacao() == 0){
+                                <div class="col-sm-4 col-md-3">
+                                    <label>Organização</label>
+                                    @Html.DropDownListFor(m => m.ConfiguracaoOperacaoCompra.idOrganizacao, AssociacaoHelper.getInstance.selectList(Model.ConfiguracaoOperacaoCompra.idOrganizacao, false), "Padrão", new{@class = "form-control input-sm", type = "number"})
+                                </div>
+                                <div class="clearfix"></div>
+                            }
+
+                            <div class="col-sm-3">
+                                <label>Percentual SINCTEC</label>
+                                @Html.TextBoxFor(m => m.ConfiguracaoOperacaoCompra.percentualLucro, new{@class = "form-control input-sm", alt = "decimal"})
+                                @Html.ValidationMessageFor(m => m.ConfiguracaoOperacaoCompra.percentualLucro)
+                                @Html.instrucao("Percentual que fica na conta da SINCTEC")
+                            </div>
+
+                            <div class="col-sm-3">
+                                <label>Percentual de Comissão</label>
+                                @Html.TextBoxFor(m => m.ConfiguracaoOperacaoCompra.percentualComissao, new{@class = "form-control input-sm", alt = "decimal"})
+                                @Html.ValidationMessageFor(m => m.ConfiguracaoOperacaoCompra.percentualComissao)
+                                @Html.instrucao("Comissão do usuário que indicou o estabelecimento")
+                            </div>
+                            
+                            <div class="col-sm-3">
+                                <label>Percentual de Cashback</label>
+                                @Html.TextBoxFor(m => m.ConfiguracaoOperacaoCompra.percentualCashback, new{@class = "form-control input-sm", alt = "decimal"})
+                                @Html.ValidationMessageFor(m => m.ConfiguracaoOperacaoCompra.percentualCashback)
+                                @Html.instrucao("Cashback para o comprador")
+                            </div>
+                            <div class="clearfix"></div>
+                            
+                            <div class="col-sm-3">
+                                <label>Percentual de Indicação Nível 1</label>
+                                @Html.TextBoxFor(m => m.ConfiguracaoOperacaoCompra.percentualIndicacaoNivel1, new{@class = "form-control input-sm", alt = "decimal"})
+                                @Html.ValidationMessageFor(m => m.ConfiguracaoOperacaoCompra.percentualIndicacaoNivel1)
+                                @Html.instrucao("Comissão de indicação do comprador 1º nível")
+                            </div>
+
+                            <div class="col-sm-3">
+                                <label>Percentual de Indicação Nível 2</label>
+                                @Html.TextBoxFor(m => m.ConfiguracaoOperacaoCompra.percentualIndicacaoNivel2, new{@class = "form-control input-sm", alt = "decimal"})
+                                @Html.ValidationMessageFor(m => m.ConfiguracaoOperacaoCompra.percentualIndicacaoNivel2)
+                                @Html.instrucao("Comissão de indicação do comprador 2º nível")
+                            </div>
+
+                            <div class="col-sm-3">
+                                <label>Percentual de Indicação Nível 3</label>
+                                @Html.TextBoxFor(m => m.ConfiguracaoOperacaoCompra.percentualIndicacaoNivel3, new{@class = "form-control input-sm", alt = "decimal"})
+                                @Html.ValidationMessageFor(m => m.ConfiguracaoOperacaoCompra.percentualIndicacaoNivel3)
+                                @Html.instrucao("Comissão de indicação do comprador 3º nível")
+                            </div>
+                            
+                        </div>
+                    </div>
+
+                    <div class="clearfix"></div><br/>
+
+                </div>
+
+                <div class="col-sm-12 text-right">
+                    @Html.botaoSalvar()
+                </div>
+                <div class="clearfix"></div>
+                <br/>
+            }
+        </div>
+    </div>
+</div>

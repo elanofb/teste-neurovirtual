@@ -1,0 +1,36 @@
+﻿@model DAL.Associados.Associado
+@using MvcFlashMessages
+
+@{
+    Layout = "~/views/shared/associatec/masterpage-modal.cshtml";
+    ViewBag.modalTitle = "Cobrança Padrão";
+    string idBox = "boxRegistrarParcelamento";
+
+    if (IsPost) {
+        Layout = null;
+    }
+}
+
+<script type="text/javascript" src="@UtilConfig.linkResourses()Areas/AssociadosContribuicoes/js/associado-contribuicao-padrao.js"></script>
+
+<div id="@(IsPost ? "" : idBox)">
+    @Html.RenderFlash()
+    <br />
+    <div class="alert alert-warning">
+        <strong>Associado:</strong> @Model.Pessoa.nome
+    </div>
+
+    @using (Ajax.BeginForm("salvar-contribuicao-padrao", "associadocontribuicaopadrao", new AjaxOptions { HttpMethod = "POST", InsertionMode = InsertionMode.Replace, UpdateTargetId = idBox, OnSuccess = "AssociadoContribuicaoPadrao.onSuccessForm" }, new { })) {
+        @Html.HiddenFor(m => m.id, new {id="idAssociado"})
+
+
+
+
+        <p class="text-right">
+            <input type="submit" name="salvar" value="Salvar Mudança" class="btn btn-primary link-loading" />
+        </p>
+    }
+
+
+    <div class="clearfix"></div>
+</div>

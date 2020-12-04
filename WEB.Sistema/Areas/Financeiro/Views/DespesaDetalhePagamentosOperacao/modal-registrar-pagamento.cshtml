@@ -1,0 +1,141 @@
+﻿@model WEB.Areas.Financeiro.ViewModels.BaixaTituloDespesaPagamentoForm
+@using DAL.Financeiro
+@using WEB.Helpers
+@using MvcFlashMessages
+@{
+    ViewBag.modalTitle = "Registrar Pagamento(s) " + (Model.TituloDespesaPagamento.TituloDespesa.descricao.isEmpty() ? "" : " - " + Model.TituloDespesaPagamento.TituloDespesa?.descricao);
+    ViewBag.modalWidthClass = "lg";
+
+    string idBox = "boxRegistrarPagamentoForm";
+    bool flagSubmit = this.ViewContext.RouteData.Values["action"].ToString() == "registrar-pagamento";
+
+    Layout = flagSubmit ? null : "~/views/shared/associatec/masterpage-modal.cshtml";
+}
+
+<div id="@(flagSubmit? "": idBox)">
+
+    @Html.RenderFlash()
+    @if (Model.listaTituloDespesaPagamento.Any()) {
+        
+        Model.TituloDespesaPagamento.dtPagamento = (Model.TituloDespesaPagamento.dtPagamento) ?? DateTime.Today;
+
+        using (Ajax.BeginForm("registrar-pagamento", "DespesaDetalhePagamentosOperacao", new { area = "Financeiro" }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = idBox, OnSuccess = "DespesaRegistrarPagamento.onSuccessPagamentoForm", InsertionMode = InsertionMode.Replace }, new { })) {
+            
+            @Html.legendaRequired()<br />
+            @Html.HiddenFor(x => x.TituloDespesaPagamento.TituloDespesa.descricao)
+
+            { Html.EnableClientValidation(false); }
+            @Html.ValidationSummary(false);
+
+            <div class="col-md-8">
+                <div class="row">
+                    <div class="col-md-4">
+                        @Html.labelRequired("Meio de pagamento")
+                        @Html.DropDownListFor(m => m.TituloDespesaPagamento.idMeioPagamento, MeioPagamentoHelper.getInstance.selectList(Model.TituloDespesaPagamento.idMeioPagamento, true, new int[]{MeioPagamentoConst.DESCONTO_INTEGRAL}), "...", new { @class = "form-control input-sm", id = "idMeioPagamento",onchange = "DespesaRegistrarPagamento.showCamposAdicionais(this)" })
+                        @Html.ValidationMessageFor(m => m.TituloDespesaPagamento.idMeioPagamento)
+                    </div>
+
+                    <div class="col-md-4 dados-cartao nao-exibir">
+                        @Html.labelRequired("Bandeira")
+                        @Html.DropDownListFor(m => m.TituloDespesaPagamento.idFormaPagamento, FormaPagamentoHelper.selectList(Model.TituloDespesaPagamento.idFormaPagamento), "...", new { @class = "form-control input-sm" })
+                        @Html.ValidationMessageFor(m => m.TituloDespesaPagamento.idFormaPagamento)
+                    </div>
+
+                    <div class="dados-cartao nao-exibir">
+                        <div class="col-md-4">
+                            <label>Código de autorização</label>
+                            @Html.TextBoxFor(m => m.TituloDespesaPagamento.codigoAutorizacao, new { @class = "form-control input-sm", maxlength = "20" })
+                            @Html.ValidationMessageFor(m => m.TituloDespesaPagamento.codigoAutorizacao)
+                        </div>
+                    </div>
+
+                    <div class="dados-cheque nao-exibir">
+                        <div class="col-md-2">
+                            <label>Nº Banco</label>
+                            @Html.TextBoxFor(m => m.TituloDespesaPagamento.nroBanco, new { @class = "form-control input-sm" })
+                            @Html.ValidationMessageFor(m => m.TituloDespesaPagamento.nroBanco)
+                        </div>
+
+                        <div class="col-md-2">
+                            <label>Nº Agência</label>
+                            @Html.TextBoxFor(m => m.TituloDespesaPagamento.nroAgencia, new { @class = "form-control input-sm", maxlength = "10" })
+                            @Html.ValidationMessageFor(m => m.TituloDespesaPagamento.nroAgencia)
+                        </div>
+
+                        <div class="col-md-3">
+                            <label>DV Agência</label>
+                            @Html.TextBoxFor(m => m.TituloDespesaPagamento.nroDigitoAgencia, new { @class = "form-control input-sm", maxlength = "5" })
+                            @Html.ValidationMessageFor(m => m.TituloDespesaPagamento.nroDigitoAgencia)
+                        </div>
+                        <div class="clearfix"></div>
+
+                        <div class="col-md-2">
+                            <label>Nº Conta</label>
+                            @Html.TextBoxFor(m => m.TituloDespesaPagamento.nroConta, new { @class = "form-control input-sm", maxlength = "20" })
+                            @Html.ValidationMessageFor(m => m.TituloDespesaPagamento.nroConta)
+                        </div>
+
+                        <div class="col-md-2">
+                            <label>DV Conta</label>
+                            @Html.TextBoxFor(m => m.TituloDespesaPagamento.nroDigitoConta, new { @class = "form-control input-sm", maxlength = "5" })
+                            @Html.ValidationMessageFor(m => m.TituloDespesaPagamento.nroDigitoConta)
+                        </div>
+                    </div>
+
+                    <div class="col-md-3 dados-documento nao-exibir">
+                        <label class="label-documento"></label>
+                        @Html.TextBoxFor(m => m.TituloDespesaPagamento.nroDocumento, new { @class = "form-control input-sm", maxlength = "20" })
+                        @Html.ValidationMessageFor(m => m.TituloDespesaPagamento.nroDocumento)
+                    </div>
+                    <div class="clearfix"></div><br />
+
+                    <div class="col-md-4">
+                        @Html.labelRequired("Data do pagamento")
+                        @Html.TextBoxFor(m => m.TituloDespesaPagamento.dtPagamento, new { @class = "form-control input-sm input-datepicker", alt = "date" })
+                        @Html.ValidationMessageFor(m => m.TituloDespesaPagamento.dtPagamento)
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+
+            <div class="col-md-12 padtop22 text-right">
+                <input type="submit" class="btn btn-primary link-loading" title="Adicionar" value="Salvar Pagamento" data-toggle="tooltip" />
+            </div>
+
+            <div class="clearfix"></div><br/><br/>
+
+            <div class="col-md-12">
+                <table class="table dataTable table-bordered table-striped fs-12">
+                    <thead>
+                        <tr>
+                            <th width="30">ID</th>
+                            <th>Despesa</th>
+                            <th>Descrição</th>
+                            <th width="150">Data Vencimento</th>
+                            <th width="150">Valor</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{ var count = 0;}
+                        @foreach (var Item in Model.listaTituloDespesaPagamento) {
+                            @Html.HiddenFor(m => m.listaTituloDespesaPagamento[count].id)
+                            @Html.HiddenFor(m => m.listaTituloDespesaPagamento[count].idTituloDespesa)
+                            @Html.HiddenFor(m => m.listaTituloDespesaPagamento[count].TituloDespesa.descricao)
+                            @Html.HiddenFor(m => m.listaTituloDespesaPagamento[count].descParcela)
+                            @Html.HiddenFor(m => m.listaTituloDespesaPagamento[count].dtVencimento)
+                            @Html.HiddenFor(m => m.listaTituloDespesaPagamento[count].valorOriginal)
+                            <tr>
+                                <td class="text-center">@Item.id</td>
+                                <td class="text-left">@Item.TituloDespesa.descricao<br/></td>
+                                <td class="text-left">@Item.descParcela<br/></td>
+                                <td class="text-left">@Item.dtVencimento.exibirData()</td>
+                                <td class="text-left">@Item.valorOriginal.ToString("C")</td>
+                            </tr>
+                            count++;
+                        }
+                    </tbody>
+                </table>            
+            </div>
+        }
+    }
+</div>

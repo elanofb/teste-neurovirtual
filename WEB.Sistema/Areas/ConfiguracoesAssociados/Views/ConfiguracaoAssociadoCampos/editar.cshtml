@@ -1,0 +1,98 @@
+﻿@using DAL.ConfiguracoesAssociados
+@model WEB.Areas.ConfiguracoesAssociados.ViewModels.ConfiguracaoCadastroVM
+
+@{
+    ViewBag.titlePage = "Configuração de Cadastro";
+}
+
+@section styles{
+    <link href="@UtilConfig.linkResourses("areas/configuracoesassociados/css/configuracao-associado-campo.css")" rel="stylesheet" />
+}
+
+@section scripts{
+    @Html.includeJqueryLoading()
+    @Html.includeBootstrapMultiselect()
+
+    <script src="@UtilConfig.linkResourses("Areas/ConfiguracoesAssociados/js/jquery-ui.js")"></script>
+    <script src="@UtilConfig.linkResourses("Areas/ConfiguracoesAssociados/js/associacao-campo-grupo.js?v=2.2")"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses("Areas/ConfiguracoesAssociados/js/associacao-campo.js?v=v2.4")"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses("Areas/ConfiguracoesAssociados/js/associacao-campo-opcao.js")"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses("Areas/ConfiguracoesAssociados/js/associacao-campo-propriedade.js")"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses("Areas/ConfiguracoesAssociados/js/clonar-configuracao.js")"></script>
+}
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="col-sm-1 bhoechie-tab-menu">
+            <div class="list-group">
+                <a href="#" class="list-group-item active text-center">
+                    <h4 class="far fa-users"></h4><br/>Membro
+                </a>
+                <a href="#" class="list-group-item text-center">
+                    <h4 class="far fa-building"></h4><br/> Comerciante
+                </a>
+            </div>
+        </div>
+        
+        <div class="col-sm-11 bhoechie-tab no-padding">
+
+            <div class="bhoechie-tab-content active">
+                <div class="nav-tabs-custom">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a href="#cadastro-pf" data-toggle="tab">Pessoa Física</a></li>
+                        <li><a href="#cadastro-pj" data-toggle="tab">Pessoa Jurídica</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="cadastro-pf">
+                            @if (Model.ConfiguracaoAssociadoPF.flagHabilitado == true) {
+                                { Html.RenderPartial("partial-form-campos", TipoCampoCadastroConst.PF); }
+                            } else {
+                                <div class="callout callout-warning"><h4>Cadastro de Pessoa Física está desabilitado.</h4></div>
+                            }
+                        </div>
+
+                        <div class="tab-pane" id="cadastro-pj">
+                            @if (Model.ConfiguracaoAssociadoPJ.flagHabilitado == true) {
+                                { Html.RenderPartial("partial-form-campos", TipoCampoCadastroConst.PJ); }
+                            } else {
+                                <div class="callout callout-warning"><h4>Cadastro de Pessoa Jurídica está desabilitado.</h4></div>
+                            }
+                        </div>
+
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+
+            <div class="bhoechie-tab-content">
+                <div class="nav-tabs-custom">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a href="#cadastro-na-pf" data-toggle="tab">Pessoa Física</a></li>
+                        <li><a href="#cadastro-na-pj" data-toggle="tab">Pessoa Jurídica</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="cadastro-na-pf">
+                            @if (Model.ConfiguracaoAssociadoPF.flagHabilitado == true) {
+                                { Html.RenderPartial("partial-form-campos", TipoCampoCadastroConst.NA_PF); }
+                            } else {
+                                <div class="callout callout-warning"><h4>Cadastro de Pessoa Física está desabilitado.</h4></div>
+                            }
+                        </div>
+
+                        <div class="tab-pane" id="cadastro-na-pj">
+                            @if (Model.ConfiguracaoAssociadoPJ.flagHabilitado == true) {
+                                { Html.RenderPartial("partial-form-campos", TipoCampoCadastroConst.NA_PJ); }
+                            } else {
+                                <div class="callout callout-warning"><h4>Cadastro de Pessoa Jurídica está desabilitado.</h4></div>
+                            }
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+</div>
+
+<div class="clearfix"></div>

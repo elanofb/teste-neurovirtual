@@ -1,0 +1,53 @@
+﻿@model WEB.Areas.ContribuicoesPainel.ViewModels.PainelCobrancaVM
+<div class="row">
+    <div class="col-lg-2 col-md-2 col-sm-6">
+        <div class="widget-small bg-blue cursor-pointer">
+            <i class="fa fa-users pull-left fs-26 cursor-pointer"></i>
+            <p>
+                Associados<br/> <label class="destaque fs-16 cursor-pointer">@Model.listaAssociados.Count</label>
+            </p>
+        </div>
+    </div>
+    <div class="col-lg-2 col-md-2 col-sm-6">
+        <div class="widget-small bg-blue cursor-pointer">
+            <i class="far fa-money-bill pull-left fs-26 cursor-pointer"></i>
+            <p>
+                Cobrados<br/> <label class="destaque fs-16 cursor-pointer">@Model.listaCobrancas.Count</label>
+            </p>
+        </div>
+    </div>
+    <div class="col-lg-2 col-md-2 col-sm-6">
+        <div class="widget-small bg-green cursor-pointer">
+            <i class="far fa-check-circle pull-left fs-26 cursor-pointer"></i>
+            <p>
+                Quitados<br/> <label class="destaque fs-16 cursor-pointer">@Model.listaQuitados.Count</label>
+            </p>
+        </div>
+    </div>
+    <div class="col-lg-2 col-md-2 col-sm-6">
+        <div class="widget-small bg-yellow cursor-pointer">
+            <i class="fa fa-handshake pull-left fs-26 cursor-pointer"></i>
+            <p>
+                Isentos<br/> <label class="destaque fs-16 cursor-pointer">@Model.listaIsentos.Count</label>
+            </p>
+        </div>
+    </div>
+
+    <div class="col-lg-2 col-md-2 col-sm-6">
+        <div class="widget-small bg-light-blue cursor-pointer">
+            <i class="fa fa-ban pull-left fs-26 cursor-pointer"></i>
+            <p>
+                Em aberto<br/> <label class="destaque fs-16 cursor-pointer">@Model.listaEmAberto.Count</label>
+            </p>
+        </div>
+    </div>
+
+    <div class="col-lg-2 col-md-2 col-sm-6">
+        <div class="widget-small bg-red cursor-pointer">
+            <i class="fa fa-thumbs-o-down pull-left fs-26 cursor-pointer"></i>
+            <p>
+                Atrasados<br/> <label class="destaque fs-16 cursor-pointer">@Model.listaVencidos.Count</label>
+            </p>
+        </div>
+    </div>
+</div>

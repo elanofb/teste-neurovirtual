@@ -1,0 +1,97 @@
+﻿@model WEB.Areas.Localizacao.ViewModels.CidadeVM
+
+@using WEB.Areas.Localizacao.Helpers
+
+@{
+    ViewBag.titlePage = (Model.Cidade.id > 0 ? String.Format("Editar Cidade {0}", Model.Cidade.nome) : "Novo Cidade");
+}
+
+@section breadcrump{
+    <ol class="breadcrumb">
+        <li><a href="@Url.Action("listar")" class="active fs-14"><i class="fa fa-arrow-left"></i> Voltar</a></li>
+    </ol>
+}
+
+<div class="row">
+    <div class="col-sm-12 box-primary">
+        <div class="nav-tabs-custom">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#tab-1" data-toggle="tab">Principal</a></li>
+            </ul>
+            <div id="tab-1" class="tab-pane active">
+
+                @{ Html.RenderPartial("partial-info-cadastro"); }
+
+                @using (Html.BeginForm("editar", null, FormMethod.Post, new { @class = "", enctype = "multipart/form-data" })) {
+
+				    @Html.legendaRequired()<br />
+
+                    { Html.EnableClientValidation(false); }
+
+                    { Html.EnableUnobtrusiveJavaScript(false); }
+
+                    @Html.ValidationSummary(true, "Alguns campos não foram validados.")
+
+                    @Html.HiddenFor(m => m.Cidade.id)
+                    @Html.HiddenFor(m => m.Cidade.nomeMunicipio)
+
+
+                    <div class="form-horizontal">
+
+                        <div class="col-md-6">
+
+                            <div class="box box-default">
+                                <div class="box-header with-border">
+                                    <h3 class="box-title">Dados da Cidade</h3>
+                                </div>
+                                <div class="box-body">
+                                    <div class="row">
+
+                                        <div class="col-md-8">
+                                            @Html.labelRequired("Cidade")
+					                        @Html.TextBoxFor(m => m.Cidade.nome, new { @class = "form-control input-sm" })
+					                        @Html.ValidationMessageFor(m => m.Cidade.nome)
+				                        </div>
+
+				                        <div class="col-md-4">
+					                        @Html.labelRequired("Estado")
+					                        @Html.DropDownListFor(m => m.Cidade.idEstado, EstadoHelper.selectList(Model.Cidade.idEstado), "...", new { @class = "form-control input-sm" })
+					                        @Html.ValidationMessageFor(m => m.Cidade.idEstado)
+				                        </div>
+                                        <div class="clearfix"></div>
+
+				                        <div class="col-md-4">
+					                        <label>Código IBGE</label>
+					                        @Html.TextBoxFor(m => m.Cidade.idMunicipioIBGE, new { @class = "form-control input-sm" })
+					                        @Html.ValidationMessageFor(m => m.Cidade.idMunicipioIBGE)
+				                        </div>
+				                        <div class="col-md-4">
+					                        @Html.labelRequired("Capital?")
+					                        @Html.DropDownListFor(m => m.Cidade.flagCapital, ComboHelper.selectListYesNo(Model.Cidade.flagCapital), "...", new { @class = "form-control input-sm" })
+					                        @Html.ValidationMessageFor(m => m.Cidade.flagCapital)
+				                        </div>
+				                        <div class="col-md-4">
+					                        <label>Status</label>
+					                        @Html.DropDownListFor(m => m.Cidade.ativo, ComboHelper.selectListYesNo(Model.Cidade.ativo), "...", new { @class = "form-control input-sm" })
+					                        @Html.ValidationMessageFor(m => m.Cidade.ativo)
+				                        </div>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+
+                    <div class="col-md-12 text-right">
+                        @Html.exibirBotoesFormulario(Url.Action("listar"), Model.Cidade.flagSistema, Url.Action("editar", new { id = 0 }))
+                    </div>
+                    <div class="clearfix"></div><br />
+
+                }
+
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+</div>

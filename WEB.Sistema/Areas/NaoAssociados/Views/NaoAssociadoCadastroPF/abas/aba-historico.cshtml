@@ -1,0 +1,22 @@
+﻿@model DAL.Associados.Associado
+
+
+<div class="tab-pane" id="tab-historico">
+    
+    <h4 class="separator-form no-margin-bottom">
+        Históricos Lançados do Associado
+        
+        <a href="javascript:;" class="pull-right fs-12 link-loading-min" onclick="DefaultSistema.showModal('@Url.Action("modal-form-cadastro", "PessoaRelacionamentoCadastro", new { Area = "Pessoas", Model.idPessoa, flagRecarregar = true })')">
+            <i class="far fa-plus-circle"></i> Nova Ocorrência
+        </a>
+        
+        <a href="javascript:;" class="pull-right margin-right-15 fs-12 link-loading-min" onclick="DefaultSistema.showModal('@Url.Action("modal-tarefa-pessoal-cadastrar", "TarefaPessoalCadastrar", new { Area = "TarefasPessoais", idNaoAssociado = Model.id })')">
+            <i class="far fa-hourglass-start"></i> Agendar Retorno
+        </a>
+    </h4>
+    
+    <div id="boxLoadListaHistorico" class="content-load carregando" data-url="@Url.Action("partial-listar-relacionamentos", "pessoarelacionamento", new { Area = "Pessoas", Model.idPessoa })"></div>
+    
+    <div class="clearfix"></div><br/>
+    
+</div>

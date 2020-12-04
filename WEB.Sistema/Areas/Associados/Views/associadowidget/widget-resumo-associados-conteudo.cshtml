@@ -1,0 +1,43 @@
+﻿@model WEB.Areas.Associados.ViewModels.WidgetResumoAssociado
+
+<div class="row">
+    <div class="col-lg-3 col-xs-6 text-center borderred-silver-right borderred-silver-left margin-bottom-20">
+        <input type="hidden" id="totalAtivosValue" value="@Model.qtdeConsumidores">
+        <input type="text" data-max="@Model.qtdeConsumidores" id="totalAtivos" class="dial" data-fgColor="#00a65a">
+        <div class="knob-label">
+            <a href="#" target="_blank" style="color: #00a65a;">
+                CONSUMIDORES <br/>ATIVOS
+            </a>
+        </div>
+    </div>
+    
+    <div class="col-lg-3 col-xs-6 text-center borderred-silver-right margin-bottom-20">
+        <input type="hidden" id="totalInativosValue" value="@Model.qtdeConsumidoresInativos">
+        <input type="text" data-max="@Model.qtdeConsumidoresInativos" id="totalInativos" class="dial" data-fgColor="#f56954">
+        <div class="knob-label">
+            <a href="#" target="_blank" style="color: #f56954;">
+                CONSUMIDORES <br/>DESATIVADOS
+            </a>
+        </div>
+    </div>
+    
+    <div class="col-lg-3 col-xs-6 text-center borderred-silver-right borderred-silver-left margin-bottom-20">
+        <input type="hidden" id="totalAdimplentesValue" value="@Model.qtdeComerciantes">
+        <input type="text" data-max="@Model.qtdeComerciantes" id="totalAdimplentes" class="dial" data-fgColor="#00a65a">
+        <div class="knob-label">
+            <a href="#" target="_blank" style="color: #00a65a;">
+                ESTABELECIMENTOS <br/>ATIVOS
+            </a>
+        </div>
+    </div>
+    
+    <div class="col-lg-3 col-xs-6 text-center borderred-silver-right margin-bottom-20">
+        <input type="hidden" id="totalInadimplentesValue" value="@Model.qtdeComerciantesInativos">
+        <input type="text" data-max="@Model.qtdeComerciantesInativos" id="totalInadimplentes" class="dial" data-fgColor="#dd4b39">
+        <div class="knob-label">
+            <a href="#" target="_blank" style="color: #dd4b39;">
+                ESTABELECIMENTOS<br/> DESATIVADOS
+            </a>
+        </div>
+    </div>
+</div>

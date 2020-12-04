@@ -1,0 +1,94 @@
+﻿@model WEB.Areas.ConfiguracoesRecibo.ViewModels.ConfiguracaoReciboForm
+
+@using DAL.Permissao.Security.Extensions
+@using WEB.Areas.Associacoes.Helpers
+@using MvcFlashMessages
+
+@{
+    ViewBag.titlePage = "Configurações de Recibo";
+}
+
+@section scripts{
+    @Html.includeFroalaEditorJS()
+    <script type="text/javascript" src="@UtilConfig.linkResourses()Areas/ConfiguracoesRecibo/js/configuracao-recibo.js"></script>
+}
+
+@section styles{
+    @Html.Raw(Html.scripts().scriptFroala)
+    @Html.includeFroalaEditorCSS()
+}
+
+@section breadcrump{
+    <ol class="breadcrumb">
+        <li><a href="@Url.Action("listar")" class="active fs-14"><i class="fa fa-arrow-left"></i> Voltar</a></li>
+    </ol>
+}
+
+<div class="row">
+    
+    <div class="col-sm-12 box-primary">
+        <div class="nav-tabs-custom">
+
+            <ul class="nav nav-tabs" role="tablist">
+                <li class="active"><a href="#tab-associado-pf" data-toggle="tab">Principal</a></li>
+            </ul>
+            @using (Html.BeginForm("editar", null, FormMethod.Post, new {role = "form", @class = "tab-content", enctype = "multipart/form-data"})) {
+
+                @Html.RenderFlash()
+                @Html.ValidationSummary(false)
+
+                <div id="tab-associado-pf" role="tabpanel" class="tab-pane active">
+
+                    <div class="col-sm-12">
+
+                        <div class="row">
+                            
+                            @Html.infoCadastro(Model.ConfiguracaoRecibo.id, Model.ConfiguracaoRecibo.dtCadastro, null)
+
+                            @if (User.idOrganizacao() == 0) {
+                                <div class="col-sm-4 col-md-3">
+                                    <label>Organização</label>
+                                    @Html.DropDownListFor(m => m.ConfiguracaoRecibo.idOrganizacao, AssociacaoHelper.getInstance.selectList(Model.ConfiguracaoRecibo.idOrganizacao), "Padrão", new {@class = "form-control input-sm" })
+                                </div>
+                            }
+
+                            <div class="col-sm-4 col-md-3">
+                                <label class="fs-9">Habilitado?</label>
+                                @Html.DropDownListFor(m => m.ConfiguracaoRecibo.flagHabilitado, ComboHelper.selectListTrueFalse(Model.ConfiguracaoRecibo.flagHabilitado), "...", new {@class = "form-control input-sm"})
+                                @Html.ValidationMessageFor(m => m.ConfiguracaoRecibo.flagHabilitado)
+                            </div>
+                            <div class="clearfix"></div>
+
+
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+
+                    <div class="col-sm-12">
+
+                        <h4 class="separator-form">Configurações Principais</h4>
+
+                        <div class="row">
+
+                            <div class="col-md-12">
+                                <label class="fs-9">Html do Recibo</label>
+                                @Html.TextAreaFor(m => m.ConfiguracaoRecibo.htmlRecibo, new { @class = "form-control input-sm froala-editor", rows = 10 })
+                            </div>
+                            <div class="cleatfix"></div>
+                            
+                        </div>
+
+                    </div>
+                    <div class="clearfix"></div><br/>
+
+                </div>
+
+                <div class="col-sm-12 text-right">
+                    @Html.botaoSalvar()
+                </div>
+                <div class="clearfix"></div><br/>
+
+            }
+        </div>
+    </div>
+</div>

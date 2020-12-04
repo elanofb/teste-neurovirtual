@@ -1,0 +1,117 @@
+﻿@model WEB.Areas.Financeiro.ViewModels.MacroContaForm
+@using BLL.Configuracoes
+@using WEB.Areas.Permissao.Helpers
+
+
+@{
+    Layout = "~/views/shared/associatec/masterpage-edit.cshtml";
+    ViewBag.titlePage = "Macro Conta";
+    ViewBag.subTituloPagina = Model.MacroConta.descricao;
+
+    var OConfigFinanceiro = ConfiguracaoFinanceiroBL.getInstance.carregar();
+}
+
+@section scripts{
+    <script type="text/javascript" src="@UtilConfig.linkResourses()areas/financeiro/js/macrocontacentrocusto.js"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses()areas/financeiro/js/combo-macro-conta.js?v=1"></script>
+}
+
+@section breadcrump{
+    <ol class="breadcrumb">
+        <li><a class="active fs-14" href="@Url.Action("listar", "MacroContaConsulta")"><i class="fa fa-arrow-left"></i> Voltar</a></li>
+    </ol>
+}
+
+@section navTabs{
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#tab-1" data-toggle="tab">Principal</a></li>
+    </ul>
+}
+
+@section tabContent{
+    <div id="tab-1" class="tab-pane active">
+
+        @Html.infoCadastro(Model.MacroConta.id, Model.MacroConta.dtCadastro.GetValueOrDefault(), Model.MacroConta.dtAlteracao)
+
+        @using (Html.BeginForm("editar", null, FormMethod.Post, new { role = "form", @class = "default" })) {
+
+            @Html.HiddenFor(m => m.MacroConta.id)
+
+            @Html.ValidationSummary(true, "Alguns campos não foram validados")
+
+            <h4 class="separator-form-icon"><i class="far fa-edit"></i> Dados Principais da Macro Conta</h4>
+            
+            <div class="form-horizontal">
+                
+                <div class="col-md-3">
+                    <label>Usar para receita ou despesa?</label>
+                    @Html.DropDownListFor(m => m.MacroConta.flagReceitaDespesa, MacroContaHelper.getInstance.selectListReceitaDespesa(Model.MacroConta.flagReceitaDespesa), new { id = "flagReceitaDespesa", @class = "form-control input-sm", onchange = "ComboMacroConta.verificarTipoMacroConta(this)" })
+                    @Html.ValidationMessageFor(m => m.MacroConta.flagReceitaDespesa)
+                </div>
+                <div class="clearfix"></div>
+
+                <div class="col-md-4">
+                    @Html.labelRequired("Descrição")
+                    @Html.TextBoxFor(m => m.MacroConta.descricao, new { @class = "form-control input-sm", maxlength = "100" })
+                    @Html.ValidationMessageFor(m => m.MacroConta.descricao)
+                </div>
+                
+                <div class="col-md-3">
+                    <label>Código Fiscal</label>
+                    @Html.TextBoxFor(m => m.MacroConta.codigoFiscal, new { @class = "form-control input-sm", maxlength = "10" })
+                </div>
+
+                @if (OConfigFinanceiro.flagAprovarContas == true) {
+                    <div id="boxUsuarioAprovacao" class="col-md-3">
+                        <label>Usuário Aprovação Custo</label>
+                        @Html.DropDownListFor(m => m.MacroConta.idUsuarioAprovacao, UsuarioSistemaHelper.getInstance.selectList(Model.MacroConta.idUsuarioAprovacao, 0), "...", new { @class = "form-control input-sm" })
+                    </div>
+                }
+
+               @* <div class="col-md-3">
+                    <label>Centro de Custo DRE</label>
+                    @Html.DropDownListFor(m => m.MacroConta.idCentroCustoDRE, CentroCustoHelper.getInstance.selectList(Model.MacroConta.idCentroCustoDRE), new { @class = "form-control input-sm select2" })
+                    @Html.ValidationMessageFor(m => m.MacroConta.idCentroCustoDRE)
+                </div>*@
+
+                <div class="col-md-2">
+                    <label>Status</label>
+                    @Html.DropDownListFor(m => m.MacroConta.ativo, ComboHelper.selectListStatus(Model.MacroConta.ativo), new { @class = "form-control input-sm" })
+                    @Html.ValidationMessageFor(m => m.MacroConta.ativo)
+                </div>
+                <div class="clearfix"></div>
+
+            </div>
+            
+            if(Model.MacroConta.id > 0) {
+                <h4 class="separator-form-icon"><i class="far fa-edit"></i> Centro de Custo</h4>
+                <div class="col-md-12">
+
+                    @if (Model.listaCentroCusto.Any()) {
+
+                        for (int index = 0; index < Model.listaCentroCusto.Count; index++) {
+
+                            var Item = Model.listaCentroCusto[index];
+
+                            @Html.HiddenFor(x => x.listaSelecionados[index].id)
+
+                            <label class="btn btn-default">
+                                @Html.CheckBoxFor(x => x.listaSelecionados[index].isChecked, new {@class = "item-check v-align-bottom"}) @Item.descricao
+                            </label>
+
+                        }
+                    }
+                </div>
+            }
+
+            <div class="clearfix"></div><br />
+
+            <div class="text-right">
+                @Html.exibirBotoesFormulario(Url.Action("listar", "MacroContaConsulta"), "N", Url.Action("editar"))
+            </div>
+
+        }
+
+    </div>
+}
+

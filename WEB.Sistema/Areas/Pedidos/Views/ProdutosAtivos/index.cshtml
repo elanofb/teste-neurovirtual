@@ -1,0 +1,107 @@
+﻿@using WEB.Areas.Produtos.Helpers
+@model WEB.Areas.Pedidos.ViewModels.ProdutosAtivosConsultaVM
+
+@{
+	ViewBag.titlePage = "Produtos com Rendimentos Ativos";
+}
+
+@section scripts {
+	
+	@Html.includeDatePicker()
+	@Html.includeBootstrapMultiselect()
+
+    <script src="@UtilConfig.linkResourses("js/associatec/plugins/knob/jquery.knob.js")"></script>
+	<script src="@UtilConfig.linkResourses("Areas/Pedidos/js/pedido-producao.js")"></script>
+	<script src="@UtilConfig.linkResourses("Areas/Pedidos/js/pedido-movimentacao.js")"></script>    
+}
+
+@section styles{
+    <link href="@UtilConfig.linkResourses("css/associatec/list-custom.css")" rel="stylesheet" />
+}
+
+<span class="badge bg-aqua"><i class="fa fa-info-circle"></i> Você está visualizando somente pedidos com pagamentos confirmados.</span>
+<div class="box box-primary">
+	
+	<div class="box-header with-border">
+		<h3 class="box-title fs-14 text-bold"><i class="fa fa-filter"></i> Filtros de Busca</h3>
+		<div class="box-tools pull-right">
+			<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="far fa-minus"></i></button>
+			<div class="clearfix"></div>
+		</div>
+	</div>
+
+	<div class="box-body">
+
+		<div class="row">
+
+			@using (Html.BeginForm(null, null, FormMethod.Get, new { id = "formFiltros" })) {
+				
+				<div class="col-md-3 col-sm-4">
+					<label>Data da Compra</label>
+					<div class="input-group">
+						@Html.TextBoxFor(m => m.dtCompraInicio, new { @class = "form-control input-sm input-datepicker", alt = "date", autocomplete="off" })
+						<span class="input-group-addon">-</span>
+						@Html.TextBoxFor(m => m.dtCompraFim, new { @class = "form-control input-sm input-datepicker", alt = "date", autocomplete="off" })
+					</div>
+				</div>
+				
+				<div class="col-md-3 col-sm-4">
+					<label>Data de Finalização</label>
+					<div class="input-group">
+						@Html.TextBoxFor(m => m.dtFinalizacaoInicio, new { @class = "form-control input-sm input-datepicker", alt = "date" })
+						<span class="input-group-addon">-</span>
+						@Html.TextBoxFor(m => m.dtFinalizacaoFim, new { @class = "form-control input-sm input-datepicker", alt = "date" })
+					</div>
+				</div>
+				
+				<div class="col-md-3 col-sm-6">
+					<label>Produto</label>
+					@Html.DropDownListFor(m => m.idProduto, ProdutoHelper.getInstance.selectList(0, Model.idProduto), "Todos", new { @class = "form-control input-sm select2" })
+				</div>
+                
+				<div class="form-group col-md-3">
+					<label>Buscar</label>
+					@Html.buttonSearch(Model.valorBusca, "", "link-loading")
+				</div>
+				
+			}
+		</div>
+	</div>
+</div>
+
+<div class="box box-primary">
+	
+	<div class="box-header with-border">
+		
+		<h3 class="box-title fs-14 text-bold"><i class="fa fa-list"></i> @Model.listaItens.Count produtos ativos</h3>
+		
+		<div class="box-tools pull-right">
+			
+			<div class="dropdown pull-left margin-right-15 margin-top-5">
+				
+				<a href="javascript:;" class="dropdown-toggle text-black" type="button" data-toggle="dropdown">
+					<i class="fa fa-cog"></i>
+				</a>
+				<ul class="dropdown-menu dropdown-menu-right">
+					
+				</ul>
+				
+			</div>
+			
+			<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="far fa-minus"></i></button>
+			<div class="clearfix"></div>
+		</div>
+	</div>
+
+	<div class="box-body">
+		<div class="col-lg-12 col-sm-12 no-padding">
+			
+			<div id="boxListaPedidosTodos">
+
+				@{ Html.RenderPartial("partial-lista", Model); }
+
+			</div>
+
+		</div>
+	</div>
+</div>

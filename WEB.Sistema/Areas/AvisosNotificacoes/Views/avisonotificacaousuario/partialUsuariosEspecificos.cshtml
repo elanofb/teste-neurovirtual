@@ -1,0 +1,69 @@
+﻿@using DAL.Permissao
+
+@{
+    Layout = null;
+}
+
+@Html.showFlashMessage()
+@using (Ajax.BeginForm("adicionarUsuarioEspecifico", "avisonotificacaousuario", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "boxUsuarioEspecifico", OnSuccess = "AvisoNotificacaoUsuario.retornoAposAdicionar();", InsertionMode = InsertionMode.Replace }, new { })) {
+
+    <div class="col-md-6">
+        <label>Selecione os Usuários</label>
+        @Html.Hidden("idUsuarioEspecifico", "")
+        @Html.Hidden("nomeUsuarioEspecifico", "")
+        @Html.Hidden("loginUsuarioEspecifico", "")
+        @Html.Hidden("emailUsuarioEspecifico", "")
+        @Html.TextBox("novoUsuarioEspecifico", "", new Dictionary<string, Object> {
+                                {"id", "novoUsuarioEspecifico"},
+                                {"Value", ""},
+                                {"class", "form-control input-sm no-padding"},
+                                {"data-title", "Digite o nome ou login do usuario"},
+								//{"data-url", Url.Action("autocompletar", "usuariosistema", new { area = "Permissao" })},
+								{"autocomplete","on"}
+                                })
+    </div>
+
+    <div class="form-group col-md-2 padtop28">
+        <button type="submit" class="btn btn-circle btn-primary" style="height:30px;" title="" data-toggle="tooltip" data-original-title="Adicionar Associado">
+            <i class="far fa-plus-circle"></i>
+        </button>
+    </div>
+
+    <div class="clearfix"></div>
+}
+<div class="clearfix"></div>
+<br />
+
+<div class="table-responsive col-md-12">
+    <div class="dataTables_wrapper form-inline" role="grid">
+        <table class="table table-bordered table-striped dataTable">
+            <thead>
+                <tr role="row">
+                    <th class="width-25">ID</th>
+                    <th>Nome</th>
+                    <th>Login</th>
+                    <th class="width-50">&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (SessionNotificacoes.getListUsuariosEspecificos().Count > 0) {
+                    foreach (UsuarioSistema Item in SessionNotificacoes.getListUsuariosEspecificos()) {
+                        <tr>
+                            <td>@Item.id</td>
+                            <td>@Item.nome</td>
+                            <td>@Item.login</td>
+                            <td class="text-center">
+                                <a href="javascript:void(0);" class="delete-default" data-id="@Item.id" data-url='@Url.Action("excluirUsuarioEspecifico", "avisonotificacaoUsuario")' title="Excluir Registro"><i class="fa fa-trash"></i></a>
+                            </td>
+                        </tr>
+                    }
+                } else {
+                    <tr>
+                        <td colspan="4" class="text-center">Nenhum usuário adicionado.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="clearfix"></div>

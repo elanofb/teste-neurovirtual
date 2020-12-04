@@ -1,0 +1,44 @@
+﻿@model WEB.Areas.Pedidos.ViewModels.PedidoDetalhesVM
+      
+<div class="btn btn-block btn-primary abreviar margin-bottom-15">
+    <i class="fa fa-usd"></i> Dados Financeiros                    
+</div>
+
+<p class="campo-info">
+    <label><i class="fa fa-chevron-right"></i> Conta Bancária: </label> @(Model.Pedido.ContaBancaria?.descricao ?? "-")
+</p>
+
+<p class="campo-info">
+    <label><i class="fa fa-chevron-right"></i> Centro de Custo: </label> @(Model.Pedido.CentroCusto?.descricao ?? "-")
+</p>
+
+<p class="campo-info">
+    <label><i class="fa fa-chevron-right"></i> Macro Conta: </label> @(Model.Pedido.MacroConta?.descricao ?? "-")
+</p>
+
+<p class="campo-info">
+    <label><i class="fa fa-chevron-right"></i> Sub-Conta: </label> @(Model.Pedido.CategoriaTitulo?.descricao ?? "-")
+</p>
+
+<p class="campo-info">
+    <label><i class="fa fa-chevron-right"></i> Código Contábil: </label> @(Model.Pedido.codigoContabil ?? "-")
+</p>
+
+<p class="campo-info margin-top-10">
+    <label><i class="fa fa-calendar"></i> Vencimento: </label> @Model.Pedido.dtVencimento.exibirData()
+</p>
+
+<p class="campo-info">
+    <label><i class="fa fa-chevron-right"></i> Boleto: </label> 
+    @(Model.Pedido.flagBoletoBancarioPermitido == true ? "Sim" : "Não")
+</p>
+
+<p class="campo-info">
+    <label><i class="fa fa-chevron-right"></i> Cartão de Crédito: </label> 
+    @(Model.Pedido.flagCartaoCreditoPermitido == true ? "Sim" : "Não")
+</p>
+
+<p class="campo-info">
+    <label><i class="fa fa-chevron-right"></i> Depósito: </label> 
+    @(Model.Pedido.flagDepositoPermitido == true ? "Sim" : "Não")
+</p>

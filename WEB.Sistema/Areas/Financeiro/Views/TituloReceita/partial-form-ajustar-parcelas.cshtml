@@ -1,0 +1,29 @@
+﻿@model WEB.Areas.Financeiro.ViewModels.ModalDetalhePagamento
+@using MvcFlashMessages
+
+<div>
+    @Html.RenderFlash()
+    <div class="row">
+        @using (Ajax.BeginForm("salvar-ajuste-parcelas", "tituloreceitapagamento", new AjaxOptions { HttpMethod = "POST", InsertionMode = InsertionMode.Replace, UpdateTargetId = "box-form-adicionar-parcela", OnSuccess = "TituloReceitaPagamento.onSuccessAjustarParcelas" }, new { @class = " pull-right" })) {
+            @Html.HiddenFor(x => x.TituloReceita.id)
+            <div class="col-xs-4">
+                <label>Valor</label>
+                @Html.TextBoxFor(m => m.ParcelaAdicional.valorOriginal,new { @class = "form-control input-sm", alt = "decimal" })
+                @Html.ValidationMessageFor(m => m.ParcelaAdicional.valorOriginal)
+            </div>
+            <div class="col-xs-4">
+                <label>Vencimento</label>
+                @Html.TextBoxFor(m => m.ParcelaAdicional.dtVencimento, new { @class = "form-control input-sm input-datepicker", alt = "date" })
+                @Html.ValidationMessageFor(m => m.ParcelaAdicional.dtVencimento)
+            </div>
+            <div class="col-xs-4 margin-top-25">
+                <input type="submit" value="Salvar Parcela" class="btn btn-primary link-loading" />
+            </div>
+            <div class="clearfix"></div>
+        }
+    </div>
+    <div class="clearfix"></div>
+
+
+</div>
+

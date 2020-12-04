@@ -1,0 +1,80 @@
+﻿@model WEB.Areas.Permissao.ViewModels.UsuarioSistemaForm
+
+@{
+    ViewBag.titlePage = Model.UsuarioSistema.id > 0 ? "Editar usuário" : "Novo Usuário";
+    ViewBag.subTituloPagina = Model.UsuarioSistema.nome;
+    ViewBag.flagButtonNewItem = false;
+}
+
+@section scripts{
+    
+    @Html.includeDatePicker()
+
+    <script src="@UtilConfig.linkResourses()Areas/Localizacao/js/localizacao.js"></script>
+
+    <script type="text/javascript" src="@UtilConfig.linkResourses()Areas/Permissao/js/usuariosistema.js"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses()Areas/UsuariosUnidades/js/usuario-unidade.js"></script>
+    <script type="text/javascript" src="@UtilConfig.linkResourses()Areas/UsuariosOrganizacoes/js/usuario-organizacao.js"></script>
+}
+
+@section breadcrump{
+    <ol class="breadcrumb">
+        <li><a href="@Url.Action("listar")" class="active fs-14"><i class="fa fa-arrow-left"></i> Voltar</a></li>
+    </ol>
+}
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="nav-tabs-custom">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#tab-1" data-toggle="tab">Principal</a></li>
+                @if(Model.UsuarioSistema.id > 0) {
+
+                    if (Model.UsuarioSistemaLogado.PerfilAcesso.flagTodasUnidades == true) {
+                        <li class=""><a href="#tab-2" data-toggle="tab">Unidades</a></li>
+                    }
+
+                    if (Model.UsuarioSistemaLogado.PerfilAcesso.flagOrganizacao == true) {
+                        <li class=""><a href="#tab-3" data-toggle="tab">Organizações</a></li>
+                    }
+
+                    <li class="dropdown pull-right">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
+                            Ações <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:void(0)" onclick="UsuarioSistema.reenviarSenha('@Model.UsuarioSistema.id');"><i class="fa fa-arrow-circle-o-right"></i> Reenviar Senha</a></li>
+                            @if (Model.flagLogAcesso) {
+                                <li role="presentation"><a role="menuitem" tabindex="-1" href="@Url.Action("listar", "LogAcesso", new { area = "LogsPermissao", id = Model.UsuarioSistema.id })"><i class="fa fa-sign-in"></i>Log de Acesso</a></li>
+                            }
+                        </ul>
+                    </li>
+                }
+            </ul>
+
+            <div class="tab-content">
+                
+                <div id="tab-1" class="tab-pane active">
+                    @Html.infoCadastro(Model.UsuarioSistema.id, Model.UsuarioSistema.dtCadastro, Model.UsuarioSistema.dtAlteracao)
+
+                    @{Html.RenderPartial("partial-dados-principais", Model);}
+                </div>
+
+                @*@if (Model.UsuarioSistemaLogado.PerfilAcesso.flagTodasUnidades == true) {
+                    <div id="tab-2" class="tab-pane">
+                        <div class="content-load carregando" data-url="@Url.Action("partial-form-vincular-unidades", "UsuarioUnidade", new {area = "UsuariosUnidades", idUsuario = Model.UsuarioSistema.id})"></div>
+                    </div>
+                }*@
+
+                @if (Model.UsuarioSistemaLogado.PerfilAcesso.flagOrganizacao == true) {
+                    <div id="tab-3" class="tab-pane">
+                        <div class="content-load carregando" data-url="@Url.Action("partial-form-vincular-organizacao", "UsuarioOrganizacao", new {area = "UsuariosOrganizacoes", idUsuario = Model.UsuarioSistema.id})"></div>
+                    </div>
+                }
+            </div>
+
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</div>
+

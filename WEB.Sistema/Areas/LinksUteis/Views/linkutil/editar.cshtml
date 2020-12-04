@@ -1,0 +1,126 @@
+﻿@model WEB.Areas.LinksUteis.ViewModels.LinkUtilForm
+@using DAL.Entities
+@using DAL.Permissao.Security.Extensions
+@using WEB.Areas.Arquivos.Helpers
+@using WEB.Areas.Associacoes.Helpers
+
+@{
+    Layout = "~/views/shared/associatec/masterpage-edit.cshtml";
+    ViewBag.titlePage = "Editar Link Útil";	
+}
+
+@section breadcrump{
+    <ol class="breadcrumb">
+        <li><a href="@Url.Action("listar")" class="active fs-14"><i class="fa fa-arrow-left"></i> Voltar</a></li>
+    </ol>
+}
+
+@section styles{
+	@Html.includeCSSModuloArquivos()
+}
+
+@section scripts{
+    @Html.includeJSModuloArquivosFotos()
+}
+
+@section navTabs{
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#tab-1" data-toggle="tab">Principal</a></li>
+    </ul>
+}
+
+@section tabContent{
+    @{Html.RenderPartial("partial-info-cadastro");}
+    <div id="tab-1" class="tab-pane active">
+
+        @using (Html.BeginForm("editar", null, FormMethod.Post, new { enctype = "multipart/form-data" })) {
+			@Html.legendaRequired()<br />
+			@Html.HiddenFor(m => m.LinkUtil.id, new { id = "id" })
+			{ Html.EnableClientValidation(false); }
+			@Html.ValidationSummary(false);
+            
+            <div class="col-md-6">
+
+                <h4 class="separator-form">Informações Cadastrais</h4>
+
+                <div class="row">
+
+                    @if (User.idOrganizacao() == 0) {
+                        <div class="col-sm-4 col-md-4">
+                            <label>Organização</label>
+                            @Html.DropDownListFor(m => m.LinkUtil.idOrganizacao, AssociacaoHelper.getInstance.selectList(Model.LinkUtil.idOrganizacao), "Padrão", new { @class = "form-control input-sm" })
+                        </div>
+                        
+                    }
+
+                    <div class="col-sm-4">
+                        <label>Portal</label>
+                        @Html.DropDownListFor(m => m.LinkUtil.idPortal, WEB.Areas.Portais.Helpers.PortalHelper.getInstance.selectList(Model.LinkUtil.idPortal), "...", new { @class = "form-control input-sm" })
+                        @Html.ValidationMessageFor(m => m.LinkUtil.idPortal)
+                    </div>
+
+                    <div class="clearfix"></div>
+
+                    <div class="col-md-8">
+                        @Html.labelRequired("Link")
+                        @Html.TextBoxFor(x => x.LinkUtil.link, new { @class = "form-control input-sm", @maxlength = "255" })
+                        @Html.ValidationMessageFor(x => x.LinkUtil.link)
+				        @Html.instrucao("Ex: http://www.sinctec.com.br")
+                    </div>
+
+                    <div class="col-md-4">
+                        @Html.labelRequired("Abrir em uma nova janela?")
+                        @Html.DropDownListFor(m => m.LinkUtil.flagBlank, ComboHelper.selectListYesNo(Model.LinkUtil.flagBlank), "...", new { @class = "form-control input-sm" })
+                        @Html.ValidationMessageFor(x => x.LinkUtil.flagBlank)
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-8">
+                        @Html.labelRequired("Informe uma descrição para o link útil")
+                        @Html.TextBoxFor(x => x.LinkUtil.descricao, new { @class = "form-control input-sm", @maxlength = "255" })
+                        @Html.ValidationMessageFor(x => x.LinkUtil.descricao)
+                    </div>
+            
+			        <div class="col-md-4">
+				        <label>Status</label>
+				        @Html.DropDownListFor(m => m.LinkUtil.ativo, ComboHelper.selectListStatus(Model.LinkUtil.ativo), new { @class = "form-control input-sm" })
+				        @Html.ValidationMessageFor(m => m.LinkUtil.ativo)
+			        </div>
+                    <div class="clearfix"></div>
+                </div>
+
+            </div>
+
+            <div class="col-md-6">
+                
+                <h4 class="separator-form">Imagem</h4>
+
+                <div class="col-md-12">
+                    @Html.inputFileSimples("Arquivo")
+                    @Html.ValidationMessageFor(m => m.Arquivo)
+                </div>
+
+                <div class="clearfix"></div><br />
+
+                @if (Model.LinkUtil.id > 0) {
+                    <h4 class="separator-form">Imagens cadastradas</h4>
+                    <div class="content-load carregando" id="boxArquivosListar" data-target="boxArquivosListar" data-url="@Url.Action("partial-lista-fotos", "ArquivoFoto", new { Area = "Arquivos", entidade = EntityTypes.LINK_UTIL, idReferencia = Model.LinkUtil.id })"></div>
+                }
+
+            </div>
+            <div class="clearfix"></div><br /><br />          
+            
+            <div class="col-md-12">
+				<div class="text-right">
+					@Html.exibirBotoesFormulario(Url.Action("listar"), "N")
+				</div>
+            </div>
+            <div class="clearfix"></div>
+        }
+
+    </div>
+    <div class="clearfix"></div>
+}
+

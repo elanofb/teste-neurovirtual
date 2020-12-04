@@ -1,0 +1,19 @@
+﻿@using MvcFlashMessages
+@{
+    ViewBag.Title = "Ops, ocorreu um problema.";
+
+    if (Request.IsAjaxRequest()) {
+
+        Layout = "~/views/shared/associatec/masterpage-modal.cshtml";
+
+    }
+
+}
+
+<div class="box" id="list">
+    @Html.RenderFlash()
+    <div class="alert alert-warning">
+        <h4>Login Expirado</h4>
+        Seu login está expirado. <a href="@Url.Action("index", "Login", new {area="Permissao"})">Clique para entrar novamente no sistema.</a>
+    </div>
+</div>

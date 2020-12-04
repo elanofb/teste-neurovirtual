@@ -1,0 +1,21 @@
+﻿@model WEB.Areas.Associados.ViewModels.AssociadoForm
+
+<div class="tab-pane" id="tab-historico">
+    <div class="col-md-8">
+        <h4 class="separator-form">Inserir Ocorrência do Associado</h4>
+        @*ReSharper disable once Mvc.ActionNotResolved*@
+        <div id="boxLoadFormHistorico" class="content-load carregando" data-url="@Url.Action("editar", "pessoarelacionamento", new { area = "pessoas", Model.Associado.idPessoa })"></div>
+    </div>
+
+    <div class="col-md-offset-1 col-md-3">
+        <h4 class="separator-form">Outras Ações</h4>
+        @{ Html.RenderPartial("~/Areas/Associados/Views/associadoacao/partial-acoes-associado.cshtml", Model.Associado); }
+    </div>
+    <div class="clearfix"></div><br />
+
+    <h4 class="separator-form">Históricos Lançados do Associado</h4>
+    <div id="boxLoadListaHistorico" class="content-load carregando" data-url="@Url.Action("partial-listar-relacionamentos", "pessoarelacionamento", new { area = "pessoas", Model.Associado.idPessoa })"></div>
+    <div class="clearfix"></div><br />
+
+
+</div>

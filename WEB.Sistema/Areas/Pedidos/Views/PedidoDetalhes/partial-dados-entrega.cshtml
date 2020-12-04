@@ -1,0 +1,94 @@
+﻿@using DAL.Pedidos.Extensions
+@model WEB.Areas.Pedidos.ViewModels.PedidoDetalhesVM
+      
+<hr />
+
+@if (Model.PedidoEntrega == null) {
+
+    <div class="alert alert-info">
+        O endereço de entrega ainda não foi informado. 
+        <a href="javascript:;"  onclick="DefaultSistema.showModal('@Url.Action("modal-alterar-endereco-entrega", "PedidoDetalhesEnderecoEntrega", new { Model.Pedido.id })')">Clique aqui</a> para informá-lo.
+    </div>
+
+}
+
+@if (Model.PedidoEntrega != null) { 
+
+    <div class="row">
+        
+        <div class="col-sm-6">
+            
+            <p class="campo-info">
+                <i class="fa fa-map-marker"></i>
+                <strong>Endereco de Entrega (@(Model.PedidoEntrega?.TipoFrete?.descricao ?? "PAC"))</strong>
+                        
+                <a href="javascript:;" class="pull-right" data-toggle="tooltip" title="Alterar" onclick="DefaultSistema.showModal('@Url.Action("modal-alterar-endereco-entrega", "PedidoDetalhesEnderecoEntrega", new { Model.Pedido.id })')">
+                    <i class="fa fa-edit no-margin"></i>
+                </a>
+            </p>
+
+            <div class="padding-left-15">
+
+                <p class="campo-info">
+                    @UtilString.formatCEP(Model.PedidoEntrega.cep)
+                </p>
+
+                <p class="campo-info">
+                    @Model.PedidoEntrega.logradouro @Model.PedidoEntrega.numero @(Model.PedidoEntrega.complemento ?? "")
+                </p>
+
+                <p class="campo-info">
+                    <span>Bairro: @Model.PedidoEntrega.bairro</span>
+                </p>
+
+                <p class="campo-info">
+                    <span>@(Model.PedidoEntrega.Cidade?.nome ?? Model.PedidoEntrega.nomeCidade)/@(Model.PedidoEntrega?.Cidade?.Estado?.sigla)</span>
+                </p>
+
+            </div>
+
+        </div>
+        
+        <div class="col-sm-6">
+            
+            <p class="campo-info">
+                
+                <span class="text-green bold fs-14 no-pointer">
+                    <i class="far fa-money-bill"></i> @(Model.Pedido.flagPagamentoNaEntrega == true ? "Pagamento na entrega" : "Pagamento prévio")
+                </span>
+                
+            </p>
+
+            <p class="campo-info">
+                <i class="fa fa-truck"></i>
+                @(Model.PedidoEntrega?.Transportador?.nome ?? "Correios")
+            </p>
+
+
+            @if (Model.PedidoEntrega.dtAgendamentoEntrega != null) {
+
+                <p class="campo-info">
+                    <i class="fa fa-calendar"></i>
+                    <strong>Data Limite de Entrega</strong>
+                </p>
+
+                <div class="padding-left-15">
+
+                    <p class="campo-info">
+                        <span>Data: @Model.PedidoEntrega.dtAgendamentoEntrega.exibirData()</span>
+                    </p>
+
+                    <p class="campo-info">
+                        <span>Périodo: @Model.PedidoEntrega.exibirPeriodoEntrega()</span>
+                    </p>
+
+                </div>
+
+            }
+            
+        </div>
+        <div class="clearfix"></div>
+
+    </div>
+    
+}

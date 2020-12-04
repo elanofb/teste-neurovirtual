@@ -1,0 +1,134 @@
+﻿@using MvcFlashMessages
+@using WEB.Areas.ContasBancarias.Helpers
+@model WEB.Areas.Financeiro.ViewModels.TituloReceitaPagamentoClonarForm
+
+@{
+    Layout = IsPost ? null : "~/views/shared/associatec/masterpage-modal.cshtml";
+
+    ViewBag.modalTitle = "Adicionar Receita Pagamento";
+    ViewBag.modalWidthClass = "md";
+}
+
+<div id="@(IsPost ? "" : "boxClonarPagamentoReceitaForm")">
+
+    @Html.RenderFlash()
+
+    <div class="col-xs-12">
+        <div class="row">
+            @using (Ajax.BeginForm("salvar-titulo-receita-pagamento", null, new AjaxOptions { UpdateTargetId = "boxClonarPagamentoReceitaForm", HttpMethod = "POST", OnSuccess = "ReceitaPagamentoClone.onSuccessSalvarClone" }, new { role = "form", @class = "default" })) {
+                
+                @Html.legendaRequired()
+
+                @Html.ValidationSummary(false)
+
+                @Html.HiddenFor(x=>x.TituloReceitaPagamento.idTituloReceita)
+
+                <h4 class="separator-form">Dados do Pagamento</h4>
+
+                <div class="form-horizontal">
+                    <div class="col-sm-4">
+                        <label>Descrição</label>
+                        @Html.TextBoxFor(x => x.TituloReceitaPagamento.descricaoParcela, new {@class = "form-control input-sm"})
+                        @Html.ValidationMessageFor(x => x.TituloReceitaPagamento.descricaoParcela)
+                    </div>
+
+                    <div class="col-sm-4">
+                        @Html.labelRequired("Valor")
+                        @Html.TextBoxFor(x => x.TituloReceitaPagamento.valorOriginal, new { @class = "form-control input-sm", alt = "decimal" })
+                        @Html.ValidationMessageFor(x => x.TituloReceitaPagamento.valorOriginal)
+                    </div>
+                    
+                    <div class="col-sm-4">
+                        <label>Juros</label>
+                        @Html.TextBoxFor(x => x.TituloReceitaPagamento.valorJuros, new { @class = "form-control input-sm", alt = "decimal" })
+                        @Html.ValidationMessageFor(x => x.TituloReceitaPagamento.valorJuros)
+                    </div>
+                    
+                    <div class="col-sm-4">
+                        <label>Tarifas Bancárias</label>
+                        @Html.TextBoxFor(x => x.TituloReceitaPagamento.valorTarifasBancarias, new { @class = "form-control input-sm", alt = "decimal" })
+                        @Html.ValidationMessageFor(x => x.TituloReceitaPagamento.valorTarifasBancarias)
+                    </div>
+                    
+                    <div class="col-sm-4">
+                        <label>Tarifas Transações</label>
+                        @Html.TextBoxFor(x => x.TituloReceitaPagamento.valorTarifasTransacao, new { @class = "form-control input-sm", alt = "decimal" })
+                        @Html.ValidationMessageFor(x => x.TituloReceitaPagamento.valorTarifasTransacao)
+                    </div>
+                    
+                    <div class="col-sm-4">
+                        <label>Outras Tarifas</label>
+                        @Html.TextBoxFor(x => x.TituloReceitaPagamento.valorOutrasTarifas, new { @class = "form-control input-sm", alt = "decimal" })
+                        @Html.ValidationMessageFor(x => x.TituloReceitaPagamento.valorOutrasTarifas)
+                    </div>
+                    
+                    <div class="col-sm-4">
+                        <label>Desconto</label>
+                        @Html.TextBoxFor(x => x.TituloReceitaPagamento.valorDesconto, new { @class = "form-control input-sm", alt = "decimal" })
+                        @Html.ValidationMessageFor(x => x.TituloReceitaPagamento.valorDesconto)
+                    </div>
+                    
+                    <div class="col-sm-8">
+                        <label>Motivo desconto</label>
+                        @Html.TextBoxFor(x => x.TituloReceitaPagamento.motivoDesconto, new { @class = "form-control input-sm", maxlength = 255 })
+                        @Html.ValidationMessageFor(x => x.TituloReceitaPagamento.motivoDesconto)
+                    </div>
+
+                    <div class="col-sm-4">
+                        @Html.labelRequired("Vencimento")
+                        @Html.TextBoxFor(x => x.TituloReceitaPagamento.dtVencimento, new { @class = "form-control input-sm input-datepicker", alt = "date" })
+                        @Html.ValidationMessageFor(x => x.TituloReceitaPagamento.dtVencimento)
+                    </div>
+
+                    <div class="col-sm-4">
+                        <label>Competência</label>
+                        @Html.TextBoxFor(x => x.TituloReceitaPagamento.dtCompetencia, new {@class = "form-control input-sm input-datepicker", alt = "date"})
+                        @Html.ValidationMessageFor(x => x.TituloReceitaPagamento.dtCompetencia)
+                    </div>
+
+                    <div class="col-sm-4">
+                        <label>N° Nota Fiscal</label>
+                        @Html.TextBoxFor(x => x.TituloReceitaPagamento.nroDocumento, new { @class = "form-control input-sm" })
+                        @Html.ValidationMessageFor(x => x.TituloReceitaPagamento.nroDocumento)
+                    </div>
+
+                    <div class="clearfix"></div>
+
+                    <h4 class="separator-form">Classificação de Contas</h4>
+                    
+                    <div class="col-sm-6">
+                        <label>Conta Bancária</label>
+                        @Html.DropDownListFor(x => x.TituloReceitaPagamento.idContaBancaria, ContaBancariaHelper.getInstance.selectList(Model.TituloReceitaPagamento.idContaBancaria), "", new { @class = "form-control input-sm idContaBancaria select2", data_group = "modalCloneReceitaPagamento" })
+                        @Html.ValidationMessageFor(x => x.TituloReceitaPagamento.idContaBancaria)
+                    </div>
+
+                    <div class="col-sm-6">
+                        <label>Centro de Custo</label>
+                        @Html.DropDownListFor(x => x.TituloReceitaPagamento.idCentroCusto, CentroCustoHelper.getInstance.selectList(Model.TituloReceitaPagamento.idCentroCusto), "", new { @class = "form-control input-sm idCentroCusto", data_group = "modalCloneReceitaPagamento" })
+                        @Html.ValidationMessageFor(x => x.TituloReceitaPagamento.idCentroCusto)
+                    </div>
+
+                    <div class="col-sm-6">
+                        <label>Macro Conta</label>
+                        @Html.DropDownListFor(x => x.TituloReceitaPagamento.idMacroConta, MacroContaHelper.getInstance.selectList(Model.TituloReceitaPagamento.idMacroConta), "", new { @class = "form-control input-sm idMacroConta", data_group = "modalCloneReceitaPagamento" })
+                        @Html.ValidationMessageFor(x => x.TituloReceitaPagamento.idMacroConta)
+                    </div>
+
+                    <div class="col-sm-6">
+                        <label>Sub-Conta</label>
+                        @Html.DropDownListFor(x => x.TituloReceitaPagamento.idCategoria, CategoriaTituloHelper.getInstance.selectList(Model.TituloReceitaPagamento.idCategoria, 0), "", new { @class = "form-control input-sm idSubConta", data_group = "modalCloneReceitaPagamento" })
+                        @Html.ValidationMessageFor(x => x.TituloReceitaPagamento.idCategoria)
+                    </div>
+
+                </div>
+                <div class="clearfix"></div><br/>
+
+                <div class="text-right">
+                    <input type="submit" class="btn btn-primary link-loading" value="Salvar" />
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<div class="clearfix"></div><br />
+

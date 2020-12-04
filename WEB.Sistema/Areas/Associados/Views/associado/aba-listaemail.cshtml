@@ -1,0 +1,8 @@
+﻿@model WEB.Areas.Associados.ViewModels.AssociadoForm
+
+<div class="tab-pane" id="tab-listaemail">
+    <div id="boxLoadFormAssociadoListaEmail" class="content-load carregando" data-url="@Url.Action("editar", "associadolistaemail", new {area = "associados", idAssociado = Model.Associado.id, idTipoAssociado = Model.Associado.idTipoAssociado})"></div>
+    <br />
+    <h4 class="separator-form">E-mails cadastrados</h4>
+    <div id="boxLoadListaAssociadoListaEmail" class="content-load carregando" data-url="@Url.Action("partial-listar", "associadolistaemail", new {area = "associados", idAssociado = Model.Associado.id })"></div>
+</div>

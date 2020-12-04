@@ -1,0 +1,62 @@
+﻿@model WEB.Areas.Relacionamentos.ViewModels.RelacionamentoConsultaVM
+
+@using WEB.Areas.Permissao.Helpers
+@using WEB.Areas.Pessoas.Helpers
+
+@using (Html.BeginForm("index", null, FormMethod.Post, new { @class = "formFiltro" })) {
+
+    @Html.Hidden("nroPagina", "", new { id = "nroPagina" })
+    
+    <div class="col-lg-12 col-md-12">
+                
+        <div class="row">
+            
+            <div class="col-md-3 col-sm-6">
+                <label>Ocorrência</label><br/>
+                @Html.ListBox("idsOcorrencias", OcorrenciaRelacionamentoHelper.selectMultiList(UtilRequest.getListInt("idsOcorrencias")?.ToArray()), new { @class = "form-control input-sm input-multiselect" })
+            </div>
+
+            <div class="col-md-6 col-sm-6">
+                <label>Membro</label><br/>
+                @Html.DropDownList("idPessoa", PessoaAutoCompleteHelper.getInstance.selectListAssociadoNaoAssociado(UtilRequest.getInt32("idPessoa")), new { @class = "form-control input-sm", id = "idPessoa" })
+            </div>
+
+            <div class="col-md-3 col-sm-6">
+                <label>Data da Ocorrência</label>
+
+                <div class="input-group">
+                    @Html.TextBox("dtOcorrenciaInicial", UtilRequest.getString("dtOcorrenciaInicial"), new { @class = "form-control input-sm input-datepicker", alt = "date" })
+                    <span class="input-group-addon">-</span>
+                    @Html.TextBox("dtOcorrenciaFinal", UtilRequest.getString("dtOcorrenciaFinal"), new { @class = "form-control input-sm input-datepicker", alt = "date" })
+                </div>
+            </div>
+
+            <div class="clearfix hidden-xs hidden-sm"></div>
+
+            <div class="col-md-3 col-sm-6">
+                <label>Usuário</label>
+                @Html.DropDownList("idUsuarioCadastro", UsuarioSistemaHelper.getInstance.selectList(UtilRequest.getInt32("idUsuarioCadastro"), 0), "Todos", new { @class = "form-control input-sm" })
+            </div>
+
+            <div class="col-md-3 col-sm-6">
+                <label>Tipo de Saída</label>
+                @Html.DropDownList("flagTipoSaida", TipoSaidaHelper.selectListTipoSaida(UtilRequest.getString("flagTipoSaida")), new { @class = "form-control input-sm" })
+            </div>
+            @*<div class="col-sm-3 col-xs-6">
+                <label>Somente ocorrências com arquivos?</label>
+                @Html.DropDownList("flagTemArquivos", ComboHelper.selectListYesNo(UtilRequest.getString("flagTemArquivos")), new {@class = "form-control input-sm"})
+            </div>*@
+            
+            <div class="col-sm-3">
+                <label>Buscar</label>
+                @Html.buttonSearch(UtilRequest.getString("valorBusca"))
+            </div>
+
+            <div class="clearfix"></div>
+
+        </div>
+        
+    </div>
+    <div class="clearfix"></div><br/>
+            
+}

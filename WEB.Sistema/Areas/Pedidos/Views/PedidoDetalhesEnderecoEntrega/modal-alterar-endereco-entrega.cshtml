@@ -1,0 +1,110 @@
+﻿@model WEB.Areas.Pedidos.ViewModels.PedidoDetalhesFreteForm
+
+@{
+    Layout = "~/views/shared/associatec/masterpage-modal.cshtml";
+
+    if (IsPost) {
+        Layout = null;
+    }
+
+    ViewBag.modalTitle = "Alterar endereço de entrega";
+}
+
+<div id="boxModalEnderecoEntrega">
+    
+    @using(Ajax.BeginForm("salvar", "PedidoDetalhesEnderecoEntrega", new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = "boxModalEnderecoEntrega", OnSuccess = "PedidoDetalhesFrete.onSuccess" })) {
+        
+        @Html.ValidationSummary(true, "Alguns campos não foram validados")
+
+        { Html.EnableUnobtrusiveJavaScript(false); }
+
+        @Html.HiddenFor(m => m.PedidoEntrega.idPedido)
+        
+        @Html.HiddenFor(m => m.PedidoEntrega.idEstado, new { rel = "idEstadoEnderecoEntrega" })
+    
+        @Html.HiddenFor(m => m.PedidoEntrega.idCidade, new { rel = "idCidadeEnderecoEntrega" })
+    
+        @Html.HiddenFor(m => m.PedidoEntrega.nomeCidade, new { rel = "nomeCidadeEnderecoEntrega" })
+
+
+        <div class="col-md-6">
+            <label>CEP Origem</label>
+            @Html.TextBoxFor(m => m.PedidoEntrega.cepOrigem, new { @class = "form-control input-sm", alt = "cep", id = "cep-origem-entrega" })
+            @Html.ValidationMessageFor(m => m.PedidoEntrega.cepOrigem)
+            @Html.instrucao("Informe local de origem para cálculo do frete")
+        </div>
+        
+        <div class="col-md-6">
+            <label>CEP Entrega</label>
+
+            <div class="input-group no-padding">
+                @Html.TextBoxFor(m => m.PedidoEntrega.cep, new { @class = "form-control input-sm", alt = "cep", autocomplete = "off", id = "cep-entrega", rel = "cepEnderecoEntrega", onblur = "PedidoDetalhesFrete.carregarEndereco('EnderecoEntrega');" })
+                <span class="input-group-addon"><a href="javascript:void(0);" onclick="PedidoCadastroFrete.carregarEndereco('EnderecoEntrega', true);"><i class="fa fa-search"></i></a></span>
+            </div>
+            @Html.ValidationMessageFor(m => m.PedidoEntrega.cep)
+        </div>
+        <div class="clearfix"></div>
+        
+        <div class="col-md-6">
+            <label>Endereço</label>
+            @Html.TextBoxFor(m => m.PedidoEntrega.logradouro, new { @class = "form-control input-sm", maxlength = "100", rel = "logradouroEnderecoEntrega", id = "logradouro-entrega" }.isReadOnly(true))
+            @Html.ValidationMessageFor(m => m.PedidoEntrega.logradouro)
+        </div>
+        
+        <div class="col-md-3">
+            <label>Nº</label>
+            @Html.TextBoxFor(m => m.PedidoEntrega.numero, new { @class = "form-control input-sm", maxlength = "20", id = "numero-entrega" })
+            @Html.ValidationMessageFor(m => m.PedidoEntrega.numero)
+        </div>
+        
+        <div class="col-md-3">
+            <label>Compl.</label>
+            @Html.TextBoxFor(m => m.PedidoEntrega.complemento, new { @class = "form-control input-sm", maxlength = "20", id = "complemento-entrega" })
+            @Html.ValidationMessageFor(m => m.PedidoEntrega.complemento)
+        </div>
+        <div class="clearfix"></div>
+        
+        <div class="col-md-6">
+            <label>Bairro</label>
+            @Html.TextBoxFor(m => m.PedidoEntrega.bairro, new { @class = "form-control input-sm", id = "bairro-entrega", rel = "bairroEnderecoEntrega" }.isReadOnly(true)) 
+        </div>
+        
+        <div class="col-md-6">
+            <label>Cidade/UF</label>
+            @Html.TextBox("nomeCidadeUF", String.Concat(Model.PedidoEntrega.Cidade?.nome ?? "", Model.PedidoEntrega.Estado != null ? "/" + Model.PedidoEntrega.Estado.sigla : ""), new { @class = "form-control input-sm", id = "cidade-entrega" }.isReadOnly(true))
+        </div>
+        
+        <div class="col-md-6">
+            <label>Transportadora</label>
+            @Html.TextBox("transportadora", Model.PedidoEntrega.Transportador?.nome, new { @class = "form-control input-sm" }.isReadOnly(true))
+        </div>
+        
+        <div class="col-md-6">
+            <label>Tipo Frete</label>
+            @Html.TextBox("tipoFrete", Model.PedidoEntrega.TipoFrete?.descricao ?? "PAC", new { @class = "form-control input-sm" }.isReadOnly(true))
+        </div>
+        <div class="clearfix"></div><br/>
+        <h4 class="separator-form">Dados de agendamento da entrega</h4>
+        <div class="col-md-4">
+            <label>Data Limite de Entrega</label>
+            @Html.TextBoxFor(m => m.PedidoEntrega.dtAgendamentoEntrega, new {@class = "form-control input-sm input-datepicker", alt = "date", id = ""})
+            @Html.ValidationMessageFor(m => m.PedidoEntrega.dtAgendamentoEntrega)
+        </div>
+        <div class="col-md-4">
+            <label>Período</label>
+            @Html.DropDownListFor(m => m.PedidoEntrega.flagPeriodo, PedidoEntregaHelper.getComboPedidoEntrega(Model.PedidoEntrega.flagPeriodo), new { @class = "form-control input-sm", alt = "date", id = "" })
+            @Html.ValidationMessageFor(m => m.PedidoEntrega.dtAgendamentoEntrega)
+        </div>
+
+        <div class="clearfix"></div><br />
+
+        <div class="col-xs-12 text-right">
+            <button class="btn btn-primary link-loading">
+                <i class="far fa-hdd"></i> Salvar
+            </button>
+        </div>
+        <div class="clearfix"></div>
+
+    }
+
+</div>

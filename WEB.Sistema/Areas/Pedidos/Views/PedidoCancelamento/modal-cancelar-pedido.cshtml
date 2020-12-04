@@ -1,0 +1,43 @@
+﻿@model WEB.Areas.Pedidos.ViewModels.PedidoCancelamentoForm
+
+@{
+    Layout = "~/views/shared/associatec/masterpage-modal.cshtml";
+
+    if (UtilRequest.getBool("IsPost") == true) {
+        Layout = null;
+    }
+
+    ViewBag.modalTitle = "Cancelar Pedido";
+}
+
+<div id="boxModalCancelamento">
+    
+    @using(Ajax.BeginForm("cancelar", "PedidoCancelamento", new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = "boxModalCancelamento", OnSuccess = "PedidoCancelamento.onSuccess" })) {
+        
+        @Html.ValidationSummary(true, "Alguns campos não foram validados")
+
+        { Html.EnableUnobtrusiveJavaScript(false); }
+
+        @Html.Hidden("IsPost", true)
+        
+        <div class="hide">
+            @Html.EditorFor(m => m.ids)
+        </div>
+        
+        <div class="col-md-12">
+            @Html.labelRequired("Motivo do Cancelamento")
+            @Html.TextAreaFor(x => x.motivoCancelamento, new {@class = "form-control input-sm", rows = 6})
+            @Html.ValidationMessageFor(x => x.motivoCancelamento)
+        </div>
+        <div class="clearfix"></div><br />
+
+        <div class="col-xs-12 text-right">
+            <button class="btn btn-primary link-loading">
+                <i class="fa fa-hdd"></i> Confirmar
+            </button>
+        </div>
+        <div class="clearfix"></div>
+
+    }
+
+</div>

@@ -1,0 +1,9 @@
+﻿.multiselect-container > li > a > label {
+    font-size: 13px !important;
+    text-transform: none !important;
+}
+
+.multiselect-container {
+    margin-left: 15px;
+    width: 100%;
+}

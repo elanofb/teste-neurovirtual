@@ -1,0 +1,69 @@
+﻿@model WEB.Areas.Associados.ViewModels.CategoriaTipoAssociadoForm
+@{
+    Layout = "~/views/shared/associatec/masterpage-edit.cshtml";
+    ViewBag.titlePage = "Categoria Tipo Associado";
+    ViewBag.subTitlePage = (Model.CategoriaTipoAssociado.id == 0 ? " - Novo Registro" : Model.CategoriaTipoAssociado.descricao);
+}
+
+
+@section breadcrump{
+    <ol class="breadcrumb">
+        <li><a class="active fs-14" href="@(Url.Action("listar", new { Model.CategoriaTipoAssociado.idOrganizacao }))"><i class="fa fa-arrow-left"></i> Voltar</a></li>
+    </ol>
+}
+
+@section navTabs{
+	<ul class="nav nav-tabs">
+		<li class="active"><a href="#tab-1" data-toggle="tab">Principal</a></li>
+	</ul>
+}
+
+@section tabContent{
+    <div id="tab-1" class="tab-pane active">
+        
+        @{Html.RenderPartial("partial-info-cadastro");}
+
+        @using (Html.BeginForm("editar", null, FormMethod.Post, new {role = "form", @class = "default"})) {
+            @Html.HiddenFor(m => m.CategoriaTipoAssociado.id)
+
+            @Html.HiddenFor(m => m.CategoriaTipoAssociado.idOrganizacao)
+
+            @Html.ValidationSummary(false)
+            @Html.legendaRequired()
+            <div class="clearfix"></div><br/>
+
+            <div class="form-horizontal">
+
+                <div class="col-md-5">
+                    @Html.labelRequired("Descrição")
+                    @Html.TextBoxFor(m => m.CategoriaTipoAssociado.descricao, new {@class = "form-control input-sm", maxlength = "100"})
+                    @Html.ValidationMessageFor(m => m.CategoriaTipoAssociado.descricao)
+                </div>
+
+                <div class="col-md-2">
+                    <label>Status</label>
+                    @Html.DropDownListFor(m => m.CategoriaTipoAssociado.ativo, ComboHelper.selectListStatus(Model.CategoriaTipoAssociado.ativo), "...", new {@class = "form-control input-sm"})
+                    @Html.ValidationMessageFor(m => m.CategoriaTipoAssociado.ativo)
+                </div>
+
+                <div class="clearfix"></div><br />
+
+                <div class="col-sm-7">
+                    <label>Observações</label>
+                    @Html.TextAreaFor(m => m.CategoriaTipoAssociado.observacao, new { @class = "form-control input-sm", rows = "3" })
+                    @Html.ValidationMessageFor(m => m.CategoriaTipoAssociado.observacao)
+                </div>
+
+                <div class="clearfix"></div><br/>
+            </div>
+            <div class="clearfix"></div><br/>
+
+            <div class="text-right col-sm-12">
+                @Html.exibirBotoesFormulario(Url.Action("listar", new { Model.CategoriaTipoAssociado.idOrganizacao }), "N", Url.Action("editar", new { Model.CategoriaTipoAssociado.idOrganizacao }))
+            </div>
+            <div class="clearfix"></div><br/>
+        }
+
+    </div><div class="clearfix"></div>
+}
+

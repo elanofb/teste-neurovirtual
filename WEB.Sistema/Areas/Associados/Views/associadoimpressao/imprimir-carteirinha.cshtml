@@ -1,0 +1,15 @@
+﻿@{
+    Layout = "~/Areas/Associados/views/shared/_masterpage-carteirinha.cshtml";
+}
+
+<p>
+    @Html.Raw(ViewBag.htmlCarteirinha)
+</p>
+
+<div class=" text-right">
+    <button onclick="window.print();"><i class="fa fa-print"></i> Imprimir</button>
+</div>
+
+<script>
+	//window.print();
+</script>

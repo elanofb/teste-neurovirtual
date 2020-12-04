@@ -1,0 +1,46 @@
+﻿@{
+    Layout = null;
+    string dtInicio = ViewBag.dtInicio.ToString();
+    string dtFim = ViewBag.dtFim.ToString();
+}
+
+@using(Html.BeginForm(null, null, FormMethod.Get, new { @class = "filtros" })) {
+
+    <div class="col-md-2">
+        <label>Está Pago?</label>
+        @Html.DropDownList("flagPago", ComboHelper.selectListYesNo(UtilRequest.getString("flagPago")), "Todos", new { @class = "form-control input-sm" })
+    </div>
+
+    <div class="col-md-2 no-padding-left">
+        <label>Pesquisar Por?</label>
+        @Html.DropDownList("pesquisarPor", FinanceiroHelper.getDtPesquisaFinanceiro(UtilRequest.getString("pesquisarPor")), new { @class = "form-control input-sm" })
+    </div>
+
+    <div class="col-xs-3">
+        <label>Data</label><br />
+        <div class="input-group">
+            @Html.TextBox("dtInicio", dtInicio, new { @class = "form-control input-sm input-datepicker", alt = "date" })
+            <span class="input-group-addon">-</span>
+            @Html.TextBox("dtFim", dtFim, new { @class = "form-control input-sm input-datepicker", alt = "date" })
+        </div>
+    </div>
+
+    <div class="form-group col-xs-3">
+        <label>Recebido de / Pago a</label>
+        @Html.TextBox("destinatario", UtilRequest.getString("destinatario"), new {@class = "form-control input-sm"})
+    </div>
+
+    <div class="form-group col-xs-2">
+        <label>Nota Fiscal</label>
+        @Html.TextBox("nf", UtilRequest.getString("nf"), new {@class = "form-control input-sm"})
+    </div>
+
+    <div class="clearfix"></div>
+
+    <div class="form-group col-xs-3">
+        <label>Descrição</label>
+        @Html.buttonSearch(UtilRequest.getString("valorBusca"))
+    </div>
+}
+
+<div class="clearfix"></div>

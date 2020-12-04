@@ -1,0 +1,26 @@
+﻿@model DAL.ConfiguracoesAssociados.ConfiguracaoAssociadoCampo
+@using MvcFlashMessages
+
+@{
+    Layout = "~/views/shared/associatec/masterpage-modal.cshtml";
+    ViewBag.modalWidthClass = "lg";
+    ViewBag.modalTitle = "Configuração das propriedades do campos";
+}
+
+<div id="modalCampoPropriedade">
+    
+    @Html.RenderFlash()
+
+    @if (Model != null) {
+        <div class="col-sm-12">
+
+            <div id="partialLoadFormCampoPropriedade" class="carregando content-load" data-url="@Url.Action("partial-form-propriedade", "ConfiguracaoAssociadoCampoPropriedade", new { idCampo = Model.id})"></div>
+            
+            <div class="clearfix"></div><br/>
+
+            <div id="partialLoadListaCampoPropriedade" class="carregando content-load" data-url="@Url.Action("partial-lista-propriedade", "ConfiguracaoAssociadoCampoPropriedade", new { idCampo = Model.id })"></div>
+
+        </div>
+        <div class="clearfix"></div>
+    }
+</div>

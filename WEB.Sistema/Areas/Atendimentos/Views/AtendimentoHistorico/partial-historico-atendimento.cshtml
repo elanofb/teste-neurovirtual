@@ -1,0 +1,56 @@
+﻿@model List<AtendimentoHistorico>
+
+@using DAL.Atendimentos
+
+<div class="direct-chat-messages">
+                        
+    @foreach (var OHistorico in Model) {
+
+            var sideClass = OHistorico.idUsuarioCadastro > 0 ? "right" : "left";
+            var marginClass = OHistorico.idUsuarioCadastro > 0 ? "margin-right-5" : "margin-left-5";
+
+            <div class="direct-chat-msg @sideClass">
+                                
+            @if (OHistorico.idStatusAtendimento > 0) { 
+
+                <div class="direct-chat-info clearfix">
+                    <span class="direct-chat-name pull-@sideClass">@OHistorico.nome</span>
+                    <span class="direct-chat-timestamp pull-@sideClass @marginClass">@OHistorico.dtCadastro.exibirData(true)</span>
+                </div>
+
+            }
+
+            <div class="direct-chat-text">
+                
+                @exibirMensagem(OHistorico)
+            
+            </div>
+                                
+        </div>
+
+
+    }
+
+</div>
+                 
+@helper exibirMensagem(AtendimentoHistorico OHistorico) { 
+
+    <span class="fs-12">
+        
+        @if (OHistorico.idStatusAtendimento == AtendimentoStatusConst.AGUARDANDO_RETORNO) {
+
+            <strong><i class="far fa-clock"></i> <i>Aguardando retorno:</i></strong>
+
+        }
+        
+        @if (OHistorico.idStatusAtendimento == AtendimentoStatusConst.FINALIZADO) {
+
+            <strong><i class="fa fa-check-circle"></i> <i>Finalizado:</i></strong>
+
+        }
+
+        @Html.Raw(OHistorico.mensagem)
+
+    </span>
+    
+}

@@ -1,0 +1,148 @@
+﻿@model WEB.Areas.Financeiro.ViewModels.ReceitaForm
+
+@using DAL.Financeiro
+
+@if (Model.TituloReceita.dtQuitacao.HasValue) {
+    <div class="btn btn-block bg-green"><i class="fa fa-check" /> Quitado em @Model.TituloReceita.dtQuitacao.exibirData()</div>
+} else {
+    <div class="btn btn-block bg-yellow"><i class="fa fa-exclamation-triangle" /> Pendente</div>
+}
+
+<div class="row">
+
+    @{
+        var totalPagos = Model.TituloReceita.listaTituloReceitaPagamento.Where(x => x.dtPagamento != null).Sum(x => x.valorRecebido);
+
+        var totalPendentes = Model.TituloReceita.listaTituloReceitaPagamento.Where(x => x.dtPagamento == null).Sum(x => x.valorComJurosEDescontos());
+
+        var totalValor = totalPagos + totalPendentes;
+    }
+
+    <div class="col-sm-7">
+        <p class="campo-info margin-left-10 margin-top-10">
+            <label><i class="fa fa-usd"></i> Total original:</label>
+        </p>
+    </div>
+    <div class="col-sm-5 text-right">
+        @if (Model.TituloReceita.listaTituloReceitaPagamento.Any() || FinanceiroHelper.receitasBloqueadas(Model.TituloReceita.idTipoReceita)) {
+            <p class="campo-info margin-left-10 margin-top-10">@(Model.TituloReceita.valorTotal.exibirValor())</p>
+        } else {
+            <p class="campo-info margin-left-10 margin-top-10">
+                R$<a href="#" class="info-editavel editable editable-click text-green" data-type="text" data-alt="decimal" data-pk="@Model.TituloReceita.id" data-name="valorTotal" data-value="@($"{Model.TituloReceita.valorTotal:N2}")" data-title="Valor Total" data-refresh-box="true">
+                    @($"{Model.TituloReceita.valorTotal:N2}")
+                </a>
+            </p>
+        }
+    </div>
+    <div class="clearfix"></div>
+
+
+    <div class="col-sm-7">
+        <p class="campo-info margin-left-10">
+            <label><i class="fa fa-usd"></i> Descontos:</label>
+        </p>
+    </div>
+    <div class="col-sm-5 text-right">
+        <p class="campo-info">
+            <label class="text-red">- @(Model.TituloReceita.listaTituloReceitaPagamento.Sum(x => decimal.Add(x.valorDescontoAntecipacao.toDecimal(), x.valorDescontoCupom.toDecimal())).ToString("C"))</label>
+        </p>
+    </div>
+    <div class="clearfix"></div>
+
+    
+    <div class="col-sm-7">
+        <p class="campo-info margin-left-10">
+            <label><i class="fa fa-usd"></i> Juros:</label>
+        </p>
+    </div>
+    <div class="col-sm-5 text-right">
+        <p class="campo-info margin-left-10">
+            <label class="text-green">+ @(Model.TituloReceita.listaTituloReceitaPagamento.Sum(x => x.valorJuros)?.ToString("C"))</label>
+        </p>
+    </div>
+    <div class="clearfix"></div>
+    
+    <div class="col-sm-7">
+        <p class="campo-info margin-left-10">
+            <label><i class="fa fa-usd"></i> Total atual:</label>
+        </p>
+    </div>
+    <div class="col-sm-5 text-right">
+        <p class="campo-info">@(Model.TituloReceita.listaTituloReceitaPagamento.Any() ? totalValor?.ToString("C") : Model.TituloReceita.valorTotal?.ToString("C"))</p>
+    </div>
+    <div class="clearfix"></div>
+
+
+
+    <div class="col-sm-7">
+        <p class="campo-info margin-left-10">
+            <label><i class="fa fa-usd"></i> Tarifas:</label>
+        </p>
+    </div>
+    <div class="col-sm-5 text-right">
+        <p class="campo-info margin-left-10">
+            <label class="text-red">- @(Model.TituloReceita.listaTituloReceitaPagamento.Sum(x => x.valorTotalTarifas()).ToString("C"))</label>
+        </p>
+    </div>
+    <div class="clearfix"></div>
+
+    <div class="col-sm-12">
+        <hr class="margin-top-10 margin-bottom-10" />
+    </div>
+    <div class="clearfix"></div>
+
+
+    <div class="col-sm-7">
+        <p class="campo-info margin-left-10">
+            <label><i class="fa fa-usd"></i> Recebido:</label>
+        </p>
+    </div>
+    <div class="col-sm-5 text-right">
+        <p class="campo-info margin-left-10">
+            <label class="text-green">@(Model.TituloReceita.listaTituloReceitaPagamento.Sum(x => x.valorRecebido)?.ToString("C"))</label>
+        </p>
+    </div>
+    <div class="clearfix"></div>
+
+    <div class="col-sm-7">
+        <p class="campo-info margin-left-10">
+            <label><i class="fa fa-usd"></i> Líquido:</label>
+        </p>
+    </div>
+    <div class="col-sm-5 text-right">
+        <p class="campo-info margin-left-10">
+            <label class="text-green">@Model.TituloReceita.listaTituloReceitaPagamento.Sum(x => x.valorLiquido()).ToString("C")</label>
+        </p>
+    </div>
+    <div class="clearfix"></div>
+
+    <div class="col-sm-7">
+        <p class="campo-info margin-left-10">
+            <label><i class="fa fa-usd"></i> Saldo:</label>
+        </p>
+    </div>
+    <div class="col-sm-5 text-right">
+        <p class="campo-info margin-left-10">
+            <label class="text-yellow">@(saldoFinal(totalPagos.toDecimal()).ToString("C"))</label>
+        </p>
+    </div>
+    <div class="clearfix"></div>
+
+</div>
+
+
+@functions{
+
+    private decimal saldoFinal(decimal totalPagos) {
+
+        var valorSaldo = decimal.Subtract(Model.TituloReceita.valorTotalComDesconto(), totalPagos);
+
+        if (valorSaldo < 0) {
+            return new decimal(0);
+        }
+
+        return valorSaldo;
+    }
+
+
+}

@@ -1,0 +1,86 @@
+﻿@model WEB.Areas.Notificacoes.ViewModels.TemplateMensagemForm
+@{
+    Layout = "~/views/shared/associatec/masterpage.cshtml";
+    ViewBag.titlePage = "Template de Mensagem";
+}
+
+
+@section scripts{
+    @Html.includeFroalaEditorJS()
+    <script src="@UtilConfig.linkResourses("Areas/Configuracao/js/plugins/bootstrap-fileinput/js/fileinput.min.js")"></script>
+    <script src="@UtilConfig.linkResourses("Areas/Configuracao/js/plugins/colorpicker/bootstrap-colorpicker.js")"></script>
+    <script src="@UtilConfig.linkResourses("Areas/Configuracao/js/configuracao-email.js?v=1.2")"></script>
+    @Html.Raw(Html.scripts().scriptFroala)
+}
+
+@section styles {
+    @Html.includeFroalaEditorCSS()
+    <link href="@UtilConfig.linkResourses("Areas/Configuracao/js/plugins/bootstrap-fileinput/css/fileinput.min.css")" rel="stylesheet" />
+    <link href="@UtilConfig.linkResourses("Areas/Configuracao/js/plugins/colorpicker/bootstrap-colorpicker.css")" rel="stylesheet" />
+}
+
+@section breadcrump{
+    <ol class="breadcrumb">
+        <li><a href="@Url.Action("index", "TemplateMensagemConsulta")" class="active fs-14"><i class="fa fa-arrow-left"></i> Voltar</a></li>
+    </ol>
+}
+
+
+<div class="row">
+    <div class="col-sm-12 box-primary">
+
+        <div class="nav-tabs-custom">
+
+            <ul class="nav nav-tabs" role="tablist">
+                <li class="active"><a href="#tab-templates" data-toggle="tab">Dados Principais</a></li>
+            </ul>
+            
+            @using (Html.BeginForm("editar", null, FormMethod.Post, new { role = "form", @class = "tab-content", enctype = "multipart/form-data" })) {
+
+                @Html.ValidationSummary(false)
+
+                <div id="tab-templates" role="tabpanel" class="tab-pane active">
+                    
+                    <div class="row">
+                        
+                        <div class="col-md-12">
+                            <h4 class="separator-form-icon"><i class='far fa-edit'></i> Dados do Template</h4>
+                        </div>
+
+                        <div class="col-md-12">
+                            <label>Título</label>
+                            @Html.TextBoxFor(m => m.TemplateMensagem.titulo, new {@class = "form-control input-sm"})
+                        </div>
+
+                        <div class="col-md-12">
+                            <label>Corpo HTML</label>
+                            @Html.TextAreaFor(m => m.TemplateMensagem.corpoHTML, new {@class = "form-control input-sm froala-editor", rows = "20"})
+                        </div>
+
+                        <div class="col-md-12">
+                            <label>Corpo Texto</label>
+                            @Html.TextAreaFor(m => m.TemplateMensagem.corpoTexto, new {@class = "form-control input-sm", rows = "10"})
+                        </div>
+
+                        <div class="clearfix"></div><br/>
+                        
+                        <div class="col-md-12">
+                            <div class="text-right">
+                                <input type="submit" name="enviar" value="Salvar" class="btn btn-primary"/>
+                            </div>
+                        </div>
+                        
+                        <div class="clearfix"></div>
+                        
+                    </div>
+                    
+                    <div class="clearfix"></div>
+                    
+                </div>
+                
+                <div class="clearfix"></div>
+            }
+            
+        </div>
+    </div>
+</div>

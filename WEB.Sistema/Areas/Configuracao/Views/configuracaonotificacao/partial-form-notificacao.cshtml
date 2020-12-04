@@ -1,0 +1,41 @@
+﻿@model WEB.Areas.Configuracao.ViewModels.ConfiguracaoNotificacaoForm
+
+<div class="row">
+    <h4 class="separator-form">Informe e-mails que devem ser informados quando houver um:</h4>
+    <div class="col-md-4">
+        <label>Novo Associado</label>
+        @Html.TextBoxFor(m => m.ConfiguracaoNotificacao.emailNovoAssociado, new { @class = "form-control input-sm", maxlength = "255", data_toggle = "tooltip", title = "E-mail que será informado quando houver o cadastro de um novo associado. Para informar mais de um e-mail, separe os endereços com ponto e vírgula." })
+    </div>
+
+    <div class="col-md-4">
+        <label>Novo Não Associado</label>
+        @Html.TextBoxFor(m => m.ConfiguracaoNotificacao.emailNovoNaoAssociado, new { @class = "form-control input-sm", maxlength = "255", data_toggle = "tooltip", title = "E-mail que será informado quando houver o cadastro de um novo não associado. Para informar mais de um e-mail, separe os endereços com ponto e vírgula." })
+    </div>
+    <div class="col-md-4">
+        <label>Novo Período Degustação</label>
+        @Html.TextBoxFor(m => m.ConfiguracaoNotificacao.emailAssociadoDegustacao, new { @class = "form-control input-sm", maxlength = "255", data_toggle = "tooltip", title = "E-mail que deve receber cópia do período de degustação." })
+    </div>
+    
+    <div class="col-md-4">
+        <label>Novo Pedido</label>
+        @Html.TextBoxFor(m => m.ConfiguracaoNotificacao.emailPedidos, new { @class = "form-control input-sm", maxlength = "255", data_toggle = "tooltip", title = "E-mail que será informado quando houver um novo pedido ou alguma alteração importante em um pedido. Para informar mais de um e-mail, separe os endereços com  ponto e vírgula." })
+    </div>
+    <div class="col-md-4">
+        <label>Novo Contato Portal</label>
+        @Html.TextBoxFor(m => m.ConfiguracaoNotificacao.emailContato, new { @class = "form-control input-sm", maxlength = "255", data_toggle = "tooltip", title = "E-mail que será informado quando houver um contato através do portal. Para informar mais de um e-mail, separe os endereços com  ponto e vírgula." })
+    </div>
+
+    <div class="col-md-4">
+        <label>Nova Inscrição Evento</label>
+        @Html.TextBoxFor(m => m.ConfiguracaoNotificacao.emailInscricaoEvento, new { @class = "form-control input-sm", maxlength = "255", data_toggle = "tooltip", title = "E-mail que será informado quando houver uma nova inscrição para algum evento. Para informar mais de um e-mail, separe os endereços com  ponto e vírgula." })
+    </div>
+    <div class="col-md-4">
+        <label>E-mails Cobrança Contribuições</label>
+        @Html.TextBoxFor(m => m.ConfiguracaoNotificacao.emailCobrancaContribuicao, new { @class = "form-control input-sm", maxlength = "255", data_toggle = "tooltip", title = "E-mails que devem receber cópias das cobranças de contribuições. Para informar mais de um e-mail, separe os endereços com  ponto e vírgula." })
+    </div>
+
+
+    <div class="clearfix"></div><br />
+</div>
+
+<div class="clearfix"></div><br />

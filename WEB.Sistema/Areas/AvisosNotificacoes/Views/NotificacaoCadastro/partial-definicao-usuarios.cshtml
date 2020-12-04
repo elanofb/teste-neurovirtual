@@ -1,0 +1,35 @@
+﻿@model WEB.Areas.AvisosNotificacoes.ViewModels.AvisoNotificacaoForm
+
+<div class="row">
+
+    <div class="col-md-12">
+        
+        <h4 class="separator-form-icon"><i class='far fa-edit'></i> Definição de Usuários</h4>
+
+        @Html.labelRequired("Envio para todos os usuários?")
+        @Html.DropDownListFor(x => x.ONotificacaoSistema.flagTodosUsuarios, ComboHelper.selectListTrueFalse(Model.ONotificacaoSistema.flagTodosUsuarios), "...", new {id = "flagTodosUsuarios", @class = "form-control input-sm" })
+        @Html.ValidationMessageFor(x => x.ONotificacaoSistema.flagTodosUsuarios)
+    </div>
+    <div class="clearfix"></div>
+
+    <div class="col-md-12 @(Model.ONotificacaoSistema.flagTodosUsuarios == true ? "hidden" : "") padding-bottom-10">
+
+        <div class="radio">
+
+            <label class="radio-label">
+
+                @if (Model.ONotificacaoSistema.flagUsuariosEspecificos == true) {
+                    @Html.RadioButton("flagUsuarios", "espec", new {@checked = Model.ONotificacaoSistema.flagUsuariosEspecificos})
+                } else {
+                    @Html.RadioButton("flagUsuarios", "espec")
+                }
+
+                Usuários Específicos
+            </label>
+
+        </div>
+
+    </div>
+    <div class="clearfix"></div>
+    
+</div>

@@ -1,0 +1,74 @@
+﻿@using PagedList.Mvc
+@model PagedList.IPagedList<DAL.Notificacoes.NotificacaoSistemaEnvio>
+
+@{
+    Layout = "~/views/shared/associatec/masterpage.cshtml";
+    ViewBag.titlePage = "Avisos do Sistema";
+}
+
+@section breadcrump {
+    <ol class="breadcrumb">
+        <li><a class="active fs-14" href="@Url.Action("index", "AvisoSistemaLista")"><i class="fa fa-arrow-left"></i> Voltar</a></li>
+    </ol>
+}
+
+@section styles {
+    <link href="@UtilConfig.linkResourses()css/associatec/list-custom.css" rel="stylesheet" />
+}
+
+@section scripts{
+    @Html.includeJqueryLoading()
+    <script src="@UtilConfig.linkResourses()Areas/Tarefas/js/painel-controle-tarefa.js?v=1.2"></script>
+}
+
+<div class="box box-primary">
+    <div class="box-header with-border">
+        <div class="box-title">
+            <i class="far fa-chart-bar"></i> Resultados <em class="fs-12">@Model.Count() avisos lidos</em>
+        </div>
+    </div>
+
+    <div class="box-body">
+        <div class="row">
+            @if (!Model.Any()) {
+                <div class="alert alert-info">
+                    Nenhum associado foi encontrado.
+                </div>
+            }
+
+            @foreach(var OItem in Model) {
+
+                <div class="col-sm-12">
+        
+                    <div class="col-sm-12 box-info-item bordered-destaque border-green">
+
+                        <div class="row text-black">
+                
+                            <div class="col-sm-9">
+                                <span><i class="fa fa-hashtag"></i>@OItem.id - @OItem.NotificacaoSistema.titulo</span> <br />
+                            </div>
+
+                            <div class="col-sm-3" data-toggle="tooltip" title="Data da leitura da notificação">
+                                <span><i class="fa fa-calendar"></i>@OItem.dtLeitura.exibirData(true)</span> <br />
+                            </div>
+
+                            <div class="col-sm-12">
+                                <span><i class="fa fa-envelope"></i>@OItem.NotificacaoSistema.notificacao</span>
+                            </div>
+                            <div class="clearfix"></div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="clearfix"></div>
+            }
+            
+        </div>
+        
+        @(Html.paginarRegistros(Model, Html.PagedListPager(Model, nroPagina => UtilRequest.linkPaginacao(nroPagina, "avisos-lidos"), PagedListRenderOptions.OnlyShowFivePagesAtATime)))
+
+    </div>
+</div>
+<div class="clearfix"></div><br />

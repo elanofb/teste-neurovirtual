@@ -1,0 +1,785 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{D0A8AF5A-37C8-477B-A2AE-80A3EE13262A}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DAL</RootNamespace>
+    <AssemblyName>DAL</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+    <TargetFrameworkProfile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <LangVersion>6</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.Extended, Version=6.0.0.0, Culture=neutral, PublicKeyToken=05b7e29bdd433584, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.Extended.6.1.0.168\lib\net45\EntityFramework.Extended.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Protobuf, Version=3.5.1.0, Culture=neutral, PublicKeyToken=a7d26565bac4d604">
+      <HintPath>..\packages\Google.Protobuf.3.5.1\lib\net45\Google.Protobuf.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="LinqKit, Version=1.1.13.0, Culture=neutral, PublicKeyToken=bc217f8844052a91, processorArchitecture=MSIL">
+      <HintPath>..\packages\LinqKit.1.1.13\lib\net45\LinqKit.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="MySql.Data, Version=6.9.12.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d">
+      <HintPath>..\packages\MySql.Data.6.9.12\lib\net45\MySql.Data.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MySql.Data.Entity.EF6, Version=6.9.12.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d">
+      <HintPath>..\packages\MySql.Data.Entity.6.9.12\lib\net45\MySql.Data.Entity.EF6.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Configuration.Install" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Drawing.Design" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Ajudas\Entities\AjudaModulo.cs" />
+    <Compile Include="Ajudas\Entities\AjudaCategoria.cs" />
+    <Compile Include="Ajudas\Repository\DataContext.cs" />
+    <Compile Include="Anuidades\Repository\DataContext.cs" />
+    <Compile Include="AreasAtuacao\Entities\AreaAtuacaoTipoAssociado.cs" />
+    <Compile Include="AreasAtuacao\Repository\DataContext.cs" />
+    <Compile Include="Arquivos\Const\ArquivoUploadExtensao.cs" />
+    <Compile Include="Arquivos\Const\ArquivoUploadTypes.cs" />
+    <Compile Include="Arquivos\DTO\ArquivoDTO.cs" />
+    <Compile Include="Arquivos\DTO\ThumbDTO.cs" />
+    <Compile Include="Arquivos\Entities\ArquivoAssociadoVW.cs" />
+    <Compile Include="Arquivos\Extensions\ArquivoFotoExtensions.cs" />
+    <Compile Include="Arquivos\Extensions\ArquivoExtensions.cs" />
+    <Compile Include="Arquivos\Extensions\ArquivoAssociadoExtension.cs" />
+    <Compile Include="Arquivos\Repository\DataContext.cs" />
+    <Compile Include="AssociadosContribuicoes\Entities\AssociadoContribuicaoOrdenada.cs" />
+    <Compile Include="AssociadosContribuicoes\Entities\AssociadoContribuicaoResumoVW.cs" />
+    <Compile Include="AssociadosContribuicoes\Entities\AssociadoContribuicaoBoletoGeracao.cs" />
+    <Compile Include="AssociadosContribuicoes\Entities\AssociadoContribuicaoBoleto.cs" />
+    <Compile Include="Associados\Const\ChaveBinariaConst.cs" />
+    <Compile Include="Associados\DTO\AssociadoAreaAtuacaoDTO.cs" />
+    <Compile Include="Associados\DTO\ListaAssociadosDTO.cs" />
+    <Compile Include="Associados\Entities\AssociadoAreaAtuacaoVW.cs" />
+    <Compile Include="Associados\Entities\ConfiguracaoMembro.cs" />
+    <Compile Include="Associados\Entities\MembroSaldo.cs" />
+    <Compile Include="Associados\Entities\MembroSaldoVW.cs" />
+    <Compile Include="Associados\Enums\ChaveBinariaEnum.cs" />
+    <Compile Include="Associados\Extensions\ConfiguracaoMembroExtension.cs" />
+    <Compile Include="Associados\Extensions\TipoCadastroExtension.cs" />
+    <Compile Include="Associados\Procedures\SpAssociadosPesquisaRapida.cs" />
+    <Compile Include="Atendimentos\Const\AtendimentoAreaConst.cs" />
+    <Compile Include="Atendimentos\Const\AtendimentoTipoConst.cs" />
+    <Compile Include="BoletosBancarios\Const\BoletoLayoutConst.cs" />
+    <Compile Include="BoletosBancarios\Entities\BoletoLayout.cs" />
+    <Compile Include="BoletosBancarios\Repository\DataContext.cs" />
+    <Compile Include="ConfiguracoesEtiquetas\Entities\ConfiguracaoEtiqueta.cs" />
+    <Compile Include="ConfiguracoesEtiquetas\Repository\DataContext.cs" />
+    <Compile Include="ConfiguracoesTextos\Entities\Idioma.cs" />
+    <Compile Include="Configuracoes\Entities\ConfiguracaoOperacaoCompra.cs" />
+    <Compile Include="Configuracoes\Entities\ConfiguracaoPromocao.cs" />
+    <Compile Include="Configuracoes\Entities\ConfiguracaoSaque.cs" />
+    <Compile Include="Configuracoes\Extensions\ConfiguracaoSaqueExtensions.cs" />
+    <Compile Include="Contatos\Entities\TipoContato.cs" />
+    <Compile Include="Contatos\Entities\TipoContatoVW.cs" />
+    <Compile Include="CoreMysql\DataContextMySQL.cs" />
+    <Compile Include="Core\Const\OrigemCadastroConst.cs" />
+    <Compile Include="Associados\DTO\AssociadoDTO.cs" />
+    <Compile Include="Associados\DTO\ItemListaAssociadoDesligado.cs" />
+    <Compile Include="Associados\DTO\ItemListaAssociado.cs" />
+    <Compile Include="Associados\Entities\AssociadoEmailVW.cs" />
+    <Compile Include="Associados\Entities\AssociadoInstituicao.cs" />
+    <Compile Include="Associados\Entities\ConfiguracaoTipoAssociado.cs" />
+    <Compile Include="Associados\Entities\MotivoDesativacao.cs" />
+    <Compile Include="Associados\Entities\NaoAssociadoRelatorioVW.cs" />
+    <Compile Include="Associados\Entities\AssociadoRelatorioVW.cs" />
+    <Compile Include="Associados\Entities\PendenciaCadastral.cs" />
+    <Compile Include="Associados\Entities\MotivoDesligamento.cs" />
+    <Compile Include="Atendimentos\Entities\AtendimentoHistorico.cs" />
+    <Compile Include="ConfiguracoesAreaAssociado\Entities\AreaAssociadoGrupoDefault.cs" />
+    <Compile Include="ConfiguracoesAreaAssociado\Entities\AreaAssociadoRecursoDefault.cs" />
+    <Compile Include="Compras\Entities\CarrinhoItemProdutoVW.cs" />
+    <Compile Include="Compras\Extensions\CarrinhoExtensions.cs" />
+    <Compile Include="Compras\Repository\DataContext.cs" />
+    <Compile Include="ConfiguracoesEcommerce\Repository\DataContext.cs" />
+    <Compile Include="Core\Extensions\DataContextExtensions.cs" />
+    <Compile Include="DadosBancarios\Entities\DadoBancario.cs" />
+    <Compile Include="DadosBancarios\Repository\DataContext.cs" />
+    <Compile Include="DocumentosFiscais\Entities\UnidadeConfiguracao.cs" />
+    <Compile Include="DocumentosFiscais\Entities\UnidadeNumeracaoDocumento.cs" />
+    <Compile Include="DocumentosFiscais\Repository\DataContext.cs" />
+    <Compile Include="EDI\Core\CampoEDI.cs" />
+    <Compile Include="EDI\Core\TipoCampoEDIConst.cs" />
+    <Compile Include="Email\Const\AssociadoEmailsConst.cs" />
+    <Compile Include="Email\Const\EventoEmailsConst.cs" />
+    <Compile Include="Email\Const\IdentificacaoMensagemEmailConst.cs" />
+    <Compile Include="Email\Const\ProcessoAvaliacaoEmailsConst.cs" />
+    <Compile Include="Email\Entities\MensagemEmail.cs" />
+    <Compile Include="Email\Extensions\MensagemEmailExtensions.cs" />
+    <Compile Include="Exceptions\Extensions\ExceptionExtensions.cs" />
+    <Compile Include="Financeiro\Const\SerieCotacaoConst.cs" />
+    <Compile Include="Financeiro\DTO\CotacaoDolarDTO.cs" />
+    <Compile Include="Financeiro\Entities\ConciliacaoFinanceira.cs" />
+    <Compile Include="Financeiro\Entities\ConciliacaoFinanceiraDetalhe.cs" />
+    <Compile Include="Financeiro\Entities\ModoPagamentoDespesa.cs" />
+    <Compile Include="Financeiro\Entities\TipoDespesa.cs" />
+    <Compile Include="Financeiro\Enums\ModoPagamentoDespesaEnum.cs" />
+    <Compile Include="Financeiro\Extensions\PlanoContaExtensions.cs" />
+    <Compile Include="Financeiro\Extensions\ReceitaDespesaArquivoExtensions.cs" />
+    <Compile Include="Financeiro\View\ReceitaDespesaArquivoVW.cs" />
+    <Compile Include="Funcionarios\Const\ModeloContratacaoConst.cs" />
+    <Compile Include="Historicos\Entities\HistoricoAtualizacao.cs" />
+    <Compile Include="Historicos\Repository\DataContext.cs" />
+    <Compile Include="Hotsites\Entities\Hotsite.cs" />
+    <Compile Include="Hotsites\Repository\DataContext.cs" />
+    <Compile Include="Migracao\Entities\Comerciante.cs" />
+    <Compile Include="Migracao\Entities\Extrato.cs" />
+    <Compile Include="Migracao\Entities\Rede.cs" />
+    <Compile Include="Migracao\Entities\RedePontos.cs" />
+    <Compile Include="Migracao\Entities\UsuarioComerciante.cs" />
+    <Compile Include="Migracao\Entities\UsuarioGeral.cs" />
+    <Compile Include="Migracao\Entities\UsuarioMembro.cs" />
+    <Compile Include="Migracao\Repository\DataContextMySQL.cs" />
+    <Compile Include="Notificacoes\Const\GatewayNotificacaoConst.cs" />
+    <Compile Include="Notificacoes\Entities\ConfiguracaoEmailUsuario.cs" />
+    <Compile Include="Notificacoes\Entities\GatewayNotificacao.cs" />
+    <Compile Include="Notificacoes\Entities\NotificacaoPostback.cs" />
+    <Compile Include="Notificacoes\Entities\PessoaDevice.cs" />
+    <Compile Include="Notificacoes\Entities\TemplateMensagem.cs" />
+    <Compile Include="Notificacoes\Extensions\NotificacaoSistemaExtension.cs" />
+    <Compile Include="OrganizacaoConfiguracoes\Entities\OrganizacaoDadosAssociado.cs" />
+    <Compile Include="OrganizacaoConfiguracoes\Repository\DataContext.cs" />
+    <Compile Include="Origens\Entities\OrigemOperacao.cs" />
+    <Compile Include="Origens\Enums\OrigemOperacaoEnum.cs" />
+    <Compile Include="Pedidos\Const\PeriodoEntregaConst.cs" />
+    <Compile Include="Pedidos\Const\PedidoEmailsConst.cs" />
+    <Compile Include="Pedidos\DTO\PedidoGeralDTO.cs" />
+    <Compile Include="Pedidos\Entities\PedidoProdutoRendimento.cs" />
+    <Compile Include="Pedidos\Extensions\PedidoAcoesExtensions.cs" />
+    <Compile Include="Pedidos\Extensions\PedidoEntregaExtensions.cs" />
+    <Compile Include="Pessoas\Const\PessoaArquivoConst.cs" />
+    <Compile Include="Pessoas\DTO\PessoaEmailResumoDTO.cs" />
+    <Compile Include="Pessoas\Entities\PessoaContaBancaria.cs" />
+    <Compile Include="Planos\Const\StatusPlanoContratacaoConst.cs" />
+    <Compile Include="Planos\Entities\Plano.cs" />
+    <Compile Include="Planos\Entities\PlanoCarreira.cs" />
+    <Compile Include="Planos\Entities\PlanoContratacao.cs" />
+    <Compile Include="Planos\Entities\PlanoPeriodo.cs" />
+    <Compile Include="Planos\Entities\StatusPlanoContratacao.cs" />
+    <Compile Include="Planos\Enums\StatusPlanoContratacaoEnum.cs" />
+    <Compile Include="Planos\Repository\DataContext.cs" />
+    <Compile Include="Produtos\Const\TipoProdutoConst.cs" />
+    <Compile Include="Produtos\Entities\ProdutoComposicao.cs" />
+    <Compile Include="Produtos\Entities\ProdutoSituacao.cs" />
+    <Compile Include="Produtos\Entities\ProdutoRedeConfiguracao.cs" />
+    <Compile Include="Produtos\Entities\ProdutoTipoAssociado.cs" />
+    <Compile Include="Produtos\Entities\ProdutoItem.cs" />
+    <Compile Include="Produtos\Entities\UnidadeMedida.cs" />
+    <Compile Include="Profissoes\Entities\Profissao.cs" />
+    <Compile Include="Profissoes\Repository\DataContext.cs" />
+    <Compile Include="Publicacoes\Entities\Conteudo.cs" />
+    <Compile Include="RedeAfiliados\DTO\NovoMembroRede.cs" />
+    <Compile Include="RedeAfiliados\DTO\PontuacaoMembroDTO.cs" />
+    <Compile Include="RedeAfiliados\DTO\RedeUnilevel.cs" />
+    <Compile Include="RedeAfiliados\Entities\RedeAfiliado.cs" />
+    <Compile Include="RedeAfiliados\Entities\RedeBinaria.cs" />
+    <Compile Include="RedeAfiliados\Entities\RedeBinariaBase.cs" />
+    <Compile Include="RedeAfiliados\Entities\RedeBinariaDireitaVW.cs" />
+    <Compile Include="RedeAfiliados\Entities\RedeBinariaEsquerdaVW.cs" />
+    <Compile Include="RedeAfiliados\Entities\RedeLinearVW.cs" />
+    <Compile Include="RedeAfiliados\Entities\RedePontuacao.cs" />
+    <Compile Include="RedeAfiliados\Extensions\RedeExtensions.cs" />
+    <Compile Include="RedeAfiliados\Repository\DataContext.cs" />
+    <Compile Include="Relacionamentos\Entities\OcorrenciaRelacionamento.cs" />
+    <Compile Include="Relacionamentos\Entities\OcorrenciaRelacionamentoVW.cs" />
+    <Compile Include="Relacionamentos\Entities\PessoaRelacionamentoVW.cs" />
+    <Compile Include="RelatoriosAssociados\Entities\AssociadoEnderecoVW.cs" />
+    <Compile Include="PedidosTemp\Entities\PedidoProdutoTemp.cs" />
+    <Compile Include="PedidosTemp\Entities\PedidoTemp.cs" />
+    <Compile Include="PedidosTemp\Extensions\PedidoTempExtensions.cs" />
+    <Compile Include="PedidosTemp\Repository\DataContext.cs" />
+    <Compile Include="Pedidos\Extensions\PedidoExtensions.cs" />
+    <Compile Include="RelatoriosFinanceiros\Entities\ResultadoDREVW.cs" />
+    <Compile Include="RelatoriosPedidos\DTO\ItemResumoProdutoPedidoDTO.cs" />
+    <Compile Include="RelatoriosPedidos\Entities\RelatorioProdutosPedidosVW.cs" />
+    <Compile Include="RelatoriosPedidos\Repository\DataContext.cs" />
+    <Compile Include="Representantes\Entities\Representante.cs" />
+    <Compile Include="Representantes\Repository\DataContext.cs" />
+    <Compile Include="SegmentosAtuacao\Entities\SegmentoAtuacao.cs" />
+    <Compile Include="SegmentosAtuacao\Repository\DataContext.cs" />
+    <Compile Include="ConfiguracoesAssociados\Entities\ConfiguracaoAssociadoCampoTipoAssociado.cs" />
+    <Compile Include="Atendimentos\Const\AtendimentoStatusConst.cs" />
+    <Compile Include="Atendimentos\Entities\Atendimento.cs" />
+    <Compile Include="Atendimentos\Entities\AtendimentoArea.cs" />
+    <Compile Include="Atendimentos\Entities\AtendimentoStatus.cs" />
+    <Compile Include="Atendimentos\Entities\AtendimentoTipo.cs" />
+    <Compile Include="Atendimentos\Repository\DataContext.cs" />
+    <Compile Include="Configuracoes\Extensions\ConfiguracaoSistemaExtensions.cs" />
+    <Compile Include="Financeiro\Entities\TituloReceitaDescontoAntecipacao.cs" />
+    <Compile Include="Financeiro\Entities\TituloReceitaResumoVW.cs" />
+    <Compile Include="Financeiro\Extensions\DescontoAntecipacaoExtensions.cs" />
+    <Compile Include="Financeiro\Procedures\SpContaBancariaSaldoAtual.cs" />
+    <Compile Include="Financeiro\View\ReceitaDespesaVW.cs" />
+    <Compile Include="ConfiguracoesRedesSociais\Repository\DataContext.cs" />
+    <Compile Include="Core\Const\EntityTypesNum.cs" />
+    <Compile Include="FinanceiroLancamentos\Repository\DataContext.cs" />
+    <Compile Include="FinanceiroLancamentos\Views\DevedorVW.cs" />
+    <Compile Include="Financeiro\Const\TipoRepeticaoConst.cs" />
+    <Compile Include="FinanceiroLancamentos\Entities\Devedor.cs" />
+    <Compile Include="FinanceiroLancamentos\Entities\Credor.cs" />
+    <Compile Include="FinanceiroLancamentos\Views\CredorVW.cs" />
+    <Compile Include="Financeiro\View\TituloReceitaPagamentoResumoVW.cs" />
+    <Compile Include="Financeiro\View\TituloDespesaPagamentoResumoVW.cs" />
+    <Compile Include="LogsAlteracoes\Entities\LogAlteracao.cs" />
+    <Compile Include="LogsAlteracoes\Repository\DataContext.cs" />
+    <Compile Include="Notificacoes\Const\TipoNotificacaoConst.cs" />
+    <Compile Include="Notificacoes\Entities\TipoNotificacao.cs" />
+    <Compile Include="OrganizacoesCobranca\Entities\OrganizacaooCobranca.cs" />
+    <Compile Include="OrganizacoesCobranca\Repository\DataContext.cs" />
+    <Compile Include="ConfiguracoesAssociados\Const\TipoCampoCadastroConst.cs" />
+    <Compile Include="ConfiguracoesRecibo\Entities\ConfiguracaoRecibo.cs" />
+    <Compile Include="ConfiguracoesRecibo\Repository\DataContext.cs" />
+    <Compile Include="ConfiguracoesScripts\Entities\ConfiguracaoScripts.cs" />
+    <Compile Include="ConfiguracoesScripts\Repository\DataContext.cs" />
+    <Compile Include="Configuracoes\Default\ConfiguracaoNotificacaoDefault.cs" />
+    <Compile Include="Configuracoes\Default\ConfiguracaoEmailDefault.cs" />
+    <Compile Include="Configuracoes\Entities\ConfiguracaoComissao.cs" />
+    <Compile Include="Configuracoes\Entities\ConfiguracaoPerfilComissionavel.cs" />
+    <Compile Include="ConfiguracoesAreaAssociado\Entities\AreaAssociadoRecurso.cs" />
+    <Compile Include="ConfiguracoesAreaAssociado\Entities\AreaAssociadoGrupo.cs" />
+    <Compile Include="ConfiguracoesAreaAssociado\Entities\ConfiguracaoAreaAssociado.cs" />
+    <Compile Include="ConfiguracoesAreaAssociado\Repository\DataContext.cs" />
+    <Compile Include="ConfiguracoesAssociados\Const\FuncaoFiltroConst.cs" />
+    <Compile Include="ConfiguracoesAssociados\Entities\FuncaoFiltro.cs" />
+    <Compile Include="ConfiguracoesAssociados\Entities\ConfiguracaoAssociadoCampoGrupo.cs" />
+    <Compile Include="ConfiguracoesAssociados\Entities\ConfiguracaoAssociadoCampo.cs" />
+    <Compile Include="ConfiguracoesAssociados\Entities\ConfiguracaoAssociadoCampoOpcao.cs" />
+    <Compile Include="ConfiguracoesAssociados\Entities\ConfiguracaoAssociadoCampoPropriedade.cs" />
+    <Compile Include="ConfiguracoesAssociados\Extensions\ConfiguracaoAssociadoCampoExtensions.cs" />
+    <Compile Include="ConfiguracoesCateirinha\Entities\ConfiguracaoCarteirinha.cs" />
+    <Compile Include="ConfiguracoesCateirinha\Repository\DataContext.cs" />
+    <Compile Include="ConfiguracoesAssociados\Entities\ConfiguracaoAssociadoPJ.cs" />
+    <Compile Include="ConfiguracoesAssociados\Entities\ConfiguracaoAssociadoPF.cs" />
+    <Compile Include="ConfiguracoesAssociados\Repository\DataContext.cs" />
+    <Compile Include="ConfiguracoesTextos\Const\TextoCategoriaConts.cs" />
+    <Compile Include="ConfiguracoesTextos\Entities\ConfiguracaoLabel.cs" />
+    <Compile Include="ConfiguracoesTextos\Entities\ConfiguracaoTexto.cs" />
+    <Compile Include="ConfiguracoesTextos\Entities\ConfiguracaoTextoCategoria.cs" />
+    <Compile Include="ConfiguracoesTextos\Enums\TextoCategoriaEnum.cs" />
+    <Compile Include="ConfiguracoesTextos\Repository\DataContext.cs" />
+    <Compile Include="Configuracoes\Config\HeaderConfig.cs" />
+    <Compile Include="Configuracoes\Const\ConfiguracaoTipoCampoConst.cs" />
+    <Compile Include="Configuracoes\Entities\ConfiguracaoRotinaAutomatica.cs" />
+    <Compile Include="Configuracoes\Entities\ConfiguracaoTipoCampo.cs" />
+    <Compile Include="Configuracoes\Entities\ConfiguracaoSistema.cs" />
+    <Compile Include="ContasBancarias\Extensions\ContaBancariaExtensions.cs" />
+    <Compile Include="Contatos\Entities\PessoaContatoVW.cs" />
+    <Compile Include="Contatos\Extensions\AssociadoExtension.cs" />
+    <Compile Include="Diretorias\Entities\DiretoriaVW.cs" />
+    <Compile Include="Diretorias\Entities\DiretoriaMembro.cs" />
+    <Compile Include="Diretorias\Entities\Diretoria.cs" />
+    <Compile Include="Diretorias\Repository\DataContext.cs" />
+    <Compile Include="DocumentosDigitais\Const\TipoDocumentoDigitalConst.cs" />
+    <Compile Include="DocumentosDigitais\Entities\DocumentoDigital.cs" />
+    <Compile Include="DocumentosDigitais\Entities\TipoDocumentoDigital.cs" />
+    <Compile Include="DocumentosDigitais\Repository\DataContext.cs" />
+    <Compile Include="Email\Const\TipoEmailConst.cs" />
+    <Compile Include="Email\Entities\TipoEmail.cs" />
+    <Compile Include="Empresas\Entities\EmpresaPorte.cs" />
+    <Compile Include="Financeiro\View\TituloReceitaReciboVW.cs" />
+    <Compile Include="Institucionais\Entities\AssociacaoHistoria.cs" />
+    <Compile Include="Institucionais\Entities\Convenio.cs" />
+    <Compile Include="Institucionais\Entities\TipoConvenio.cs" />
+    <Compile Include="ImportacoesErros\Const\MensagensErroConst.cs" />
+    <Compile Include="ImportacoesErros\DTO\MensagemErroImportacaoDTO.cs" />
+    <Compile Include="Localizacao\Const\TipoRegiaoConst.cs" />
+    <Compile Include="Localizacao\Const\TipoRegiaoStringConst.cs" />
+    <Compile Include="Localizacao\Entities\TipoRegiao.cs" />
+    <Compile Include="Localizacao\Enums\EstadoEnum.cs" />
+    <Compile Include="Localizacao\Enums\TipoRegiaoEnum.cs" />
+    <Compile Include="LogsPermissao\Entities\LogUsuarioSistemaAcesso.cs" />
+    <Compile Include="LogsPermissao\Repository\DataContext.cs" />
+    <Compile Include="Logs\Const\TipoLogVisualizacaoConst.cs" />
+    <Compile Include="Organizacoes\Const\StatusOrganizacaoConst.cs" />
+    <Compile Include="Organizacoes\Entities\AcessoRecursoGrupoOrganizacao.cs" />
+    <Compile Include="Organizacoes\Entities\StatusOrganizacao.cs" />
+    <Compile Include="Organizacoes\Entities\Organizacao.cs" />
+    <Compile Include="Organizacoes\Entities\UsuarioOrganizacao.cs" />
+    <Compile Include="Organizacoes\Repository\DataContext.cs" />
+    <Compile Include="AssociadosContribuicoes\DTO\AssociadoContribuicaoDadosBasicos.cs" />
+    <Compile Include="AssociadosContribuicoes\Entities\AssociadoContribuicaoFilaGeracao.cs" />
+    <Compile Include="AssociadosContribuicoes\Procedures\AssociadoNaoVinculadoContribuicao.cs" />
+    <Compile Include="Associados\DTO\AssociadoDadosBasicos.cs" />
+    <Compile Include="Configuracoes\Config\NaoAssociadoConfig.cs" />
+    <Compile Include="Configuracoes\Config\CheckoutConfig.cs" />
+    <Compile Include="Configuracoes\Config\AreaAssociadoConfig.cs" />
+    <Compile Include="Configuracoes\Config\CadastroAssociadoConfig.cs" />
+    <Compile Include="Configuracoes\Config\ApplicationJson.cs" />
+    <Compile Include="Configuracoes\Config\StyleConfig.cs" />
+    <Compile Include="Contribuicoes\Const\PeriodoContribuicaoConst.cs" />
+    <Compile Include="Contribuicoes\Const\TipoGeracaoContribuicaoConst.cs" />
+    <Compile Include="Contribuicoes\Const\TipoVencimentoConst.cs" />
+    <Compile Include="Contribuicoes\Entities\ContribuicaoCobranca.cs" />
+    <Compile Include="Contribuicoes\Entities\ContribuicaoPrecoDesconto.cs" />
+    <Compile Include="Contribuicoes\Entities\ContribuicaoVencimento.cs" />
+    <Compile Include="Contribuicoes\Entities\ContribuicaoTabelaPreco.cs" />
+    <Compile Include="Contribuicoes\Entities\PeriodoContribuicao.cs" />
+    <Compile Include="Contribuicoes\Entities\TipoGeracaoContribuicao.cs" />
+    <Compile Include="Contribuicoes\Entities\TipoVencimento.cs" />
+    <Compile Include="Contribuicoes\Enums\PeriodoContribuicaoEnum.cs" />
+    <Compile Include="Contribuicoes\Enums\TipoGeracaoContribuicaoEnum.cs" />
+    <Compile Include="Contribuicoes\Enums\TipoVencimentoEnum.cs" />
+    <Compile Include="Contribuicoes\Extensions\ContribuicaoVencimentoExtensions.cs" />
+    <Compile Include="Financeiro\Entities\CentroCustoMacroConta.cs" />
+    <Compile Include="AssociadosCarteirinha\Entities\AssociadoCarteirinha.cs" />
+    <Compile Include="AssociadosCarteirinha\Extensions\AssociadoCarteirinhaExtension.cs" />
+    <Compile Include="AssociadosCarteirinha\Repository\DataContext.cs" />
+    <Compile Include="AssociadosContribuicoes\Entities\AssociadoContribuicaoEmailCobranca.cs" />
+    <Compile Include="AssociadosContribuicoes\Enums\SituacaoContribuicaoEnum.cs" />
+    <Compile Include="AssociadosContribuicoes\Extensions\AssociadoContribuicaoEmailCobrancaExtension.cs" />
+    <Compile Include="AssociadosContribuicoes\Extensions\AssociadoContribuicaoExtension.cs" />
+    <Compile Include="AssociadosContribuicoes\Repository\DataContext.cs" />
+    <Compile Include="Associados\Config\CadastroForm.cs" />
+    <Compile Include="Associados\Config\CampoPropriedade.cs" />
+    <Compile Include="Associados\Config\CadastroCampo.cs" />
+    <Compile Include="Associados\Config\CadastroBlocoItem.cs" />
+    <Compile Include="Associados\Config\CadastroBlocoPJConfig.cs" />
+    <Compile Include="Associados\Config\CadastroBlocoPFConfig.cs" />
+    <Compile Include="Associados\Const\CategoriaTipoAssociadoConst.cs" />
+    <Compile Include="Associados\Const\SituacaoContribuicaoConst.cs" />
+    <Compile Include="Associados\Const\AssociadoTipoCadastroConst.cs" />
+    <Compile Include="Associados\Const\TipoAssociadoConst.cs" />
+    <Compile Include="Associados\Entities\AssociadoAbrangencia.cs" />
+    <Compile Include="Associados\Entities\AssociadoRepresentante.cs" />
+    <Compile Include="Associados\Entities\AssociadoNotificacao.cs" />
+    <Compile Include="Associados\Entities\CategoriaTipoAssociado.cs" />
+    <Compile Include="Associados\Entities\AssociadoTipoCadastro.cs" />
+    <Compile Include="Associados\Enums\CategoriaTipoAssociadoEnum.cs" />
+    <Compile Include="Associados\Enums\AssociadoTipoCadastroEnum.cs" />
+    <Compile Include="Bancos\Repository\DataContext.cs" />
+    <Compile Include="Beneficios\Entities\Beneficio.cs" />
+    <Compile Include="Beneficios\Repository\DataContext.cs" />
+    <Compile Include="Compras\Entities\CarrinhoItem.cs" />
+    <Compile Include="Compras\Entities\CarrinhoResumo.cs" />
+    <Compile Include="Financeiro\Const\TipoMovimentacaoConst.cs" />
+    <Compile Include="Financeiro\DTO\ExtratoPorMacroContaDTO.cs" />
+    <Compile Include="Financeiro\View\GestaoTituloVW.cs" />
+    <Compile Include="Infraestrutura\Config\LinkUrl.cs" />
+    <Compile Include="Institucionais\Config\MenuItem.cs" />
+    <Compile Include="Institucionais\Config\MenuConfig.cs" />
+    <Compile Include="MateriaisApoio\Const\DisponibilidadeAssociadoConst.cs" />
+    <Compile Include="MeiosDivulgacao\Entities\MeioDivulgacao.cs" />
+    <Compile Include="MeiosDivulgacao\Repository\DataContext.cs" />
+    <Compile Include="Notificacoes\Extensions\NotificacaoSistemaEmailExtension.cs" />
+    <Compile Include="OrgaosClasses\Entities\OrgaoClasse.cs" />
+    <Compile Include="OrgaosClasses\Repository\DataContext.cs" />
+    <Compile Include="Paginas\Entities\PaginaEstatuto.cs" />
+    <Compile Include="Paginas\Entities\PaginaAssocie.cs" />
+    <Compile Include="Paginas\Repository\DataContext.cs" />
+    <Compile Include="Permissao\Config\UsuarioSistemaJson.cs" />
+    <Compile Include="Permissao\Entities\UsuarioSistemaLogadoVW.cs" />
+    <Compile Include="Permissao\Extensions\UsuarioSistemaExtensions.cs" />
+    <Compile Include="Permissao\Security\SecurityCookieCheckout.cs" />
+    <Compile Include="Permissao\Security\SecurityCookie.cs" />
+    <Compile Include="Permissao\Security\SecurityExtensionsCheckout.cs" />
+    <Compile Include="Permissao\Security\SecurityExtensions.cs" />
+    <Compile Include="Pessoas\Const\CategoriaPessoaConst.cs" />
+    <Compile Include="Pessoas\Entities\PessoaDTO.cs" />
+    <Compile Include="Pessoas\Entities\PessoaEmailDTO.cs" />
+    <Compile Include="Pessoas\Entities\PessoaTelefone.cs" />
+    <Compile Include="Pessoas\Entities\PessoaEmail.cs" />
+    <Compile Include="Pessoas\Extensions\PessoaEnderecoExtensions.cs" />
+    <Compile Include="Portais\Entities\Portal.cs" />
+    <Compile Include="Portais\Repository\DataContext.cs" />
+    <Compile Include="ProcessoAdmissoes\Const\TipoFaseAdmissaoConst.cs" />
+    <Compile Include="ProcessoAdmissoes\Entities\TipoAssociadoDocumentoAdmissao.cs" />
+    <Compile Include="ProcessoAdmissoes\Entities\TipoAssociadoFaseAdmissao .cs" />
+    <Compile Include="ProcessoAdmissoes\Entities\AssociadoProcessoAdmissao.cs" />
+    <Compile Include="ProcessoAdmissoes\Entities\TipoFaseAdmissao.cs" />
+    <Compile Include="ProcessoAdmissoes\Repository\DataContext.cs" />
+    <Compile Include="Produtos\Const\ProdutoConst.cs" />
+    <Compile Include="Produtos\Extensions\ProdutoExtensions.cs" />
+    <Compile Include="Publicacoes\Entities\CategoriaNoticia.cs" />
+    <Compile Include="RelatoriosAssociados\Repository\DataContext.cs" />
+    <Compile Include="Telefones\Const\TipoTelefoneConst.cs" />
+    <Compile Include="Telefones\Entities\OperadoraTelefonia.cs" />
+    <Compile Include="Telefones\Entities\TipoTelefone.cs" />
+    <Compile Include="Pessoas\View\PessoaVW.cs" />
+    <Compile Include="Publicacoes\DTO\JornalDTO.cs" />
+    <Compile Include="Publicacoes\Entities\Jornal.cs" />
+    <Compile Include="Publicacoes\Entities\TipoGaleriaFoto.cs" />
+    <Compile Include="RamosAtividade\Entities\SetorAtuacao.cs" />
+    <Compile Include="RamosAtividade\Entities\RamoAtividade.cs" />
+    <Compile Include="RamosAtividade\Repository\DataContext.cs" />
+    <Compile Include="Publicacoes\Config\BannerConfig.cs" />
+    <Compile Include="ConfiguracoesEcommerce\Entities\ConfiguracaoEcommerce.cs" />
+    <Compile Include="Configuracoes\Entities\ConfiguracaoPortal.cs" />
+    <Compile Include="ContasBancarias\Const\ContaTipoOperacaoConst.cs" />
+    <Compile Include="ContasBancarias\Entities\ContaBancaria.cs" />
+    <Compile Include="ContasBancarias\Entities\ContaMovimentacao.cs" />
+    <Compile Include="ContasBancarias\Entities\ContaTipoOperacao.cs" />
+    <Compile Include="ContasBancarias\Enums\ContaTipoOperacaoEnum.cs" />
+    <Compile Include="ContasBancarias\Repository\DataContext.cs" />
+    <Compile Include="Contribuicoes\DTO\VigenciaDTO.cs" />
+    <Compile Include="Contribuicoes\Exceptions\ContribuicaoException.cs" />
+    <Compile Include="CuponsDesconto\Entities\CupomDesconto.cs" />
+    <Compile Include="CuponsDesconto\Repository\DataContext.cs" />
+    <Compile Include="FaleConosco\Entities\ContatoPortal.cs" />
+    <Compile Include="Financeiro\Const\FormaPagamentoConst.cs" />
+    <Compile Include="Financeiro\Const\GatewayPagamentoConst.cs" />
+    <Compile Include="Financeiro\Const\CentroCustoConst.cs" />
+    <Compile Include="Financeiro\Const\MeioPagamentoConst.cs" />
+    <Compile Include="Financeiro\Const\StatusPagamentoConst.cs" />
+    <Compile Include="Financeiro\Const\TipoDespesaConst.cs" />
+    <Compile Include="Financeiro\Const\TipoReceitaConst.cs" />
+    <Compile Include="Financeiro\Const\TipoTituloConst.cs" />
+    <Compile Include="Financeiro\DTO\ReferenciaDespesaDTO.cs" />
+    <Compile Include="Financeiro\DTO\ImportacaoDespesaDTO.cs" />
+    <Compile Include="Financeiro\DTO\ReferenciaReceitaDTO.cs" />
+    <Compile Include="Financeiro\Entities\GatewayPagamento.cs" />
+    <Compile Include="Financeiro\Entities\MacroConta.cs" />
+    <Compile Include="Financeiro\Entities\StatusPagamento.cs" />
+    <Compile Include="Financeiro\Entities\CategoriaTitulo.cs" />
+    <Compile Include="Financeiro\Entities\MeioPagamento.cs" />
+    <Compile Include="Financeiro\Entities\TipoReceita.cs" />
+    <Compile Include="Financeiro\Enums\GatewayPagamentoEnum.cs" />
+    <Compile Include="Financeiro\Enums\CentroCustoEnum.cs" />
+    <Compile Include="Financeiro\Enums\MeioPagamentoEnum.cs" />
+    <Compile Include="Financeiro\Enums\StatusPagamentoEnum.cs" />
+    <Compile Include="Financeiro\Enums\TipoCobrancaEnum.cs" />
+    <Compile Include="Financeiro\Enums\TipoReceitaEnum.cs" />
+    <Compile Include="Financeiro\Extensions\StatusPagamentoExtensions.cs" />
+    <Compile Include="Financeiro\Extensions\TituloDespesaExtensions.cs" />
+    <Compile Include="Financeiro\Extensions\TituloReceitaExtensions.cs" />
+    <Compile Include="Financeiro\Extensions\TituloDespesaPagamentoExtensions.cs" />
+    <Compile Include="Financeiro\Extensions\TituloReceitaPagamentoExtensions.cs" />
+    <Compile Include="Financeiro\Entities\TituloPagamento.cs" />
+    <Compile Include="Financeiro\Enums\TipoPeriodoRepeticaoEnum.cs" />
+    <Compile Include="Financeiro\View\TituloReceitaPagamentoVW.cs" />
+    <Compile Include="Frete\Const\CorreiosTipoFreteConst.cs" />
+    <Compile Include="Frete\Entities\CorreiosFreteRetorno.cs" />
+    <Compile Include="Frete\Entities\TipoFrete.cs" />
+    <Compile Include="Frete\Entities\Transportador.cs" />
+    <Compile Include="Frete\Enums\CorreiosTipoFreteEnum.cs" />
+    <Compile Include="Frete\Extensions\CorreioFreteRetornoExtensions.cs" />
+    <Compile Include="Frete\Repository\DataContext.cs" />
+    <Compile Include="Funcionarios\Entities\FuncionarioBeneficio.cs" />
+    <Compile Include="Funcionarios\Entities\FuncionarioContaBancaria.cs" />
+    <Compile Include="Funcionarios\Entities\FuncionarioDependente.cs" />
+    <Compile Include="Funcionarios\Entities\FuncionarioFerias.cs" />
+    <Compile Include="Funcionarios\Entities\FuncionarioOcorrencia.cs" />
+    <Compile Include="Funcionarios\Entities\FuncionarioProfissao.cs" />
+    <Compile Include="Mailings\Const\TipoMailingConst.cs" />
+    <Compile Include="Mailings\Entities\TipoMailing.cs" />
+    <Compile Include="MateriaisApoio\Entities\MaterialApoioPessoa.cs" />
+    <Compile Include="MateriaisApoio\Entities\TipoMaterialApoio.cs" />
+    <Compile Include="Notificacoes\Entities\NotificacaoSistemaEnvio.cs" />
+    <Compile Include="Permissao\Enums\MenuInstitucionalEnum.cs" />
+    <Compile Include="Associados\Extensions\AssociadoExtension.cs" />
+    <Compile Include="Popups\Entities\HomePopup.cs" />
+    <Compile Include="Popups\Repository\DataContext.cs" />
+    <Compile Include="Beneficiario\Entities\Beneficiario.cs" />
+    <Compile Include="Transacoes\Const\MovimentoConst.cs" />
+    <Compile Include="Transacoes\DTo\MovimentoResumoPedido.cs" />
+    <Compile Include="Transacoes\Entities\ConferenciaSaldoVW.cs" />
+    <Compile Include="Transacoes\Entities\Movimento.cs" />
+    <Compile Include="Transacoes\Entities\MovimentoOperacaoDTO.cs" />
+    <Compile Include="Transacoes\Entities\MovimentoRedeDTO.cs" />
+    <Compile Include="Transacoes\Entities\MovimentoResumoVW.cs" />
+    <Compile Include="Transacoes\Entities\TotalMovimentoVW.cs" />
+    <Compile Include="Transacoes\Entities\TipoDependente.cs" />
+    <Compile Include="Transacoes\Entities\TransacaoPagamentoDTO.cs" />
+    <Compile Include="Transacoes\Entities\TransacaoProdutoInternoDTO.cs" />
+    <Compile Include="Transacoes\Enums\TipoTransacaoEnum.cs" />
+    <Compile Include="Transacoes\Extensions\MovimentoExtensions.cs" />
+    <Compile Include="Transacoes\Extensions\MovimentoOperacaoExtensions.cs" />
+    <Compile Include="Transacoes\Repository\DataContext.cs" />
+    <Compile Include="UnidadesCertificados\Entities\CertificadoDigitalVW.cs" />
+    <Compile Include="UnidadesCertificados\Entities\UnidadeCertificado.cs" />
+    <Compile Include="UnidadesCertificados\Repository\DataContext.cs" />
+    <Compile Include="Beneficiario\Repository\DataContext.cs" />
+    <Compile Include="Configuracoes\Entities\ConfiguracaoFinanceiro.cs" />
+    <Compile Include="Configuracoes\Entities\ConfiguracaoContribuicao.cs" />
+    <Compile Include="Associados\DTO\AssociadoAutoComplete.cs" />
+    <Compile Include="Associados\Enums\TipoAssociadoEnum.cs" />
+    <Compile Include="Associados\Repository\DataContext.cs" />
+    <Compile Include="Contratos\Entities\TipoContrato.cs" />
+    <Compile Include="Contratos\Enums\StatusContratoEnum.cs" />
+    <Compile Include="Contribuicoes\Entities\ContribuicaoPreco.cs" />
+    <Compile Include="Contribuicoes\Extensions\ContribuicaoExtensions.cs" />
+    <Compile Include="Core\Const\EntityTypes.cs" />
+    <Compile Include="Documentos\Const\CategoriaDocumentoConst.cs" />
+    <Compile Include="Documentos\Const\TipoDocumentoConst.cs" />
+    <Compile Include="Documentos\Entities\TipoDocumento.cs" />
+    <Compile Include="Documentos\Enums\CategoriaDocumentoEnum.cs" />
+    <Compile Include="Documentos\Enums\TipoDocumentoEnum.cs" />
+    <Compile Include="Email\Enums\EmailEnvioEnum.cs" />
+    <Compile Include="Enderecos\Const\TipoEnderecoConst.cs" />
+    <Compile Include="Escolaridades\Entities\NivelEscolar.cs" />
+    <Compile Include="Escolaridades\Repository\DataContext.cs" />
+    <Compile Include="Cargos\Repository\DataContext.cs" />
+    <Compile Include="RelatoriosFinanceiros\Entities\RelatorioResultadoContribuicaoVW.cs" />
+    <Compile Include="RelatoriosFinanceiros\Repository\DataContext.cs" />
+    <Compile Include="RelatoriosAssociados\Entities\RelatorioAssociadoInadimplenteVW.cs" />
+    <Compile Include="RelatoriosAssociados\Procedures\SpRelatorioEmissaoCarteirinha.cs" />
+    <Compile Include="RelatoriosImediatos\DTO\ParametroInfo.cs" />
+    <Compile Include="RelatoriosImediatos\Extensions\RelatoriosImediatosExtensions.cs" />
+    <Compile Include="RelatoriosImediatos\Repository\RelatorioImediatoContext.cs" />
+    <Compile Include="RelatoriosImediatos\Repository\DataContext.cs" />
+    <Compile Include="Contatos\Enums\TipoContatoEnum.cs" />
+    <Compile Include="Contatos\Repositoty\DataContext.cs" />
+    <Compile Include="Contribuicoes\Const\TipoContribuicaoConst.cs" />
+    <Compile Include="Contribuicoes\Entities\TipoContribuicao.cs" />
+    <Compile Include="Contribuicoes\Entities\Contribuicao.cs" />
+    <Compile Include="Contribuicoes\Enums\TipoContribuicaoEnum.cs" />
+    <Compile Include="Contribuicoes\Repository\DataContext.cs" />
+    <Compile Include="Core\Base\DefaultEmpresa.cs" />
+    <Compile Include="Core\Base\DefaultEntity.cs" />
+    <Compile Include="Empresas\Repository\DataContext.cs" />
+    <Compile Include="Enderecos\Entities\Endereco.cs" />
+    <Compile Include="Core\Base\Geral.cs" />
+    <Compile Include="Documentos\Repository\DataContext.cs" />
+    <Compile Include="Enderecos\Enums\TipoEnderecoEnum.cs" />
+    <Compile Include="Enderecos\Repository\DataContext.cs" />
+    <Compile Include="Erros\Repository\DataContext.cs" />
+    <Compile Include="Financeiro\Const\MacroContaConst.cs" />
+    <Compile Include="Financeiro\Enums\MacroContaEnum.cs" />
+    <Compile Include="Funcionarios\Repository\DataContext.cs" />
+    <Compile Include="Institucionais\Const\TipoResultadoBuscaConst.cs" />
+    <Compile Include="Institucionais\Repository\DataContext.cs" />
+    <Compile Include="Instituicoes\Repository\DataContext.cs" />
+    <Compile Include="Localizacao\DTO\CidadeAutoComplete.cs" />
+    <Compile Include="Localizacao\Entities\Localidade.cs" />
+    <Compile Include="Financeiro\Entities\TituloDespesaPagamento.cs" />
+    <Compile Include="Financeiro\Entities\TituloReceitaPagamento.cs" />
+    <Compile Include="Financeiro\Enums\FormaPagamentoEnum.cs" />
+    <Compile Include="Financeiro\Repository\DataContext.cs" />
+    <Compile Include="Fornecedores\Repository\DataContext.cs" />
+    <Compile Include="Contratos\Entities\Contrato.cs" />
+    <Compile Include="Contratos\Repository\DataContext.cs" />
+    <Compile Include="Localizacao\Repository\DataContext.cs" />
+    <Compile Include="Mailings\Repository\DataContext.cs" />
+    <Compile Include="MateriaisApoio\Repository\DataContext.cs" />
+    <Compile Include="Notificacoes\Const\TipoEnvioAssociadoConst.cs" />
+    <Compile Include="Notificacoes\Const\TipoEnvioUsuarioConst.cs" />
+    <Compile Include="Notificacoes\Entities\AvisoNotificacao.cs" />
+    <Compile Include="Notificacoes\Entities\NotificacaoSistema.cs" />
+    <Compile Include="Notificacoes\Repository\DataContext.cs" />
+    <Compile Include="Pedidos\Const\TipoOcorrenciaPedidoConst.cs" />
+    <Compile Include="Pedidos\Const\StatusPedidoConst.cs" />
+    <Compile Include="Pedidos\Repository\DataContext.cs" />
+    <Compile Include="Permissao\Const\PerfilAcessoConst.cs" />
+    <Compile Include="Permissao\Const\AcessoRecursoGrupoConst.cs" />
+    <Compile Include="Permissao\Enums\AcessoRecursoGrupoEnum.cs" />
+    <Compile Include="Permissao\Enums\PerfilAcessoEnum.cs" />
+    <Compile Include="Permissao\Repository\DataContext.cs" />
+    <Compile Include="Pessoas\Extensions\PessoaExtensions.cs" />
+    <Compile Include="Pessoas\Repository\DataContext.cs" />
+    <Compile Include="Produtos\DTO\ProdutoAutoComplete.cs" />
+    <Compile Include="Produtos\Entities\EstoqueEntrada.cs" />
+    <Compile Include="Produtos\Entities\EstoqueSaida.cs" />
+    <Compile Include="Produtos\Entities\ProdutoEstoque.cs" />
+    <Compile Include="Produtos\Entities\TipoReferenciaSaida.cs" />
+    <Compile Include="Produtos\Enums\TipoReferenciaSaidaEnum.cs" />
+    <Compile Include="Produtos\Repository\DataContext.cs" />
+    <Compile Include="LinksUteis\Entities\LinkUtil.cs" />
+    <Compile Include="LinksUteis\Repository\DataContext.cs" />
+    <Compile Include="Publicacoes\Const\PosicaoBannerConst.cs" />
+    <Compile Include="Publicacoes\Const\TipoNoticiaConst.cs" />
+    <Compile Include="Publicacoes\Entities\Banner.cs" />
+    <Compile Include="Publicacoes\Entities\Parceiro.cs" />
+    <Compile Include="Publicacoes\Entities\TipoParceiro.cs" />
+    <Compile Include="Publicacoes\Enums\TipoNoticiaEnum.cs" />
+    <Compile Include="Publicacoes\Repository\DataContext.cs" />
+    <Compile Include="Relacionamentos\Const\OcorrenciaRelacionamentoConst.cs" />
+    <Compile Include="Relacionamentos\Entities\OcorrenciaRelacionamentoPadrao.cs" />
+    <Compile Include="Pessoas\Entities\PessoaRelacionamento.cs" />
+    <Compile Include="Relacionamentos\Enums\OcorrenciaRelacionamentoEnum.cs" />
+    <Compile Include="Relacionamentos\Repository\DataContext.cs" />
+    <Compile Include="Configuracoes\Entities\ConfiguracaoEmail.cs" />
+    <Compile Include="Configuracoes\Entities\ConfiguracaoNotificacao.cs" />
+    <Compile Include="ConfiguracoesRedesSociais\Entities\ConfiguracaoRedesSociais.cs" />
+    <Compile Include="Configuracoes\Repository\DataContext.cs" />
+    <Compile Include="Core\Const\StatusConst.cs" />
+    <Compile Include="Associados\Entities\Associado.cs" />
+    <Compile Include="AssociadosContribuicoes\Entities\AssociadoContribuicao.cs" />
+    <Compile Include="Associados\Entities\AssociadoAreaAtuacao.cs" />
+    <Compile Include="Associados\Entities\AssociadoCargo.cs" />
+    <Compile Include="Associados\Entities\AssociadoTitulo.cs" />
+    <Compile Include="Bancos\Entities\Banco.cs" />
+    <Compile Include="Documentos\Entities\CategoriaDocumento.cs" />
+    <Compile Include="Financeiro\Entities\CentroCusto.cs" />
+    <Compile Include="Empresas\Entities\Empresa.cs" />
+    <Compile Include="Pessoas\Entities\PessoaContato.cs" />
+    <Compile Include="Empresas\Entities\EmpresaEndereco.cs" />
+    <Compile Include="Funcionarios\Entities\Funcionario.cs" />
+    <Compile Include="Publicacoes\Entities\Noticia.cs" />
+    <Compile Include="Publicacoes\Entities\GaleriaFoto.cs" />
+    <Compile Include="Financeiro\Entities\PeriodoRepeticao.cs" />
+    <Compile Include="Mailings\Entities\Mailing.cs" />
+    <Compile Include="Financeiro\Entities\TituloDespesa.cs" />
+    <Compile Include="Financeiro\Entities\TituloReceita.cs" />
+    <Compile Include="Publicacoes\Entities\Video.cs" />
+    <Compile Include="Fornecedores\Entities\Fornecedor.cs" />
+    <Compile Include="Anuidades\Entities\ExportacaoAnuidadePDF.cs" />
+    <Compile Include="MateriaisApoio\Entities\MaterialApoio.cs" />
+    <Compile Include="RelatoriosPedidos\Procedures\SpRelatorioPedidosPorPeriodo.cs" />
+    <Compile Include="Relatorios\DTO\GraficoStatusAssociadoDTO.cs" />
+    <Compile Include="Relatorios\DTO\SeriesGraficoDTO.cs" />
+    <Compile Include="Relatorios\DTO\VisaoFluxoDTO.cs" />
+    <Compile Include="Relatorios\Entities\AssociadoContribuicaoVW.cs" />
+    <Compile Include="Relatorios\Entities\CentroCustoVW.cs" />
+    <Compile Include="Relatorios\Entities\ResumoAssociadoVW.cs" />
+    <Compile Include="Relatorios\Repository\DataContext.cs" />
+    <Compile Include="Associados\Entities\TipoAssociadoRepresentante.cs" />
+    <Compile Include="Telefones\Repository\DataContext.cs" />
+    <Compile Include="Tipos\Entities\TipoDependente.cs" />
+    <Compile Include="Tipos\Repository\DataContext.cs" />
+    <Compile Include="Pedidos\Entities\TipoOcorrenciaPedido.cs" />
+    <Compile Include="Pedidos\Entities\PedidoHistorico.cs" />
+    <Compile Include="Pedidos\Entities\PedidoEntrega.cs" />
+    <Compile Include="Instituicoes\Entities\Instituicao.cs" />
+    <Compile Include="Publicacoes\DTO\GaleriaDTO.cs" />
+    <Compile Include="Publicacoes\DTO\NoticiaDTO.cs" />
+    <Compile Include="Email\Entities\EmailContatoVW.cs" />
+    <Compile Include="Email\Entities\LogEmail.cs" />
+    <Compile Include="Email\Entities\LogEmailDestino.cs" />
+    <Compile Include="Email\Repository\DataContext.cs" />
+    <Compile Include="Anuidades\Entities\Anuidade.cs" />
+    <Compile Include="Cargos\Entities\Cargo.cs" />
+    <Compile Include="RelatoriosImediatos\Entities\RelatorioImediato.cs" />
+    <Compile Include="Financeiro\Entities\FormaPagamento.cs" />
+    <Compile Include="Pedidos\Entities\Pedido.cs" />
+    <Compile Include="Pedidos\Entities\PedidoProduto.cs" />
+    <Compile Include="Pessoas\Entities\PessoaEndereco.cs" />
+    <Compile Include="Pessoas\Entities\Pessoa.cs" />
+    <Compile Include="AreasAtuacao\Entities\AreaAtuacao.cs" />
+    <Compile Include="Produtos\Entities\Produto.cs" />
+    <Compile Include="Arquivos\Entities\ArquivoUpload.cs" />
+    <Compile Include="Localizacao\Entities\CepBrasil.cs" />
+    <Compile Include="Localizacao\Entities\Cidade.cs" />
+    <Compile Include="Localizacao\Entities\Pais.cs" />
+    <Compile Include="Localizacao\Entities\Estado.cs" />
+    <Compile Include="Erros\Entities\LogErro.cs" />
+    <Compile Include="Permissao\Entities\AcessoPemissao.cs" />
+    <Compile Include="Permissao\Entities\AcessoRecurso.cs" />
+    <Compile Include="Permissao\Entities\AcessoRecursoAcao.cs" />
+    <Compile Include="Permissao\Entities\AcessoRecursoGrupo.cs" />
+    <Compile Include="Permissao\Entities\PerfilAcesso.cs" />
+    <Compile Include="Permissao\Entities\RecursoPermissaoVW.cs" />
+    <Compile Include="Permissao\Entities\RecursoSistemaVW.cs" />
+    <Compile Include="Permissao\Entities\UsuarioSistema.cs" />
+    <Compile Include="Permissao\Entities\UsuarioSistemaVW.cs" />
+    <Compile Include="Contratos\Entities\StatusContrato.cs" />
+    <Compile Include="Pedidos\Entities\StatusPedido.cs" />
+    <Compile Include="Publicacoes\Entities\TipoNoticia.cs" />
+    <Compile Include="Contatos\Entities\TipoContatoPadrao.cs" />
+    <Compile Include="Enderecos\Entities\TipoEndereco.cs" />
+    <Compile Include="Associados\Entities\TipoAssociado.cs" />
+    <Compile Include="Produtos\Entities\TipoProduto.cs" />
+    <Compile Include="Associados\Entities\TipoTitulo.cs" />
+    <Compile Include="Core\Extensions\DALExtensions.cs" />
+    <Compile Include="Procedures\SpDadosProcedure.cs" />
+    <Compile Include="Procedures\SpNomes.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Core\DataContext.cs" />
+    <Compile Include="Core\DataContextInterceptor.cs" />
+    <Compile Include="Core\GenericRepository.cs" />
+    <Compile Include="Core\TableRepository.cs" />
+    <Compile Include="Core\IGenericRepository.cs" />
+    <Compile Include="Unidades\Const\TipoUnidadeConst.cs" />
+    <Compile Include="Unidades\Entities\Unidade.cs" />
+    <Compile Include="Unidades\Entities\UnidadeContaBancaria.cs" />
+    <Compile Include="Unidades\Entities\UnidadeDetalhe.cs" />
+    <Compile Include="Unidades\Entities\UnidadeEmissoraVW.cs" />
+    <Compile Include="Unidades\Entities\UnidadeResumoVW.cs" />
+    <Compile Include="Unidades\Entities\UnidadeRota.cs" />
+    <Compile Include="Unidades\Entities\UsuarioUnidade.cs" />
+    <Compile Include="Unidades\Extensions\UnidadeRotaExtensions.cs" />
+    <Compile Include="Unidades\Repository\DataContext.cs" />
+    <Compile Include="Views\AssociadoAnuidadePagantes.cs" />
+    <Compile Include="Views\AssociadoAnuidadeIsentos.cs" />
+    <Compile Include="Views\TituloCobrancaVW.cs" />
+    <Compile Include="Views\DadosPessoaAnuidadeVW.cs" />
+    <Compile Include="Institucionais\Entities\ResultadoBuscaVW.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="libman.json" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="AssociadosContribuicoes\Views\" />
+    <Folder Include="Empresas\Const\" />
+    <Folder Include="Funcionarios\DTO\" />
+    <Folder Include="Funcionarios\Enums\" />
+    <Folder Include="Infraestrutura\Entities\" />
+    <Folder Include="Institucionais\Enums\" />
+    <Folder Include="Organizacoes\Extensions\" />
+    <Folder Include="Origens\Repository\" />
+    <Folder Include="Pedidos\Enums\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\UTIL\UTIL.csproj">
+      <Project>{d26b1e83-d874-437b-a9cc-3af27bf8eb23}</Project>
+      <Name>UTIL</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

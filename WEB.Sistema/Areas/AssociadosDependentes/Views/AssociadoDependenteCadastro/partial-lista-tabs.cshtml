@@ -1,0 +1,35 @@
+﻿@model WEB.Areas.AssociadosDependentes.ViewModels.AssociadoDependenteCadastroForm
+
+<li class="active"><a href="#tab-dados-cadastrais-dependente" data-toggle="tab">Dados Cadastrais</a></li>
+
+@if (Model.Associado.id > 0) {
+    
+    <li><a href="#tab-documentos" data-toggle="tab">Documentos</a></li>
+
+    @*<li><a href="#tab-historico" data-toggle="tab">Histórico</a></li>*@
+    
+
+    @*if (Model.ConfiguracaoAssociadoPF.flagAbaAreasAtuacao == true) {
+        <li><a href="#tab-area-atuacao" data-toggle="tab">@Html.labelTexto("areaAtuacaoPlural")</a></li>
+    }
+
+    if (Model.ConfiguracaoAssociadoPF.flagAbaTitulos == true) {
+        <li><a href="#tab-titulos" data-toggle="tab">Títulos</a></li>
+    }
+
+    if (Model.ConfiguracaoAssociadoPF.flagAbaPedidos == true) {
+        <li><a href="#tab-pedidos" data-toggle="tab">Pedidos</a></li>
+    }
+
+    if (Model.ConfiguracaoAssociadoPF.flagAbaEventos == true) {
+        <li><a href="#tab-eventos" data-toggle="tab">Eventos</a></li>
+    }
+
+    if (Model.ConfiguracaoAssociadoPF.flagAbaAnuncios == true) {
+        <li><a href="#tab-anuncios" data-toggle="tab">Anúncios</a></li>
+    }
+
+    if (Model.ConfiguracaoAssociadoPF.flagAbaCarteirinha == true) {
+        <li><a href="#tab-carteirinha" data-toggle="tab">Carteirinha</a></li>
+    }*@
+}

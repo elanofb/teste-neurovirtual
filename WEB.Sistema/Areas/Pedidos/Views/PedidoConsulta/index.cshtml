@@ -1,0 +1,133 @@
+﻿@using BLL.ConfiguracoesTextos.Extensions
+@using DAL.Permissao.Security.Extensions
+@{
+    ViewBag.contentHeaderClass = "content-header-action";
+    ViewBag.titlePage = Html.labelTexto(User.idOrganizacao(), "titlePagePedidoLista", "Pedidos Cadastrados");
+}
+
+@section breadcrump{
+    <ol class="breadcrumb">
+        <li class="padding-right-10"><a href="javascript:;" onclick="$('.box-filtros').toggle()" class="fs-16"><i class="far fa-filter"></i></a></li>
+        <li>
+            <a href="@Url.Action("index", "PedidoCadastro")" target="_blank">
+                <i class="far fa-plus-circle"></i>
+            </a>
+        </li>
+    </ol>
+}
+
+@section scripts {
+    
+    @Html.includeDatePicker()
+    @Html.includeBootstrapMultiselect()
+
+    <script src="@UtilConfig.linkResourses("Areas/Pedidos/js/pedido-consulta.js?v=1.0")"></script>
+    <script src="@UtilConfig.linkResourses("Areas/Pedidos/js/pedido-cancelamento.js?v=1.0")"></script>
+}
+
+@section styles{
+    <link href="@UtilConfig.linkResourses("css/associatec/list-custom.css")" rel="stylesheet" />
+    <link href="@UtilConfig.linkResourses("Areas/Pedidos/css/pedido-consulta.css")" rel="stylesheet" />
+}
+
+<div class="box box-primary box-filtros nao-exibir">
+    
+    @Html.headerBox("Filtros de Busca", "fa fa-filter")
+
+    <div class="box-body">
+
+        <div class="row">
+
+            @using(Html.BeginForm(null, null, FormMethod.Get, new { id = "formFiltros" })) {
+
+                <div class="col-md-3 col-sm-6">
+
+                    <label>Prazo de Entrega</label>
+                    <div class="input-group">
+                        @Html.TextBox("dtPrazoInicio", UtilRequest.getString("dtPrazoInicio"), new { @class = "form-control input-sm input-datepicker", alt = "date" })
+                        <span class="input-group-addon">-</span>
+                        @Html.TextBox("dtPrazoFim", UtilRequest.getString("dtPrazoFim"), new { @class = "form-control input-sm input-datepicker", alt = "date" })
+                    </div>
+
+                </div>
+
+                <div class="col-md-3 col-sm-6">
+                    <label>Data de Cadastro</label>
+                    <div class="input-group">
+                        @Html.TextBox("dtCadastroInicio", UtilRequest.getString("dtCadastroInicio"), new { @class = "form-control input-sm input-datepicker", alt = "date" })
+                        <span class="input-group-addon">-</span>
+                        @Html.TextBox("dtCadastroFim", UtilRequest.getString("dtCadastroFim"), new { @class = "form-control input-sm input-datepicker", alt = "date" })
+                    </div>
+                </div>
+
+                <div class="col-md-3 col-sm-6">
+                    <label>Status</label>
+                    @Html.ListBox("idsStatusPedido", StatusPedidoHelper.getInstance.selectMultiList(UtilRequest.getListInt("idsStatusPedido")), new { @class = "form-control input-sm input-multiselect" })
+                </div>
+
+                <div class="form-group col-md-3">
+                    <label>Buscar</label>
+                    @Html.buttonSearch(UtilRequest.getString("valorBusca"), "", "link-loading")
+                </div>
+
+            }
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="row">
+
+    <div class="col-lg-12">
+        <ul class="nav nav-tabs" id="tabs">
+            <li class="active"><a data-toggle="tab" href="#em-aberto" class="text-black"> Em Aberto</a></li>
+            <li class=""><a data-toggle="tab" href="#pagos" class="text-black"> Pagos</a></li>
+            <li class=""><a data-toggle="tab" href="#em-producao" class="text-black"> Em Produção</a></li>
+            <li class=""><a data-toggle="tab" href="#em-transporte" class="text-black"> Transporte</a></li>
+            <li class=""><a data-toggle="tab" href="#finalizados" class="text-black"> Finalizados</a></li>
+            <li class=""><a data-toggle="tab" href="#atrasados" class="text-black"> Atrasados</a></li>
+            <li class=""><a data-toggle="tab" href="#cancelados" class="text-black"> Cancelados</a></li>
+        </ul>
+    </div>
+
+    <div class="clearfix"></div>
+
+    <div class="col-lg-12">
+
+        <div class="tab-content padding-10" style="background-color:white">
+
+            <div id="em-aberto" class="tab-pane active">
+                <div id="boxListaPedidosEmAberto" class="carregando"></div>
+            </div>
+
+            <div id="pagos" class="tab-pane">
+                <div id="boxListaPedidosPagos" class="carregando"></div>
+            </div>
+            
+            <div id="em-producao" class="tab-pane">
+                <div id="boxListaPedidosEmProducao" class="carregando"></div>
+            </div>
+            
+            <div id="em-transporte" class="tab-pane">
+                <div id="boxListaPedidosEmTransporte" class="carregando"></div>
+            </div>
+            
+            <div id="finalizados" class="tab-pane">
+                <div id="boxListaPedidosFinalizados" class="carregando"></div>
+            </div>
+            
+            <div id="atrasados" class="tab-pane">
+                <div id="boxListaPedidosAtrasados" class="carregando"></div>
+            </div>
+            
+            <div id="cancelados" class="tab-pane">
+                <div id="boxListaPedidosCancelados" class="carregando"></div>
+            </div>
+
+        </div>
+
+    </div>
+    <div class="clearfix"></div>
+</div>

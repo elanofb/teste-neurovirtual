@@ -1,0 +1,140 @@
+﻿@model List<TituloReceitaPagamentoVW>
+@using DAL.Financeiro;
+@{
+    Layout = null;
+}
+
+<h4 class="separator-form">Pagamentos realizados</h4>
+<ul class="products-list product-list-in-box listagem-padrao">
+
+    @if (Model.Count > 0) {
+
+        var pagamentosRealizados = Model.Where(x => x.dtPagamento.HasValue).ToList();
+
+        foreach (var item in pagamentosRealizados) {
+            @montarRegistro(item);
+        }
+    } else {
+        <li class="item">
+            <div class="col-sm-12">
+                <p class="alert-warning text-center">
+                    Nenhum registro encontrado.
+                </p>
+            </div>
+        </li>
+    }
+</ul><br/>
+
+<h4 class="separator-form">Pagamentos em aberto/removidos</h4>
+
+<ul class="products-list product-list-in-box listagem-padrao">
+
+    @if (Model.Count > 0) {
+
+        var pagamentosEmAberto = Model.Where(x => x.dtExclusao.HasValue || x.dtPagamento == null).ToList();
+
+        foreach (var item in pagamentosEmAberto) {
+            @montarRegistro(item);
+        }
+    } else {
+        <li class="item">
+            <div class="col-sm-12">
+                <p class="alert-warning text-center">
+                    Nenhum registro encontrado.
+                </p>
+            </div>
+        </li>
+    }
+</ul>
+
+@helper montarRegistro(TituloReceitaPagamentoVW item) {
+    var classDisabled = item.dtExclusao.HasValue ? "item-list-disabled" : "";
+
+    <li class="item text-black bordered-destaque border-@(item.dtExclusao.HasValue ? "disabled" : item.dtPagamento.HasValue ? "green" : item.dtVencimento?.Date < DateTime.Now.Date ? "red" : "yellow")">
+        @if (item.dtExclusao.HasValue) {
+            <div class="col-md-12 margin-bottom-10">
+                <div class="row">
+                    
+                    <div class="col-sm-4">
+                        <span data-toggle="tooltip" title="Motivo da exclusão"><i class="fa fa-window-close"></i> @(item.motivoExclusao)</span>    
+                    </div>
+                    
+                    <div class="col-sm-3 col-lg-2">
+                        <span data-toggle="tooltip" title="Dt. Exclusão"><i class="fa fa-calendar-times-o"></i> @(item.dtExclusao.exibirData())</span>
+                    </div>
+                    
+                    <div class="col-sm-4">
+                        <span data-toggle="tooltip" title="Usuário exclusão"><i class="fa fa-user-times"></i> @(item.nomeUsuarioExclusao)</span>
+                    </div>
+
+                </div>
+            </div>
+        }
+        
+        <div class="col-sm-4 @classDisabled">
+            <span><strong>#@item.idTituloReceitaPagamento</strong> (@(item.descricaoStatusPagamento))</span><br />
+
+            <span data-toggle="tooltip" title="Meio de Pagamento"><i class="glyphicons glyphicons-small-payments"></i> @(item.descricaoMeioPagamento)</span><br />
+
+            <span data-toggle="tooltip" title="Forma de Pagamento"><i class="glyphicons glyphicons-fees-payments"></i> @(item.descricaoFormaPagamento)</span><br />
+
+            @if (item.dtBaixa.HasValue) {
+                <span data-toggle="tooltip" title="Data da Baixa"><i class="fa fa-calendar"></i> @(item.dtBaixa.exibirData())</span><br />
+
+                        <span data-toggle="tooltip" title="Usuário da Baixa"><i class="fa fa-user"></i> @(item.nomeUsuarioBaixa)</span><br />
+            }
+        </div>
+
+        <div class="col-sm-3 col-lg-2 @classDisabled">
+
+            <span data-toggle="tooltip" title="Data de Vencimento"><i class="fa fa-calendar-times-o"></i> @(item.dtVencimento.exibirData())</span><br />
+
+            <span data-toggle="tooltip" title="Data de Pagamento"><i class="fa fa-calendar-check"></i> @(item.dtPagamento.exibirData())</span><br />
+
+            <span data-toggle="tooltip" title="Valor Original"><i class="far fa-money-bill"></i> @(item.valorOriginal.ToString("C"))</span><br />
+
+            <span data-toggle="tooltip" title="Valor Recebido"><i class="far fa-money-bill"></i> @(item.valorRecebido?.ToString("C"))</span><br />
+
+        </div>
+
+        <div class="col-sm-4 @classDisabled">
+            @if (item.idMeioPagamento == MeioPagamentoConst.CARTAO_CREDITO || item.idMeioPagamento == MeioPagamentoConst.CARTAO_DEBITO) {
+                <span><strong>Token Transação</strong>: @(item.dtBaixa.exibirData())</span><br />
+
+                <span><strong>Cod. Autorização</strong>: @(item.codigoAutorizacao)</span><br />
+
+                <span><strong>Desc. Parcela</strong>: @(item.codigoAutorizacao)</span><br />
+            }
+
+            @if (item.idMeioPagamento == MeioPagamentoConst.CHEQUE) {
+                <span><strong>Nro. Chegue</strong>: </span><br />
+
+                <span><strong>Nro. Conta</strong>: @item.nroConta</span><br />
+
+                <span><strong>Agência</strong>: @item.nroAgencia</span><br />
+            }
+
+            @if (item.idMeioPagamento == MeioPagamentoConst.BOLETO_BANCARIO) {
+                <span><strong>Nosso Nro.</strong>: @item.nossoNumero</span><br />
+
+                <span><strong>Conta Bancária</strong>: @item.nroAgenciaContaBancaria / @item.nroContaContaBancaria</span><br />
+
+                <span><strong>Dt. Vencimento</strong>: @(item.nroAgencia)</span><br />
+
+                if (item.idArquivoRemessa > 0) {
+                    <span><strong>Nro. Arquivo Remessa</strong>: @item.nroArquivoRemessa</span><br />
+                }
+            }
+        </div>
+
+        <div class="col-sm-1 col-lg-2">
+            <div class="pull-right">
+                @if (!item.boletoUrl.isEmpty()) {
+                    <a href="@Url.Action("visualizar", "BoletoBancario", new {area = "BoletosBancarios", p = UtilCrypt.toBase64Encode(item.idTituloReceitaPagamento.toInt())})" target="_blank" class="text-black" data-toggle="tooltip" title="Downloado do boleto bancário"><i class="fa fa-download"></i>&nbsp;&nbsp;&nbsp;</a>
+                }
+            </div>
+        </div>
+
+        <div class="clearfix"></div>
+    </li>
+}

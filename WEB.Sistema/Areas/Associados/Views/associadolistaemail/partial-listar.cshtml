@@ -1,0 +1,65 @@
+﻿@using WEB.Areas.Mailings.Helpers
+@model List<DAL.Mailings.Mailing>
+
+<div id="boxResultadoListaEmail">
+    <br />
+    <div class="text-left">
+	    <button class="btn bg-yellow">
+		    <i class="far fa-chart-bar"></i> <strong>@Model.Count</strong> cadatrado(s)
+	    </button>
+    </div><br/>
+
+
+    <div class="col-md-12 no-padding">
+        @using (Ajax.BeginForm("partial-listar", "associadolistaemail", new {area = "associados"}, new AjaxOptions {HttpMethod = "POST", UpdateTargetId = "boxResultadoListaEmail", InsertionMode = InsertionMode.Replace, OnSuccess = "AssociadoListaEmail.onSuccessBusca"}, new {})) {
+            @Html.Hidden("idAssociado", UtilRequest.getInt32("idAssociado"))
+
+            <div class="col-xs-6">
+            </div>
+
+            <div class="col-xs-3">
+                <label>Tipo da Lista</label>
+                @Html.DropDownList("idTipoMailing", TipoMailingHelper.selectList(0), "Todos", new {@class = "form-control input-sm"})
+            </div>
+
+            <div class="form-group col-xs-3">
+                <label>Buscar</label>
+                @Html.buttonSearch(UtilRequest.getString("valorBusca"))
+            </div>
+        }
+    </div>
+
+    <div class="clearfix"></div><br/>
+
+    <table border="0" cellpadding="0" cellspacing="0" class="table table-bordered table-striped">
+        <tr>
+            <th class="text-center">Tipo</th>
+            <th class="text-center">Nome</th>
+            <th class="text-center">E-mail</th>
+            <th class="text-center width-150">Cadastro</th>
+            <th class="text-center width-100">&nbsp;</th>
+        </tr>
+        @if (Model.Count > 0) {
+            foreach (var Item in Model) {
+                <tr>
+                    <td class="text-center">@Item.TipoMailing.nome</td>
+                    <td class="text-center">@Item.nome</td>
+                    <td class="text-center">@Item.email</td>
+                    <td class="text-center">@Item.dtCadastro</td>
+                    <td class="text-center box-acoes">
+                        <a href="javascript:void(0);" onclick="DefaultSistema.carregarConteudo(this);" data-url="@Url.Action("editar", "associadolistaemail", new {area = "associados", Item.id, Item.Associado.idTipoAssociado})" data-target="boxFormAssociadoListaEmail" title="Editar E-mail" data-toggle="tooltip">
+                            <i class="fa fa-edit"></i>
+                        </a> &nbsp;
+                        @Html.linkAjaxExcluir(Item.id, "N", Url.Action("excluir", "associadolistaemail", new {area = "associados"}))
+                    </td>
+                </tr>
+            }
+
+        }
+        else {
+            <tr>
+                <td class="text-center" colspan="16">Nenhum e-mail cadastrado para esse associado.</td>
+            </tr>
+        }
+    </table>
+</div>

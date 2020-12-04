@@ -1,0 +1,74 @@
+﻿@using DAL.Pessoas
+@using MvcFlashMessages
+
+@{
+    Layout = null;
+}
+
+@Html.RenderFlash()
+@using (Ajax.BeginForm("adicionarAssociadoEspecifico", "materialapoioassociado", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "boxAssociadoEspecifico", OnSuccess = "MaterialApoioAssociado.retornoAposAdicionar();", InsertionMode = InsertionMode.Replace }, new { })) {
+
+    <div class="col-md-4">
+        <label>Adicionar por Lote</label>
+        @Html.TextArea("cnpfAssociadosLote", new { @class = "form-control input-sm", rows = 5 })
+        @Html.instrucao("Insira a lista de CPF/CNPJ separados por uma quebra de linha.")<div class="clearfix"></div>
+    </div>
+    <div class="clearfix"></div>
+    
+    <div class="col-md-4">
+        <label>Adicionar Individual</label>
+        @Html.Hidden("idAssociadoEspecifico", "")
+        @Html.Hidden("nomeAssociadoEspecifico", "")
+        @Html.Hidden("cnpfAssociadoEspecifico", "")
+        @Html.DropDownList("novoAssociadoEspecifico", Enumerable.Empty<SelectListItem>(), new { id = "novoAssociadoEspecifico", @class = "form-control input-sm no-padding", data_title = "Digite o nome ou o documento do associado", data_url = Url.Action("autocompletarAssociado", "associado", new { area = "Associados" }) })
+    </div>
+
+    <div class="form-group col-md-2 padding-top-20">
+        <button type="submit" class="btn btn-primary" title="" data-toggle="tooltip" data-original-title="Adicionar Associado">
+            Adicionar
+        </button>
+    </div>
+
+    <div class="clearfix"></div>
+    <div class="col-md-6 alert alert-info">
+        Para registrar de forma efetiva, é necessário salvar os dados na aba do material de apoio.
+    </div>
+}
+
+<div class="clearfix"></div>
+<br />
+
+<div class="table-responsive col-md-12">
+    <div class="dataTables_wrapper form-inline" role="grid">
+
+        <table class="table table-bordered table-striped dataTable">
+            <thead>
+                <tr role="row">
+                    <th class="width-25">ID</th>
+                    <th>Nome</th>
+                    <th>CPF/CNPJ</th>
+                    <th class="width-50">&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (SessionMateriaisApoio.getListAssociadosEspecificos() != null && SessionMateriaisApoio.getListAssociadosEspecificos().Count() > 0) {
+                    foreach (Pessoa Item in SessionMateriaisApoio.getListAssociadosEspecificos()) {
+                        <tr>
+                            <td>@Item.id</td>
+                            <td>@Item.nome</td>
+                            <td>@UtilString.formatCPFCNPJ(Item.nroDocumento)</td>
+                            <td class="text-center">
+                                <a href="javascript:void(0);" class="delete-default" data-id="@Item.id" data-url='@Url.Action("excluirAssociadoEspecifico", "materialapoioassociado", new { idMaterialApoio = ViewBag.idMaterialApoio })' title="Excluir Registro"><i class="fa fa-trash"></i></a>
+                            </td>
+                        </tr>
+                    }
+                } else {
+                    <tr>
+                        <td colspan="4" class="text-center">Nenhum associado adicionado.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="clearfix"></div>

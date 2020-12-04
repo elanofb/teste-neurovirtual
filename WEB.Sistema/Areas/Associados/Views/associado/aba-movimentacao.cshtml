@@ -1,0 +1,13 @@
+﻿@model int
+
+<div class="tab-pane" id="tab-movimentacao">
+
+    <h4 class="separator-form-icon no-margin-bottom">
+        <i class="far fa-edit"></i> Movimentações
+    </h4>
+    
+    <div id="boxLoadListaMovimentacao" class="content-load carregando" data-url="@Url.Action("partial-lista-movimentacao", "MovimentoConsulta", new { Area = "Movimentacoes", idMembroDestino = Model })"></div>
+    
+    <div class="clearfix"></div><br/>
+    
+</div>

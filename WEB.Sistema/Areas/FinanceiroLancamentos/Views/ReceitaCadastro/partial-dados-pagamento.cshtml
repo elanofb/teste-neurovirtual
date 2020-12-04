@@ -1,0 +1,57 @@
+﻿@model WEB.Areas.FinanceiroLancamentos.ViewModels.ReceitaCadastroForm
+
+@{
+    Layout = null;
+}
+
+<div class="row margin-top-20">
+    <div class="col-sm-6">
+        <div class="row margin-top-10">
+            <div class="col-sm-12">
+                <div class="row">
+                    <div class="col-sm-9 no-padding-right">
+                        @Html.spanFieldForm("Valor da Receita", "fs-12", true)<br />
+                        @Html.instrucao("Informe o valor total da receita")
+                    </div>
+                    <div class="col-sm-3">
+                        @Html.TextBoxFor(m => m.TituloReceita.valorTotal, new { @class = "form-control input-sm", alt = "decimal", id = "valorTotal" })
+                        @Html.ValidationMessageFor(m => m.TituloReceita.valorTotal)
+                    </div>
+                </div>
+                <hr class="no-margin-bottom margin-top-5"/>
+            </div>
+        </div>
+        <div class="row margin-top-10">
+            <div class="col-sm-12">
+                <div class="row">
+                    <div class="col-sm-9 no-padding-right">
+                        @Html.spanFieldForm("Data Previsão Pagamento", "fs-12", true)<br />
+                        @Html.instrucao("Informe a data da previsão de pagamento")
+                    </div>
+                    <div class="col-sm-3">
+                        @Html.TextBoxFor(m => m.dtPrevisaoPagamento, new {@class = "form-control input-sm input-datepicker", alt = "date"})
+                        @Html.ValidationMessageFor(m => m.dtPrevisaoPagamento)
+                    </div>
+                </div>
+                <hr class="no-margin-bottom margin-top-5"/>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="row margin-top-10">
+            <div class="col-sm-12">
+                <div class="row">
+                    <div class="col-sm-9 no-padding-right">
+                        @Html.spanFieldForm("Vencimento da Despesa", "fs-12", true)<br />
+                        @Html.instrucao("Data original de vencimento")
+                    </div>
+                    <div class="col-sm-3">
+                        @Html.TextBoxFor(m => m.TituloReceita.dtVencimento, new {@class = "form-control input-sm input-datepicker", autocomplete="off", alt = "date"})
+                        @Html.ValidationMessageFor(m => m.TituloReceita.dtVencimento)
+                    </div>
+                </div>
+                <hr class="no-margin-bottom margin-top-5"/>
+            </div>
+        </div>
+    </div>
+</div>

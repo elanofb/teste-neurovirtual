@@ -1,0 +1,75 @@
+﻿@model WEB.Areas.FinanceiroLancamentos.ViewModels.ConciliacaoDetalheVM
+
+@{
+
+    ViewBag.modalTitle = "Detalhe da conciliação - " + Model.OConciliacaoFinanceira.descricao +" - "+ Model.OConciliacaoFinanceira.dtConciliacao.exibirData();
+    ViewBag.modalWidthClass = "lg";
+
+    Layout = "~/views/shared/associatec/masterpage-modal.cshtml";
+    
+    if (UtilRequest.getBool("IsPost") == true) {
+        Layout = null;
+    }
+    
+}
+
+<div class="row" id="listaDetalheConciliacao">
+    
+    <div class="col-sm-12">
+        
+        @if (Model.listaDetalhesConciliacao.Any()) {
+
+            foreach (var OItem in Model.listaDetalhesConciliacao) {
+
+                var id = OItem.idTituloDespesaPagamento > 0 ? OItem.idTituloDespesaPagamento : OItem.idTituloReceitaPagamento;
+                var dtVencimento = OItem.idTituloDespesaPagamento > 0 ? OItem.TituloDespesaPagamento.dtVencimento : OItem.TituloReceitaPagamento.dtVencimento;
+                var dtPagamento = OItem.idTituloDespesaPagamento > 0 ? OItem.TituloDespesaPagamento.dtPagamento : OItem.TituloReceitaPagamento.dtPagamento;
+                var dtPrevisao = OItem.idTituloDespesaPagamento > 0 ? OItem.TituloDespesaPagamento.dtPagamento : OItem.TituloReceitaPagamento.dtPrevisaoCredito;
+                var descricao = OItem.idTituloDespesaPagamento > 0 ? (OItem.TituloDespesaPagamento?.TituloDespesa.descricao) : (OItem.TituloReceitaPagamento?.TituloReceita.descricao);
+                var nmPessoa = OItem.idTituloDespesaPagamento > 0 ? (OItem.TituloDespesaPagamento?.TituloDespesa.nomePessoaCredor) : (OItem.TituloReceitaPagamento?.TituloReceita.nomePessoa);
+
+                <div class="box-info-item">
+
+                    <div class="row">
+                        <div class="col-sm-9 abreviar">
+                            #@id @descricao
+                        </div>
+                        <div class="col-sm-3 abreviar">
+                            @nmPessoa
+                        </div>
+                        <div class="col-sm-3 abreviar">
+                            <span data-toggle="tooltip" title="@($"Conciliado por {OItem.UsuarioCadastro.nome}")" class="">@OItem.UsuarioCadastro.nome</span>
+                        </div>
+                        <div class="col-sm-2 abreviar">
+                            <span data-toggle="tooltip" title="@($"Vencimento em {dtVencimento.exibirData()}")" class="">@dtVencimento.exibirData()</span>
+                        </div>
+                        <div class="col-sm-2 abreviar">
+                            <span data-toggle="tooltip" title="@($"Pago em {dtPagamento.exibirData()}")" class="">@dtPagamento.exibirData()</span>
+                        </div>
+                        <div class="col-sm-2 abreviar">
+                            <span data-toggle="tooltip" title="@($"Previsto em {dtPrevisao.exibirData()}")" class="">@dtPrevisao.exibirData()</span>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="row">
+                                <div class="col-sm-6 text-right">
+
+                                    @if (OItem.idTituloReceitaPagamento > 0) {
+                                        <strong class="text-green" data-toggle="tooltip" title="Valor de Receita">
+                                            <i class="fa fa-caret-up"></i> @OItem.valorConciliado.ToString("C")
+                                        </strong>
+                                    } else {
+                                        <strong class="text-red" data-toggle="tooltip" title="Valor de Despesa">
+                                            <i class="fa fa-caret-down"></i> @OItem.valorConciliado.ToString("C")
+                                        </strong>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            }
+        }
+    </div>
+    }
+</div>

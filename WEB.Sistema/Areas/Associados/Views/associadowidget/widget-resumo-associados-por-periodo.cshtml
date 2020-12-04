@@ -1,0 +1,23 @@
+﻿<div class="box box-primary">
+
+    <div class="box-header with-border">
+        <h3 class="box-title"><i class="fa fa-users"></i> Resumo por Período</h3>
+        <div class="box-options pull-right">
+
+            <button class="btn btn-box-tool" id="btnResumoAssociadosPeriodo">
+                <span>Selecionar período</span> <i class="fa fa-caret-down"></i>
+            </button>
+
+            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="far fa-minus"></i></button>
+
+        </div>
+    </div>
+
+    <div class="box-body padding-top-20">
+
+        <div id="boxResumoAssociadosPorPeriodo" class="carregando" data-url="@Url.Action("widget-resumo-associados-por-periodo", "AssociadoWidget", new {area = "Associados"})"></div>
+
+    </div>
+</div>
+
+<div class="clearfix"></div>

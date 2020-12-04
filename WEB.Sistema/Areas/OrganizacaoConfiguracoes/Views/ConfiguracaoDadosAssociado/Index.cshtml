@@ -1,0 +1,137 @@
+﻿@model WEB.Areas.OrganizacaoConfiguracoes.ViewModels.ConfiguracaoDadosAssociadoForm
+@using MvcFlashMessages
+
+@{
+    ViewBag.titlePage = "Liberação Dados Associado";
+}
+
+<div class="row">
+
+    <div class="col-sm-12 box-primary">
+
+        <div class="nav-tabs-custom">
+
+            <ul class="nav nav-tabs" role="tablist">
+                <li class="active">
+                    <a href="#tab-principal" data-toggle="tab">Principal</a>
+                </li>
+            </ul>
+
+            <div id="tab-principal" role="tabpanel" class="tab-pane active">
+                
+                @using (Html.BeginForm("salvar", null, FormMethod.Post, new { @class = "tab-content" })) {
+                    { Html.RenderPartial("partial-dados-cadastro", Model);}
+
+                <div class="col-sm-12">
+                        @Html.RenderFlash()
+                    </div>
+                    <div class="clearfix"></div>
+                    
+                    @Html.ValidationSummary(false)
+
+                    <div class="col-sm-6">
+
+                        <h4 class="separator-form-icon">Configurações de Dados Pessoais</h4>
+
+                        <div class="row">
+
+                            <div class="col-sm-6">
+                                <label class="fs-9">Habilitar Cadastro de Associado?</label>
+                                @Html.DropDownListFor(m => m.OrganizacaoDadosAssociado.flagCadastroAssociado, ComboHelper.selectListTrueFalse(Model.OrganizacaoDadosAssociado.flagCadastroAssociado), "...", new { @class = "form-control input-sm"})
+                            </div>
+                            
+                            <div class="col-sm-6">
+                                <label class="fs-9">Habilitar Situação do Associado?</label>
+                                @Html.DropDownListFor(m => m.OrganizacaoDadosAssociado.flagSituacaoAssociado, ComboHelper.selectListTrueFalse(Model.OrganizacaoDadosAssociado.flagSituacaoAssociado), "...", new { @class = "form-control input-sm"})
+                            </div>
+                            
+                            <div class="col-sm-6">
+                                <label class="fs-9">Habilitar Endereço do Associado?</label>
+                                @Html.DropDownListFor(m => m.OrganizacaoDadosAssociado.flagDadosEndereco, ComboHelper.selectListTrueFalse(Model.OrganizacaoDadosAssociado.flagDadosEndereco), "...", new { @class = "form-control input-sm"})
+                            </div>
+                            <div class="clearfix"></div>
+
+                        </div>
+                    </div>
+                    
+                    <div class="col-sm-6">
+
+                        <h4 class="separator-form-icon">Configurações de Contatos</h4>
+
+                        <div class="row">
+
+                            <div class="col-sm-6">
+                                <label class="fs-9">Habilitar Dados de Telefone?</label>
+                                @Html.DropDownListFor(m => m.OrganizacaoDadosAssociado.flagDadosTelefone, ComboHelper.selectListTrueFalse(Model.OrganizacaoDadosAssociado.flagDadosTelefone), "...", new { @class = "form-control input-sm"})
+                            </div>
+                            
+                            <div class="col-sm-6">
+                                <label class="fs-9">Habilitar Dados de E-mail?</label>
+                                @Html.DropDownListFor(m => m.OrganizacaoDadosAssociado.flagDadosEmail, ComboHelper.selectListTrueFalse(Model.OrganizacaoDadosAssociado.flagDadosEmail), "...", new { @class = "form-control input-sm"})
+                            </div>
+                            <div class="clearfix"></div>
+
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                                         
+                    <div class="col-sm-6">
+
+                        <h4 class="separator-form-icon">Configurações de Dados Profissionais</h4>
+
+                        <div class="row">
+
+                            <div class="col-sm-6">
+                                <label class="fs-9">Habilitar Dados de Profissão?</label>
+                                @Html.DropDownListFor(m => m.OrganizacaoDadosAssociado.flagDadosProfissao, ComboHelper.selectListTrueFalse(Model.OrganizacaoDadosAssociado.flagDadosProfissao), "...", new { @class = "form-control input-sm"})
+                            </div>
+                            
+                            <div class="col-sm-6">
+                                <label class="fs-9">Habilitar Áreas de Atuação?</label>
+                                @Html.DropDownListFor(m => m.OrganizacaoDadosAssociado.flagAreasAtuacao, ComboHelper.selectListTrueFalse(Model.OrganizacaoDadosAssociado.flagAreasAtuacao), "...", new { @class = "form-control input-sm"})
+                            </div>
+                            <div class="clearfix"></div>
+
+                        </div>
+                    </div>
+                    
+                    <div class="col-sm-6">
+
+                        <h4 class="separator-form-icon">Configurações de Dados Empresariais</h4>
+
+                        <div class="row">
+
+                            <div class="col-sm-6">
+                                <label class="fs-9">Habilitar Dados de Empresa?</label>
+                                @Html.DropDownListFor(m => m.OrganizacaoDadosAssociado.flagDadosEmpresa, ComboHelper.selectListTrueFalse(Model.OrganizacaoDadosAssociado.flagDadosEmpresa), "...", new { @class = "form-control input-sm"})
+                            </div>
+                            
+                            <div class="col-sm-6">
+                                <label class="fs-9">Habilitar Dados de Responsável pela Empresa</label>
+                                @Html.DropDownListFor(m => m.OrganizacaoDadosAssociado.flagDadosResponsavelEmpresa, ComboHelper.selectListTrueFalse(Model.OrganizacaoDadosAssociado.flagDadosResponsavelEmpresa), "...", new { @class = "form-control input-sm"})
+                            </div>
+                            
+                            <div class="col-sm-6">
+                                <label class="fs-9">Habilitar Dados de Funcionários?</label>
+                                @Html.DropDownListFor(m => m.OrganizacaoDadosAssociado.flagDadosFuncionario, ComboHelper.selectListTrueFalse(Model.OrganizacaoDadosAssociado.flagDadosFuncionario), "...", new { @class = "form-control input-sm"})
+                            </div>
+                            <div class="clearfix"></div>
+
+                        </div>
+                    </div>
+                    <div class="clearfix"></div><br />
+
+                    <div class="col-sm-12 text-right">
+                        @Html.botaoSalvar()
+                    </div>
+                    <div class="clearfix"></div><br/>
+
+                }
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

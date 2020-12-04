@@ -1,0 +1,12 @@
+﻿@using WEB.Areas.MeiosDivulgacao.Helpers
+@model WEB.Areas.Associados.ViewModels.AssociadoForm
+
+<div class="col-sm-6">
+    <h4 class="separator-form">Como conheceu a associação?</h4>
+    <div class="row">
+        <div class="col-sm-6">
+            @Html.DropDownListFor(m => m.Associado.idMeioDivulgacao, MeioDivulgacaoHelper.getInstance.selectList(Model.Associado.idMeioDivulgacao), "...", new { @class = "form-control input-sm" })
+            @Html.ValidationMessageFor(m => m.Associado.dadoCustomizado01)
+        </div>
+    </div>
+</div>

@@ -1,0 +1,199 @@
+{
+    "descricao": "Configuracoes Tipo de Pagamento Itau CNAB 240",
+    "listaTiposPagamento": [
+        {
+            "id": "1",
+            "descricao": "Salários",
+            "codigoRemessa": "30",
+            "listaFormasPagamento": [{ "id": 1}]
+        },
+        {
+            "id": "2",
+            "descricao": "Dividendos",
+            "codigoRemessa": "10",
+            "listaFormasPagamento": [{ "id": 1},{ "id": 4},{ "id": 5},{ "id": 6},{ "id": 8},{ "id": 23}]
+        },
+        {
+            "id": "3",
+            "descricao": "Juros sobre Debêntures",
+            "codigoRemessa": "15",
+            "listaFormasPagamento": [{ "id": 1},{ "id": 5},{ "id": 6},{ "id": 8},{ "id": 23}]
+        },
+        {
+            "id": "4",
+            "descricao": "Despesas de Viajantes",
+            "codigoRemessa": "60",
+            "listaFormasPagamento": [{ "id": 1},{ "id": 5},{ "id": 6},{ "id": 8},{ "id": 23}]
+        },
+        {
+            "id": "5",
+            "descricao": "Representantes Vendedores",
+            "codigoRemessa": "80",
+            "listaFormasPagamento": [{ "id": 1},{ "id": 5},{ "id": 6},{ "id": 8},{ "id": 23}]
+        },
+        {
+            "id": "6",
+            "descricao": "Fornecedores",
+            "codigoRemessa": "20",
+            "listaFormasPagamento": [{ "id": 1},{ "id": 2},{ "id": 4},{ "id": 5},{ "id": 6},{ "id": 7},{ "id": 8},{ "id": 9},{ "id": 10},{ "id": 11},{ "id": 12},{ "id": 23},{ "id": 24}]
+        },
+        {
+            "id": "7",
+            "descricao": "Benefícios",
+            "codigoRemessa": "90",
+            "listaFormasPagamento": [{ "id": 1},{ "id": 4},{ "id": 5},{ "id": 6},{ "id": 8},{ "id": 23}]
+        },
+        {
+            "id": "8",
+            "descricao": "Sinistro de Seguro",
+            "codigoRemessa": "50",
+            "listaFormasPagamento": [{ "id": 1},{ "id": 4},{ "id": 5},{ "id": 6},{ "id": 8},{ "id": 23}]
+        },
+        {
+            "id": "9",
+            "descricao": "Fundos de Investimentos",
+            "codigoRemessa": "40",
+            "listaFormasPagamento": [{ "id": 1},{ "id": 4},{ "id": 7}]
+        },
+        {
+            "id": "10",
+            "descricao": "Diversos",
+            "codigoRemessa": "98",
+            "listaFormasPagamento": [{ "id": 1},{ "id": 2},{ "id": 4},{ "id": 5},{ "id": 6},{ "id": 7},{ "id": 8},{ "id": 9},{ "id": 10},{ "id": 11},{ "id": 12},{ "id": 23},{ "id": 24}]
+        },
+        {
+            "id": "11",
+            "descricao": "Tributos",
+            "codigoRemessa": "22",
+            "listaFormasPagamento": [{"id": 13},{"id": 14},{"id": 15},{"id": 16},{"id": 17},{"id": 18},{"id": 19},{"id": 20},{"id": 21},{"id": 22}]
+        }
+    ],
+    "listaFormasPagamento": [
+        {
+            "id": "1",
+            "descricao": "Conta Corrente - Outro Titular",
+            "codigoRemessa": "01"
+        },
+        {
+            "id": "2",
+            "descricao": "Conta Corrente - Mesmo Titular",
+            "codigoRemessa": "05"
+        },
+        {
+            "id": "3",
+            "descricao": "Conta Corrente - Cartão Salário",
+            "codigoRemessa": "01"
+        },
+        {
+            "id": "4",
+            "descricao": "Conta Poupança",
+            "codigoRemessa": "05"
+        },
+        {
+            "id": "5",
+            "descricao": "Cheque Pagamento",
+            "codigoRemessa": ""
+        },
+        {
+            "id": "6",
+            "descricao": "DOC C - Outro Titular",
+            "codigoRemessa": "03"
+        },
+        {
+            "id": "7",
+            "descricao": "DOC D - Mesmo Titular",
+            "codigoRemessa": "07"
+        },
+        {
+            "id": "8",
+            "descricao": "OP - Ordem de Pagamento",
+            "codigoRemessa": "10"
+        },
+        {
+            "id": "9",
+            "descricao": "Boleto Bancário",
+            "codigoRemessa": "30"
+        },
+        {
+            "id": "10",
+            "descricao": "Bloqueto de Outros Bancos",
+            "codigoRemessa": "31"
+        },
+        {
+            "id": "11",
+            "descricao": "Nota Fiscal - Liquidação Eletrônica",
+            "codigoRemessa": "32"
+        },
+        {
+            "id": "12",
+            "descricao": "Contas de Concessionárias",
+            "codigoRemessa": "13"
+        },
+        {
+            "id": "13",
+            "descricao": "DARF Normal",
+            "codigoRemessa": "16"
+        },
+        {
+            "id": "14",
+            "descricao": "DARF Simples",
+            "codigoRemessa": "18"
+        },
+        {
+            "id": "15",
+            "descricao": "DARJ",
+            "codigoRemessa": "21"
+        },
+        {
+            "id": "16",
+            "descricao": "GARE - SP ICMS",
+            "codigoRemessa": "22"
+        },
+        {
+            "id": "17",
+            "descricao": "GNRE e Tributos Estaduais",
+            "codigoRemessa": "91"
+        },
+        {
+            "id": "18",
+            "descricao": "GPS - Guia de Previdência Social",
+            "codigoRemessa": "17"
+        },
+        {
+            "id": "19",
+            "descricao": "FGTS - GFIP",
+            "codigoRemessa": "35"
+        },
+        {
+            "id": "20",
+            "descricao": "IPTU",
+            "codigoRemessa": "19"
+        },
+        {
+            "id": "21",
+            "descricao": "IPVA",
+            "codigoRemessa": "25"
+        },
+        {
+            "id": "22",
+            "descricao": "DPVAT",
+            "codigoRemessa": "27"
+        },
+        {
+            "id": "23",
+            "descricao": "TED - Outro Titular",
+            "codigoRemessa": "41"
+        },
+        {
+            "id": "24",
+            "descricao": "TED - Mesmo Titular",
+            "codigoRemessa": "43"
+        }
+        
+        
+    ],
+    "idsFormaPagamentoDiversos": [ 1, 2, 3, 4, 5, 6, 7, 8, 23, 24],
+    "idsFormaPagamentoBoletos": [ 9, 10],
+    "idsFormaPagamentoConcessionarias": [12],
+    "idsFormaPagamentoTributos": [13, 14, 15, 16, 17, 18, 19, 20, 21, 22]
+}

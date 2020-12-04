@@ -1,0 +1,42 @@
+﻿@model WEB.Areas.Atendimentos.ViewModels.AtendimentoForm
+
+@using WEB.Areas.AssociadosConsultas.Extensions
+
+<div class="box box-primary">
+                    
+    <div class="box-header with-border">
+                        
+        <h3 class="box-title"><i class="fa fa-user"></i> Associado Vinculado</h3>
+              
+    </div>
+                    
+    <div class="box-body">
+                        
+        <div class="col-md-6">
+
+            <p><i class="fa fa-user"></i> @Model.AssociadoVinculado.nome</p>
+            
+            <p><i class="fa fa-hashtag"></i> @Model.AssociadoVinculado.nroAssociado <small>(@Model.AssociadoVinculado.descricaoTipoAssociado)</small></p>
+            
+        </div>
+                
+        <div class="col-md-6">
+                    
+            <p class="@Model.AssociadoVinculado.exibirClasseStatus()"><i class="fa @Model.AssociadoVinculado.exibirIconeStatus()"></i> @Model.AssociadoVinculado.exibirStatus()</p>
+                         
+        </div>
+        <div class="clearfix"></div>
+        
+        <div class="col-md-12">
+            
+            <p><i class="fa fa-envelope"></i> @Model.AssociadoVinculado.email</p>
+                    
+            <p><i class="fa fa-phone"></i> @(Model.AssociadoVinculado.nroTelefone.isEmpty() ? "Não Informado" : UtilString.formatPhone(Model.AssociadoVinculado.nroTelefone))</p>
+
+        </div>
+        <div class="clearfix"></div>
+
+    </div>
+
+</div>
+         

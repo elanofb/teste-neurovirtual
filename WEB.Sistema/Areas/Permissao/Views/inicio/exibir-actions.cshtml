@@ -1,0 +1,75 @@
+﻿@model WEB.Areas.Permissao.ViewModels.AcessoRecursoForm
+<table class="table table-bordered table-striped dataTable">
+	<thead>
+		<tr>
+			<th class="width-50"> @(Model.idPerfilAcesso > 0 ? "Acesso" : "")</th>
+			<th>Descrição</th>
+			<th>Área</th>
+			<th>Controle</th>
+			<th>Ação</th>
+			<th>Método</th>
+			<th class="width-75">&nbsp;</th>
+		</tr>
+		<tr>
+			<td>@Model.descricaoPerfil</td>
+			<td class="text-center">
+				@Html.Hidden("idPerfilAcesso", Model.idPerfilAcesso, new { id = "idPerfilAcesso" })
+				@Html.Hidden("idRecursoGrupo", Model.idRecursoGrupo, new { id = "idRecursoGrupo" })
+				@Html.Hidden("idRecursoAcao", "", new { id = "idRecursoAcao" })
+				@Html.Hidden("idRecursoPaiAcao", Model.id, new { id = "idRecursoPaiAcao" })
+				@Html.TextBox("descricaoAcao", "", new { id = "descricaoAcao", @class = "width-150 form-control input-sm" })
+			</td>
+			<td class="text-center">
+				@Html.TextBox("areaAcao", "", new { id = "areaAcao", @class = "form-control input-sm" })
+			</td>
+			<td class="text-center">
+				@Html.TextBox("controleAcao", "", new { id = "controleAcao", @class = "width-150 form-control input-sm" })
+			</td>
+			<td class="text-center">
+				@Html.TextBox("nomeAcao", "", new { id = "nomeAcao", @class = "form-control input-sm" })
+			</td>
+			<td class="text-center">
+				@Html.DropDownList("metodoAcao", ComboHelper.selectListHttpMetodos(""), "..", new { id = "metodoAcao", @class = "width-75 form-control input-sm" })
+			</td>
+			<td class="a-center">
+				<a href="javascript:void(Recurso.saveAction());" title="Incluir Nova">
+					<i class="far fa-plus-circle"></i>
+				</a>
+			</td>
+		</tr>
+		<tr>
+			<th colspan="7">Ações Cadastradas</th>
+		</tr>
+	</thead>
+	<tbody id="actionsController">
+		@{
+			if (Model.listRecursoAcao.Count > 0) {
+				foreach (DAL.Permissao.AcessoRecursoAcao Acao in Model.listRecursoAcao) {
+					bool flagPermissao = false;
+					if (Model.idPerfilAcesso > 0) {
+						flagPermissao = Model.listaPermissoes.Any(x => (x.controllerRecurso== Acao.controller && x.actionPadraoRecurso == Acao.action) || (x.controllerAcao == Acao.controller && x.nomeAcao == Acao.action));
+					}
+					<tr>
+						<td class="text-center">
+							@if (Model.idPerfilAcesso > 0) {
+								<input type="checkbox" name="permissao" value="@Acao.id" onclick="Recurso.salvarPermissaoAcao( this, '@Acao.id', '@Model.idPerfilAcesso' );" @(flagPermissao? "checked='checked'": "") />
+							}
+						</td>
+						<td class="text-center">@Acao.descricao</td>
+						<td class="text-center">@Acao.area</td>
+						<td class="text-center">@Acao.controller</td>
+						<td class="text-center">@Acao.action</td>
+						<td class="text-center">@(String.IsNullOrEmpty(Acao.method) ? "TODOS" : Acao.method)</td>
+						<td>
+							@Html.linkAjaxExcluir(Acao.id, "N", Url.Action("excluir-action", "inicio", new{area="permissao"}))
+						</td>
+					</tr>
+				}
+			} else {
+				<tr>
+					<td colspan="7" class="text-center">Nenhuma ação cadastrada.</td>
+				</tr>
+			}
+		}
+	</tbody>
+</table>

@@ -1,0 +1,215 @@
+﻿@model List<DAL.Associados.DTO.ItemListaAssociado>
+
+@using WEB.Areas.AssociadosConsultas.Extensions
+
+@{
+    ViewBag.titlePage = "Associados em Admissão";
+}
+
+@section scripts {
+
+    @Html.includeDatePicker()
+
+    @Html.includeFroalaEditorJS()
+
+    <script type="text/javascript" src="@UtilConfig.linkResourses()Areas/Associados/js/associado-admissao.js?v=1"></script>
+    
+    <script type="text/javascript" src="@UtilConfig.linkResourses()Areas/AssociadosOperacoes/js/associado-exclusao.js?v=1"></script>
+
+    <script type="text/javascript" src="@UtilConfig.linkResourses()Areas/AssociadosNotificacoes/js/associado-notificacao.js?v=1"></script>
+}
+
+@section styles {
+    @Html.includeFroalaEditorCSS()
+    <link href="@UtilConfig.linkResourses()css/associatec/list-custom.css" rel="stylesheet" />
+}
+
+<div class="box box-primary">
+
+    @Html.headerBox("Filtros de Busca", "fa fa-filter")
+
+    <div class="box-body">
+
+        @using(Html.BeginForm(null, null, FormMethod.Get, new { id = "fmFiltro", @class = "formFiltro" })) {
+            @Html.Hidden("ativo", "E")
+            <div class="form-group col-lg-2 col-md-1">
+            </div>
+
+            <div class="form-group col-lg-3 col-md-4 col-sm-5">
+                <label>Data de Cadastro</label>
+                <div class="input-group">
+                    @Html.TextBox("dtCadastroInicio", UtilRequest.getString("dtCadastroInicio"), new { @class = "form-control input-sm input-datepicker", alt = "date" })
+                    <div class="input-group-addon"><span>-</span></div>
+                    @Html.TextBox("dtCadastroFim", UtilRequest.getString("dtCadastroFim"), new { @class = "form-control input-sm input-datepicker", alt = "date" })
+                </div>
+            </div>
+
+            <div class="form-group col-md-2 col-sm-3">
+                <label>Situação Financeira</label>
+                @Html.DropDownList("flagSituacaoContribuicao", SituacaoContribuicaoHelper.getSituacao(UtilRequest.getString("flagSituacaoContribuicao")), "Todas", new { @class = "form-control input-sm" })
+            </div>
+
+            <div class="form-group col-md-2 col-sm-4">
+                <label>Tipo Associado</label>
+                @Html.DropDownList("idTipoAssociado", TipoAssociadoHelper.getInstance.selectList(UtilRequest.getInt32("idTipoAssociado")), "Todos", new { @class = "form-control input-sm" })
+            </div>
+
+            <div class="clearfix visible-sm"></div>
+
+            <div class="form-group col-md-3">
+                <label>Buscar</label>
+                @Html.buttonSearch(UtilRequest.getString("valorBusca"))
+            </div>
+            <div class="clearfix"></div>
+        }
+
+    </div>
+
+</div>
+
+
+<div class="box box-primary">
+
+    <div class="box-header with-border">
+        <div class="box-title">
+            <i class="far fa-chart-bar"></i> Resultados <small> Existem @Model.Count associados em processo de admissão.</small>
+        </div>
+        <div class="box-tools pull-right">
+            
+            <div class="btn-group">
+                <button type="button" class="btn btn-box-tool dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+                    Ações <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                    
+                    <li>
+                        <a href="javascript:;" class="text-green" onclick="AssociadoAdmissao.abriModalAdmissao()">
+                            <i class="fa fa-check"></i> Admitir associados
+                        </a>
+                    </li>
+                    
+                    <li class="divider"></li>
+
+                    <li>
+                        <a href="javascript:;" class="text-blue" onclick="AssociadoNotificacao.enviarNotificacaoSelecionados()">
+                            <i class="fa fa-envelope"></i> Enviar mensagem para os associados selecionados
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="javascript:;" class="text-blue" onclick="AssociadoNotificacao.enviarNotificacaoTodos()">
+                            <i class="fa fa-envelope"></i> Enviar mensagem para todos associados
+                        </a>
+                    </li>
+
+                    <li class="divider"></li>
+                    
+                    <li>
+                        <a href="javascript:;" class="text-red" onclick="AssociadoExclusao.excluirSelecionados()">
+                            <i class="fa fa-user-times"></i> Desligar associados selecionados
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="javascript:;" class="text-red" onclick="AssociadoExclusao.excluirTodos()">
+                            <i class="fa fa-user-times"></i> Desligar todos associados
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="box-body">
+        
+        <div class="btn-group">
+
+            <label class="btn btn-default" data-toggle="tooltip" title="Selecionar Todos">
+                <input type="checkbox" name="marcarTodos" data-childs="checkRegistro[]" id="checkMarcarTodos"/>
+            </label>
+
+        </div>
+
+        @if(!Model.Any()) {
+            <div class="alert alert-info">
+                Nenhum associado foi encontrado.
+            </div>
+        }
+
+        <div id="boxAssociadosParaAdmissao">
+
+            @foreach(var OAssociado in Model) {
+
+                <div class="box-info-item">
+
+                    <div class="row">
+
+                        <div class="col-md-4 col-sm-4 col-xs-4">
+
+                            <div class="checkbox no-margin">
+
+                                <label class="titulo">
+                                    <input type="checkbox" name="checkRegistro[]" value="@OAssociado.id" class="margin-right-5"/>
+                                    <i class="fa fa-user"></i> @OAssociado.nome.abreviar(30, "").ToUpper()
+                                </label>
+
+                            </div>
+                            
+                            <span># @(OAssociado.nroAssociado ?? OAssociado.id)</span> <em>(@(OAssociado.descricaoTipoAssociado))</em>
+
+                        </div>
+
+                        <div class="col-md-2 col-sm-3 col-xs-3">
+                            <span>
+                                <i class="fa fa-id-card"></i> @UtilString.formatCPFCNPJ(OAssociado.nroDocumento)
+                            </span>
+
+                            <span class="visible-sm visible-xs">
+                                <i class="fa fa-calendar"></i> @OAssociado.dtCadastro.exibirData(true)
+                            </span>
+                        </div>
+
+                        <div class="col-md-2 hidden-sm hidden-xs">
+                            <span>
+                                <i class="fa fa-calendar"></i> @OAssociado.dtCadastro.exibirData(true)
+                            </span>
+                        </div>
+
+                        <div class="col-md-2 col-sm-3 col-xs-3">
+
+                            <div class="row">
+
+                                <div class="col-md-12 margin-bottom-5">
+                                    <span class="@OAssociado.exibirClasseStatus()"><i class="fa @OAssociado.exibirIconeStatus()"></i> @OAssociado.exibirStatus()</span>
+                                </div>
+                                <div class="clearfix"></div>
+
+                                <div class="col-md-12">
+                                    <span class="@OAssociado.exibirClasseSituacaoFinanceira()"><i class="fa @OAssociado.exibirIconeSituacaoFinanceira()"></i> @OAssociado.exibirSituacao()</span>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2 col-sm-2 col-xs-2 text-right">
+
+                            <a href="@Url.Action("editar", "AssociadoCadastro", new { OAssociado.id })" class="text-black">
+                                <i class="fa fa-edit"></i> Ver Detalhes
+                            </a>    
+                        
+                        </div>
+
+                        <div class="clearfix"></div>
+
+
+                    </div>
+
+                </div>
+
+            }
+
+        </div>
+        
+    </div>
+</div>

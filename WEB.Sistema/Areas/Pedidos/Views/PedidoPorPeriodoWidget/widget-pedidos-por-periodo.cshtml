@@ -1,0 +1,31 @@
+﻿<div class="box box-primary">
+
+    <div class="box-header with-border">
+        <h3 class="box-title"><i class="fa fa-shopping-cart"></i> Acompanhar Pedidos por Data</h3>
+        <div class="box-options pull-right">
+
+            <a href="javascript:;" onclick="PedidosPorPeriodoWidget.alterarVisaoDiaria()" class="btn btn-box-tool">
+                <i class="fas fa-sun"></i> Visão Diária
+            </a>
+
+            <a href="javascript:;" onclick="PedidosPorPeriodoWidget.alterarVisaoSemanal()" class="btn btn-box-tool">
+                <i class="fas fa-calendar-alt"></i> Visão Semanal
+            </a>
+            
+            <button class="btn btn-box-tool" id="btnResumoPedidosPeriodo">
+                <span>Selecionar período</span> <i class="fa fa-caret-down"></i>
+            </button>
+
+            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="far fa-minus"></i></button>
+
+        </div>
+    </div>
+
+    <div class="box-body padding-top-20">
+
+        <div id="boxResumoPedidosPorPeriodo" class="carregando" data-url="@Url.Action("widget-pedidos-por-periodo", "PedidoPorPeriodoWidget", new {area = "Pedidos"})"></div>
+
+    </div>
+</div>
+
+<div class="clearfix"></div>
